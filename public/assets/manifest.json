@@ -1,0 +1,69 @@
+[
+  {
+    "file": "logo.png",
+    "source": "Owner-supplied attachment: casaelida_logo_redy_small.png",
+    "description": "Supplied company logo; original bytes preserved.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "593ab3018c883630987e92e760daf810e73cfe75ab39154a82e6dbd4aa82629e"
+  },
+  {
+    "file": "logo-brand.jpg",
+    "source": "Owner-supplied attachment: logo-fb.jpg",
+    "description": "Supplied company social lockup; original bytes preserved.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "e14872c6ee38b666a7402b9774f3f078aabbeeb1f513344641c3e1e145855110"
+  },
+  {
+    "file": "campaign-umbrella.jpg",
+    "source": "Owner-supplied attachment: 774970189_1781737733951874_3638091802600127085_n.jpg",
+    "description": "Supplied company square campaign reference.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "10939a4d2dcd4b2dd6d3a12e5092d3ddd28b2e1003168fa9f7fe3552aac6c975"
+  },
+  {
+    "file": "campaign-organisers.jpg",
+    "source": "Owner-supplied attachment: 766183772_1769590408499940_8738224858989097788_n.jpg",
+    "description": "Supplied company square campaign reference.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "818ccfac9af4ed728e9bfdefbac94584bc43dfeef166197ec378539f083ee969"
+  },
+  {
+    "file": "campaign-kitchen.jpg",
+    "source": "Owner-supplied attachment: 762917111_1769590411833273_5629431787051251300_n.jpg",
+    "description": "Supplied company square campaign reference.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "4603c19eeea295735725e19857f5aafcf8c77f4c12779de321c8e68a3b081b07"
+  },
+  {
+    "file": "product-mene.png",
+    "source": "https://dl.dropboxusercontent.com/scl/fi/5nbum6o58i2iqtrwxbqhq/1792093937-1792093937.png?rlkey=ytja2st329dvbn68vv9zc5xdp&dl=0",
+    "sourcePage": "https://casaelida.com/catalogo/mene",
+    "description": "Public Casa Elida catalogue hero image: MENE",
+    "rights": "Casa Elida catalogue asset; used for this company design reference.",
+    "sha256": "b06f72d5c8a03de7b40eb67d1c61b7d4f790d229d03d0de9de5b7d92deb8cc91"
+  },
+  {
+    "file": "product-nome.png",
+    "source": "https://dl.dropboxusercontent.com/scl/fi/dp2wfq3nit9236ykg4l6i/1792092788-1792092788.png?rlkey=9e5fxdcm7idvqp2eh2onvwqr6&dl=0",
+    "sourcePage": "https://casaelida.com/catalogo/nome",
+    "description": "Public Casa Elida catalogue hero image: NOME",
+    "rights": "Casa Elida catalogue asset; used for this company design reference.",
+    "sha256": "ecac056e1d8f8b8596f41d273225a171fc0fe19a71cc004ba6948fd84de41888"
+  },
+  {
+    "file": "product-tilen.png",
+    "source": "https://dl.dropboxusercontent.com/scl/fi/4obbrqy3q3dns2plou069/1790620019-1790620019.png?rlkey=96wje10pm3p93knutuu062tjr&dl=0",
+    "sourcePage": "https://casaelida.com/catalogo/tilen",
+    "description": "Public Casa Elida catalogue hero image: TILEN",
+    "rights": "Casa Elida catalogue asset; used for this company design reference.",
+    "sha256": "45da0ea1dbfd43360e4212137c85a31178fc1d1770fdc281ac8984059950504d"
+  },
+  {
+    "file": "product-talen.png",
+    "source": "https://dl.dropboxusercontent.com/scl/fi/rxc2g42us065ohcgwkpd1/1790619822-1790619822.png?rlkey=o8e07tx0kg20ihgy8mkjwgnu8&dl=0",
+    "sourcePage": "https://casaelida.com/catalogo/talen",
+    "description": "Public Casa Elida catalogue hero image: TALEN",
+    "rights": "Casa Elida catalogue asset; used for this company design reference.",
+    "sha256": "583e9662eafa126db05fef8252ee231c95c5e90dbd74362060d9db552214698d"
+  }
+]

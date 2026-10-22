@@ -1,0 +1,192 @@
+{
+  "color": {
+    "brand": {
+      "red": {
+        "$type": "color",
+        "$value": "{palette.red}",
+        "$description": ""
+      },
+      "yellow": {
+        "$type": "color",
+        "$value": "{palette.yellow}",
+        "$description": ""
+      }
+    },
+    "surface": {
+      "canvas": {
+        "$type": "color",
+        "$value": "{palette.white}",
+        "$description": ""
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": "{palette.subtle}",
+        "$description": ""
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{palette.ink}",
+        "$description": ""
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": "{palette.ink}",
+        "$description": ""
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "{palette.secondary}",
+        "$description": ""
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "{palette.muted}",
+        "$description": ""
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{palette.white}",
+        "$description": ""
+      }
+    },
+    "border": {
+      "default": {
+        "$type": "color",
+        "$value": "{palette.border}",
+        "$description": ""
+      },
+      "control": {
+        "$type": "color",
+        "$value": "{palette.control}",
+        "$description": ""
+      }
+    },
+    "action": {
+      "primary": {
+        "bg": {
+          "$type": "color",
+          "$value": "{palette.red-action}",
+          "$description": ""
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{palette.white}",
+          "$description": ""
+        },
+        "hover": {
+          "$type": "color",
+          "$value": "{palette.red-hover}",
+          "$description": ""
+        },
+        "active": {
+          "$type": "color",
+          "$value": "{palette.red-active}",
+          "$description": ""
+        }
+      }
+    },
+    "focus": {
+      "$type": "color",
+      "$value": "{palette.ink}",
+      "$description": ""
+    },
+    "code": {
+      "bg": {
+        "$type": "color",
+        "$value": "{palette.ink}",
+        "$description": ""
+      },
+      "text": {
+        "$type": "color",
+        "$value": "{palette.white}",
+        "$description": ""
+      }
+    },
+    "price": {
+      "regular": {
+        "$type": "color",
+        "$value": "{palette.ink}",
+        "$description": ""
+      },
+      "previous": {
+        "$type": "color",
+        "$value": "{palette.muted}",
+        "$description": ""
+      },
+      "offer": {
+        "bg": {
+          "$type": "color",
+          "$value": "{palette.yellow}",
+          "$description": ""
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{palette.ink}",
+          "$description": ""
+        }
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{palette.white}",
+        "$description": ""
+      }
+    },
+    "status": {
+      "danger": {
+        "text": {
+          "$type": "color",
+          "$value": "{palette.red-active}",
+          "$description": ""
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{palette.danger-bg}",
+          "$description": ""
+        }
+      },
+      "success": {
+        "text": {
+          "$type": "color",
+          "$value": "{palette.success}",
+          "$description": ""
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{palette.success-bg}",
+          "$description": ""
+        }
+      },
+      "warning": {
+        "text": {
+          "$type": "color",
+          "$value": "{palette.warning}",
+          "$description": ""
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{palette.warning-bg}",
+          "$description": ""
+        }
+      },
+      "info": {
+        "text": {
+          "$type": "color",
+          "$value": "{palette.info}",
+          "$description": ""
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{palette.info-bg}",
+          "$description": ""
+        }
+      }
+    },
+    "overlay": {
+      "$type": "color",
+      "$value": "{palette.scrim}",
+      "$description": ""
+    }
+  }
+}

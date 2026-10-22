@@ -1,0 +1,94 @@
+{
+  "name": "Casa Elida",
+  "version": "0.1.0",
+  "status": "foundation",
+  "theme": "light",
+  "tokenFormat": "DTCG 2025.10",
+  "tokenSources": [
+    "tokens/primitives.tokens.json",
+    "tokens/semantic.tokens.json"
+  ],
+  "exports": {
+    "tokens": "exports/tokens.css",
+    "resolved": "exports/tokens.resolved.json",
+    "recipes": "exports/recipes.css",
+    "price": "recipes/price.mjs"
+  },
+  "contrastPairs": [
+    [
+      "color.text.primary",
+      "color.surface.canvas",
+      4.5
+    ],
+    [
+      "color.text.secondary",
+      "color.surface.canvas",
+      4.5
+    ],
+    [
+      "color.text.muted",
+      "color.surface.canvas",
+      4.5
+    ],
+    [
+      "color.text.muted",
+      "color.surface.subtle",
+      4.5
+    ],
+    [
+      "color.action.primary.text",
+      "color.action.primary.bg",
+      4.5
+    ],
+    [
+      "color.action.primary.text",
+      "color.action.primary.hover",
+      4.5
+    ],
+    [
+      "color.action.primary.text",
+      "color.action.primary.active",
+      4.5
+    ],
+    [
+      "color.code.text",
+      "color.code.bg",
+      4.5
+    ],
+    [
+      "color.price.offer.text",
+      "color.price.offer.bg",
+      4.5
+    ],
+    [
+      "color.status.danger.text",
+      "color.status.danger.bg",
+      4.5
+    ],
+    [
+      "color.status.success.text",
+      "color.status.success.bg",
+      4.5
+    ],
+    [
+      "color.status.warning.text",
+      "color.status.warning.bg",
+      4.5
+    ],
+    [
+      "color.status.info.text",
+      "color.status.info.bg",
+      4.5
+    ],
+    [
+      "color.border.control",
+      "color.surface.canvas",
+      3
+    ],
+    [
+      "color.focus",
+      "color.surface.canvas",
+      3
+    ]
+  ]
+}

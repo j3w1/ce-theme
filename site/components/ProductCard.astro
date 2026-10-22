@@ -1,0 +1,19 @@
+---
+import Price from './Price.astro';
+interface Product { code?: string; model: string; name: string; details: string; image: string; amount: string; previousAmount?: string; discountLabel?: string; badge?: string }
+interface Props { product: Product }
+const { product } = Astro.props;
+---
+<article class="ce-product">
+  <div class="ce-product-media">
+    <img src={product.image} alt={product.name} width="400" height="400" loading="lazy" />
+    {product.badge && <span class="ce-badge ce-badge--offer">{product.badge}</span>}
+  </div>
+  <div class="ce-product-info">
+    {product.code && <span class="ce-code">{product.code}</span>}
+    <h3 class="ce-product-model">{product.model}</h3>
+    <p class="ce-product-name">{product.name}</p>
+    <p class="ce-product-details">{product.details}</p>
+    <Price amount={product.amount} previousAmount={product.previousAmount} discountLabel={product.discountLabel} />
+  </div>
+</article>

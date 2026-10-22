@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { products } from '../data/products.mjs';
+const principles = [
+  ['Claro a primera vista', 'El producto, su nombre y su precio. Lo importante siempre tiene su lugar.'],
+  ['Espacio para lo cotidiano', 'Superficies limpias y fotografías generosas que dejan respirar cada idea.'],
+  ['Inconfundiblemente Elida', 'Nuestra firma, nuestro rojo y un amarillo que hace visible el valor.'],
+  ['Una base para todos', 'Reglas compartidas para tienda, herramientas de trabajo, campañas y pantallas.'],
+];
+---
+<Layout>
+  <div class="container">
+    <section class="intro" aria-labelledby="home-title">
+      <div><p class="eyebrow">Casa Elida · Sistema de diseño</p><h1 id="home-title">Diseñamos para<br/>la vida en casa.</h1><p>Una base compartida para crear experiencias sencillas, útiles y llenas de posibilidades.</p></div>
+      <p class="intro-aside">Identidad, fundamentos y recetas.<br/>Todo empieza con una buena base.</p>
+    </section>
+    <section class="hero-grid" aria-label="Nuestra dirección visual">
+      <div class="hero-photo ce-photo-panel">
+        <img src="/assets/campaign-organisers.jpg" alt="Organizadores Casa Elida en una alacena de cocina" width="1000" height="1000" fetchpriority="high" />
+        <span class="hero-label ce-badge ce-badge--offer">Ideas que hacen casa</span>
+        <div class="ce-photo-content"><p>Orden, calma y pequeñas soluciones</p><h2>Cada cosa<br/>en su lugar.</h2><a class="hero-arrow ce-icon-button ce-icon-button--ink" href="/aplicaciones/" aria-label="Explorar aplicaciones de marca"><Icon/></a></div>
+      </div>
+      <div class="yellow-panel"><p class="eyebrow">Nuestra esencia</p><h2>El buen gusto,<br/>no cuesta más.</h2><p>Una identidad cercana. Una forma clara de mostrar el producto. Un precio que se entiende al instante.</p><a class="panel-link" href="/fundamentos/"><span>Conoce los fundamentos</span><span class="ce-icon-button ce-icon-button--ink"><Icon/></span></a></div>
+    </section>
+    <section class="section" aria-labelledby="principles-title"><SectionHeading eyebrow="Cómo se siente Casa Elida" title="Mucho más que rojo y amarillo."/>
+      <div class="principle-grid">{principles.map(([title,description],i)=><article><span class="principle-number">0{i+1}</span><h3>{title}</h3><p>{description}</p></article>)}</div>
+    </section>
+  </div>
+  <section class="muted-section section"><div class="container"><SectionHeading eyebrow="Los fundamentos" title="Una identidad que se reconoce." href="/fundamentos/" link="Explorar la base"/>
+    <div class="foundation-grid">
+      <a class="foundation-tile" href="/fundamentos/#color"><div class="foundation-art foundation-color" aria-hidden="true"><span class="color-circle"></span><span class="color-circle"></span><span class="color-circle"></span></div><span class="tile-title">Color con intención <Icon/></span></a>
+      <a class="foundation-tile" href="/fundamentos/#tipografia"><div class="foundation-art foundation-type" aria-hidden="true">Aa</div><span class="tile-title">Palabras que se leen <Icon/></span></a>
+      <a class="foundation-tile" href="/fundamentos/#espaciado"><div class="foundation-art foundation-spacing" aria-hidden="true">{[32,48,64,96,128].map(height=><span style={`height:${height}px`}></span>)}</div><span class="tile-title">Espacio para respirar <Icon/></span></a>
+    </div>
+  </div></section>
+  <div class="container">
+    <section class="section"><SectionHeading eyebrow="Productos y precios" title="El producto primero. El precio, clarísimo." description="Fotografía amplia, nombres reconocibles y una jerarquía que funciona de un vistazo." href="/patrones/" link="Ver las recetas"/>
+      <div class="ce-product-grid">{products.map(product=><ProductCard product={product}/>)}</div>
+      <p class="small-note">Ejemplos de composición. Los importes son demostrativos y no son ofertas vigentes.</p>
+    </section>
+    <section class="section"><SectionHeading eyebrow="Una marca, muchas aplicaciones" title="De la pantalla a la vida diaria." description="La misma claridad en una publicación, una historia o una pantalla de tienda." href="/aplicaciones/" link="Ver aplicaciones"/>
+      <div class="gallery-grid">
+        <figure class="gallery-card"><img src="/assets/campaign-umbrella.jpg" alt="Campaña Casa Elida de un paraguas con funda: fotografía de uso, colores y una tarjeta de precio" width="1000" height="1000" loading="lazy"/><figcaption><strong>El producto en contexto</strong><span>Campaña</span></figcaption></figure>
+        <figure class="gallery-card"><img src="/assets/campaign-organisers.jpg" alt="Campaña de organizadores con tarjeta blanca de información y precio por unidad" width="1000" height="1000" loading="lazy"/><figcaption><strong>Detalles que ayudan</strong><span>Producto</span></figcaption></figure>
+        <figure class="gallery-card"><img src="/assets/campaign-kitchen.jpg" alt="Campaña de un contenedor colgante para cocina con código, medidas y precio" width="1000" height="1000" loading="lazy"/><figcaption><strong>Una solución cotidiana</strong><span>Inspiración</span></figcaption></figure>
+      </div>
+    </section>
+    <section class="resource-banner"><div><p class="eyebrow">Lista para construir</p><h2>Una buena base se comparte.</h2><p>Tokens, estilos y recetas HTML para llevar Casa Elida a tu próximo proyecto.</p></div><a class="ce-button ce-button--ink" href="/descargas/">Explorar recursos <Icon name="download" size={20}/></a></section>
+  </div>
+</Layout>

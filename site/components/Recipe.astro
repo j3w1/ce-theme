@@ -1,0 +1,9 @@
+---
+interface Props { title: string; code: string; description?: string }
+const { title, code, description } = Astro.props;
+---
+<section class="recipe-section">
+  <div class="recipe-header"><h2>{title}</h2>{description && <p>{description}</p>}</div>
+  <div class="recipe-preview"><slot /></div>
+  <details class="recipe-source"><summary>Ver HTML de la receta</summary><div class="source-toolbar"><span>HTML · CSS compartido</span><button class="ce-button ce-button--secondary copy-button" data-copy={code}>Copiar HTML</button></div><pre><code>{code}</code></pre></details>
+</section>

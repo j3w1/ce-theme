@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+const downloads=[
+ ['Tokens CSS','Variables para compartir color, tipografía, espacio y estados.','tokens.css'],
+ ['Recetas CSS','Controles, códigos, precios, tarjetas y composiciones de fotografía.','recipes.css'],
+ ['Tokens JSON','Valores resueltos, tipos y nombres CSS para herramientas y agentes.','tokens.resolved.json'],
+ ['Formato de precios','Utilidad JavaScript para mostrar importes decimales sin perder precisión.','price.mjs'],
+ ['Manifiesto','Versión, fuentes de tokens, exportaciones y parejas de contraste.','ce-theme.json'],
+ ['Guía técnica','Uso de la base, contratos y ejemplos de integración. English.','usage.md'],
+];
+const install=`<link rel="stylesheet" href="/styles/tokens.css">
+<link rel="stylesheet" href="/styles/recipes.css">
+
+<main class="ce-scope">
+  <button class="ce-button">Ver productos</button>
+</main>`;
+---
+<Layout title="Recursos y descargas">
+  <div class="container"><div class="page-intro"><p class="eyebrow">05 · Recursos</p><h1>Una base lista para usar.</h1><p>Archivos pequeños, nombres claros y recetas que puedes llevar a cualquier proyecto. Sin depender de un framework de interfaz.</p></div>
+    <div class="download-grid">{downloads.map(([name,description,file])=><article class="download-card"><Icon name="download" size={28}/><h2>{name}</h2><p>{description}</p><code>{file}</code><a class="ce-button ce-button--secondary" href={`/downloads/${file}`} download>Descargar <Icon name="arrow" size={18}/></a></article>)}</div>
+    <section class="section"><SectionHeading title="Empieza con dos archivos." description="Carga los tokens antes de las recetas y aplica ce-scope al contenedor. Los estilos compartidos no reinician el resto de tu aplicación."/><pre class="install-code"><code>{install}</code></pre><p class="small-note">La fuente se distribuye por separado mediante @fontsource-variable/noto-sans. Las recetas incluyen una alternativa Arial y sans-serif; consulta la guía técnica para cargar la fuente localmente.</p></section>
+    <section class="section"><SectionHeading title="Una fuente compartida."/><div class="rule-grid"><div><h3>Para diseño y desarrollo</h3><p>Los tokens de origen usan el formato DTCG 2025.10. Los archivos descargables se generan junto con el sitio, desde la misma versión.</p></div><div><h3>Para el siguiente proyecto</h3><p>Adopta la base por versión. El repositorio incluye ejemplos, contratos y verificaciones para conservar la identidad al integrarla.</p><p style="margin-top:var(--ce-space-16)"><a class="ce-link" href="https://github.com/j3w1/ce-theme">Abrir ce-theme en GitHub ↗</a></p></div></div></section>
+  </div>
+</Layout>

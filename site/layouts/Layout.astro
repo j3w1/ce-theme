@@ -1,0 +1,58 @@
+---
+import '@fontsource-variable/noto-sans';
+import '../../exports/tokens.css';
+import '../../recipes/recipes.css';
+import '../styles/site.css';
+import Icon from '../components/Icon.astro';
+interface Props { title?: string; description?: string }
+const { title = 'Diseñamos para la vida en casa', description = 'La base visual de Casa Elida: identidad, fundamentos y recetas para crear experiencias claras, cercanas y accesibles.' } = Astro.props;
+const pathname = Astro.url.pathname;
+const nav = [['/', 'Visión general'], ['/fundamentos/', 'Fundamentos'], ['/componentes/', 'Componentes'], ['/patrones/', 'Precios y productos'], ['/aplicaciones/', 'Aplicaciones']];
+---
+<!doctype html>
+<html lang="es-PE">
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · Casa Elida</title><meta name="description" content={description} />
+    <meta name="theme-color" content="#E6303D" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+  </head>
+  <body class="ce-scope">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <div class="utility-bar"><div class="container utility-inner"><span>El buen gusto, no cuesta más.</span><span>Una misma identidad. Muchas formas de llegar a casa.</span><span>Base · v0.1.0</span></div></div>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/" aria-label="Casa Elida — inicio"><img src="/assets/logo.png" alt="Casa Elida" width="116" height="52" /></a>
+        <span class="system-label">Sistema de diseño</span>
+        <nav aria-label="Navegación principal" class="desktop-nav">{nav.slice(1,4).map(([url,label]) => <a href={url} aria-current={pathname===url?'page':undefined}>{label}</a>)}</nav>
+        <a class="header-download ce-button ce-button--secondary" href="/descargas/">Recursos <Icon name="download" size={18}/></a>
+        <button class="ce-icon-button menu-toggle" aria-label="Abrir navegación" aria-expanded="false" aria-controls="mobile-navigation"><Icon name="menu" /></button>
+      </div>
+      <nav id="mobile-navigation" class="container mobile-navigation" aria-label="Navegación móvil" hidden>{nav.map(([url,label]) => <a href={url} aria-current={pathname===url?'page':undefined}>{label}</a>)}<a href="/descargas/">Recursos y descargas</a></nav>
+    </header>
+    <div class="container section-nav-wrap"><nav class="section-nav" aria-label="Secciones del sistema">{nav.map(([url,label]) => <a class="ce-chip" href={url} aria-current={pathname===url?'page':undefined}>{label}</a>)}</nav></div>
+    <main id="contenido" tabindex="-1"><slot /></main>
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div><a class="brand" href="/"><img src="/assets/logo.png" alt="Casa Elida — inicio" width="135" height="60" /></a><p>Todo lo que hace casa.<br/>Todo lo que nos hace Casa Elida.</p><span class="footer-version">Sistema de diseño · 0.1.0</span></div>
+        <div><h2>Diseñar con Casa Elida</h2><a href="/fundamentos/">Identidad y fundamentos</a><a href="/componentes/">Componentes esenciales</a><a href="/patrones/">Precios y productos</a><a href="/aplicaciones/">Aplicaciones de marca</a></div>
+        <div><h2>Construir con la base</h2><a href="/descargas/">Tokens y recetas</a><a href="https://github.com/j3w1/ce-theme">Repositorio en GitHub ↗</a><a href="/downloads/usage.md" download>Guía técnica · English</a></div>
+      </div>
+      <div class="container footer-bottom"><span>Casa Elida · Una base compartida, hecha para crecer.</span><span>Precios de ejemplo; no constituyen ofertas vigentes.</span></div>
+    </footer>
+    <div id="copy-status" role="status" aria-live="polite" class="copy-status"></div>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+      const menu = document.querySelector<HTMLElement>('#mobile-navigation');
+      function closeMenu() { if (menu && toggle) { menu.hidden = true; toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-label', 'Abrir navegación'); } }
+      toggle?.addEventListener('click', () => { if (!menu) return; const open = toggle.getAttribute('aria-expanded') !== 'true'; menu.hidden = !open; toggle.setAttribute('aria-expanded', String(open)); toggle.setAttribute('aria-label', open ? 'Cerrar navegación' : 'Abrir navegación'); });
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') { closeMenu(); toggle.focus(); } });
+      window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => { if (event.matches) closeMenu(); });
+      document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => button.addEventListener('click', async () => {
+        const status = document.querySelector<HTMLElement>('#copy-status');
+        try { await navigator.clipboard.writeText(button.dataset.copy ?? ''); if (status) status.textContent = 'Copiado al portapapeles'; button.textContent = 'Copiado'; setTimeout(() => { button.textContent = 'Copiar HTML'; if (status) status.textContent = ''; }, 1800); }
+        catch { if (status) status.textContent = 'Selecciona el código y cópialo manualmente.'; }
+      }));
+    </script>
+  </body>
+</html>
