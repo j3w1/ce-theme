@@ -1,0 +1,29 @@
+<!-- @dsCard group="Tagging" height=460 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>TaggedMedia</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .wrap { padding: var(--ce-space-16); }
+  .scene { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; gap: var(--ce-space-16); aspect-ratio: 16 / 9; padding: var(--ce-space-24); background: var(--ce-color-surface-subtle); }
+  .scene img { width: 100%; height: auto; }
+  .ce-detail-inset { --size: 18%; }
+  .note { margin: var(--ce-space-8) 0 0; color: var(--ce-color-text-muted); font-size: var(--ce-font-size-xs); }
+</style>
+</head>
+<body>
+<div class="ce-scope wrap">
+  <figure class="ce-tagged-media" style="margin:0">
+    <div class="scene" role="img" aria-label="Composición de ejemplo con dos tazas de vidrio y un tapete de ducha"><img src="../../media/product-mene.png" alt=""><img src="../../media/product-nome.png" alt=""><img src="../../media/product-tilen.png" alt=""></div>
+    <a class="ce-hotspot" href="#mene" style="--x:22%;--y:34%"><span aria-hidden="true">A.</span><span class="ce-sr-only">Producto A: Taza de vidrio MENE</span></a>
+    <a class="ce-hotspot" href="#nome" style="--x:52%;--y:30%"><span aria-hidden="true">B.</span><span class="ce-sr-only">Producto B: Taza de vidrio NOME</span></a>
+    <a class="ce-hotspot ce-hotspot--promo" href="#tilen" style="--x:80%;--y:46%"><span aria-hidden="true">C.</span><span class="ce-sr-only">Producto C: Tapete de ducha TILEN</span></a>
+    <span class="ce-feature-tag ce-feature-tag--light" style="--x:24%;--y:60%"><span class="ce-feature-tag-label">de <strong>vidrio borosilicato</strong></span></span>
+    <span class="ce-feature-tag ce-feature-tag--start" style="--x:71%;--y:57%;--line:28px"><span class="ce-feature-tag-label">base <strong>antideslizante</strong></span></span>
+  </figure>
+  <p class="note">Composición de ejemplo con fotografías del catálogo.</p>
+</div>
+</body>
+</html>

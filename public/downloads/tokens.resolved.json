@@ -454,13 +454,12 @@
     "font.family": {
       "type": "fontFamily",
       "value": [
-        "Noto Sans Variable",
-        "Noto Sans",
+        "Inter",
         "Arial",
         "sans-serif"
       ],
-      "description": "Noto Sans for every interface and retail surface, with Arial fallback.",
-      "css": "\"Noto Sans Variable\", \"Noto Sans\", Arial, sans-serif",
+      "description": "Inter for every interface, retail and campaign surface, with Arial fallback.",
+      "css": "Inter, Arial, sans-serif",
       "variable": "--ce-font-family"
     },
     "font.line.body": {

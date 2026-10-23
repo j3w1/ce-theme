@@ -2,18 +2,19 @@
 // Text files are generated here; binary files (font, photos, logos) are listed in publish.json
 // with their repository source paths so they are never duplicated in the repository.
 import { readFile, readdir } from 'node:fs/promises';
+import { relative, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { icons } from '../site/data/icons.mjs';
 
 const root = new URL('../', import.meta.url);
 const read = (path) => readFile(new URL(path, root), 'utf8');
 export const OUT = 'exports/design-system';
 
-const FONT = {
-  family: 'Noto Sans Variable',
-  weight: '100 900',
-  file: 'fonts/noto-sans-latin-wght-normal.woff2',
-  source: 'node_modules/@fontsource-variable/noto-sans/files/noto-sans-latin-wght-normal.woff2',
-};
+// Supplied Inter files, recorded with provenance in fonts/manifest.json.
+const FONTS = JSON.parse(await read('fonts/manifest.json')).map((font) => ({
+  family: font.family, weight: String(font.weight), style: font.style,
+  file: `fonts/${font.file.split('/').pop()}`, source: `fonts/${font.file}`,
+}));
 
 // Supplied assets as they appear in the design system's asset library.
 const ASSET_GROUPS = [
@@ -23,7 +24,7 @@ const ASSET_GROUPS = [
   { name: 'Icons', tile: 'xs', files: Object.keys(icons).map((name) => `${name}.svg`) },
 ];
 // Photos that component previews load by relative path (each must stay under 512 KB).
-const PREVIEW_MEDIA = ['product-mene.png', 'product-nome.png', 'product-tilen.png'];
+const PREVIEW_MEDIA = ['product-mene.png', 'product-nome.png', 'product-tilen.png', 'logo-brand.jpg'];
 
 // Type styles. Values come from the font tokens; letter spacing and price sizes come from recipes.css and the site.
 const TYPE_GROUPS = [
@@ -111,12 +112,12 @@ export async function buildTokens(manifest, tokens) {
     version: 1,
     meta: {
       source: 'github', repo: 'j3w1/ce-theme', package: '.', foundation: manifest.version,
-      paths: { tokens: manifest.tokenSources, fonts: [FONT.source], assets: ['public/assets/'], docs: ['design-system/', 'docs/pricing.md', 'docs/accessibility.md'] },
+      paths: { tokens: manifest.tokenSources, fonts: FONTS.map((font) => font.source), assets: ['public/assets/'], docs: ['design-system/', 'docs/pricing.md', 'docs/accessibility.md', 'docs/sharing.md', 'docs/evolution/2026-10-design-evolution.md'] },
       generator: 'scripts/design-system.mjs',
     },
     color: { themes: [{ id: manifest.theme, name: 'Light' }], tokens: colors },
     type: {
-      fonts: [{ family: FONT.family, file: FONT.file, weight: FONT.weight, style: 'normal' }],
+      fonts: FONTS.map(({ family, file, weight, style }) => ({ family, file, weight, style })),
       families: { sans: fontStack },
       groups,
     },
@@ -151,7 +152,8 @@ const iconSvg = (path) => `<svg xmlns="http://www.w3.org/2000/svg" width="24" he
 
 async function listFiles(dir) {
   const entries = await readdir(new URL(dir, root), { withFileTypes: true, recursive: true });
-  return entries.filter((e) => e.isFile()).map((e) => `${e.parentPath ?? e.path}/${e.name}`.slice(new URL(dir, root).pathname.length)).sort();
+  const base = fileURLToPath(new URL(dir, root));
+  return entries.filter((e) => e.isFile()).map((e) => relative(base, `${e.parentPath ?? e.path}/${e.name}`).split(sep).join('/')).sort();
 }
 
 export async function buildDesignSystem(manifest, tokens) {
@@ -160,12 +162,14 @@ export async function buildDesignSystem(manifest, tokens) {
   const ds = await buildTokens(manifest, tokens);
   put('tokens.json', JSON.stringify(ds, null, 2) + '\n');
   put('tokens.css', compileTokensCss(ds));
-  const recipes = await read('recipes/recipes.css');
-  put('components/bundle.css', `/* ${manifest.name} ${manifest.version} — generated from recipes/recipes.css. Do not edit. */\n/* The design system declares the font stack as --font-sans; the recipes read --ce-font-family. */\n:root { --ce-font-family: var(--font-sans); }\n${recipes}`);
+  const recipes = await read('recipes/recipes.css') + await read('recipes/share-card.css');
+  put('components/bundle.css', `/* ${manifest.name} ${manifest.version} — generated from recipes/recipes.css and recipes/share-card.css. Do not edit. */\n/* The design system declares the font stack as --font-sans; the recipes read --ce-font-family. */\n:root { --ce-font-family: var(--font-sans); }\n${recipes}`);
   for (const file of await listFiles('design-system/')) put(file, await read(`design-system/${file}`));
   put('pricing.md', await read('docs/pricing.md'));
   put('accessibility.md', await read('docs/accessibility.md'));
-  put('licenses/noto-sans-OFL.txt', await read('public/licenses/noto-sans-OFL.txt'));
+  put('sharing.md', await read('docs/sharing.md'));
+  put('evolution.md', (await read('docs/evolution/2026-10-design-evolution.md')).replaceAll('](../decisions.md)', '](https://github.com/j3w1/ce-theme/blob/main/docs/decisions.md)'));
+  put('licenses/inter-OFL.txt', await read('fonts/inter/OFL.txt'));
   for (const [name, path] of Object.entries(icons)) put(`assets/Icons/${name}.svg`, iconSvg(path));
 
   // Binary files are published from their repository sources; uploads become the asset library.
@@ -175,7 +179,7 @@ export async function buildDesignSystem(manifest, tokens) {
     namespace: 'CasaElida',
     libraries: [],
     files: {
-      [`project/${FONT.file}`]: FONT.source,
+      ...Object.fromEntries(FONTS.map((font) => [`project/${font.file}`, font.source])),
       ...Object.fromEntries(PREVIEW_MEDIA.map((file) => [`project/media/${file}`, `public/assets/${file}`])),
     },
     assetGroups: ASSET_GROUPS.map(({ name, tile, files }) => ({ name, tile, files: files.map((file) => ({ name: file, source: source(name, file) })) })),

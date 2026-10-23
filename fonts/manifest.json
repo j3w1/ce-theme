@@ -1,0 +1,42 @@
+[
+  {
+    "file": "inter/Inter-Regular.woff2",
+    "family": "Inter",
+    "weight": 400,
+    "style": "normal",
+    "source": "Owner-supplied archive inter.zip (2026-10-23): inter/woff2/Inter-Regular.woff2, unmodified",
+    "version": "Inter 3.015 (git-7f5c04026)",
+    "license": "SIL Open Font License 1.1; see inter/OFL.txt",
+    "sha256": "e71ecb4730f1f88c95cb05c3dd7a1c958303767669aac2e5c6def89fb4df8f96"
+  },
+  {
+    "file": "inter/Inter-SemiBold.woff2",
+    "family": "Inter",
+    "weight": 600,
+    "style": "normal",
+    "source": "Owner-supplied archive inter.zip (2026-10-23): inter/woff2/Inter-SemiBold.woff2, unmodified",
+    "version": "Inter 3.015 (git-7f5c04026)",
+    "license": "SIL Open Font License 1.1; see inter/OFL.txt",
+    "sha256": "47159b7bba1660d8a67bacc4ffb680251561ec7a6242061d980a1e01616cf30f"
+  },
+  {
+    "file": "inter/Inter-Bold.woff2",
+    "family": "Inter",
+    "weight": 700,
+    "style": "normal",
+    "source": "Owner-supplied archive inter.zip (2026-10-23): inter/woff2/Inter-Bold.woff2, unmodified",
+    "version": "Inter 3.015 (git-7f5c04026)",
+    "license": "SIL Open Font License 1.1; see inter/OFL.txt",
+    "sha256": "2e7803583e963647c86f60af126c87ddc049eeedfdec6ddb02e5c4ccb0a25b62"
+  },
+  {
+    "file": "inter/Inter-ExtraBold.woff2",
+    "family": "Inter",
+    "weight": 800,
+    "style": "normal",
+    "source": "Owner-supplied archive inter.zip (2026-10-23): inter/woff2/Inter-ExtraBold.woff2, unmodified",
+    "version": "Inter 3.015 (git-7f5c04026)",
+    "license": "SIL Open Font License 1.1; see inter/OFL.txt",
+    "sha256": "50b574db8ab1de3e9e07e4cf0f561ec81b754565255f92f92c41cbe9ac7f5653"
+  }
+]

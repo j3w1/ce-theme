@@ -3,7 +3,37 @@ import Layout from '../layouts/Layout.astro';
 import Price from '../components/Price.astro';
 import ProductCard from '../components/ProductCard.astro';
 import Recipe from '../components/Recipe.astro';
+import Icon from '../components/Icon.astro';
 import { products } from '../data/products.mjs';
+const tagged=[
+  { letter:'A.', id:'etiqueta-mene', x:'22%', y:'34%', product:products[0], capacity:'250ml', material:'vidrio borosilicato' },
+  { letter:'B.', id:'etiqueta-nome', x:'52%', y:'30%', product:products[1], capacity:'350ml', material:'vidrio borosilicato' },
+  { letter:'C.', id:'etiqueta-tilen', x:'80%', y:'46%', product:products[2], capacity:'64 × 35cm', material:'PVC', promo:true },
+];
+const taggedCode=`<figure class="ce-tagged-media">
+  <img src="ambiente.jpg" alt="Tazas de vidrio y tapete de ducha en uso">
+  <a class="ce-hotspot" href="#taza-mene" style="--x:22%;--y:34%">
+    <span aria-hidden="true">A.</span><span class="ce-sr-only">Producto A: Taza de vidrio MENE</span>
+  </a>
+  <span class="ce-feature-tag" style="--x:30%;--y:62%">
+    <span class="ce-feature-tag-label">de <strong>vidrio borosilicato</strong></span>
+  </span>
+</figure>
+<ol class="ce-tag-list">
+  <li class="ce-tag-item" id="taza-mene">
+    <img src="taza-mene.png" alt="" width="160" height="160">
+    <div class="ce-tag-item-info">
+      <span class="ce-code">CE26061441</span>
+      <h3 class="ce-tag-item-title"><span class="ce-hotspot ce-hotspot--inline" aria-hidden="true">A.</span>Taza de vidrio MENE</h3>
+      <dl class="ce-specs">
+        <div class="ce-spec"><dt><!-- ruler icon --><span class="ce-sr-only">Medida</span></dt><dd>250ml</dd></div>
+        <div class="ce-spec"><dt><!-- material icon --><span class="ce-sr-only">Material</span></dt><dd>vidrio borosilicato</dd></div>
+      </dl>
+      <!-- Insert the shared price recipe here. -->
+      <p class="ce-availability">Disponible en todas las sedes.</p>
+    </div>
+  </li>
+</ol>`;
 const priceCode=`<span class="ce-price"><span class="ce-sr-only">Precio actual: 8.5 soles</span>
   <span class="ce-price-currency" aria-hidden="true">S/</span>
   <span class="ce-price-value" aria-hidden="true">8.5</span>
@@ -22,7 +52,7 @@ const offerCode=`<div class="ce-price-block">
 <Layout title="Precios y productos">
   <div class="container">
     <div class="page-intro"><p class="eyebrow">03 · Precios y productos</p><h1>Que se vea.<br/>Que se entienda.</h1><p>El código identifica. El nombre explica. El precio destaca. Una jerarquía compartida en el catálogo, las campañas y la tienda.</p></div>
-    <nav class="page-nav" aria-label="En esta página"><a class="ce-link" href="#codigos">Códigos</a><a class="ce-link" href="#precios">Precios</a><a class="ce-link" href="#ofertas">Ofertas</a><a class="ce-link" href="#productos">Productos</a><a class="ce-link" href="#fotografia">Sobre fotografía</a></nav>
+    <nav class="page-nav" aria-label="En esta página"><a class="ce-link" href="#codigos">Códigos</a><a class="ce-link" href="#precios">Precios</a><a class="ce-link" href="#ofertas">Ofertas</a><a class="ce-link" href="#productos">Productos</a><a class="ce-link" href="#etiquetas">Etiquetas</a><a class="ce-link" href="#fotografia">Sobre fotografía</a></nav>
     <div class="price-contract"><p><strong>La forma importa tanto como el importe.</strong> S/ pequeño, cifras grandes y decimales completos: <strong>S/8.5</strong>, <strong>S/20</strong>, <strong>S/14.5</strong>. El amarillo se reserva para precios de oferta; el blanco permite leer sobre fotografía.</p></div>
     <div id="codigos"><Recipe title="Un código con su propio lugar" description="Blanco sobre negro, esquinas rectas y caracteres intactos. El código precede al nombre; los nombres de catálogo como MENE se muestran por separado." code={'<span class="ce-code">CE26061509</span>\n<h3>Dispensador aceite</h3>\n<p>Vidrio, 350ml</p>'}><div class="code-specimens"><span class="ce-code">CE26061509</span><span class="ce-code">7730744292227</span><span class="ce-code">CE26031111R/12R</span><span class="ce-code">0000123456789</span></div><p class="small-note">Un código no se convierte a número, no se corta y no se sustituye por un nombre comercial.</p></Recipe></div>
     <div id="precios"><Recipe title="El precio de todos los días" description="Negro sobre blanco. La cifra tiene el mayor peso visual, con el prefijo S/ más pequeño y alineado en la parte superior." code={priceCode}><div class="demo-prices"><div><p class="demo-label">Entero</p><Price amount="20.00"/></div><div><p class="demo-label">Un decimal</p><Price amount="8.50"/></div><div><p class="demo-label">Por unidad</p><Price amount="5.50" unitLabel="cada uno"/></div></div></Recipe></div>
@@ -30,6 +60,16 @@ const offerCode=`<div class="ce-price-block">
     <Recipe title="Blanco sobre fotografía" description="Para campañas y pantallas. Protege siempre la lectura con un área tranquila o una capa oscura suficiente; la sombra de texto por sí sola no garantiza contraste." code={'<div class="ce-photo-panel">\n  <img src="tu-fotografia.jpg" alt="Descripción del producto en uso">\n  <div class="ce-photo-content">\n    <span class="ce-code">CE26061509</span>\n    <h3>Dispensador aceite</h3>\n    <p>Vidrio, 350ml</p>\n    <span class="ce-price ce-price--inverse"><span class="ce-sr-only">Precio actual: 8.5 soles</span>\n      <span class="ce-price-currency" aria-hidden="true">S/</span>\n      <span class="ce-price-value" aria-hidden="true">8.5</span>\n    </span>\n  </div>\n</div>'}><div class="inverse-demo"><span class="ce-code">CE26061509</span><h3 style="margin:var(--ce-space-16) 0 var(--ce-space-8)">Dispensador aceite</h3><p>Vidrio, 350ml</p><Price amount="8.5" variant="inverse"/></div></Recipe>
     <div id="productos"><Recipe title="La tarjeta de catálogo" description="Imagen completa, nombre comercial en negrita, descripción y detalle técnico. Las filas de precio se alinean incluso cuando los nombres ocupan varias líneas." code={'<article class="ce-product">\n  <div class="ce-product-media">\n    <img src="taza.png" alt="Taza de vidrio resistente al calor" width="400" height="400">\n  </div>\n  <div class="ce-product-info">\n    <h3 class="ce-product-model">MENE</h3>\n    <p class="ce-product-name">Taza de vidrio resistente al calor</p>\n    <p class="ce-product-details">Vidrio borosilicato, 250ml</p>\n    <!-- Insert the shared price recipe here. -->\n  </div>\n</article>'}><div class="ce-product-grid">{products.map(product=><ProductCard product={product}/>)}</div><p class="small-note">Los importes son ejemplos. Las fotografías proceden del catálogo público de Casa Elida.</p></Recipe></div>
     <Recipe title="La tarjeta que acompaña al producto" description="Una tarjeta blanca con fotografía, identificación y precio. Ideal para una pieza editorial donde el producto principal ya se ve en contexto." code={'<article class="ce-callout">\n  <img src="taza.png" alt="Taza de vidrio">\n  <div>\n    <h3>Taza de vidrio</h3>\n    <p class="ce-product-details">350ml · vidrio borosilicato</p>\n    <!-- Insert the shared price recipe here. -->\n  </div>\n</article>'}><div class="callout-stage"><article class="ce-callout"><img src="/assets/product-nome.png" alt="Taza NOME de vidrio" width="300" height="300" loading="lazy"/><div><h3>Taza de vidrio</h3><p class="ce-product-details">350ml · vidrio borosilicato</p><Price amount="8" unitLabel="cada una"/></div></article></div></Recipe>
+    <div id="etiquetas"><Recipe title="Etiquetas sobre la fotografía" description="Cada letra señala un producto en la imagen y lleva a su ficha. Así se distingue qué se está mostrando, qué se describe y cuánto cuesta. La lista repite toda la información en texto." code={taggedCode}>
+      <figure class="tagged-scene"><div class="ce-tagged-media">
+        <div class="tagged-scene-art" role="img" aria-label="Composición de ejemplo con dos tazas de vidrio y un tapete de ducha"><img src="/assets/product-mene.png" alt="" width="300" height="300" loading="lazy"/><img src="/assets/product-nome.png" alt="" width="300" height="300" loading="lazy"/><img src="/assets/product-tilen.png" alt="" width="300" height="300" loading="lazy"/></div>
+        {tagged.map(item=><a class:list={['ce-hotspot', item.promo && 'ce-hotspot--promo']} href={`#${item.id}`} style={`--x:${item.x};--y:${item.y}`}><span aria-hidden="true">{item.letter}</span><span class="ce-sr-only">{`Producto ${item.letter.replace('.','')}: ${item.product.name} ${item.product.model}`}</span></a>)}
+        <span class="ce-feature-tag ce-feature-tag--light" style="--x:24%;--y:60%"><span class="ce-feature-tag-label">de <strong>vidrio borosilicato</strong></span></span></div>
+        <figcaption class="small-note">Composición de ejemplo con fotografías del catálogo. Precios y disponibilidad de ejemplo.</figcaption>
+      </figure>
+      <ol class="ce-tag-list">{tagged.map(item=><li class="ce-tag-item" id={item.id}><img src={item.product.image} alt="" width="160" height="160" loading="lazy"/><div class="ce-tag-item-info"><span class="ce-code">{item.product.code}</span><h3 class="ce-tag-item-title"><span class:list={['ce-hotspot','ce-hotspot--inline', item.promo && 'ce-hotspot--promo']} aria-hidden="true">{item.letter}</span>{`${item.product.name} ${item.product.model}`}</h3><dl class="ce-specs"><div class="ce-spec"><dt><Icon name="ruler" size={18}/><span class="ce-sr-only">Medida</span></dt><dd>{item.capacity}</dd></div><div class="ce-spec"><dt><Icon name="material" size={18}/><span class="ce-sr-only">Material</span></dt><dd>{item.material}</dd></div></dl><Price amount={item.product.amount} previousAmount={item.product.previousAmount} discountLabel={item.product.discountLabel}/><p class="ce-availability">Disponibilidad de ejemplo: todas las sedes.</p></div></li>)}</ol>
+    </Recipe></div>
+    <Recipe title="La tarjeta que señala" description="La tarjeta blanca con una punta hacia el producto aparece en cada publicación reciente. Reúne nombre, medida, material y precio sin tapar la fotografía." code={'<article class="ce-callout ce-callout--bubble">\n  <img src="taza.png" alt="Taza de vidrio NOME">\n  <div>\n    <h3>Taza de vidrio NOME</h3>\n    <dl class="ce-specs">…</dl>\n    <!-- Insert the shared price recipe here. -->\n  </div>\n</article>'}><div class="callout-stage callout-stage--bubble"><article class="ce-callout ce-callout--bubble"><img src="/assets/product-nome.png" alt="Taza NOME de vidrio" width="300" height="300" loading="lazy"/><div><h3>Taza de vidrio NOME</h3><dl class="ce-specs"><div class="ce-spec"><dt><Icon name="ruler" size={18}/><span class="ce-sr-only">Medida</span></dt><dd>350ml</dd></div><div class="ce-spec"><dt><Icon name="material" size={18}/><span class="ce-sr-only">Material</span></dt><dd>vidrio borosilicato</dd></div></dl><Price amount="8"/></div></article></div></Recipe>
     <section class="section" id="fotografia"><h2>Una composición, tres niveles de información.</h2><div class="rule-grid"><div><h3>01 · Identificar</h3><p>El código negro es discreto, pero legible. Se coloca antes del nombre y mantiene el mismo orden en todas las piezas.</p></div><div><h3>02 · Explicar</h3><p>Nombre en negrita y detalles breves: material, capacidad o medidas. Solo se muestra información que el producto proporciona.</p></div><div><h3>03 · Mostrar el valor</h3><p>El precio es el elemento tipográfico más grande. Si hay una oferta, el precio anterior permanece cerca del actual.</p></div><div><h3>Siempre en texto real</h3><p>En web, códigos, nombres y precios permanecen seleccionables y accesibles. Las imágenes de campaña se usan como referencias de aplicación.</p></div></div></section>
   </div>
 </Layout>

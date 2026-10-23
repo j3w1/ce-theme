@@ -9,7 +9,7 @@ for (const route of routes) {
     await page.goto(route);
     await expect(page.locator('h1')).toHaveCount(1);
     await page.locator('footer').scrollIntoViewIfNeeded();
-    await page.evaluate(()=>Promise.all([...document.images].map(image=>image.decode().catch(()=>{}))));
+    await page.evaluate(()=>Promise.all([...document.images].map(image=>{image.loading='eager';return image.decode().catch(()=>{});})));
     expect(await page.locator('img').evaluateAll(images=>images.filter(i=>!i.complete||i.naturalWidth===0).map(i=>i.src))).toEqual([]);
     expect(errors).toEqual([]);
     const results=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
@@ -96,4 +96,18 @@ test('long identifiers, larger text and failed product images do not break card 
 test('reduced motion removes control transitions',async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/componentes/');
   expect(await page.locator('.ce-button').first().evaluate(el=>getComputedStyle(el).transitionDuration)).toBe('0s');
+});
+test('tagged photography links every marker to a product with the same letter',async({page})=>{
+  await page.goto('/patrones/');
+  const markers=page.locator('#etiquetas .ce-tagged-media .ce-hotspot');
+  await expect(markers).toHaveCount(3);
+  for (const marker of await markers.all()) {
+    const target=(await marker.getAttribute('href')).slice(1);
+    const letter=(await marker.locator('[aria-hidden="true"]').textContent()).trim();
+    await expect(marker).toHaveAccessibleName(new RegExp(`^Producto ${letter.replace('.','')}: `));
+    await expect(page.locator(`#${target} .ce-tag-item-title .ce-hotspot`)).toHaveText(letter);
+    await expect(page.locator(`#${target} .ce-price > .ce-sr-only`)).toHaveText(/^Precio actual: /);
+  }
+  await markers.first().click();
+  await expect(page).toHaveURL(/#etiqueta-mene$/);
 });

@@ -42,7 +42,7 @@ test('design-system CSS variables match the foundation exports exactly', async (
   }
   const bundle = await read('components/bundle.css');
   assert.ok(bundle.includes('--ce-font-family: var(--font-sans)'));
-  assert.ok(bundle.endsWith(await readFile(new URL('recipes/recipes.css', root), 'utf8')));
+  assert.ok(bundle.endsWith(await readFile(new URL('recipes/recipes.css', root), 'utf8') + await readFile(new URL('recipes/share-card.css', root), 'utf8')));
 });
 
 test('every component has guidelines and a marked live preview using only shipped media', async () => {
@@ -50,7 +50,7 @@ test('every component has guidelines and a marked live preview using only shippe
   const components = await readdir(new URL('components/', project), { withFileTypes: true });
   for (const entry of components.filter((e) => e.isDirectory())) {
     const preview = await read(`components/${entry.name}/preview.html`);
-    assert.match(preview.split('\n')[0], /^<!-- @dsCard (group="[A-Za-z ]+" )?height=\d+ -->$/, entry.name);
+    assert.match(preview.split('\n')[0], /^<!-- @dsCard (group="[A-Za-z ]+" )?height=\d+( width=\d+)?( subtitle="[^"]*")? -->$/, entry.name);
     assert.ok(preview.length < 256 * 1024);
     assert.doesNotMatch(preview, /<(iframe|object|embed|frame|noscript)\b/i);
     for (const [, src] of preview.matchAll(/src="([^"]+)"/g)) {

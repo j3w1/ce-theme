@@ -11,9 +11,9 @@
 | `README.md`, `components/<Name>/README.md` and `preview.html`, `assets/<Group>/README.md`, `components/Cover/preview.html` | Authored in `design-system/`. |
 | `pricing.md`, `accessibility.md` | `docs/` (copied). |
 | `assets/Icons/*.svg` | `site/data/icons.mjs`, drawn in ink `#111111`. |
-| `licenses/noto-sans-OFL.txt` | `public/licenses/`. |
+| `licenses/inter-OFL.txt` | `fonts/inter/OFL.txt`. |
 
-Binary files are not copied into the repository. `exports/design-system/publish.json` lists them with their repository sources: the Noto Sans latin variable font (from `node_modules/@fontsource-variable/noto-sans`), the product photos that component previews load from `project/media/`, and the supplied logos, product photos, campaign references and icons that become the design system's asset library.
+Binary files are not copied into the repository. `exports/design-system/publish.json` lists them with their repository sources: the four Inter weights (from `fonts/inter/`), the product photos that component previews load from `project/media/`, and the supplied logos, product photos, campaign references and icons that become the design system's asset library.
 
 There is no JavaScript component bundle: components are the framework-neutral HTML/CSS recipes, and previews are static markup styled by `bundle.css`.
 

@@ -24,8 +24,8 @@ const scale=[['Display','3rem','Diseñar para la vida.'],['Heading','2rem','Todo
       <div class="price-contract"><p><strong>El rojo de acción tiene su propio papel.</strong> Para botones con texto blanco usamos #DA2E3A. El amarillo siempre lleva texto oscuro. El color de marca y el estado de error tienen roles separados.</p></div>
       <div class="demo-row"><span class="ce-status ce-status--success">✓ Disponible</span><span class="ce-status ce-status--warning">! Requiere atención</span><span class="ce-status ce-status--danger">! Revisa este dato</span><span class="ce-status ce-status--info">i Información útil</span></div>
     </section>
-    <section class="section" id="tipografia"><SectionHeading eyebrow="Tipografía" title="Clara, cercana y sin rodeos." description="Noto Sans. Una familia para nombres, descripciones, herramientas y grandes precios."/>
-      <div class="type-specimen"><div class="type-display">Todo lo que<br/>hace casa.</div><div class="type-meta"><span>Noto Sans Variable</span><span>400 · 600 · 700 · 800</span></div></div>
+    <section class="section" id="tipografia"><SectionHeading eyebrow="Tipografía" title="Clara, cercana y sin rodeos." description="Inter. Una familia para nombres, descripciones, herramientas y grandes precios."/>
+      <div class="type-specimen"><div class="type-display">Todo lo que<br/>hace casa.</div><div class="type-meta"><span>Inter</span><span>400 · 600 · 700 · 800</span></div></div>
       <div class="type-scale">{scale.map(([label,size,text])=><div class="type-row"><span>{label}<br/>{size}</span><p style={`font-size:${size};font-weight:${label==='Body'||label==='Label'?400:700};line-height:1.2`}>{text}</p></div>)}</div>
       <p class="small-note">Texto base de 16px con interlineado de 1.5. Códigos y metadatos a 14px. Las cifras del precio mantienen el decimal al mismo tamaño; el símbolo S/ es más pequeño.</p>
     </section>

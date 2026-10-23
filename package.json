@@ -17,7 +17,6 @@
     "test:browser": "playwright test",
     "check": "pnpm validate && pnpm check:generated && pnpm test && pnpm build"
   },
-  "dependencies": { "@fontsource-variable/noto-sans": "5.3.0" },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
     "@playwright/test": "1.64.1",

@@ -41,7 +41,7 @@ Load `exports/tokens.css` before `exports/recipes.css`. Add `ce-scope` to your c
 </main>
 ```
 
-Set the price's font size for its context. `ce-product` sets it to 44px; campaign examples use larger values. Load the optional Noto Sans font locally; the CSS includes system fallbacks.
+Set the price's font size for its context. `ce-product` sets it to 44px; campaign examples use larger values. Load the optional `exports/fonts.css` (Inter, self-hosted from `fonts/inter/`) before the tokens; the CSS includes Arial and sans-serif fallbacks.
 
 ## Source map
 
@@ -49,7 +49,8 @@ Set the price's font size for its context. `ce-product` sets it to 44px; campaig
 | --- | --- |
 | `tokens/` | DTCG 2025.10 primitive and semantic token sources |
 | `ce-theme.json` | Version, supported exports, and contrast pairs |
-| `recipes/` | Framework-neutral styles and decimal-string price formatting |
+| `recipes/` | Framework-neutral styles, font faces, the share-card template and decimal-string price formatting |
+| `fonts/` | Owner-supplied Inter files with provenance hashes and OFL license |
 | `docs/` | Usage, accessibility, identity, and decisions |
 | `site/` | Static Astro reference site and demonstration fixtures |
 | `design-system/` | Brand book, component guidelines and previews for the Claude Design System bundle |
@@ -58,10 +59,10 @@ Set the price's font size for its context. `ce-product` sets it to 44px; campaig
 
 Run `pnpm generate` after changing token, recipe, manifest, or usage sources. Generated files are committed and checked for drift. The first foundation has 98 tokens and a light theme; the separate `j3w1/theme` project is not a dependency.
 
-Read [the consumer guide](docs/usage.md), [pricing contract](docs/pricing.md), [accessibility rules](docs/accessibility.md), [foundation decisions](docs/decisions.md), and [the Claude Design System bundle](docs/design-system.md).
+Read [the consumer guide](docs/usage.md), [pricing contract](docs/pricing.md), [accessibility rules](docs/accessibility.md), [foundation decisions](docs/decisions.md), [shared-link specification](docs/sharing.md), [the October 2026 design evolution record](docs/evolution/2026-10-design-evolution.md), and [the Claude Design System bundle](docs/design-system.md).
 
 ## Status and rights
 
 Version 0.1.0 is the first foundation. It does not migrate any existing Casa Elida application. Catalogue and campaign prices are demonstration fixtures, not current offers. The formatter renders supplied commercial terms and does not calculate discounts.
 
-The GitHub repository is public. Public visibility does not grant a general license to the company identity, photos, or source. Brand assets retain their ownership; see [asset notes](docs/assets.md). Noto Sans is distributed under its [SIL Open Font License](public/licenses/noto-sans-OFL.txt). This repository does not contain IKEA marks or purchased template source.
+The GitHub repository is public. Public visibility does not grant a general license to the company identity, photos, or source. Brand assets retain their ownership; see [asset notes](docs/assets.md). Inter is distributed under its [SIL Open Font License](fonts/inter/OFL.txt). This repository does not contain IKEA marks or purchased template source.

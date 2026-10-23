@@ -1,0 +1,20 @@
+/* Casa Elida product share card: a fixed 1200 × 630 canvas rendered to an image for og:image.
+   Load after tokens.css and fonts.css. The centre 630 × 630 square holds everything essential,
+   so square crops (common in messaging previews) keep the product, name and price. */
+.ce-share-card { position: relative; box-sizing: border-box; width: 1200px; height: 630px; overflow: hidden; background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); font-family: var(--ce-font-family); }
+.ce-share-card *, .ce-share-card *::before, .ce-share-card *::after { box-sizing: border-box; }
+.ce-share-card-brand { position: absolute; inset: 0 auto 0 0; display: flex; align-items: center; justify-content: center; width: 285px; background: var(--ce-color-brand-red); }
+.ce-share-card-brand img { display: block; width: 220px; height: 220px; object-fit: contain; }
+.ce-share-card-square { position: absolute; top: 0; left: 285px; display: grid; grid-template-rows: minmax(0, 1fr) auto; width: 630px; height: 630px; padding: var(--ce-space-32) var(--ce-space-40) var(--ce-space-40); }
+.ce-share-card-media { display: flex; align-items: center; justify-content: center; min-height: 0; }
+.ce-share-card-media img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ce-share-card-info { display: grid; gap: var(--ce-space-8); }
+.ce-share-card-name { margin: 0; font-size: 34px; font-weight: var(--ce-font-weight-bold); line-height: var(--ce-font-line-heading); letter-spacing: -.02em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ce-share-card-details { margin: 0; color: var(--ce-color-text-muted); font-size: 22px; line-height: var(--ce-font-line-heading); }
+.ce-share-card .ce-price-block { gap: var(--ce-space-16); }
+.ce-share-card .ce-price { font-size: 96px; }
+.ce-share-card .ce-price-history { font-size: 22px; }
+.ce-share-card-aside { position: absolute; inset: 0 0 0 auto; display: flex; flex-direction: column; justify-content: space-between; width: 285px; padding: var(--ce-space-40) var(--ce-space-32); border-left: var(--ce-stroke-thin) solid var(--ce-color-border-default); font-size: 20px; }
+.ce-share-card-aside .ce-code { font-size: 20px; }
+.ce-share-card-url { color: var(--ce-color-text-secondary); font-weight: var(--ce-font-weight-semibold); overflow-wrap: anywhere; }
+.ce-share-card--fallback .ce-share-card-media { background: var(--ce-color-surface-subtle); }

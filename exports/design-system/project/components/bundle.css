@@ -1,4 +1,4 @@
-/* Casa Elida 0.1.0 — generated from recipes/recipes.css. Do not edit. */
+/* Casa Elida 0.1.0 — generated from recipes/recipes.css and recipes/share-card.css. Do not edit. */
 /* The design system declares the font stack as --font-sans; the recipes read --ce-font-family. */
 :root { --ce-font-family: var(--font-sans); }
 /* Casa Elida recipes. Load tokens.css first. No global reset or font download. */
@@ -42,7 +42,7 @@
 .ce-status--danger { color: var(--ce-color-status-danger-text); background: var(--ce-color-status-danger-bg); }
 .ce-status--warning { color: var(--ce-color-status-warning-text); background: var(--ce-color-status-warning-bg); }
 .ce-status--info { color: var(--ce-color-status-info-text); background: var(--ce-color-status-info-bg); }
-.ce-code { display: inline-block; max-width: 100%; padding: var(--ce-space-2) var(--ce-space-8); background: var(--ce-color-code-bg); color: var(--ce-color-code-text); border: 0; border-radius: var(--ce-radius-none); font-family: var(--ce-font-family); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-regular); line-height: var(--ce-font-line-body); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; user-select: all; }
+.ce-code { display: inline-block; max-width: 100%; padding: var(--ce-space-2) var(--ce-space-8); background: var(--ce-color-code-bg); color: var(--ce-color-code-text); border: 0; border-radius: var(--ce-radius-none); font-family: var(--ce-font-family); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-regular); line-height: var(--ce-font-line-body); font-variant-numeric: tabular-nums; font-feature-settings: "ss04"; overflow-wrap: anywhere; user-select: all; }
 .ce-price-block { display: flex; align-items: center; flex-wrap: wrap; gap: var(--ce-space-12); }
 .ce-price { display: inline-flex; align-items: baseline; gap: var(--ce-space-2); color: var(--ce-color-price-regular); font-weight: var(--ce-font-weight-heavy); line-height: 1; white-space: nowrap; letter-spacing: -.045em; font-variant-numeric: lining-nums; }
 .ce-price-currency { font-size: .46em; letter-spacing: -.03em; align-self: flex-start; padding-top: .18em; }
@@ -85,6 +85,67 @@
 .ce-table { width: 100%; border-collapse: collapse; text-align: left; font-size: var(--ce-font-size-sm); }
 .ce-table th, .ce-table td { padding: var(--ce-space-16); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); vertical-align: top; }
 .ce-table th { font-weight: var(--ce-font-weight-bold); background: var(--ce-color-surface-subtle); }
-@media (min-width: 640px) { .ce-product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ce-space-48) var(--ce-space-24); } }
+/* Product information on photography and in lists. */
+.ce-specs { display: grid; gap: var(--ce-space-4); margin: 0; font-size: var(--ce-font-size-sm); line-height: var(--ce-font-line-heading); }
+.ce-spec { display: flex; align-items: center; gap: var(--ce-space-8); }
+.ce-spec dt { display: inline-flex; flex: 0 0 auto; }
+.ce-spec dt svg { width: 18px; height: 18px; }
+.ce-spec dd { margin: 0; overflow-wrap: anywhere; }
+.ce-availability { margin: 0; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); font-weight: var(--ce-font-weight-semibold); line-height: var(--ce-font-line-heading); }
+.ce-callout--bubble { position: relative; overflow: visible; }
+.ce-callout--bubble::before { position: absolute; bottom: calc(100% - 1px); right: 12%; width: 44px; height: 40px; content: ''; background: inherit; clip-path: path('M0 40 Q30 36 40 0 Q44 20 44 40 Z'); }
+.ce-tagged-media { position: relative; isolation: isolate; container-type: inline-size; }
+.ce-tagged-media > img { display: block; width: 100%; height: auto; }
+.ce-hotspot { position: absolute; z-index: 1; left: var(--x, 50%); top: var(--y, 50%); transform: translate(-50%, -50%); display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: var(--ce-stroke-focus) solid var(--ce-color-surface-canvas); border-radius: var(--ce-radius-pill); background: var(--ce-color-action-primary-bg); color: var(--ce-color-action-primary-text); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-heavy); line-height: 1; text-decoration: none; }
+.ce-hotspot::after { position: absolute; inset: -6px; content: ''; border-radius: inherit; }
+.ce-hotspot:hover { background: var(--ce-color-action-primary-hover); }
+.ce-hotspot--promo, .ce-hotspot--promo:hover { background: var(--ce-color-price-offer-bg); color: var(--ce-color-price-offer-text); }
+.ce-hotspot--inline { position: static; transform: none; flex: 0 0 auto; width: 28px; height: 28px; border: 0; font-size: var(--ce-font-size-xs); }
+.ce-hotspot--inline::after { content: none; }
+.ce-hotspot:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); box-shadow: 0 0 0 var(--ce-stroke-offset) var(--ce-color-surface-canvas); }
+.ce-feature-tag { position: absolute; z-index: 1; left: var(--x, 50%); top: var(--y, 50%); display: flex; align-items: center; transform: translate(-6px, -50%); color: var(--ce-color-text-inverse); font-size: var(--ce-font-size-sm); line-height: var(--ce-font-line-heading); pointer-events: none; }
+.ce-feature-tag::before { flex: 0 0 auto; width: 12px; height: 12px; content: ''; border: var(--ce-stroke-focus) solid var(--ce-color-surface-inverse); border-radius: var(--ce-radius-pill); background: var(--ce-color-surface-canvas); }
+.ce-feature-tag::after { order: 1; flex: 0 0 auto; width: var(--line, 40px); height: var(--ce-stroke-focus); content: ''; background: var(--ce-color-surface-canvas); box-shadow: 0 0 0 1px var(--ce-color-overlay); }
+.ce-feature-tag-label { order: 2; max-width: 16em; padding: var(--ce-space-4) var(--ce-space-12); border-radius: var(--ce-radius-small); background: var(--ce-color-overlay); }
+.ce-feature-tag-label strong { color: var(--ce-color-brand-yellow); font-weight: var(--ce-font-weight-heavy); }
+.ce-feature-tag--light { color: var(--ce-color-text-primary); }
+.ce-feature-tag--light .ce-feature-tag-label { background: var(--ce-color-surface-canvas); }
+.ce-feature-tag--light .ce-feature-tag-label strong { color: var(--ce-color-action-primary-bg); }
+.ce-feature-tag--start { transform: translate(calc(-100% + 6px), -50%); }
+.ce-feature-tag--start::before { order: 3; }
+.ce-feature-tag--start::after { order: 2; }
+.ce-feature-tag--start .ce-feature-tag-label { order: 1; }
+.ce-detail-inset { position: absolute; z-index: 1; left: var(--x, 80%); top: var(--y, 80%); display: grid; justify-items: center; gap: var(--ce-space-8); width: var(--size, 22%); margin: 0; transform: translate(-50%, -50%); color: var(--ce-color-text-inverse); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-semibold); text-align: center; }
+.ce-detail-inset img { width: 100%; aspect-ratio: 1; object-fit: cover; border: 3px solid var(--ce-color-surface-canvas); border-radius: var(--ce-radius-pill); }
+.ce-detail-inset figcaption { padding: var(--ce-space-2) var(--ce-space-8); border-radius: var(--ce-radius-small); background: var(--ce-color-overlay); }
+.ce-tag-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ce-space-24); margin: 0; padding: var(--ce-space-24) 0 0; list-style: none; }
+.ce-tag-item { display: grid; grid-template-columns: 30% minmax(0, 1fr); align-items: start; gap: var(--ce-space-12); scroll-margin-top: var(--ce-space-96); }
+.ce-tag-item > img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.ce-tag-item-info { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ce-space-8); min-width: 0; }
+.ce-tag-item-title { display: flex; align-items: flex-start; gap: var(--ce-space-8); margin: 0; font-size: var(--ce-font-size-lead); font-weight: var(--ce-font-weight-bold); line-height: var(--ce-font-line-heading); letter-spacing: -.02em; overflow-wrap: anywhere; }
+.ce-tag-item .ce-price { font-size: 40px; }
+.ce-tag-item:target { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-space-8); }
+@media (min-width: 640px) { .ce-product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ce-space-48) var(--ce-space-24); } .ce-tag-list { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); } .ce-tag-item + .ce-tag-item { border-left: var(--ce-stroke-thin) solid var(--ce-color-border-default); padding-left: var(--ce-space-24); } }
 @media (min-width: 1024px) { .ce-product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@container (max-width: 480px) { .ce-hotspot { width: 30px; height: 30px; font-size: var(--ce-font-size-xs); } .ce-feature-tag { font-size: var(--ce-font-size-xs); } .ce-detail-inset { font-size: var(--ce-font-size-xs); } }
 @media (prefers-reduced-motion: reduce) { .ce-button, .ce-chip, .ce-icon-button { transition: none; } }
+/* Casa Elida product share card: a fixed 1200 × 630 canvas rendered to an image for og:image.
+   Load after tokens.css and fonts.css. The centre 630 × 630 square holds everything essential,
+   so square crops (common in messaging previews) keep the product, name and price. */
+.ce-share-card { position: relative; box-sizing: border-box; width: 1200px; height: 630px; overflow: hidden; background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); font-family: var(--ce-font-family); }
+.ce-share-card *, .ce-share-card *::before, .ce-share-card *::after { box-sizing: border-box; }
+.ce-share-card-brand { position: absolute; inset: 0 auto 0 0; display: flex; align-items: center; justify-content: center; width: 285px; background: var(--ce-color-brand-red); }
+.ce-share-card-brand img { display: block; width: 220px; height: 220px; object-fit: contain; }
+.ce-share-card-square { position: absolute; top: 0; left: 285px; display: grid; grid-template-rows: minmax(0, 1fr) auto; width: 630px; height: 630px; padding: var(--ce-space-32) var(--ce-space-40) var(--ce-space-40); }
+.ce-share-card-media { display: flex; align-items: center; justify-content: center; min-height: 0; }
+.ce-share-card-media img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ce-share-card-info { display: grid; gap: var(--ce-space-8); }
+.ce-share-card-name { margin: 0; font-size: 34px; font-weight: var(--ce-font-weight-bold); line-height: var(--ce-font-line-heading); letter-spacing: -.02em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ce-share-card-details { margin: 0; color: var(--ce-color-text-muted); font-size: 22px; line-height: var(--ce-font-line-heading); }
+.ce-share-card .ce-price-block { gap: var(--ce-space-16); }
+.ce-share-card .ce-price { font-size: 96px; }
+.ce-share-card .ce-price-history { font-size: 22px; }
+.ce-share-card-aside { position: absolute; inset: 0 0 0 auto; display: flex; flex-direction: column; justify-content: space-between; width: 285px; padding: var(--ce-space-40) var(--ce-space-32); border-left: var(--ce-stroke-thin) solid var(--ce-color-border-default); font-size: 20px; }
+.ce-share-card-aside .ce-code { font-size: 20px; }
+.ce-share-card-url { color: var(--ce-color-text-secondary); font-weight: var(--ce-font-weight-semibold); overflow-wrap: anywhere; }
+.ce-share-card--fallback .ce-share-card-media { background: var(--ce-color-surface-subtle); }

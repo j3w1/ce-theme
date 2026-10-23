@@ -1,5 +1,8 @@
 /* Casa Elida — generated from tokens.json */
-@font-face { font-family: "Noto Sans Variable"; src: url("fonts/noto-sans-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("fonts/Inter-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("fonts/Inter-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("fonts/Inter-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("fonts/Inter-ExtraBold.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
 :root, [data-theme="light"] {
   --ce-palette-red: #e6303d;
   --ce-palette-red-action: #da2e3a;
@@ -100,7 +103,7 @@
   --ce-layout-gutter-tablet: 24px;
   --ce-layout-gutter-desktop: 48px;
   --ce-motion-quick: 160ms;
-  --font-sans: "Noto Sans Variable", "Noto Sans", Arial, sans-serif;
+  --font-sans: Inter, Arial, sans-serif;
 }
 .ce-type-signage { font-family: var(--font-sans); font-size: 8rem; line-height: 1.1; font-weight: 800; letter-spacing: -0.05em; }
 .ce-type-hero { font-family: var(--font-sans); font-size: 4rem; line-height: 1.1; font-weight: 700; letter-spacing: -0.035em; }

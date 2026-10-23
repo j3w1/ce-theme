@@ -7,6 +7,7 @@ Version: **0.1.0**, light foundation. `ce-theme.json` lists the source token fil
 - `exports/tokens.css`: resolved CSS custom properties, prefixed `--ce-`.
 - `exports/tokens.resolved.json`: token type, resolved value, CSS value, description, and variable name.
 - `exports/recipes.css`: opt-in, framework-neutral HTML recipes.
+- `exports/fonts.css`: opt-in `@font-face` rules for the self-hosted Inter files in `fonts/inter/`.
 - `recipes/price.mjs`: `formatAmount`, `amountInCents`, and `preparePrice` named exports.
 
 The static site exposes the same files under `/downloads/`. DTCG sources remain in `tokens/`; the resolved export is a consumer convenience, not a second authoring format.
@@ -23,7 +24,9 @@ Load tokens first, recipes second, then application styles. Wrap a consumer regi
 </section>
 ```
 
-The reference site bundles and self-hosts `@fontsource-variable/noto-sans`, pinned in the lockfile. A bundler consumer can install that package and import `@fontsource-variable/noto-sans` in its application entry. Keep the font's OFL notice. Copy-only consumers may use the documented Arial/sans-serif fallback or host their licensed Noto Sans font files. The recipes themselves do not fetch fonts or any third-party URL.
+The typeface is Inter. The owner-supplied files (Inter 3.015, weights 400/600/700/800, WOFF2) live in `fonts/inter/` with their OFL notice. `exports/fonts.css` declares them with URLs relative to `../fonts/inter/`; copy the folder beside it, or point the URLs at your own copy. Keep the OFL notice with the files. Without the font, the stack falls back to Arial and sans-serif. The recipes themselves do not fetch fonts or any third-party URL.
+
+The supplied files contain the full Inter character set (about 110 KB each). Subsetting to the Latin range used by Spanish is recommended for public web delivery and is permitted by the OFL; record any subset as a derived file with its own hash.
 
 Typography uses weights 400, 600, 700, and 800. Body text is 16px, supporting product details and codes 14px, and line-height 1.5. Large display prices use weight 800. The currency prefix is 46% of the amount size; fractional digits retain the amount's size.
 

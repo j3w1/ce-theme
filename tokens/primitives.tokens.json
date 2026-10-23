@@ -361,12 +361,11 @@
     "family": {
       "$type": "fontFamily",
       "$value": [
-        "Noto Sans Variable",
-        "Noto Sans",
+        "Inter",
         "Arial",
         "sans-serif"
       ],
-      "$description": "Noto Sans for every interface and retail surface, with Arial fallback."
+      "$description": "Inter for every interface, retail and campaign surface, with Arial fallback."
     },
     "weight": {
       "regular": {

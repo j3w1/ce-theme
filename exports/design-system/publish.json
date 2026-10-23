@@ -3,10 +3,14 @@
   "namespace": "CasaElida",
   "libraries": [],
   "files": {
-    "project/fonts/noto-sans-latin-wght-normal.woff2": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-latin-wght-normal.woff2",
+    "project/fonts/Inter-Regular.woff2": "fonts/inter/Inter-Regular.woff2",
+    "project/fonts/Inter-SemiBold.woff2": "fonts/inter/Inter-SemiBold.woff2",
+    "project/fonts/Inter-Bold.woff2": "fonts/inter/Inter-Bold.woff2",
+    "project/fonts/Inter-ExtraBold.woff2": "fonts/inter/Inter-ExtraBold.woff2",
     "project/media/product-mene.png": "public/assets/product-mene.png",
     "project/media/product-nome.png": "public/assets/product-nome.png",
-    "project/media/product-tilen.png": "public/assets/product-tilen.png"
+    "project/media/product-tilen.png": "public/assets/product-tilen.png",
+    "project/media/logo-brand.jpg": "public/assets/logo-brand.jpg"
   },
   "assetGroups": [
     {
@@ -118,6 +122,10 @@
         {
           "name": "ruler.svg",
           "source": "exports/design-system/project/assets/Icons/ruler.svg"
+        },
+        {
+          "name": "material.svg",
+          "source": "exports/design-system/project/assets/Icons/material.svg"
         }
       ]
     }
