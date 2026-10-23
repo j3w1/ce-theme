@@ -1,0 +1,148 @@
+---
+// Internal-tool demonstration: the workspace recipes composed into CE Systems and CE Meta screens.
+// Records, prices, permissions and workflow states are fixtures; the applications own the real rules.
+import Store from '../../layouts/Store.astro';
+import Icon from '../../components/Icon.astro';
+import Price from '../../components/Price.astro';
+import { productView, codeSegments } from '../../../recipes/product.mjs';
+import { preparePrice } from '../../../recipes/price.mjs';
+import { catalogue, stores } from '../../data/store.mjs';
+const rows = catalogue.map((item) => ({ item, view: productView(item) }));
+const code = (value: string) => codeSegments(value);
+const receiving = [
+  { item: catalogue[0], expected: '48', received: '48', state: ['success', 'Completo'] },
+  { item: catalogue[1], expected: '36', received: '30', state: ['warning', 'Faltan 6'] },
+  { item: catalogue[2], expected: '24', received: '', state: ['info', 'Pendiente'] },
+];
+---
+<Store title="CE Systems" bare description="Demostración de pantallas internas: catálogo, ficha, precios por tienda, recepción, etiquetas y compartir.">
+  <div class="ce-app" data-ce-density="compact">
+    <header class="ce-app-bar">
+      <a class="ce-app-brand" href="/sistemas/"><img src="/assets/logo-square-red.jpg" alt="" width="28" height="28" />CE Systems</a>
+      <form class="ce-app-search ce-search" role="search"><Icon name="search" size={20} /><label class="ce-sr-only" for="buscar-sistema">Buscar por código, nombre o descripción</label><input id="buscar-sistema" type="search" placeholder="Código, NAME o descripción" /></form>
+      <div class="ce-app-context"><Icon name="store" size={20} /><label class="ce-sr-only" for="sede">Tienda de trabajo</label><select class="ce-select" id="sede" style="min-height:36px;padding-block:4px">{stores.map((store) => <option>{store.name}</option>)}</select><span class="ce-pill">Rol: Encargada de tienda</span></div>
+    </header>
+    <nav class="ce-module-nav" aria-label="Módulos">
+      <h2>Catálogo</h2><a href="#productos" aria-current="page"><Icon name="grid" size={18} />Productos</a><a href="#precios"><Icon name="tag" size={18} />Precios por tienda</a>
+      <h2>Tienda</h2><a href="#recepcion"><Icon name="truck" size={18} />Recepción</a><a href="#etiquetas"><Icon name="ruler" size={18} />Etiquetas</a>
+      <h2>CE Meta</h2><a href="#compartir"><Icon name="share" size={18} />Compartir</a>
+    </nav>
+    <div class="ce-app-main">
+      <h1 class="ce-sr-only">CE Systems: pantallas de ejemplo</h1>
+      <div class="ce-tabs" role="tablist" aria-label="Pantallas de ejemplo">
+        <button class="ce-tab" role="tab" id="t-productos" aria-controls="productos" aria-selected="true">Productos</button>
+        <button class="ce-tab" role="tab" id="t-ficha" aria-controls="ficha" aria-selected="false">Ficha</button>
+        <button class="ce-tab" role="tab" id="t-precios" aria-controls="precios" aria-selected="false">Precios</button>
+        <button class="ce-tab" role="tab" id="t-recepcion" aria-controls="recepcion" aria-selected="false">Recepción</button>
+        <button class="ce-tab" role="tab" id="t-etiquetas" aria-controls="etiquetas" aria-selected="false">Etiquetas</button>
+        <button class="ce-tab" role="tab" id="t-compartir" aria-controls="compartir" aria-selected="false">Compartir</button>
+      </div>
+
+      <section class="ce-tab-panel" role="tabpanel" id="productos" aria-labelledby="t-productos">
+        <div class="ce-page-header"><h2>Productos</h2><div class="ce-page-actions"><button class="ce-button ce-button--secondary" type="button"><Icon name="download" size={18} />Exportar</button><button class="ce-button" type="button"><Icon name="plus" size={18} />Nuevo producto</button></div></div>
+        <div class="ce-table-toolbar"><input class="ce-input" type="search" aria-label="Filtrar la tabla" placeholder="Filtrar" /><button class="ce-chip" type="button" aria-pressed="true" data-ce-toggle>Activos</button><button class="ce-chip" type="button" aria-pressed="false" data-ce-toggle>Sin foto</button><button class="ce-chip" type="button" aria-pressed="false" data-ce-toggle>Talla sin resolver</button></div>
+        <div class="ce-table-wrap">
+          <table class="ce-data-table">
+            <caption class="ce-sr-only">Productos del catálogo</caption>
+            <thead><tr><th class="is-select"><input type="checkbox" aria-label="Seleccionar todos" /></th><th scope="col">Foto</th><th scope="col" aria-sort="ascending"><button class="ce-sort" type="button">Código</button></th><th scope="col"><button class="ce-sort" type="button">NAME</button></th><th scope="col" class="is-wrap">Descripción</th><th scope="col">Especificaciones</th><th scope="col">Estado</th></tr></thead>
+            <tbody>
+              {rows.map(({ item, view }, index) => <tr aria-selected={index < 2 ? 'true' : 'false'}>
+                <td class="is-select"><input type="checkbox" checked={index < 2} aria-label={`Seleccionar ${view.code}`} /></td>
+                <td><img class="ce-thumb" src={view.image} alt="" width="40" height="40" /></td>
+                <td><span class="ce-code">{code(view.code).map((part) => <span class={part.part === 'number' ? 'ce-code-number' : undefined}>{part.text}</span>)}</span></td>
+                <td><strong>{view.name}</strong></td>
+                <td class="is-wrap">{view.description}</td>
+                <td>{view.specs.join(', ')}</td>
+                <td><span class="ce-pill ce-pill--success">Publicado</span></td>
+              </tr>)}
+              <tr><td class="is-select"><input type="checkbox" aria-label="Seleccionar CE26061509" /></td><td><span class="ce-thumb ce-unknown" style="display:grid;place-items:center" role="img" aria-label="Sin foto"><Icon name="info" size={18} /></span></td><td><span class="ce-code">{code('CE26061509').map((part) => <span class={part.part === 'number' ? 'ce-code-number' : undefined}>{part.text}</span>)}</span></td><td><span class="ce-unknown">Sin NAME</span></td><td class="is-wrap">Dispensador de Aceite</td><td>vidrio, 350ml</td><td><span class="ce-pill ce-pill--warning">Borrador</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ce-bulk-bar" role="region" aria-label="Acciones para la selección"><strong>2 seleccionados</strong><button class="ce-button ce-button--secondary" type="button">Preparar etiquetas</button><button class="ce-button ce-button--secondary" type="button">Compartir</button><button class="ce-link" type="button">Quitar selección</button></div>
+        <div class="ce-table-footer"><span>5 de 5 productos</span><span>Datos de ejemplo</span></div>
+      </section>
+
+      <section class="ce-tab-panel" role="tabpanel" id="ficha" aria-labelledby="t-ficha" hidden>
+        <div class="ce-record-header"><img src={rows[0].view.image} alt="" width="64" height="64" /><div class="ce-record-title"><span class="ce-code" style="justify-self:start">{rows[0].view.code}</span><h2>{rows[0].view.name} · {rows[0].view.description}</h2><div class="ce-record-meta"><span>Familia: tazas</span><span>Última edición: equipo de catálogo</span></div></div><span class="ce-pill ce-pill--success">Publicado</span></div>
+        <div class="ce-record-layout">
+          <form>
+            <div class="ce-form-section"><h2>Identidad</h2>
+              <div class="ce-form-grid">
+                <div class="ce-field"><label for="f-name">NAME</label><input class="ce-input" id="f-name" value={rows[0].view.name} /><span class="ce-field-note">Se muestra en mayúsculas.</span></div>
+                <div class="ce-field"><label for="f-desc">Descripción</label><input class="ce-input" id="f-desc" value="Taza de vidrio resistente al calor" /><span class="ce-field-note">Vista: {rows[0].view.description}</span></div>
+                <div class="ce-field"><label for="f-specs">Especificaciones</label><input class="ce-input" id="f-specs" value={rows[0].view.specs.join(', ')} /></div>
+              </div>
+            </div>
+            <div class="ce-form-section"><h2>Código</h2>
+              <div class="ce-locked"><Icon name="info" size={18} />El código lo asigna 1688toPL. Aquí solo se muestra y se copia.</div>
+              <dl class="ce-readonly" data-ce-copy-scope><dt>Código</dt><dd style="display:flex;gap:8px;align-items:center"><span class="ce-code">{rows[0].view.code}</span><button class="ce-icon-button" type="button" data-ce-copy={rows[0].view.code} aria-label="Copiar código" style="min-height:36px;width:36px;flex-basis:36px;padding:8px"><Icon name="copy" size={16} /></button><span role="status" class="ce-field-note"></span></dd><dt>Material</dt><dd>vidrio borosilicato <span class="ce-pill">confirmado</span></dd></dl>
+            </div>
+            <div class="ce-form-actions"><span class="ce-save-state" data-state="dirty">Cambios sin guardar</span><button class="ce-button ce-button--secondary" type="button">Descartar</button><button class="ce-button" type="button">Guardar</button></div>
+          </form>
+          <aside aria-labelledby="historial"><h2 id="historial" style="font-size:var(--ce-font-size-lead)">Historial</h2>
+            <ol class="ce-audit"><li><strong>Descripción editada</strong><time datetime="2026-10-22T16:40">22 oct, 16:40 · Catálogo</time></li><li><strong>Publicado en la tienda</strong><time datetime="2026-10-20T10:05">20 oct, 10:05 · Tienda Tacna</time></li><li><strong>Creado desde 1688toPL</strong><time datetime="2026-10-18T09:12">18 oct, 09:12</time></li></ol>
+          </aside>
+        </div>
+      </section>
+
+      <section class="ce-tab-panel" role="tabpanel" id="precios" aria-labelledby="t-precios" hidden>
+        <div class="ce-page-header"><h2>Precios por tienda</h2><div class="ce-page-actions"><span class="ce-pill ce-pill--info">Solo lectura para tu rol</span></div></div>
+        <p class="ce-field-note" style="margin-top:0">El servicio de precios decide el precio vigente. Esta vista lo muestra; no calcula descuentos.</p>
+        <div class="ce-table-wrap"><table class="ce-data-table">
+          <caption class="ce-sr-only">Precio de venta por tienda</caption>
+          <thead><tr><th scope="col">Código</th><th scope="col">NAME</th>{stores.map((store) => <th scope="col" class="is-number">{store.name}</th>)}</tr></thead>
+          <tbody>{rows.map(({ item, view }) => <tr><td><span class="ce-code">{view.code}</span></td><td><strong>{view.name}</strong></td>{stores.map((store) => <td class="is-number">{item.prices[store.id] ? <>S/{preparePrice({ amount: item.prices[store.id] }).current}{item.previous?.[store.id] && <span class="ce-pill ce-pill--warning" style="margin-left:8px">Oferta</span>}</> : <span class="ce-unknown">Sin precio</span>}</td>)}</tr>)}</tbody>
+        </table></div>
+      </section>
+
+      <section class="ce-tab-panel" role="tabpanel" id="recepcion" aria-labelledby="t-recepcion" hidden data-ce-density="touch">
+        <div class="ce-page-header"><h2>Recepción · Guía G-0042</h2><div class="ce-page-actions"><button class="ce-button" type="button">Cerrar recepción</button></div></div>
+        <div class="ce-notice ce-notice--warning" role="status"><strong>Faltan 6 unidades de NOME.</strong> Registra la diferencia antes de cerrar.</div>
+        <div class="ce-table-wrap" style="margin-top:var(--ce-space-16)"><table class="ce-data-table">
+          <caption class="ce-sr-only">Productos de la guía</caption>
+          <thead><tr><th scope="col">Código</th><th scope="col">Producto</th><th scope="col" class="is-number">Esperado</th><th scope="col" class="is-number">Recibido</th><th scope="col">Estado</th></tr></thead>
+          <tbody>{receiving.map(({ item, expected, received, state }, index) => { const view = productView(item); return <tr><td><span class="ce-code">{view.code}</span></td><td><strong>{view.name}</strong> {view.description}</td><td class="is-number">{expected}</td><td class="is-number"><label class="ce-sr-only" for={`rec-${index}`}>{`Recibido de ${view.name}`}</label><input class="ce-input ce-input--number" id={`rec-${index}`} inputmode="numeric" value={received} style="max-width:96px;text-align:right" /></td><td><span class={`ce-pill ce-pill--${state[0]}`}>{state[1]}</span></td></tr>; })}</tbody>
+        </table></div>
+      </section>
+
+      <section class="ce-tab-panel" role="tabpanel" id="etiquetas" aria-labelledby="t-etiquetas" hidden>
+        <div class="ce-page-header"><h2>Etiquetas de góndola</h2><div class="ce-page-actions"><a class="ce-button" href="/sistemas/etiquetas/">Ver hoja A4 para imprimir</a></div></div>
+        <p class="ce-field-note" style="margin-top:0">80 × 40 mm, tinta negra. Papel blanco o amarillo para ofertas. El contenido del QR lo entrega el sistema.</p>
+        <div class="label-stage">
+          <article class="ce-label">
+            <p class="ce-label-specs">{rows[0].view.specs.join(', ')}</p>
+            <div class="ce-label-ident"><span class="ce-product-name">{rows[0].view.name}</span><span class="ce-product-description">{rows[0].view.description}</span></div>
+            <div class="ce-label-foot"><img class="ce-label-logo" src="/assets/logo-wordmark-black.png" alt="Casa Elida" width="1236" height="592" /><span class="ce-code">{rows[0].view.code}</span></div>
+            <div class="ce-label-qr label-qr" role="img" aria-label="Espacio para el código QR">QR</div>
+            <div class="ce-label-prices"><span class="ce-price"><span class="ce-sr-only">Precio: 6.5 soles</span><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6.5</span></span></div>
+          </article>
+          <article class="ce-label ce-label--yellow-paper">
+            <p class="ce-label-specs">{rows[2].view.specs.join(', ')}</p>
+            <div class="ce-label-ident"><span class="ce-product-name">{rows[2].view.name}</span><span class="ce-product-description">{rows[2].view.description}</span></div>
+            <div class="ce-label-foot"><img class="ce-label-logo" src="/assets/logo-wordmark-black.png" alt="Casa Elida" width="1236" height="592" /><span class="ce-code">{rows[2].view.code}</span></div>
+            <div class="ce-label-qr label-qr" role="img" aria-label="Espacio para el código QR">QR</div>
+            <div class="ce-label-prices"><p class="ce-label-previous">Antes <del>S/7.5</del> <span class="ce-label-discount">−20%</span></p><span class="ce-price"><span class="ce-sr-only">Precio de oferta: 6 soles</span><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6</span></span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="ce-tab-panel" role="tabpanel" id="compartir" aria-labelledby="t-compartir" hidden>
+        <div class="ce-page-header"><h2>Compartir producto</h2></div>
+        <div class="ce-record-layout">
+          <div>
+            <p class="ce-field-note" style="margin-top:0">Vista previa a tamaño real de chat (300 px). Sin precio: el enlace abre la ficha con el precio de la tienda elegida.</p>
+            <div class="share-scale"><article class="ce-share-card"><div class="ce-share-card-media"><img src={rows[0].view.image} alt="" width="900" height="900" /></div><div class="ce-share-card-text"><img class="ce-share-card-logo" src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="840" height="372" /><p class="ce-product-name">{rows[0].view.name}</p><p class="ce-product-description">{rows[0].view.description}</p><p class="ce-product-specs">{rows[0].view.specs.join(', ')}</p></div></article></div>
+          </div>
+          <form class="ce-form-section" style="padding-top:0">
+            <div class="ce-field"><label for="s-title">Título del enlace</label><input class="ce-input" id="s-title" value={`${rows[0].view.name} ${rows[0].view.description} · Casa Elida`} /></div>
+            <div class="ce-field"><label for="s-variant">Plantilla</label><select class="ce-select" id="s-variant"><option>Producto</option><option>Foto de ambiente</option><option>Solo texto</option></select></div>
+            <label class="ce-check"><input type="checkbox" />Mostrar código</label>
+            <button class="ce-button" type="button" data-ce-copy="https://tienda.example/producto/CE26061441"><Icon name="copy" size={18} />Copiar enlace</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="ce-toast-region" role="status" aria-live="polite"></div>
+</Store>

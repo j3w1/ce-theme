@@ -1,0 +1,33 @@
+<!-- @dsCard group="Customer journeys" height=600 width=1200 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Account</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--ce-space-32); padding: var(--ce-space-16); align-items: start; }
+  .grid .ce-auth { grid-template-columns: 1fr 1fr; }
+</style>
+</head>
+<body>
+<div class="ce-scope grid">
+  <section class="ce-auth" aria-labelledby="ingresar">
+    <div class="ce-auth-aside"><img src="../../media/logo-wordmark-white-yellow.png" alt="" width="140" height="62"><p>Guarda tus favoritos y sigue tus pedidos.</p></div>
+    <div class="ce-auth-main"><h1 id="ingresar">Inicia sesión</h1>
+      <form><div class="ce-field"><label for="c">Correo electrónico</label><input class="ce-input" id="c" type="email" autocomplete="email"></div><div class="ce-field"><label for="k">Contraseña</label><input class="ce-input" id="k" type="password" autocomplete="current-password"></div><button class="ce-button" type="submit">Ingresar</button></form>
+      <p class="ce-divider">o</p><a class="ce-button ce-button--secondary" href="#">Crear una cuenta</a>
+    </div>
+  </section>
+  <section aria-labelledby="pedido"><h2 id="pedido" style="margin-top:0">Pedido P-000123</h2>
+    <ol class="ce-timeline">
+      <li data-state="done"><p class="ce-timeline-title">Pedido recibido</p><p class="ce-timeline-meta">Confirmación enviada por correo</p></li>
+      <li data-state="done"><p class="ce-timeline-title">En preparación</p><p class="ce-timeline-meta">La tienda reúne tus productos</p></li>
+      <li aria-current="step"><p class="ce-timeline-title">Listo para retirar</p><p class="ce-timeline-meta">Te avisaremos cuando puedas pasar</p></li>
+      <li><p class="ce-timeline-title">Entregado</p><p class="ce-timeline-meta">Pendiente</p></li>
+    </ol>
+    <ul class="ce-link-rows"><li><a class="ce-link-row" href="#"><span>Cambios y devoluciones<small>Condiciones y pasos</small></span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></li><li><a class="ce-link-row" href="#"><span>Retiro en tienda<small>Cómo y cuándo recoger</small></span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></li></ul>
+  </section>
+</div>
+</body>
+</html>

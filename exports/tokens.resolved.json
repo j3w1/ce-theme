@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "theme": "light",
   "tokens": {
     "color.action.primary.active": {
@@ -156,6 +156,34 @@
       "css": "#111111",
       "variable": "--ce-color-focus"
     },
+    "color.marker.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.06666666666666667,
+          0.06666666666666667,
+          0.06666666666666667
+        ]
+      },
+      "description": "Lettered image marker circle (A, B, C).",
+      "css": "#111111",
+      "variable": "--ce-color-marker-bg"
+    },
+    "color.marker.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ]
+      },
+      "description": "Marker letter on color.marker.bg.",
+      "css": "#ffffff",
+      "variable": "--ce-color-marker-text"
+    },
     "color.overlay": {
       "type": "color",
       "value": {
@@ -240,6 +268,48 @@
       "description": "Everyday price on white surfaces.",
       "css": "#111111",
       "variable": "--ce-color-price-regular"
+    },
+    "color.sale.accent": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9764705882352941,
+          0.9215686274509803,
+          0.06274509803921569
+        ]
+      },
+      "description": "Large promotional price on color.sale.bg (24px and larger only).",
+      "css": "#f9eb10",
+      "variable": "--ce-color-sale-accent"
+    },
+    "color.sale.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8549019607843137,
+          0.1803921568627451,
+          0.22745098039215686
+        ]
+      },
+      "description": "Supported red promotion block or card (REBAJAS); not the default promotion.",
+      "css": "#da2e3a",
+      "variable": "--ce-color-sale-bg"
+    },
+    "color.sale.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ]
+      },
+      "description": "Text on color.sale.bg.",
+      "css": "#ffffff",
+      "variable": "--ce-color-sale-text"
     },
     "color.status.danger.bg": {
       "type": "color",
@@ -483,6 +553,13 @@
       "css": "1.1",
       "variable": "--ce-font-line-tight"
     },
+    "font.ratio.name": {
+      "type": "number",
+      "value": 0.9375,
+      "description": "Product NAME size relative to its Description (15px against 16px at the reference scale); keeps the optical hierarchy at any size and in print.",
+      "css": "0.9375",
+      "variable": "--ce-font-ratio-name"
+    },
     "font.size.body": {
       "type": "dimension",
       "value": {
@@ -600,6 +677,27 @@
       "description": "Status text and price unit labels.",
       "css": "600",
       "variable": "--ce-font-weight-semibold"
+    },
+    "layer.overlay": {
+      "type": "number",
+      "value": 100,
+      "description": "Dialogs, drawers, menus and their scrim.",
+      "css": "100",
+      "variable": "--ce-layer-overlay"
+    },
+    "layer.sticky": {
+      "type": "number",
+      "value": 10,
+      "description": "Sticky headers, toolbars and action bars.",
+      "css": "10",
+      "variable": "--ce-layer-sticky"
+    },
+    "layer.toast": {
+      "type": "number",
+      "value": 200,
+      "description": "Notifications above overlays.",
+      "css": "200",
+      "variable": "--ce-layer-toast"
     },
     "layout.breakpoint.desktop": {
       "type": "dimension",
@@ -962,6 +1060,16 @@
       "css": "20px",
       "variable": "--ce-radius-callout"
     },
+    "radius.code": {
+      "type": "dimension",
+      "value": {
+        "value": 3,
+        "unit": "px"
+      },
+      "description": "CE code badges: slightly rounded corners.",
+      "css": "3px",
+      "variable": "--ce-radius-code"
+    },
     "radius.none": {
       "type": "dimension",
       "value": {
@@ -1001,6 +1109,56 @@
       "description": "Inputs and selects.",
       "css": "4px",
       "variable": "--ce-radius-small"
+    },
+    "size.control.comfortable": {
+      "type": "dimension",
+      "value": {
+        "value": 48,
+        "unit": "px"
+      },
+      "description": "Default control height in retail and customer interfaces.",
+      "css": "48px",
+      "variable": "--ce-size-control-comfortable"
+    },
+    "size.control.compact": {
+      "type": "dimension",
+      "value": {
+        "value": 36,
+        "unit": "px"
+      },
+      "description": "Control height in dense internal workspaces; keep 24px minimum targets.",
+      "css": "36px",
+      "variable": "--ce-size-control-compact"
+    },
+    "size.control.touch": {
+      "type": "dimension",
+      "value": {
+        "value": 56,
+        "unit": "px"
+      },
+      "description": "Control height for touch-first stations such as POS and receiving.",
+      "css": "56px",
+      "variable": "--ce-size-control-touch"
+    },
+    "size.row.comfortable": {
+      "type": "dimension",
+      "value": {
+        "value": 56,
+        "unit": "px"
+      },
+      "description": "Table row height in comfortable density.",
+      "css": "56px",
+      "variable": "--ce-size-row-comfortable"
+    },
+    "size.row.compact": {
+      "type": "dimension",
+      "value": {
+        "value": 40,
+        "unit": "px"
+      },
+      "description": "Table row height in compact density.",
+      "css": "40px",
+      "variable": "--ce-size-row-compact"
     },
     "space.0": {
       "type": "dimension",

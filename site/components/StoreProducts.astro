@@ -1,0 +1,22 @@
+---
+// Renders catalogue items once per store view; the Store layout reveals the selected store's view only,
+// so an amount from one store is never left on screen after switching to another.
+import ProductCard from './ProductCard.astro';
+import Icon from './Icon.astro';
+import { cardFor, storeViews } from '../data/store.mjs';
+interface Props { items: any[]; layout?: 'rail' | 'grid'; id: string; label: string; compare?: boolean }
+const { items, layout = 'grid', id, label, compare = false } = Astro.props;
+const extra = Astro.slots.has('default') ? await Astro.slots.render('default') : '';
+---
+{storeViews.map((store) => (
+  <div data-store-view={store} hidden={store !== 'tacna'}>
+    {layout === 'rail'
+      ? <div class="ce-rail-wrap">
+          <a class="ce-skip" href={`#${id}-${store}-fin`}>Saltar lista: {label}</a>
+          <div class="ce-rail-buttons"><button class="ce-icon-button" type="button" data-ce-rail="prev" aria-controls={`${id}-${store}`} aria-label={`Anterior: ${label}`}><Icon name="arrow" /></button><button class="ce-icon-button" type="button" data-ce-rail="next" aria-controls={`${id}-${store}`} aria-label={`Siguiente: ${label}`}><Icon name="arrow" /></button></div>
+          <ul class="ce-rail" id={`${id}-${store}`} aria-label={label}>{items.map((item) => <li><ProductCard product={item} actions showCode={false} {...cardFor(item, store)} /></li>)}</ul>
+          <span id={`${id}-${store}-fin`} tabindex="-1"></span>
+        </div>
+      : <div class="ce-product-grid ce-product-grid--divided">{items.map((item) => <ProductCard product={item} actions compare={compare} {...cardFor(item, store)} />)}<Fragment set:html={extra} /></div>}
+  </div>
+))}

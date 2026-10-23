@@ -1,4 +1,4 @@
-/* Casa Elida 0.1.0 — generated from tokens/. Do not edit. */
+/* Casa Elida 0.2.0 — generated from tokens/. Do not edit. */
 :root {
   --ce-color-action-primary-active: #a61e2a;
   --ce-color-action-primary-bg: #da2e3a;
@@ -11,12 +11,17 @@
   --ce-color-code-bg: #111111;
   --ce-color-code-text: #ffffff;
   --ce-color-focus: #111111;
+  --ce-color-marker-bg: #111111;
+  --ce-color-marker-text: #ffffff;
   --ce-color-overlay: rgb(0 0 0 / 0.72);
   --ce-color-price-inverse: #ffffff;
   --ce-color-price-offer-bg: #f9eb10;
   --ce-color-price-offer-text: #111111;
   --ce-color-price-previous: #666666;
   --ce-color-price-regular: #111111;
+  --ce-color-sale-accent: #f9eb10;
+  --ce-color-sale-bg: #da2e3a;
+  --ce-color-sale-text: #ffffff;
   --ce-color-status-danger-bg: #fff0f1;
   --ce-color-status-danger-text: #a61e2a;
   --ce-color-status-info-bg: #eaf3fb;
@@ -36,6 +41,7 @@
   --ce-font-line-body: 1.5;
   --ce-font-line-heading: 1.2;
   --ce-font-line-tight: 1.1;
+  --ce-font-ratio-name: 0.9375;
   --ce-font-size-body: 1rem;
   --ce-font-size-display: 3rem;
   --ce-font-size-heading: 2rem;
@@ -49,6 +55,9 @@
   --ce-font-weight-heavy: 800;
   --ce-font-weight-regular: 400;
   --ce-font-weight-semibold: 600;
+  --ce-layer-overlay: 100;
+  --ce-layer-sticky: 10;
+  --ce-layer-toast: 200;
   --ce-layout-breakpoint-desktop: 1024px;
   --ce-layout-breakpoint-tablet: 640px;
   --ce-layout-content: 1440px;
@@ -77,10 +86,16 @@
   --ce-palette-white: #ffffff;
   --ce-palette-yellow: #f9eb10;
   --ce-radius-callout: 20px;
+  --ce-radius-code: 3px;
   --ce-radius-none: 0px;
   --ce-radius-pill: 999px;
   --ce-radius-price: 8px;
   --ce-radius-small: 4px;
+  --ce-size-control-comfortable: 48px;
+  --ce-size-control-compact: 36px;
+  --ce-size-control-touch: 56px;
+  --ce-size-row-comfortable: 56px;
+  --ce-size-row-compact: 40px;
   --ce-space-0: 0px;
   --ce-space-12: 12px;
   --ce-space-16: 16px;

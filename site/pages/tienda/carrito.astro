@@ -1,0 +1,70 @@
+---
+import Store from '../../layouts/Store.astro';
+import Icon from '../../components/Icon.astro';
+import Price from '../../components/Price.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { productView } from '../../../recipes/product.mjs';
+import { catalogue } from '../../data/store.mjs';
+// Line and order amounts are supplied by the commerce service as decimal strings; the page never computes them.
+const lines = [
+  { item: catalogue[0], quantity: 2, lineAmount: '13.00' },
+  { item: catalogue[3], quantity: 1, lineAmount: '8.50' },
+];
+const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
+---
+<Store title="Tu bolsa" description="Bolsa y pago de demostración con retiro en tienda o envío.">
+  <div class="ce-container">
+    <h1 class="store-page-title">Tu bolsa</h1>
+    <ol class="ce-steps" aria-label="Pasos de compra" style="margin-bottom:var(--ce-space-32)">
+      <li aria-current="step"><span class="ce-step-label">Bolsa</span></li>
+      <li><span class="ce-step-label">Entrega</span></li>
+      <li><span class="ce-step-label">Pago</span></li>
+    </ol>
+    <div class="ce-cart">
+      <div>
+        <p class="ce-store-note">Comprando en <strong data-store-name>Tacna</strong>. Los precios pueden variar en otra tienda.</p>
+        <ul class="ce-cart-lines" aria-label="Productos en tu bolsa">
+          {lines.map(({ item, quantity, lineAmount }, index) => { const view = productView(item); return (
+            <li class="ce-cart-line">
+              <img src={view.image} alt="" width="128" height="128" />
+              <div class="ce-cart-line-body">
+                <h2 class="ce-product-heading" style="--ce-product-text:1rem"><a class="ce-product-link" href="/tienda/producto/"><span class="ce-product-name">{view.name}</span><span class="ce-product-description">{view.description}</span></a></h2>
+                <p class="ce-product-specs">{view.specs.join(', ')}</p>
+                <span class="ce-code" style="justify-self:start">{view.code}</span>
+                <div class="ce-cart-line-actions">
+                  <div class="ce-quantity"><button type="button" aria-label={`Quitar uno de ${view.name}`}><Icon name="minus" size={18} /></button><label class="ce-sr-only" for={`cantidad-${index}`}>{`Cantidad de ${view.name}`}</label><input id={`cantidad-${index}`} type="number" inputmode="numeric" min="1" max="20" value={quantity} /><button type="button" aria-label={`Agregar uno de ${view.name}`}><Icon name="plus" size={18} /></button></div>
+                  <Price amount={lineAmount} />
+                  <button class="ce-link" type="button"><Icon name="trash" size={18} /> Quitar</button>
+                </div>
+              </div>
+            </li>
+          ); })}
+        </ul>
+
+        <section aria-labelledby="entrega" style="margin-top:var(--ce-space-40)">
+          <h2 id="entrega" style="font-size:var(--ce-font-size-title)">¿Cómo quieres recibirlo?</h2>
+          <fieldset class="ce-choice-cards"><legend class="ce-sr-only">Forma de entrega</legend>
+            <label class="ce-choice-card"><input type="radio" name="entrega" value="retiro" checked /><span class="ce-choice-card-title">Retiro en tienda</span><span>En <span data-store-name>Tacna</span>. Te avisamos cuando esté listo.</span></label>
+            <label class="ce-choice-card"><input type="radio" name="entrega" value="envio" /><span class="ce-choice-card-title">Envío a domicilio</span><span>Costo y plazo según tu dirección.</span></label>
+            <label class="ce-choice-card"><input type="radio" name="entrega" value="otra" disabled /><span class="ce-choice-card-title">Retiro por otra persona</span><span>No disponible en esta demostración.</span></label>
+          </fieldset>
+        </section>
+      </div>
+      <aside class="ce-order-summary" aria-labelledby="resumen">
+        <h2 id="resumen">Resumen</h2>
+        <dl class="ce-summary">
+          <div><dt>Subtotal (3 productos)</dt><dd>{summary.subtotal}</dd></div>
+          <div><dt>Retiro en tienda</dt><dd>{summary.pickup}</dd></div>
+          <div class="ce-summary-total"><dt>Total</dt><dd>{summary.total}</dd></div>
+        </dl>
+        <a class="ce-button" href="/tienda/cuenta/">Continuar</a>
+        <p class="ce-fine-print">Importes de ejemplo calculados por el servicio de comercio, no por la interfaz.</p>
+      </aside>
+    </div>
+
+    <section class="ce-section" id="favoritos" aria-labelledby="favoritos-titulo">
+      <div class="ce-section-head"><h2 id="favoritos-titulo">Tus favoritos</h2></div>
+      <div class="ce-product-grid">{catalogue.slice(1, 3).map((item) => <ProductCard product={item} href="/tienda/producto/" showCode={false} priceNote="Precio y disponibilidad al elegir tu tienda." />)}</div>
+    </section>
+  </div>
+</Store>

@@ -18,6 +18,34 @@ const errorCode=`<div class="ce-field">
     aria-invalid="true" aria-describedby="email-error">
   <span class="ce-field-error" id="email-error">Escribe un correo completo.</span>
 </div>`;
+const navCode=`<details class="ce-disclosure"><summary>Cuidados</summary>
+  <div class="ce-disclosure-body">…</div></details>
+<button class="ce-button ce-button--secondary" data-ce-open="quitar">Quitar</button>
+<dialog class="ce-dialog" id="quitar" aria-labelledby="quitar-titulo">
+  <div class="ce-dialog-header"><h2 id="quitar-titulo">¿Quitar de la bolsa?</h2>…</div>
+  <div class="ce-dialog-body">…</div>
+  <div class="ce-dialog-footer"><button class="ce-button" data-ce-close>Quitar</button></div>
+</dialog>
+<button popovertarget="acciones">Más acciones</button>
+<div class="ce-menu" id="acciones" popover>
+  <button class="ce-menu-item">Copiar código</button>
+</div>`;
+const feedbackCode=`<div class="ce-notice ce-notice--warning">
+  <svg aria-hidden="true">…</svg>
+  <div><strong>Precio no disponible en Arequipa</strong><p>Elige otra tienda.</p></div>
+</div>
+<span class="ce-spinner" role="status" aria-label="Cargando"></span>
+<span class="ce-skeleton" aria-hidden="true"></span>
+<div class="ce-toast-region" role="status" aria-live="polite">
+  <div class="ce-toast">Agregado a tu bolsa <a class="ce-link" href="/bolsa">Ver bolsa</a></div>
+</div>`;
+const formsCode=`<label class="ce-switch"><input type="checkbox" role="switch">Publicar</label>
+<div class="ce-input-group">
+  <span class="ce-input-affix">S/</span>
+  <input class="ce-input ce-input--number" inputmode="decimal" value="6.50">
+</div>
+<label class="ce-upload"><input type="file" accept="image/*">
+  <span><strong>Elige una foto</strong> o arrástrala aquí</span></label>`;
 ---
 <Layout title="Componentes">
   <div class="container">
@@ -30,6 +58,44 @@ const errorCode=`<div class="ce-field">
     <Recipe title="Etiquetas y estados" description="Información breve, con un nombre explícito además del color." code={'<span class="ce-badge ce-badge--offer">Llegó la Navidad</span>\n<span class="ce-badge ce-badge--yellow">Precio especial</span>\n<span class="ce-status ce-status--success">✓ Disponible</span>'}><div class="demo-row"><span class="ce-badge ce-badge--offer">Llegó la Navidad</span><span class="ce-badge ce-badge--yellow">Precio especial</span><span class="ce-badge">Nuevo</span><span class="ce-status ce-status--success">✓ Disponible</span><span class="ce-status ce-status--info">i Información</span></div></Recipe>
     <Recipe title="Muestras de color" description="Cada muestra tiene un nombre, un borde visible y un estado de selección. Los colores representan el producto, no nuevas variantes de marca." code={'<button class="ce-swatch" aria-label="Color: blanco"\n  aria-pressed="true" style="background:var(--ce-color-surface-canvas)"></button>'}><div class="ce-swatches" data-choice-group role="group" aria-label="Ejemplo de selección de color"><button class="ce-swatch" aria-label="Blanco" aria-pressed="true" style="background:var(--ce-color-surface-canvas)"></button><button class="ce-swatch" aria-label="Negro" aria-pressed="false" style="background:var(--ce-color-surface-inverse)"></button><button class="ce-swatch" aria-label="Gris" aria-pressed="false" style="background:var(--ce-color-text-muted)"></button></div></Recipe>
     <Recipe title="Tablas para herramientas de trabajo" description="Una aplicación neutra de la misma base. Códigos legibles, columnas claras y sin colores que compitan con los datos." code={'<table class="ce-table">\n  <caption>Productos de ejemplo</caption>\n  <thead><tr><th scope="col">Código</th><th scope="col">Producto</th></tr></thead>\n  <tbody><tr><td>CE26061509</td><td>Dispensador aceite</td></tr></tbody>\n</table>'}><div class="table-wrap"><table class="ce-table"><caption class="ce-sr-only">Productos de ejemplo para una herramienta interna</caption><thead><tr><th scope="col">Código</th><th scope="col">Producto</th><th scope="col">Detalle</th></tr></thead><tbody><tr><td><span class="ce-code">CE26061509</span></td><td>Dispensador aceite</td><td>Vidrio, 350ml</td></tr><tr><td><span class="ce-code">CE26018821</span></td><td>Portabocadito Corazón</td><td>Cerámica, dos niveles</td></tr></tbody></table></div></Recipe>
+    <Recipe title="Navegación, pestañas y capas" description="Elementos nativos primero: details para contenido plegable, dialog para ventanas y cajones, popover para menús y ayudas. El comportamiento de referencia está en recipes/behaviors.mjs." code={navCode}>
+      <nav class="ce-breadcrumbs" aria-label="Ruta de ejemplo"><ol><li><a href="#">Inicio</a></li><li><a href="#">Cocina</a></li><li><span aria-current="page">Tazas</span></li></ol></nav>
+      <div class="ce-tabs" role="tablist" aria-label="Pestañas de ejemplo" style="margin-top:var(--ce-space-24)"><button class="ce-tab" role="tab" id="demo-tab-1" aria-controls="demo-panel-1" aria-selected="true">Detalles</button><button class="ce-tab" role="tab" id="demo-tab-2" aria-controls="demo-panel-2" aria-selected="false">Medidas</button></div>
+      <div class="ce-tab-panel" role="tabpanel" id="demo-panel-1" aria-labelledby="demo-tab-1"><p style="margin:0">vidrio borosilicato, 250ml</p></div>
+      <div class="ce-tab-panel" role="tabpanel" id="demo-panel-2" aria-labelledby="demo-tab-2" hidden><p style="margin:0">8 × 9cm</p></div>
+      <details class="ce-disclosure"><summary>Cuidados</summary><div class="ce-disclosure-body">Información de ejemplo.</div></details>
+      <div class="demo-row" style="margin-top:var(--ce-space-24)">
+        <button class="ce-button ce-button--secondary" type="button" data-ce-open="demo-dialog">Abrir diálogo</button>
+        <button class="ce-button ce-button--secondary" type="button" data-ce-open="demo-drawer">Abrir cajón</button>
+        <button class="ce-button ce-button--secondary" type="button" popovertarget="demo-menu">Más acciones</button>
+        <button class="ce-icon-button" type="button" popovertarget="demo-tip" aria-label="Qué es el código"><Icon name="info"/></button>
+      </div>
+      <div class="ce-menu" id="demo-menu" popover><button class="ce-menu-item" type="button"><Icon name="copy" size={18}/>Copiar código</button><button class="ce-menu-item" type="button"><Icon name="share" size={18}/>Compartir</button><button class="ce-menu-item" type="button" aria-disabled="true"><Icon name="trash" size={18}/>Eliminar (sin permiso)</button></div>
+      <p class="ce-tooltip" id="demo-tip" popover>El código CE identifica el producto. Se copia exacto.</p>
+      <dialog class="ce-dialog" id="demo-dialog" aria-labelledby="demo-dialog-title"><div class="ce-dialog-header"><h2 id="demo-dialog-title">¿Quitar de la bolsa?</h2><button class="ce-icon-button" type="button" data-ce-close aria-label="Cerrar"><Icon name="close"/></button></div><div class="ce-dialog-body"><p style="margin:0">Puedes volver a agregarlo cuando quieras.</p></div><div class="ce-dialog-footer"><button class="ce-button ce-button--secondary" type="button" data-ce-close>Cancelar</button><button class="ce-button" type="button" data-ce-close>Quitar</button></div></dialog>
+      <dialog class="ce-drawer" id="demo-drawer" aria-labelledby="demo-drawer-title"><div class="ce-dialog-header"><h2 id="demo-drawer-title">Filtros</h2><button class="ce-icon-button" type="button" data-ce-close aria-label="Cerrar"><Icon name="close"/></button></div><div class="ce-dialog-body"><label class="ce-check"><input type="checkbox"/>Disponible en tu tienda</label></div><div class="ce-dialog-footer"><button class="ce-button" type="button" data-ce-close>Ver resultados</button></div></dialog>
+    </Recipe>
+    <Recipe title="Mensajes y estados de carga" description="Avisos con texto e icono, no solo color. Esqueletos y cargas sin mostrar datos viejos." code={feedbackCode}>
+      <div style="display:grid;gap:var(--ce-space-12)">
+        <div class="ce-notice ce-notice--success" role="status"><Icon name="check" size={20}/><div><strong>Guardado</strong><p>La ficha se actualizó.</p></div></div>
+        <div class="ce-notice ce-notice--warning"><Icon name="info" size={20}/><div><strong>Precio no disponible en Arequipa</strong><p>Elige otra tienda o consulta más tarde.</p></div></div>
+        <div class="ce-notice ce-notice--danger" role="alert"><Icon name="close" size={20}/><div><strong>No se pudo guardar</strong><p>Revisa tu conexión e inténtalo de nuevo.</p></div></div>
+        <div class="demo-row"><span class="ce-spinner" role="status" aria-label="Cargando"></span><span class="ce-save-state" data-state="saved">Guardado</span><span class="ce-save-state" data-state="dirty">Cambios sin guardar</span><span class="ce-save-state" data-state="error">Error al guardar</span></div>
+        <div style="display:grid;gap:8px;max-width:320px" aria-hidden="true"><span class="ce-skeleton" style="aspect-ratio:1"></span><span class="ce-skeleton"></span><span class="ce-skeleton" style="width:60%"></span></div>
+        <progress class="ce-progress" max="100" value="60" aria-label="Carga de fotos">60%</progress>
+        <div class="ce-toast" style="justify-self:start">Agregado a tu bolsa <a class="ce-link" href="/tienda/carrito/">Ver bolsa</a></div>
+        <div class="ce-empty"><h3>Tu bolsa está vacía</h3><p>Guarda productos o explora las novedades.</p><a class="ce-button" href="/tienda/">Ir a la tienda</a></div>
+      </div>
+    </Recipe>
+    <Recipe title="Formularios más completos" description="Interruptores, importes con prefijo, carga de archivos y fichas seleccionadas. Cada control tiene etiqueta visible." code={formsCode}>
+      <div class="demo-fields">
+        <label class="ce-switch"><input type="checkbox" role="switch" checked/>Publicar en la tienda</label>
+        <div class="ce-field"><label for="demo-amount">Precio de venta</label><div class="ce-input-group"><span class="ce-input-affix">S/</span><input class="ce-input ce-input--number" id="demo-amount" inputmode="decimal" value="6.50"/></div><span class="ce-field-note">Texto decimal; el sistema de precios lo valida.</span></div>
+        <fieldset class="ce-fieldset"><legend>Materiales</legend><ul class="ce-token-list"><li class="ce-token">vidrio borosilicato<button type="button" aria-label="Quitar vidrio borosilicato"><Icon name="close" size={14}/></button></li><li class="ce-token">bambú<button type="button" aria-label="Quitar bambú"><Icon name="close" size={14}/></button></li></ul></fieldset>
+        <label class="ce-upload"><input type="file" accept="image/*"/><Icon name="download"/><span><strong>Elige una foto</strong> o arrástrala aquí</span><span>PNG o JPG, fondo blanco</span></label>
+      </div>
+    </Recipe>
   </div>
+  <script>import { enhanceAll } from '../../recipes/behaviors.mjs'; enhanceAll();</script>
   <script>document.querySelectorAll('[data-choice-group]').forEach(group=>group.querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>{group.querySelectorAll('button').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));})));</script>
 </Layout>

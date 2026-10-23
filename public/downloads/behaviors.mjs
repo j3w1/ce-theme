@@ -1,0 +1,163 @@
+/** Optional reference behaviour for the Casa Elida recipes. Framework applications use their own
+ * component behaviour; these functions document the expected interaction and power the reference site.
+ * Each one is progressive enhancement: the markup works (or degrades to readable content) without it. */
+
+/** Tabs: role="tablist" with role="tab" buttons (aria-controls) and role="tabpanel" panels.
+ * Arrow keys, Home and End move between tabs; activation is automatic. */
+export function enhanceTabs(root = document) {
+  for (const list of root.querySelectorAll('[role="tablist"]')) {
+    const tabs = [...list.querySelectorAll('[role="tab"]')];
+    const select = (tab, focus = true) => {
+      for (const other of tabs) {
+        const selected = other === tab;
+        other.setAttribute('aria-selected', String(selected));
+        other.tabIndex = selected ? 0 : -1;
+        const panel = document.getElementById(other.getAttribute('aria-controls'));
+        if (panel) panel.hidden = !selected;
+      }
+      if (focus) tab.focus();
+    };
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', (event) => {
+        const index = tabs.indexOf(tab);
+        const next = { ArrowRight: index + 1, ArrowLeft: index - 1, Home: 0, End: tabs.length - 1 }[event.key];
+        if (next === undefined) return;
+        event.preventDefault();
+        select(tabs[(next + tabs.length) % tabs.length]);
+      });
+    });
+    select(tabs.find((tab) => tab.getAttribute('aria-selected') === 'true') ?? tabs[0], false);
+  }
+}
+
+/** Dialogs and drawers: a button with data-ce-open="<dialog id>" opens it with showModal(); any element
+ * with data-ce-close inside closes it. Focus returns to the opener; Escape closes natively. */
+export function enhanceDialogs(root = document) {
+  const openers = new WeakMap();
+  for (const opener of root.querySelectorAll('[data-ce-open]')) {
+    const dialog = document.getElementById(opener.dataset.ceOpen);
+    if (!dialog || typeof dialog.showModal !== 'function') continue;
+    opener.setAttribute('aria-haspopup', 'dialog');
+    opener.addEventListener('click', () => { openers.set(dialog, opener); dialog.showModal(); });
+    if (dialog.dataset.ceEnhanced) continue;
+    dialog.dataset.ceEnhanced = 'true';
+    dialog.addEventListener('close', () => openers.get(dialog)?.focus());
+  }
+  for (const closer of root.querySelectorAll('dialog [data-ce-close]')) {
+    closer.addEventListener('click', () => closer.closest('dialog').close());
+  }
+}
+
+/** Quantity steppers: .ce-quantity with two buttons and a number input (min/max respected). */
+export function enhanceQuantity(root = document) {
+  for (const group of root.querySelectorAll('.ce-quantity')) {
+    const input = group.querySelector('input');
+    const [less, more] = group.querySelectorAll('button');
+    const sync = () => {
+      const value = Number(input.value);
+      less.disabled = input.min !== '' && value <= Number(input.min);
+      more.disabled = input.max !== '' && value >= Number(input.max);
+    };
+    less.addEventListener('click', () => { input.stepDown(); input.dispatchEvent(new Event('change', { bubbles: true })); sync(); });
+    more.addEventListener('click', () => { input.stepUp(); input.dispatchEvent(new Event('change', { bubbles: true })); sync(); });
+    input.addEventListener('input', sync);
+    sync();
+  }
+}
+
+/** Single-choice groups of pressed buttons (chips, swatches, store choice): [data-ce-choice]. */
+export function enhanceChoices(root = document) {
+  for (const group of root.querySelectorAll('[data-ce-choice]')) {
+    const buttons = [...group.querySelectorAll('button[aria-pressed]')];
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        buttons.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
+        group.dispatchEvent(new CustomEvent('ce-choice', { bubbles: true, detail: { value: button.value || button.textContent.trim() } }));
+      });
+    }
+  }
+}
+
+/** Copy buttons: data-ce-copy="<exact text>" writes the exact identifier and announces the result
+ * in the nearest [role="status"]. Codes are copied as stored, never as their segmented display. */
+export function enhanceCopy(root = document) {
+  for (const button of root.querySelectorAll('[data-ce-copy]')) {
+    button.addEventListener('click', async () => {
+      const status = button.closest('[data-ce-copy-scope]')?.querySelector('[role="status"]') ?? document.querySelector('[role="status"]');
+      try {
+        await navigator.clipboard.writeText(button.dataset.ceCopy);
+        if (status) status.textContent = 'Copiado';
+      } catch {
+        if (status) status.textContent = 'No se pudo copiar; selecciona el texto';
+      }
+    });
+  }
+}
+
+/** Toggle buttons (favourite, compare): button[data-ce-toggle][aria-pressed] flips its pressed state.
+ * The application persists the choice; this only reflects it. */
+export function enhanceToggles(root = document) {
+  for (const button of root.querySelectorAll('button[data-ce-toggle][aria-pressed]')) {
+    button.addEventListener('click', () => button.setAttribute('aria-pressed', String(button.getAttribute('aria-pressed') !== 'true')));
+  }
+}
+
+/** Rails: buttons with data-ce-rail="prev|next" and aria-controls="<rail id>" scroll the rail by one view.
+ * The rail stays a native scroll container, so touch, trackpad and keyboard scrolling keep working. */
+export function enhanceRails(root = document) {
+  for (const button of root.querySelectorAll('[data-ce-rail][aria-controls]')) {
+    const rail = document.getElementById(button.getAttribute('aria-controls'));
+    if (!rail) continue;
+    const direction = button.dataset.ceRail === 'prev' ? -1 : 1;
+    const sync = () => {
+      const max = rail.scrollWidth - rail.clientWidth - 1;
+      button.disabled = direction < 0 ? rail.scrollLeft <= 0 : rail.scrollLeft >= max;
+    };
+    button.addEventListener('click', () => {
+      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      rail.scrollBy({ left: direction * rail.clientWidth * 0.9, behavior: smooth ? 'smooth' : 'auto' });
+    });
+    rail.addEventListener('scroll', sync, { passive: true });
+    sync();
+  }
+}
+
+/** Gallery position on narrow screens: .ce-gallery with a sibling .ce-gallery-status (aria-live="polite")
+ * announces “Imagen 2 de 5” as the customer swipes. */
+export function enhanceGallery(root = document) {
+  for (const gallery of root.querySelectorAll('.ce-gallery')) {
+    const status = gallery.parentElement?.querySelector('.ce-gallery-status');
+    const items = [...gallery.children];
+    if (!status || items.length < 2) continue;
+    let current = -1;
+    const update = () => {
+      const index = Math.round(gallery.scrollLeft / Math.max(1, gallery.clientWidth));
+      if (index === current) return;
+      current = index;
+      status.textContent = `Imagen ${Math.min(index + 1, items.length)} de ${items.length}`;
+    };
+    gallery.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+}
+
+/** Marker visibility: button[data-ce-markers="<tagged media id>"] hides or shows the letters on a photo.
+ * The product list below the photo is unaffected, so no information is lost. */
+export function enhanceMarkers(root = document) {
+  for (const button of root.querySelectorAll('button[data-ce-markers]')) {
+    const media = document.getElementById(button.dataset.ceMarkers);
+    if (!media) continue;
+    button.setAttribute('aria-pressed', String(media.dataset.ceMarkers !== 'hidden'));
+    button.addEventListener('click', () => {
+      const show = media.dataset.ceMarkers === 'hidden';
+      media.dataset.ceMarkers = show ? 'shown' : 'hidden';
+      button.setAttribute('aria-pressed', String(show));
+    });
+  }
+}
+
+export function enhanceAll(root = document) {
+  enhanceTabs(root); enhanceDialogs(root); enhanceQuantity(root); enhanceChoices(root); enhanceCopy(root);
+  enhanceToggles(root); enhanceRails(root); enhanceGallery(root); enhanceMarkers(root);
+}

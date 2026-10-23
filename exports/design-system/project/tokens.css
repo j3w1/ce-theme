@@ -56,6 +56,11 @@
   --ce-color-status-info-text: var(--ce-palette-info);
   --ce-color-status-info-bg: var(--ce-palette-info-bg);
   --ce-color-overlay: var(--ce-palette-scrim);
+  --ce-color-marker-bg: var(--ce-palette-ink);
+  --ce-color-marker-text: var(--ce-palette-white);
+  --ce-color-sale-bg: var(--ce-palette-red-action);
+  --ce-color-sale-text: var(--ce-palette-white);
+  --ce-color-sale-accent: var(--ce-palette-yellow);
 }
 :root {
   --ce-space-0: 0px;
@@ -77,6 +82,7 @@
   --ce-radius-price: 8px;
   --ce-radius-callout: 20px;
   --ce-radius-pill: 999px;
+  --ce-radius-code: 3px;
   --ce-font-size-xs: 0.75rem;
   --ce-font-size-sm: 0.875rem;
   --ce-font-size-body: 1rem;
@@ -103,6 +109,15 @@
   --ce-layout-gutter-tablet: 24px;
   --ce-layout-gutter-desktop: 48px;
   --ce-motion-quick: 160ms;
+  --ce-size-control-touch: 56px;
+  --ce-size-control-comfortable: 48px;
+  --ce-size-control-compact: 36px;
+  --ce-size-row-comfortable: 56px;
+  --ce-size-row-compact: 40px;
+  --ce-layer-sticky: 10;
+  --ce-layer-overlay: 100;
+  --ce-layer-toast: 200;
+  --ce-font-ratio-name: 0.9375;
   --font-sans: Inter, Arial, sans-serif;
 }
 .ce-type-signage { font-family: var(--font-sans); font-size: 8rem; line-height: 1.1; font-weight: 800; letter-spacing: -0.05em; }

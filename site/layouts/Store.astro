@@ -1,0 +1,109 @@
+---
+// Storefront demonstration frame: the retail recipes composed into a complete customer-facing page.
+import '../../recipes/fonts.css';
+import '../../exports/tokens.css';
+import '../../recipes/recipes.css';
+import '../../recipes/interface.css';
+import '../../recipes/retail.css';
+import '../../recipes/workspace.css';
+import '../../recipes/share-card.css';
+import '../../recipes/print-label.css';
+import '../styles/site.css';
+import Icon from '../components/Icon.astro';
+import { stores } from '../data/store.mjs';
+interface Props { title: string; description?: string; current?: string; bare?: boolean }
+const { title, description = 'Demostración de tienda del sistema de diseño de Casa Elida.', current, bare = false } = Astro.props;
+const nav = [['/tienda/categoria/', 'Productos'], ['/tienda/escena/', 'Ambientes'], ['/tienda/categoria/#ofertas', 'Ofertas'], ['/tienda/cuenta/#tiendas', 'Tiendas'], ['/tienda/cuenta/#ayuda', 'Ayuda']];
+---
+<!doctype html>
+<html lang="es-PE">
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · Casa Elida</title><meta name="description" content={description} />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#111111" />
+    <link rel="icon" href="/assets/logo-wordmark-color.png" type="image/png" />
+  </head>
+  <body class="ce-scope">
+    <a class="ce-skip" href="#contenido">Saltar al contenido</a>
+    <div class="ce-band ce-band--yellow demo-notice"><div class="ce-container demo-notice-inner"><p><strong>Demostración del sistema de diseño.</strong> Productos, precios, tiendas y existencias son ejemplos.</p><a class="ce-link" href="/patrones/">Volver al sistema</a></div></div>
+    {!bare && <>
+      <div class="ce-utility-bar">
+        <div class="ce-container ce-utility-bar-inner">
+          <p class="utility-claim">El buen gusto, no cuesta más.</p>
+          <button class="ce-store-context" type="button" data-ce-open="elegir-tienda"><Icon name="store" size={20} /><span>Tu tienda: <span class="ce-store-context-name" data-store-name>Tacna</span></span></button>
+        </div>
+      </div>
+      <header class="ce-site-header">
+        <div class="ce-container ce-site-header-inner">
+          <a class="ce-site-brand" href="/tienda/"><img src="/assets/logo-wordmark-color.png" alt="Casa Elida, inicio" width="99" height="44" /></a>
+          <nav class="ce-site-nav" aria-label="Principal"><ul>{nav.map(([href, label]) => <li><a href={href} aria-current={current === label ? 'page' : undefined}>{label}</a></li>)}</ul></nav>
+          <form class="ce-search" role="search" action="/tienda/categoria/">
+            <Icon name="search" size={20} />
+            <label class="ce-sr-only" for="buscar">Buscar productos</label>
+            <input id="buscar" name="q" type="search" placeholder="¿Qué estás buscando?" autocomplete="off" />
+          </form>
+          <div class="ce-site-actions">
+            <a class="ce-site-action" href="/tienda/cuenta/"><Icon name="user" /><span class="ce-site-action-label">Hola, inicia sesión</span><span class="ce-sr-only">Cuenta: inicia sesión</span></a>
+            <a class="ce-site-action" href="/tienda/carrito/#favoritos" aria-label="Favoritos"><Icon name="heart" /></a>
+            <a class="ce-site-action" href="/tienda/carrito/" aria-label="Bolsa, 3 productos"><Icon name="bag" /><span class="ce-count" aria-hidden="true">3</span></a>
+            <button class="ce-site-action ce-site-menu" type="button" data-ce-open="menu-tienda" aria-label="Abrir menú"><Icon name="menu" /></button>
+          </div>
+        </div>
+      </header>
+    </>}
+    <main id="contenido" tabindex="-1"><slot /></main>
+    {!bare && <>
+      <div class="ce-container ce-feedback"><p>¿Encontraste lo que buscabas?</p><a class="ce-button ce-button--secondary" href="/tienda/cuenta/#ayuda">Cuéntanos</a></div>
+      <footer class="ce-site-footer">
+        <div class="ce-container">
+          <div class="ce-footer-grid">
+            <div class="ce-footer-intro"><img src="/assets/logo-wordmark-black.png" alt="Casa Elida" width="140" height="67" /><p>Regalos, decoración y hogar. Todo lo que hace casa.</p><ul class="ce-social-links"><li><a class="ce-button ce-button--secondary" href="https://www.instagram.com/casa.elida/">Instagram</a></li></ul></div>
+            <div><h2>Compra</h2><ul class="ce-footer-links"><li><a href="/tienda/categoria/">Productos</a></li><li><a href="/tienda/escena/">Ambientes</a></li><li><a href="/tienda/categoria/#ofertas">Ofertas</a></li><li><a href="/tienda/carrito/">Tu bolsa</a></li></ul></div>
+            <div><h2>Ayuda</h2><ul class="ce-footer-links"><li><a href="/tienda/cuenta/#seguimiento">Seguimiento de pedido</a></li><li><a href="/tienda/cuenta/#ayuda">Cambios y devoluciones</a></li><li><a href="/tienda/cuenta/#ayuda">Retiro en tienda</a></li><li><a href="/tienda/cuenta/#ayuda">Contacto</a></li></ul></div>
+            <div><h2>Casa Elida</h2><ul class="ce-footer-links"><li><a href="/tienda/cuenta/#tiendas">Nuestras tiendas</a></li><li><a href="/">Sistema de diseño</a></li></ul></div>
+          </div>
+          <div class="ce-footer-legal"><span>© Casa Elida. Demostración; no es una tienda en línea.</span><ul><li><a href="/tienda/cuenta/#ayuda">Términos</a></li><li><a href="/tienda/cuenta/#ayuda">Privacidad</a></li><li><a href="/tienda/cuenta/#ayuda">Libro de reclamaciones</a></li></ul></div>
+        </div>
+      </footer>
+      <dialog class="ce-dialog" id="elegir-tienda" aria-labelledby="elegir-tienda-titulo">
+        <form method="dialog">
+          <div class="ce-dialog-header"><h2 id="elegir-tienda-titulo">Elige tu tienda</h2><button class="ce-icon-button" type="button" data-ce-close aria-label="Cerrar"><Icon name="close" /></button></div>
+          <div class="ce-dialog-body">
+            <p class="ce-store-note">Precio y disponibilidad pueden variar por tienda.</p>
+            <fieldset class="ce-choice-cards" style="margin-top:var(--ce-space-16)"><legend class="ce-sr-only">Tienda</legend>
+              {stores.map((store, index) => <label class="ce-choice-card"><input type="radio" name="tienda" value={store.id} checked={index === 0} /><span class="ce-choice-card-title">{store.name}</span><span>{store.note}</span></label>)}
+            </fieldset>
+          </div>
+          <div class="ce-dialog-footer"><button class="ce-button" value="ok" data-store-confirm>Usar esta tienda</button></div>
+        </form>
+      </dialog>
+      <dialog class="ce-drawer ce-drawer--start" id="menu-tienda" aria-label="Menú">
+        <div class="ce-dialog-header"><img src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="90" height="40" /><button class="ce-icon-button" type="button" data-ce-close aria-label="Cerrar menú"><Icon name="close" /></button></div>
+        <div class="ce-dialog-body"><ul class="ce-nav-list">{nav.map(([href, label]) => <li><a href={href} aria-current={current === label ? 'page' : undefined}>{label}<Icon name="arrow" size={20} /></a></li>)}</ul></div>
+      </dialog>
+    </>}
+    <script>
+      import { enhanceAll } from '../../recipes/behaviors.mjs';
+      enhanceAll();
+      // Store context (demo): the chosen store is shown in the bar and in [data-store-name]; pages that render
+      // per-store views reveal the matching [data-store-view] and hide the others, so no stale amount remains.
+      const names: Record<string, string> = { tacna: 'Tacna', arequipa: 'Arequipa', ninguna: '' };
+      function applyStore(id: string) {
+        document.querySelectorAll<HTMLElement>('[data-store-name]').forEach((el) => { el.textContent = names[id] || 'elige una'; });
+        document.querySelectorAll<HTMLElement>('[data-store-view]').forEach((el) => { el.hidden = el.dataset.storeView !== id; });
+        document.querySelectorAll<HTMLInputElement>('input[name="tienda"]').forEach((input) => { input.checked = input.value === id; });
+      }
+      const requested = new URLSearchParams(location.search).get('tienda') ?? 'tacna';
+      let current = names[requested] !== undefined ? requested : 'tacna';
+      applyStore(current);
+      const storeDialog = document.querySelector<HTMLDialogElement>('#elegir-tienda');
+      storeDialog?.addEventListener('close', () => {
+        const chosen = document.querySelector<HTMLInputElement>('input[name="tienda"]:checked');
+        if (storeDialog.returnValue === 'ok' && chosen) current = chosen.value;
+        storeDialog.returnValue = '';
+        applyStore(current);
+      });
+    </script>
+  </body>
+</html>

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { readSources } from '../scripts/tokens.mjs';
+import { readRecipes } from '../scripts/sources.mjs';
 
 const root = new URL('../', import.meta.url);
 const project = new URL('exports/design-system/project/', root);
@@ -42,7 +43,8 @@ test('design-system CSS variables match the foundation exports exactly', async (
   }
   const bundle = await read('components/bundle.css');
   assert.ok(bundle.includes('--ce-font-family: var(--font-sans)'));
-  assert.ok(bundle.endsWith(await readFile(new URL('recipes/recipes.css', root), 'utf8') + await readFile(new URL('recipes/share-card.css', root), 'utf8')));
+  const css = (path) => readFile(new URL(path, root), 'utf8');
+  assert.ok(bundle.endsWith(await readRecipes() + await css('recipes/share-card.css') + await css('recipes/print-label.css')));
 });
 
 test('every component has guidelines and a marked live preview using only shipped media', async () => {

@@ -1,0 +1,31 @@
+/* Casa Elida gondola price label, 80 × 40 mm. Black ink only: print on white paper, or on yellow paper
+   for promotions. This is a shelf price label, distinct from 1688toPL's product barcode labels and carton
+   marks, whose payloads, geometry and Arial artwork are not changed here. The QR payload is supplied by the
+   consuming system; print and scan acceptance must be tested on the real printer and paper. */
+.ce-label { position: relative; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr) 32mm; grid-template-rows: auto minmax(0, 1fr) auto; gap: 1mm 2mm; width: 80mm; height: 40mm; padding: 2.5mm 3mm; overflow: hidden; background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); font-family: var(--ce-font-family); line-height: 1.1; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.ce-label *, .ce-label *::before, .ce-label *::after { box-sizing: border-box; }
+.ce-label--yellow-paper { background: var(--ce-color-brand-yellow); }
+@media print { .ce-label--yellow-paper { background: transparent; } }
+.ce-label-specs { grid-column: 1; margin: 0; font-size: 2.5mm; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ce-label-ident { grid-column: 1; grid-row: 2; display: flex; flex-direction: column; justify-content: flex-start; gap: .6mm; min-height: 0; overflow: hidden; --ce-product-text: 3.9mm; }
+.ce-label .ce-product-name { font-size: 5.6mm; font-weight: var(--ce-font-weight-heavy); line-height: 1; letter-spacing: -.01em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ce-label .ce-product-description { color: var(--ce-color-text-primary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ce-label-foot { grid-column: 1; grid-row: 3; display: flex; align-items: flex-end; gap: 2mm; }
+.ce-label-logo { display: block; width: auto; height: 5.5mm; mix-blend-mode: multiply; }
+.ce-label .ce-code { padding: .3em .35em; font-size: 3.2mm; letter-spacing: .02em; }
+.ce-label-qr { grid-column: 2; grid-row: 1 / span 2; justify-self: end; width: 14mm; height: 14mm; }
+.ce-label-qr img, .ce-label-qr svg { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+.ce-label-prices { grid-column: 2; grid-row: 2 / span 2; align-self: end; display: grid; justify-items: end; gap: .5mm; }
+.ce-label-bulk { margin: 0; font-size: 2.4mm; font-weight: var(--ce-font-weight-bold); white-space: nowrap; }
+.ce-label-previous { display: flex; align-items: center; gap: 1mm; margin: 0; font-size: 2.4mm; }
+.ce-label-previous del { font-weight: var(--ce-font-weight-bold); }
+.ce-label-discount { padding: .3mm .8mm; border: .25mm solid currentColor; font-weight: var(--ce-font-weight-bold); }
+.ce-label .ce-price { font-size: 11mm; letter-spacing: -.04em; }
+.ce-label .ce-price-unit { margin-left: .6mm; font-size: 2.6mm; }
+.ce-label--wide-price .ce-label-qr { width: 12mm; height: 12mm; }
+.ce-label--wide-price .ce-price { font-size: 8.5mm; }
+
+/* A4 sheet: 2 × 7 labels with dashed cut guides. */
+.ce-label-sheet { display: grid; grid-template-columns: repeat(2, 80mm); grid-auto-rows: 40mm; justify-content: center; align-content: start; width: 210mm; min-height: 297mm; padding-top: 8.5mm; background: var(--ce-color-surface-canvas); }
+.ce-label-sheet .ce-label { outline: .2mm dashed var(--ce-color-border-control); outline-offset: -.1mm; }
+@media print { @page { size: A4; margin: 0; } .ce-label-sheet { break-after: page; } }

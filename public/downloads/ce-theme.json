@@ -1,6 +1,6 @@
 {
   "name": "Casa Elida",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "foundation",
   "theme": "light",
   "tokenFormat": "DTCG 2025.10",
@@ -88,6 +88,21 @@
     [
       "color.focus",
       "color.surface.canvas",
+      3
+    ],
+    [
+      "color.marker.text",
+      "color.marker.bg",
+      4.5
+    ],
+    [
+      "color.sale.text",
+      "color.sale.bg",
+      4.5
+    ],
+    [
+      "color.sale.accent",
+      "color.sale.bg",
       3
     ]
   ]

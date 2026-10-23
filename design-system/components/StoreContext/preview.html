@@ -1,0 +1,34 @@
+<!-- @dsCard group="Product" height=520 width=1100 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>StoreContext</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ce-space-32); padding: var(--ce-space-16); align-items: start; }
+  .states { display: grid; gap: var(--ce-space-24); }
+  .states small { display: block; margin-bottom: var(--ce-space-8); color: var(--ce-color-text-muted); font-size: var(--ce-font-size-xs); }
+  .bar { padding-inline: var(--ce-space-16); }
+</style>
+</head>
+<body>
+<div class="ce-scope wrap">
+  <div class="ce-dialog" role="dialog" aria-labelledby="tienda-t" style="position:static;display:block;border:var(--ce-stroke-thin) solid var(--ce-color-border-default)">
+    <div class="ce-dialog-header"><h2 id="tienda-t">Elige tu tienda</h2><button class="ce-icon-button" type="button" aria-label="Cerrar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 6 12 12M6 18 18 6"/></svg></button></div>
+    <div class="ce-dialog-body"><p class="ce-store-note">Precio y disponibilidad pueden variar por tienda.</p>
+      <fieldset class="ce-choice-cards" style="margin-top:var(--ce-space-16)"><legend class="ce-sr-only">Tienda</legend>
+        <label class="ce-choice-card"><input type="radio" name="t" checked><span class="ce-choice-card-title">Tacna</span><span>Tienda de ejemplo</span></label>
+        <label class="ce-choice-card"><input type="radio" name="t"><span class="ce-choice-card-title">Arequipa</span><span>Tienda de ejemplo</span></label>
+      </fieldset></div>
+    <div class="ce-dialog-footer"><button class="ce-button" type="button">Usar esta tienda</button></div>
+  </div>
+  <div class="states">
+    <div><small>Barra con carga en curso</small><div class="ce-utility-bar bar"><button class="ce-store-context" type="button" aria-busy="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9l1.5-5h15L21 9M3 9h18M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M5 12v9h14v-9M10 21v-5h4v5"/></svg><span>Tu tienda: <span class="ce-store-context-name">Arequipa</span></span></button></div></div>
+    <div><small>Precio válido</small><div class="ce-price-block"><span class="ce-price ce-price--regular" style="font-size:44px"><span class="ce-sr-only">Precio actual: 6.5 soles</span><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6.5</span></span></div><p class="ce-store-note">Precio en <strong>Tacna</strong></p><ul class="ce-stock"><li data-state="available">Disponible en Tacna</li></ul></div>
+    <div><small>Sin precio en la tienda</small><p class="ce-store-note">Precio no disponible en Arequipa.</p><ul class="ce-stock"><li data-state="unavailable">Agotado en Arequipa</li></ul></div>
+    <div><small>Sin tienda elegida</small><div class="ce-price-pending"><span>Elige tu tienda para ver precio y disponibilidad.</span><button class="ce-button ce-button--secondary" type="button">Elegir tienda</button></div></div>
+  </div>
+</div>
+</body>
+</html>

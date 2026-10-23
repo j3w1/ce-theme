@@ -1,0 +1,40 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { productView } from '../../recipes/product.mjs';
+import { products } from '../data/products.mjs';
+const mene = productView(products[0]);
+const tilen = productView(products[2]);
+const cards = [
+  { id: 'producto', title: 'Producto', note: 'Foto de catálogo en la zona central; NAME, descripción y especificaciones a la izquierda.' },
+  { id: 'producto-codigo', title: 'Producto con código', note: 'El código es opcional: solo se lee en vistas grandes.' },
+  { id: 'texto', title: 'Producto sin foto aprobada', note: 'Identificación en texto. Nunca un precio.' },
+  { id: 'categoria', title: 'Categoría o colección', note: 'Para listados, colecciones y campañas.' },
+  { id: 'inicio', title: 'Inicio, tienda o campaña', note: 'Superficie de marca cuando no hay foto adecuada.' },
+];
+---
+<Layout title="Vistas previas al compartir" description="Imágenes para enlaces compartidos sin precio, probadas a escala real.">
+  <div class="container">
+    <div class="page-intro"><p class="eyebrow">Aplicaciones · Compartir</p><h1>Un enlace que se reconoce sin mostrar el precio.</h1><p>La imagen de 1200 × 630 se ve en el chat a un cuarto de su tamaño y a veces recortada al centro. El precio depende de la tienda y cambia; vive en la página, no en la vista previa.</p></div>
+    {cards.map((card) => (
+      <section class="section" aria-labelledby={`c-${card.id}`}>
+        <h2 id={`c-${card.id}`} style="font-size:var(--ce-font-size-title)">{card.title}</h2>
+        <p class="section-description" style="margin-bottom:var(--ce-space-24)">{card.note}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:var(--ce-space-24);align-items:flex-start;max-width:100%;overflow-x:auto">
+          {['', ' share-scale--half'].reverse().map((size) => (
+            <figure style="margin:0">
+              <div class={`share-scale${size}`}>
+                {card.id === 'producto' && <article class="ce-share-card"><div class="ce-share-card-media"><img src={mene.image} alt="" width="900" height="900" /></div><div class="ce-share-card-text"><img class="ce-share-card-logo" src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="840" height="372" /><p class="ce-product-name">{mene.name}</p><p class="ce-product-description">{mene.description}</p><p class="ce-product-specs">{mene.specs.join(', ')}</p></div></article>}
+                {card.id === 'producto-codigo' && <article class="ce-share-card"><div class="ce-share-card-media"><img src={tilen.image} alt="" width="900" height="900" /></div><div class="ce-share-card-text"><img class="ce-share-card-logo" src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="840" height="372" /><span class="ce-code">{tilen.code}</span><p class="ce-product-name">{tilen.name}</p><p class="ce-product-description">{tilen.description}</p></div></article>}
+                {card.id === 'texto' && <article class="ce-share-card ce-share-card--text"><div class="ce-share-card-text"><img class="ce-share-card-logo" src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="840" height="372" /><p class="ce-product-description">Dispensador de Aceite</p><p class="ce-product-specs">vidrio, 350ml</p></div></article>}
+                {card.id === 'categoria' && <article class="ce-share-card"><div class="ce-share-card-media"><img src={mene.image} alt="" width="900" height="900" /></div><div class="ce-share-card-text"><img class="ce-share-card-logo" src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="840" height="372" /><p class="ce-share-card-eyebrow">Colección</p><p class="ce-share-card-title">Tazas de vidrio</p></div></article>}
+                {card.id === 'inicio' && <article class="ce-share-card ce-share-card--brand"><div class="ce-share-card-text"><img class="ce-share-card-logo" src="/assets/logo-wordmark-white-yellow.png" alt="Casa Elida" width="840" height="372" /><p class="ce-share-card-eyebrow">Regalos, decoración y hogar</p><p class="ce-share-card-title">El buen gusto, no cuesta más.</p></div></article>}
+              </div>
+              <figcaption class="small-note">{size ? '600 px · vista grande' : '300 px · tamaño de chat'}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    ))}
+    <p class="small-note">Las imágenes se generan en el servidor con <code>exports/share-card.css</code>. Ver <a class="ce-link" href="/downloads/sharing.md">el contrato de metadatos</a>.</p>
+  </div>
+</Layout>

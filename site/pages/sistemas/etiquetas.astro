@@ -1,0 +1,46 @@
+---
+// A4 sheet of 80 × 40 mm gondola labels (2 × 7). Print at 100% scale; the sheet removes page margins.
+import '../../../recipes/fonts.css';
+import '../../../exports/tokens.css';
+import '../../../recipes/recipes.css';
+import '../../../recipes/print-label.css';
+import { productView } from '../../../recipes/product.mjs';
+import { preparePrice } from '../../../recipes/price.mjs';
+import { catalogue } from '../../data/store.mjs';
+// Store: Tacna. Prices and quantity prices are example values supplied to the label, not computed here.
+const labels = [
+  { item: catalogue[0] },
+  { item: catalogue[1], bulk: [['x3', '7.50'], ['x6', '7.00']] },
+  { item: catalogue[2], yellow: true },
+  { item: catalogue[3] },
+].map(({ item, bulk = [], yellow = false }) => ({
+  view: productView(item), yellow, bulk,
+  price: preparePrice({ amount: item.prices.tacna, previousAmount: item.previous?.tacna, discountLabel: item.discount?.tacna }),
+}));
+const sheet = Array.from({ length: 14 }, (_, index) => labels[index % labels.length]);
+---
+<!doctype html>
+<html lang="es-PE">
+  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex" /><link rel="icon" href="/assets/logo-wordmark-color.png" type="image/png" /><title>Hoja de etiquetas · Casa Elida</title>
+    <style>body { margin: 0; background: var(--ce-color-border-default); } .ce-label-sheet { margin-inline: auto; } .sheet-note { max-width: 210mm; margin: 0 auto; padding: 16px; font: 14px/1.5 var(--ce-font-family); } @media print { .sheet-note { display: none; } body { background: none; } }</style>
+  </head>
+  <body class="ce-scope">
+    <h1 class="ce-sr-only">Hoja de etiquetas de góndola</h1>
+    <p class="sheet-note"><strong>Demostración.</strong> Hoja A4 de 14 etiquetas de 80 × 40 mm con precios de ejemplo (Tacna). Imprime al 100 % y valida en la impresora y el papel reales. El recuadro QR es un espacio reservado. <a href="/sistemas/">Volver</a></p>
+    <div class="ce-label-sheet">
+      {sheet.map(({ view, price, yellow, bulk }) => (
+        <article class:list={['ce-label', yellow && 'ce-label--yellow-paper']} aria-label={`Etiqueta ${view.code}`}>
+          <p class="ce-label-specs">{view.specs.join(', ')}</p>
+          <div class="ce-label-ident"><span class="ce-product-name">{view.name}</span><span class="ce-product-description">{view.description}</span></div>
+          <div class="ce-label-foot"><img class="ce-label-logo" src="/assets/logo-wordmark-black.png" alt="Casa Elida" width="1236" height="592" /><span class="ce-code">{view.code}</span></div>
+          <div class="ce-label-qr" style="display:grid;place-items:center;border:.3mm dashed currentColor;font-size:2.4mm">QR</div>
+          <div class="ce-label-prices">
+            {bulk.map(([quantity, amount]) => <p class="ce-label-bulk">{quantity} · S/{preparePrice({ amount }).current} c/u</p>)}
+            {price.previous !== undefined && <p class="ce-label-previous">Antes <del>S/{price.previous}</del>{price.discountLabel && <span class="ce-label-discount">−{price.discountLabel}</span>}</p>}
+            <span class="ce-price"><span class="ce-sr-only">{`Precio: ${price.current} soles`}</span><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">{price.current}</span></span>
+          </div>
+        </article>
+      ))}
+    </div>
+  </body>
+</html>

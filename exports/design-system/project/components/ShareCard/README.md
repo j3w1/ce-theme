@@ -1,22 +1,23 @@
 # ShareCard
 
-The 1200 × 630 image composed from verified product data and served as a product page's `og:image`, so links shared on WhatsApp and social platforms show the product, its name and its price.
+The 1200 × 630 image served as a page's `og:image`, so links shared on WhatsApp and social platforms show what the link is about. It never shows a price: prices differ by store and change, and the page carries them.
 
 ## Layout
 
-- `ce-share-card`: fixed 1200 × 630 canvas on `ce-color-surface-canvas`, rendered to JPEG by the commerce application (never by the browser of the person sharing).
-- `ce-share-card-square`: the centre 630 × 630 safe zone with the product photo (`contain`, whole product), the name (two lines at most) and the `Price` recipe at 96px. Messaging apps that crop to a square keep everything in this zone.
-- `ce-share-card-brand`: the left 285px brand-red band holding the supplied red-ground logo (`logo-brand.jpg`) unchanged.
-- `ce-share-card-aside`: the right 285px with the product code and `casaelida.com`.
-- `ce-share-card--fallback`: product photo missing; the media area becomes a subtle panel and the name and price carry the card.
+- `ce-share-card`: fixed 1200 × 630 canvas on `ce-color-surface-canvas`, rendered to JPEG by the commerce application (never in the browser of the person sharing). Set `--ce-product-text` to scale NAME, Description and specs together (48px default).
+- `ce-share-card-media`: the product zone from x 400 to 1000, so a centre-square crop keeps most of the product; the photo is whole (`contain`).
+- `ce-share-card-text`: the left column with `ce-share-card-logo` (supplied wordmark), then `ce-product-name`, `ce-product-description` (up to 4 lines), `ce-product-specs` (2 lines) and an optional `ce-code`. Category and campaign links use `ce-share-card-eyebrow` and `ce-share-card-title` instead.
+- `ce-share-card--photo`: a full-bleed lifestyle photo (focal point `--ce-x`, `--ce-y`) with the text on a white card.
+- `ce-share-card--text`: no approved photo; centred text on the subtle surface.
+- `ce-share-card--brand`: home, store or campaign links on brand red with `logo-wordmark-white-yellow.png`; large text only.
 
 ## The consumer supplies
 
-From CE Systems or the commerce service: product name and model, code, one approved product photo (flattened on white, not transparent), and a price only when one price applies to the shared link. With per-store prices, the link must name the store or the card omits the price; see `docs/sharing.md`. An offer shows `ce-price--offer` and the supplied previous price; a missing optional field is left out, never filled with placeholder text.
+From CE Systems or the commerce service: NAME, Description, specs, one approved photo flattened on white, optionally the code, and the page type. Missing fields are left out, never filled with placeholder text. Metadata rules are in `sharing.md`.
 
 ## Do and don't
 
-- Do regenerate the image when the name, photo or price changes, and version its URL so platforms fetch the new one.
-- Do keep the name, price and code as text in the page's metadata too; the image is never the only source.
-- Don't add campaign slogans, mascots or availability claims to the card unless they are supplied for that product.
-- Don't use the transparent catalogue PNG directly as `og:image`; some platforms render transparency as black.
+- Do test the image at chat size (about 300px wide) and as a centre square crop; at that size only the photo, NAME and Description need to read.
+- Do regenerate and version the image URL when the photo or text changes.
+- Don't show a price, a discount or availability on the card.
+- Don't use a transparent PNG as `og:image`; some platforms render transparency as black.

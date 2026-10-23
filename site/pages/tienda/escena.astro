@@ -1,0 +1,45 @@
+---
+import Store from '../../layouts/Store.astro';
+import Icon from '../../components/Icon.astro';
+import Price from '../../components/Price.astro';
+import { productView } from '../../../recipes/product.mjs';
+import { catalogue, stockText } from '../../data/store.mjs';
+// Marker positions are supplied with the scene (percentages of the image). Letters have no periods.
+const tags = [
+  { letter: 'A', item: catalogue[0], x: '20%', y: '40%' },
+  { letter: 'B', item: catalogue[1], x: '50%', y: '36%' },
+  { letter: 'C', item: catalogue[2], x: '80%', y: '52%' },
+];
+---
+<Store title="Ambiente: cocina y baño" current="Ambientes" description="Escena comprable de demostración con etiquetas A, B y C y la lista accesible de productos.">
+  <div class="ce-container">
+    <nav class="ce-breadcrumbs" aria-label="Ruta" style="padding-top:var(--ce-space-16)"><ol><li><a href="/tienda/">Inicio</a></li><li><span aria-current="page">Ambientes</span></li></ol></nav>
+    <h1 class="store-page-title">Lo esencial para empezar el día</h1>
+    <div class="ce-scene">
+      <figure style="margin:0">
+        <div class="ce-tagged-media" id="escena-cocina">
+          <div class="tagged-scene-art" role="img" aria-label="Composición con dos tazas de vidrio y un tapete de ducha"><img src="/assets/product-mene.png" alt="" width="300" height="300" /><img src="/assets/product-nome.png" alt="" width="300" height="300" /><img src="/assets/product-tilen.png" alt="" width="300" height="300" /></div>
+          {tags.map((tag) => <a class="ce-hotspot" href={`#escena-${tag.letter.toLowerCase()}`} style={`--ce-x:${tag.x};--ce-y:${tag.y}`}><span aria-hidden="true">{tag.letter}</span><span class="ce-sr-only">{`Producto ${tag.letter}: ${productView(tag.item).accessibleName}`}</span></a>)}
+        </div>
+        <figcaption class="ce-scene-toolbar"><span class="ce-store-note">Composición con fotos del catálogo. Precios de ejemplo en <strong data-store-name>Tacna</strong>.</span><button class="ce-chip" type="button" data-ce-markers="escena-cocina">Mostrar etiquetas</button></figcaption>
+      </figure>
+      <ol class="ce-tag-list" aria-label="Productos en esta escena">
+        {tags.map(({ letter, item }) => { const view = productView(item); return (
+          <li class="ce-tag-item" id={`escena-${letter.toLowerCase()}`}>
+            <img src={view.image} alt="" width="160" height="160" loading="lazy" />
+            <div class="ce-tag-item-info">
+              <h2 class="ce-tag-item-title"><span class="ce-hotspot ce-hotspot--inline" aria-hidden="true">{letter}</span><a class="ce-product-link" href="/tienda/producto/"><span class="ce-product-name">{view.name}</span><span class="ce-product-description">{view.description}</span></a></h2>
+              <p class="ce-product-specs">{view.specs.join(', ')}</p>
+              <span data-store-view="tacna"><Price amount={item.prices.tacna} previousAmount={item.previous?.tacna} discountLabel={item.discount?.tacna} /></span>
+              <span data-store-view="arequipa" hidden>{item.prices.arequipa ? <Price amount={item.prices.arequipa} /> : <span class="ce-store-note">Precio no disponible en Arequipa.</span>}</span>
+              <span data-store-view="ninguna" hidden class="ce-store-note">Elige tu tienda para ver el precio.</span>
+              <ul class="ce-stock" data-store-view="tacna"><li data-state={item.stock.tacna}>{stockText[item.stock.tacna]('Tacna')}</li></ul>
+              <ul class="ce-stock" data-store-view="arequipa" hidden><li data-state={item.stock.arequipa}>{stockText[item.stock.arequipa]('Arequipa')}</li></ul>
+              <button class="ce-button ce-button--secondary" type="button"><Icon name="bag-plus" size={20} />Agregar</button>
+            </div>
+          </li>
+        ); })}
+      </ol>
+    </div>
+  </div>
+</Store>

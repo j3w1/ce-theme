@@ -24,6 +24,6 @@ export function preparePrice({ amount, previousAmount, discountLabel, unitLabel,
   }
   if (unitLabel !== undefined && (typeof unitLabel !== 'string' || !unitLabel.trim())) throw new TypeError('Unit label must be text.');
   const style = variant ?? (previous === undefined ? 'regular' : 'offer');
-  if (!['regular', 'offer', 'inverse'].includes(style)) throw new TypeError('Unknown price variant.');
+  if (!['regular', 'offer', 'inverse', 'sale'].includes(style)) throw new TypeError('Unknown price variant.');
   return { current, previous, discountLabel, unitLabel, variant: style };
 }

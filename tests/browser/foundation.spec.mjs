@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const routes=['/','/fundamentos/','/componentes/','/patrones/','/aplicaciones/','/descargas/'];
+const routes=['/','/fundamentos/','/componentes/','/patrones/','/aplicaciones/','/compartir/','/descargas/','/tienda/','/tienda/categoria/','/tienda/producto/','/tienda/escena/','/tienda/carrito/','/tienda/cuenta/','/sistemas/','/sistemas/etiquetas/'];
 for (const route of routes) {
   test(`${route}: renders without errors, missing images, broken local links or accessibility violations`,async({page,request})=>{
     const errors=[];
     page.on('pageerror',error=>errors.push(error.message));
     await page.goto(route);
     await expect(page.locator('h1')).toHaveCount(1);
-    await page.locator('footer').scrollIntoViewIfNeeded();
+    await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
     await page.evaluate(()=>Promise.all([...document.images].map(image=>{image.loading='eager';return image.decode().catch(()=>{});})));
     expect(await page.locator('img').evaluateAll(images=>images.filter(i=>!i.complete||i.naturalWidth===0).map(i=>i.src))).toEqual([]);
     expect(errors).toEqual([]);
@@ -25,7 +25,7 @@ for (const width of [390,768,1440]) {
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
     const columns=await page.locator('.ce-product-grid').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
     expect(columns).toBe(width<640?2:width<1024?3:4);
-    await expect(page.locator('.ce-code').filter({hasText:'0000123456789'})).toHaveText('0000123456789');
+    await expect(page.locator('.ce-code').filter({hasText:'7730744292227'})).toHaveText('7730744292227');
     const style=await page.locator('.ce-price--offer').first().evaluate(el=>({bg:getComputedStyle(el).backgroundColor,color:getComputedStyle(el).color}));
     expect(style).toEqual({bg:'rgb(249, 235, 16)',color:'rgb(17, 17, 17)'});
     const priceBottoms=await page.locator('.ce-product-info .ce-price-block').evaluateAll(items=>items.map(item=>item.getBoundingClientRect().bottom));
@@ -76,7 +76,7 @@ test('copyable recipe HTML reaches the clipboard and confirms completion',async(
   await page.goto('/componentes/');
   await page.locator('.recipe-source summary').first().click();
   await page.getByRole('button',{name:'Copiar HTML'}).first().click();
-  await expect(page.getByRole('status')).toHaveText('Copiado al portapapeles');
+  await expect(page.locator('#copy-status')).toHaveText('Copiado al portapapeles');
   expect(await page.evaluate(()=>navigator.clipboard.readText())).toContain('class="ce-button"');
 });
 test('long identifiers, larger text and failed product images do not break card layout',async({page})=>{
@@ -85,12 +85,12 @@ test('long identifiers, larger text and failed product images do not break card 
   await page.evaluate(()=>{
     document.documentElement.style.fontSize='200%';
     const code=document.querySelector('.ce-code');code.textContent='000000000000000000000000000000000000000000000000000000000000000';
-    document.querySelector('.ce-product-name').textContent='Nombre de producto muy largo con detalles de presentación y capacidad adicional';
-    document.querySelector('.ce-product-media img').src='/intentionally-missing.png';
+    document.querySelector('#productos .ce-product-description').textContent='Nombre de producto muy largo con detalles de presentación y capacidad adicional';
+    document.querySelector('#productos .ce-product-media img').src='/intentionally-missing.png';
   });
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-  const card=page.locator('.ce-product').first();
-  await expect(card.locator('img')).toHaveAttribute('alt','Taza de vidrio resistente al calor');
+  const card=page.locator('#productos .ce-product').first();
+  await expect(card.locator('img')).toHaveAttribute('alt','Taza de Vidrio Resistente al Calor MENE');
   const box=await card.boundingBox();expect(box.height).toBeGreaterThan(200);
 });
 test('reduced motion removes control transitions',async({page})=>{
@@ -104,7 +104,9 @@ test('tagged photography links every marker to a product with the same letter',a
   for (const marker of await markers.all()) {
     const target=(await marker.getAttribute('href')).slice(1);
     const letter=(await marker.locator('[aria-hidden="true"]').textContent()).trim();
-    await expect(marker).toHaveAccessibleName(new RegExp(`^Producto ${letter.replace('.','')}: `));
+    expect(letter).toMatch(/^[A-Z]$/);
+    await expect(marker).toHaveAccessibleName(new RegExp(`^Producto ${letter}: `));
+    expect(await marker.evaluate(el=>[getComputedStyle(el).backgroundColor,getComputedStyle(el).color,getComputedStyle(el).borderTopWidth])).toEqual(['rgb(17, 17, 17)','rgb(255, 255, 255)','0px']);
     await expect(page.locator(`#${target} .ce-tag-item-title .ce-hotspot`)).toHaveText(letter);
     await expect(page.locator(`#${target} .ce-price > .ce-sr-only`)).toHaveText(/^Precio actual: /);
   }

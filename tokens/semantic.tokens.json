@@ -113,7 +113,7 @@
       "previous": {
         "$type": "color",
         "$value": "{palette.muted}",
-        "$description": "Struck-through previous price and its “Antes” label."
+        "$description": "Struck-through previous price and its \u201cAntes\u201d label."
       },
       "offer": {
         "bg": {
@@ -187,6 +187,35 @@
       "$type": "color",
       "$value": "{palette.scrim}",
       "$description": "Gradient scrim behind text on photography. Validate each final crop."
+    },
+    "marker": {
+      "bg": {
+        "$type": "color",
+        "$value": "{palette.ink}",
+        "$description": "Lettered image marker circle (A, B, C)."
+      },
+      "text": {
+        "$type": "color",
+        "$value": "{palette.white}",
+        "$description": "Marker letter on color.marker.bg."
+      }
+    },
+    "sale": {
+      "bg": {
+        "$type": "color",
+        "$value": "{palette.red-action}",
+        "$description": "Supported red promotion block or card (REBAJAS); not the default promotion."
+      },
+      "text": {
+        "$type": "color",
+        "$value": "{palette.white}",
+        "$description": "Text on color.sale.bg."
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "{palette.yellow}",
+        "$description": "Large promotional price on color.sale.bg (24px and larger only)."
+      }
     }
   }
 }

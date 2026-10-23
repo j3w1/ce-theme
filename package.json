@@ -1,6 +1,6 @@
 {
   "name": "@casaelida/foundation",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Casa Elida brand foundations, design tokens, HTML/CSS recipes, and visual reference.",

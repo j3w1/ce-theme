@@ -1,6 +1,6 @@
 # Design evolution, October 2026
 
-Record of the evidence review, assessment and proposals made on 2026-10-23 for the owner's design-evolution brief. **Nothing here is an approved standard until the owner reviews it.** Confirmed decisions are copied into [decisions.md](https://github.com/j3w1/ce-theme/blob/main/docs/decisions.md); everything else stays here with its status.
+Record of the evidence review, assessment and proposals made on 2026-10-23 for the owner's design-evolution brief. **Later the same day the owner's consolidated brief settled P4, P5, P7 and P9 and changed the marker and share-card rules; see the revisions in [decisions.md](decisions.md), the [source inventory](sources.md) and the [coverage matrix](coverage.md). Rows below keep their original wording for traceability.** **Nothing here is an approved standard until the owner reviews it.** Confirmed decisions are copied into [decisions.md](decisions.md); everything else stays here with its status.
 
 Status labels:
 
@@ -19,7 +19,7 @@ Status labels:
 | S2 | `ig_posts.zip` + `ig_posts_2.zip` | 78 slides from 12 Instagram carousel posts, 2026-10-11 to 2026-10-22, 2048 × 2048 | Primary evidence of current communication; owner-supplied originals without app chrome | Recurring layouts, product-information order, tagging conventions, offer treatments, palette check | 12 days, not two months; Christmas pre-sale dominates; layout software and fonts unknown; prices and availability are historical |
 | S3 | `stories.zip` | 5 Instagram story screenshots, 2026-09-25 | Earlier style that S1 was derived from | Code label, name, details, price hierarchy | Screenshots include Instagram interface chrome; never copy into public assets |
 | S4 | casaelida.com, fetched 2026-10-23 | Live home and product pages | Historical reference for terminology, catalogue structure, data and current metadata | Categories, product fields, per-store pricing, store names, metadata gaps | Old template with residue (size guide on a mat, review count); not an architectural model |
-| S5 | IKEA US homepage (saved HTML, screenshot) | Mature image-centred home-goods retail | Principles only | Discovery patterns, card anatomy, image ratios, price markup, metadata practice | Saved with extension CSS and blanked scripts; not to be copied |
+| S5 | Retail reference (owner-supplied saved pages and screenshots; kept outside the repository) | Mature image-centred home-goods retail | Principles only | Discovery patterns, card anatomy, image ratios, price markup, metadata practice | Saved with extension CSS and blanked scripts; not to be copied |
 | S6 | `inter.zip` | Inter 3.015, 9 weights × roman/italic, TTF/OTF/WOFF/WOFF2/EOT | Authoritative typeface files | Families, weights, features, license | No variable font; no license file in the archive (license read from font metadata: SIL OFL 1.1) |
 | S7 | Owner brief, 2026-10-23 | Scope, Inter, image-first commerce, sharing, tagging, governance | Authoritative instruction | Confirmed decisions D1–D4 | — |
 
@@ -57,11 +57,11 @@ Data-quality notes found in the sources (not to be reproduced):
 - Site: the cart shows `$200.00`.
 - Site: `<html lang="en">`.
 
-### Transferable principles from the IKEA reference (S5)
+### Transferable principles from the retail reference (S5)
 
 Taken: square product photos with space reserved before load; one price built from parts with a single readable label; offer terms printed as supplied; small type scale with two weights at most for UI; availability always as words, never color alone; carousels that let the next card peek, each with labelled controls; eager loading only for first-screen images; canonical, Open Graph and organisation structured data.
 
-Not taken: IKEA identity, loyalty pricing colours, product naming style, the 19-section homepage, US-specific store and ZIP selectors.
+Not taken: the reference brand's identity, loyalty pricing colours, product naming style, the 19-section homepage, US-specific store and ZIP selectors.
 
 ## 3. Assessment of the foundation (S1)
 
