@@ -1,0 +1,25 @@
+<!-- @dsCard group="Data" height=220 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Table</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .stage { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12); padding: var(--ce-space-16); }
+  .wrap { padding: var(--ce-space-16); overflow-x: auto; }
+</style>
+</head>
+<body>
+<div class="ce-scope wrap">
+  <table class="ce-table">
+    <caption class="ce-sr-only">Productos de ejemplo</caption>
+    <thead><tr><th scope="col">Código</th><th scope="col">Producto</th><th scope="col">Detalle</th><th scope="col">Estado</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ce-code">CE26061509</span></td><td>Dispensador aceite</td><td>Vidrio, 350ml</td><td><span class="ce-status ce-status--success">✓ Disponible</span></td></tr>
+      <tr><td><span class="ce-code">CE26018821</span></td><td>Portabocadito Corazón</td><td>Cerámica, dos niveles</td><td><span class="ce-status ce-status--warning">! Pocas unidades</span></td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

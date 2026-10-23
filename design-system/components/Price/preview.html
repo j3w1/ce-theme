@@ -1,0 +1,24 @@
+<!-- @dsCard group="Commerce" height=200 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Price</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .stage { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12); padding: var(--ce-space-16); }
+  .prices { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--ce-space-40); padding: var(--ce-space-16); }
+  .prices .ce-price { font-size: 56px; }
+  .ink { background: var(--ce-color-surface-inverse); padding: var(--ce-space-16) var(--ce-space-20); }
+</style>
+</head>
+<body>
+<div class="ce-scope prices">
+  <div class="ce-price-block"><span class="ce-price ce-price--regular"><span class="ce-sr-only">Precio actual: 20 soles</span><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">20</span></span></div>
+  <div class="ce-price-block"><span class="ce-price ce-price--regular"><span class="ce-sr-only">Precio actual: 5.5 soles, cada uno</span><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">5.5</span><span class="ce-price-unit" aria-hidden="true">cada uno</span></span></div>
+  <div class="ce-price-block"><div class="ce-price-history"><span>Antes <del>S/16.5</del></span></div><span class="ce-price ce-price--offer"><span class="ce-sr-only">Precio actual: 14.5 soles</span><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">14.5</span></span></div>
+  <div class="ce-price-block"><div class="ce-price-history"><span>Antes <del>S/16</del></span><span class="ce-badge ce-badge--offer"><span class="ce-sr-only">Descuento: </span>−31.25%</span></div><span class="ce-price ce-price--offer"><span class="ce-sr-only">Precio actual: 11 soles</span><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">11</span></span></div>
+  <div class="ink"><div class="ce-price-block"><span class="ce-price ce-price--inverse"><span class="ce-sr-only">Precio actual: 8.5 soles</span><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">8.5</span></span></div></div>
+</div>
+</body>
+</html>

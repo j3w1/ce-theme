@@ -249,98 +249,112 @@
       "$value": {
         "value": 0,
         "unit": "px"
-      }
+      },
+      "$description": "No space."
     },
     "2": {
       "$type": "dimension",
       "$value": {
         "value": 2,
         "unit": "px"
-      }
+      },
+      "$description": "Code label vertical padding; price fragment gap."
     },
     "4": {
       "$type": "dimension",
       "$value": {
         "value": 4,
         "unit": "px"
-      }
+      },
+      "$description": "Badge vertical padding; tight stacks."
     },
     "8": {
       "$type": "dimension",
       "$value": {
         "value": 8,
         "unit": "px"
-      }
+      },
+      "$description": "Gap inside buttons, fields and product info; badge horizontal padding."
     },
     "12": {
       "$type": "dimension",
       "$value": {
         "value": 12,
         "unit": "px"
-      }
+      },
+      "$description": "Button vertical padding; input vertical padding; price block gap."
     },
     "16": {
       "$type": "dimension",
       "$value": {
         "value": 16,
         "unit": "px"
-      }
+      },
+      "$description": "Input horizontal padding; mobile gutter; product grid column gap on mobile."
     },
     "20": {
       "$type": "dimension",
       "$value": {
         "value": 20,
         "unit": "px"
-      }
+      },
+      "$description": "Chip horizontal padding; callout padding; gap below product media."
     },
     "24": {
       "$type": "dimension",
       "$value": {
         "value": 24,
         "unit": "px"
-      }
+      },
+      "$description": "Button horizontal padding; tablet gutter; grid column gap from 640px."
     },
     "32": {
       "$type": "dimension",
       "$value": {
         "value": 32,
         "unit": "px"
-      }
+      },
+      "$description": "Separation between related blocks."
     },
     "40": {
       "$type": "dimension",
       "$value": {
         "value": 40,
         "unit": "px"
-      }
+      },
+      "$description": "Separation between groups."
     },
     "48": {
       "$type": "dimension",
       "$value": {
         "value": 48,
         "unit": "px"
-      }
+      },
+      "$description": "Product grid row gap; desktop gutter."
     },
     "64": {
       "$type": "dimension",
       "$value": {
         "value": 64,
         "unit": "px"
-      }
+      },
+      "$description": "Section spacing on small screens."
     },
     "80": {
       "$type": "dimension",
       "$value": {
         "value": 80,
         "unit": "px"
-      }
+      },
+      "$description": "Section spacing."
     },
     "96": {
       "$type": "dimension",
       "$value": {
         "value": 96,
         "unit": "px"
-      }
+      },
+      "$description": "Large section and campaign spacing."
     }
   },
   "font": {
@@ -351,24 +365,29 @@
         "Noto Sans",
         "Arial",
         "sans-serif"
-      ]
+      ],
+      "$description": "Noto Sans for every interface and retail surface, with Arial fallback."
     },
     "weight": {
       "regular": {
         "$type": "fontWeight",
-        "$value": 400
+        "$value": 400,
+        "$description": "Body copy, product names and code labels."
       },
       "semibold": {
         "$type": "fontWeight",
-        "$value": 600
+        "$value": 600,
+        "$description": "Status text and price unit labels."
       },
       "bold": {
         "$type": "fontWeight",
-        "$value": 700
+        "$value": 700,
+        "$description": "Headings, labels, buttons, chips and product models."
       },
       "heavy": {
         "$type": "fontWeight",
-        "$value": 800
+        "$value": 800,
+        "$description": "Display prices and large campaign type."
       }
     },
     "size": {
@@ -377,77 +396,89 @@
         "$value": {
           "value": 0.75,
           "unit": "rem"
-        }
+        },
+        "$description": "Badges, eyebrows and fine print."
       },
       "sm": {
         "$type": "dimension",
         "$value": {
           "value": 0.875,
           "unit": "rem"
-        }
+        },
+        "$description": "Product details, codes, labels, buttons and notes."
       },
       "body": {
         "$type": "dimension",
         "$value": {
           "value": 1,
           "unit": "rem"
-        }
+        },
+        "$description": "Body copy and product names."
       },
       "lead": {
         "$type": "dimension",
         "$value": {
           "value": 1.125,
           "unit": "rem"
-        }
+        },
+        "$description": "Intro paragraphs and small headings."
       },
       "title": {
         "$type": "dimension",
         "$value": {
           "value": 1.5,
           "unit": "rem"
-        }
+        },
+        "$description": "Card and section titles (h3)."
       },
       "heading": {
         "$type": "dimension",
         "$value": {
           "value": 2,
           "unit": "rem"
-        }
+        },
+        "$description": "Section headings (h2) and photo-panel titles."
       },
       "display": {
         "$type": "dimension",
         "$value": {
           "value": 3,
           "unit": "rem"
-        }
+        },
+        "$description": "Display headings."
       },
       "hero": {
         "$type": "dimension",
         "$value": {
           "value": 4,
           "unit": "rem"
-        }
+        },
+        "$description": "Page and campaign heroes."
       },
       "signage": {
         "$type": "dimension",
         "$value": {
           "value": 8,
           "unit": "rem"
-        }
+        },
+        "$description": "In-store signage read at distance."
       }
     },
     "line": {
       "tight": {
         "$type": "number",
-        "$value": 1.1
+        "$value": 1.1,
+        "$description": "Display and hero headings."
       },
       "heading": {
         "$type": "number",
-        "$value": 1.2
+        "$value": 1.2,
+        "$description": "Headings, buttons and compact labels."
       },
       "body": {
         "$type": "number",
-        "$value": 1.5
+        "$value": 1.5,
+        "$description": "Body copy and product text."
       }
     }
   },
@@ -457,35 +488,40 @@
       "$value": {
         "value": 0,
         "unit": "px"
-      }
+      },
+      "$description": "Product code labels, badges and photography: square corners."
     },
     "small": {
       "$type": "dimension",
       "$value": {
         "value": 4,
         "unit": "px"
-      }
+      },
+      "$description": "Inputs and selects."
     },
     "price": {
       "$type": "dimension",
       "$value": {
         "value": 8,
         "unit": "px"
-      }
+      },
+      "$description": "Offer price blocks."
     },
     "callout": {
       "$type": "dimension",
       "$value": {
         "value": 20,
         "unit": "px"
-      }
+      },
+      "$description": "Floating product callout cards."
     },
     "pill": {
       "$type": "dimension",
       "$value": {
         "value": 999,
         "unit": "px"
-      }
+      },
+      "$description": "Buttons, icon buttons, chips and swatches."
     }
   },
   "layout": {
@@ -494,7 +530,8 @@
       "$value": {
         "value": 1440,
         "unit": "px"
-      }
+      },
+      "$description": "Maximum content width."
     },
     "breakpoint": {
       "tablet": {
@@ -502,14 +539,16 @@
         "$value": {
           "value": 640,
           "unit": "px"
-        }
+        },
+        "$description": "Three product columns from this width."
       },
       "desktop": {
         "$type": "dimension",
         "$value": {
           "value": 1024,
           "unit": "px"
-        }
+        },
+        "$description": "Four product columns from this width."
       }
     },
     "gutter": {
@@ -518,21 +557,24 @@
         "$value": {
           "value": 16,
           "unit": "px"
-        }
+        },
+        "$description": "Side gutter below 640px."
       },
       "tablet": {
         "$type": "dimension",
         "$value": {
           "value": 24,
           "unit": "px"
-        }
+        },
+        "$description": "Side gutter from 640px."
       },
       "desktop": {
         "$type": "dimension",
         "$value": {
           "value": 48,
           "unit": "px"
-        }
+        },
+        "$description": "Side gutter from 1024px."
       }
     }
   },
@@ -542,7 +584,8 @@
       "$value": {
         "value": 160,
         "unit": "ms"
-      }
+      },
+      "$description": "Color and border transitions on controls; disabled under reduced motion."
     }
   },
   "stroke": {
@@ -551,21 +594,24 @@
       "$value": {
         "value": 1,
         "unit": "px"
-      }
+      },
+      "$description": "Borders and dividers."
     },
     "focus": {
       "$type": "dimension",
       "$value": {
         "value": 2,
         "unit": "px"
-      }
+      },
+      "$description": "Focus outline width."
     },
     "offset": {
       "$type": "dimension",
       "$value": {
         "value": 3,
         "unit": "px"
-      }
+      },
+      "$description": "Focus outline offset."
     }
   }
 }

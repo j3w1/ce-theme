@@ -12,7 +12,7 @@
           0.16470588235294117
         ]
       },
-      "description": "",
+      "description": "Primary button fill while pressed.",
       "css": "#a61e2a",
       "variable": "--ce-color-action-primary-active"
     },
@@ -26,7 +26,7 @@
           0.22745098039215686
         ]
       },
-      "description": "",
+      "description": "Primary button fill under white labels.",
       "css": "#da2e3a",
       "variable": "--ce-color-action-primary-bg"
     },
@@ -40,7 +40,7 @@
           0.19215686274509805
         ]
       },
-      "description": "",
+      "description": "Primary button fill on hover; also link hover color.",
       "css": "#bd2431",
       "variable": "--ce-color-action-primary-hover"
     },
@@ -54,7 +54,7 @@
           1
         ]
       },
-      "description": "",
+      "description": "Label on primary action fills in every state.",
       "css": "#ffffff",
       "variable": "--ce-color-action-primary-text"
     },
@@ -68,7 +68,7 @@
           0.4627450980392157
         ]
       },
-      "description": "",
+      "description": "Input, select, swatch and secondary-button boundaries (3:1 on canvas).",
       "css": "#767676",
       "variable": "--ce-color-border-control"
     },
@@ -82,7 +82,7 @@
           0.8666666666666667
         ]
       },
-      "description": "",
+      "description": "Decorative dividers and table rules. Not a control boundary.",
       "css": "#dddddd",
       "variable": "--ce-color-border-default"
     },
@@ -96,7 +96,7 @@
           0.23921568627450981
         ]
       },
-      "description": "",
+      "description": "Brand red for large brand surfaces, logo grounds and decorative emphasis. Not a fill for small white text; use color.action.primary.bg.",
       "css": "#e6303d",
       "variable": "--ce-color-brand-red"
     },
@@ -110,7 +110,7 @@
           0.06274509803921569
         ]
       },
-      "description": "",
+      "description": "Promotional yellow for offer blocks and campaign panels. Always pair with color.text.primary.",
       "css": "#f9eb10",
       "variable": "--ce-color-brand-yellow"
     },
@@ -124,7 +124,7 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Product code label background.",
       "css": "#111111",
       "variable": "--ce-color-code-bg"
     },
@@ -138,7 +138,7 @@
           1
         ]
       },
-      "description": "",
+      "description": "Product code label text on color.code.bg.",
       "css": "#ffffff",
       "variable": "--ce-color-code-text"
     },
@@ -152,7 +152,7 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Focus outline: 2px solid with a 3px offset on every interactive recipe.",
       "css": "#111111",
       "variable": "--ce-color-focus"
     },
@@ -167,7 +167,7 @@
         ],
         "alpha": 0.72
       },
-      "description": "",
+      "description": "Gradient scrim behind text on photography. Validate each final crop.",
       "css": "rgb(0 0 0 / 0.72)",
       "variable": "--ce-color-overlay"
     },
@@ -181,7 +181,7 @@
           1
         ]
       },
-      "description": "",
+      "description": "Price on photography protected by color.overlay or a dark area.",
       "css": "#ffffff",
       "variable": "--ce-color-price-inverse"
     },
@@ -195,7 +195,7 @@
           0.06274509803921569
         ]
       },
-      "description": "",
+      "description": "Offer price block background.",
       "css": "#f9eb10",
       "variable": "--ce-color-price-offer-bg"
     },
@@ -209,7 +209,7 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Offer price amount on color.price.offer.bg.",
       "css": "#111111",
       "variable": "--ce-color-price-offer-text"
     },
@@ -223,7 +223,7 @@
           0.4
         ]
       },
-      "description": "",
+      "description": "Struck-through previous price and its “Antes” label.",
       "css": "#666666",
       "variable": "--ce-color-price-previous"
     },
@@ -237,7 +237,7 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Everyday price on white surfaces.",
       "css": "#111111",
       "variable": "--ce-color-price-regular"
     },
@@ -251,7 +251,7 @@
           0.9450980392156862
         ]
       },
-      "description": "",
+      "description": "Error message surface.",
       "css": "#fff0f1",
       "variable": "--ce-color-status-danger-bg"
     },
@@ -265,7 +265,7 @@
           0.16470588235294117
         ]
       },
-      "description": "",
+      "description": "Error text and invalid-field borders on color.status.danger.bg and canvas.",
       "css": "#a61e2a",
       "variable": "--ce-color-status-danger-text"
     },
@@ -279,7 +279,7 @@
           0.984313725490196
         ]
       },
-      "description": "",
+      "description": "Information message surface.",
       "css": "#eaf3fb",
       "variable": "--ce-color-status-info-bg"
     },
@@ -293,7 +293,7 @@
           0.6392156862745098
         ]
       },
-      "description": "",
+      "description": "Information text on color.status.info.bg.",
       "css": "#0058a3",
       "variable": "--ce-color-status-info-text"
     },
@@ -307,7 +307,7 @@
           0.9333333333333333
         ]
       },
-      "description": "",
+      "description": "Success message surface.",
       "css": "#eaf5ee",
       "variable": "--ce-color-status-success-bg"
     },
@@ -321,7 +321,7 @@
           0.23137254901960785
         ]
       },
-      "description": "",
+      "description": "Success text on color.status.success.bg.",
       "css": "#17613b",
       "variable": "--ce-color-status-success-text"
     },
@@ -335,7 +335,7 @@
           0.8627450980392157
         ]
       },
-      "description": "",
+      "description": "Warning message surface.",
       "css": "#fff6dc",
       "variable": "--ce-color-status-warning-bg"
     },
@@ -349,7 +349,7 @@
           0.0392156862745098
         ]
       },
-      "description": "",
+      "description": "Warning text on color.status.warning.bg.",
       "css": "#81590a",
       "variable": "--ce-color-status-warning-text"
     },
@@ -363,7 +363,7 @@
           1
         ]
       },
-      "description": "",
+      "description": "Default page and card background. White surfaces carry product photography.",
       "css": "#ffffff",
       "variable": "--ce-color-surface-canvas"
     },
@@ -377,7 +377,7 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Dark background for ink buttons, badges, utility bars and photo panels.",
       "css": "#111111",
       "variable": "--ce-color-surface-inverse"
     },
@@ -391,7 +391,7 @@
           0.9607843137254902
         ]
       },
-      "description": "",
+      "description": "Quiet neutral background for chips, table headers and grouped regions.",
       "css": "#f5f5f5",
       "variable": "--ce-color-surface-subtle"
     },
@@ -405,7 +405,7 @@
           1
         ]
       },
-      "description": "",
+      "description": "Text on color.surface.inverse and on photography protected by color.overlay.",
       "css": "#ffffff",
       "variable": "--ce-color-text-inverse"
     },
@@ -419,7 +419,7 @@
           0.4
         ]
       },
-      "description": "",
+      "description": "Product details, field notes and captions on color.surface.canvas and color.surface.subtle.",
       "css": "#666666",
       "variable": "--ce-color-text-muted"
     },
@@ -433,7 +433,7 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Headings, body copy and labels on color.surface.canvas, color.surface.subtle and color.brand.yellow.",
       "css": "#111111",
       "variable": "--ce-color-text-primary"
     },
@@ -447,7 +447,7 @@
           0.2823529411764706
         ]
       },
-      "description": "",
+      "description": "Supporting paragraphs on color.surface.canvas and color.surface.subtle.",
       "css": "#484848",
       "variable": "--ce-color-text-secondary"
     },
@@ -459,28 +459,28 @@
         "Arial",
         "sans-serif"
       ],
-      "description": "",
+      "description": "Noto Sans for every interface and retail surface, with Arial fallback.",
       "css": "\"Noto Sans Variable\", \"Noto Sans\", Arial, sans-serif",
       "variable": "--ce-font-family"
     },
     "font.line.body": {
       "type": "number",
       "value": 1.5,
-      "description": "",
+      "description": "Body copy and product text.",
       "css": "1.5",
       "variable": "--ce-font-line-body"
     },
     "font.line.heading": {
       "type": "number",
       "value": 1.2,
-      "description": "",
+      "description": "Headings, buttons and compact labels.",
       "css": "1.2",
       "variable": "--ce-font-line-heading"
     },
     "font.line.tight": {
       "type": "number",
       "value": 1.1,
-      "description": "",
+      "description": "Display and hero headings.",
       "css": "1.1",
       "variable": "--ce-font-line-tight"
     },
@@ -490,7 +490,7 @@
         "value": 1,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Body copy and product names.",
       "css": "1rem",
       "variable": "--ce-font-size-body"
     },
@@ -500,7 +500,7 @@
         "value": 3,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Display headings.",
       "css": "3rem",
       "variable": "--ce-font-size-display"
     },
@@ -510,7 +510,7 @@
         "value": 2,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Section headings (h2) and photo-panel titles.",
       "css": "2rem",
       "variable": "--ce-font-size-heading"
     },
@@ -520,7 +520,7 @@
         "value": 4,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Page and campaign heroes.",
       "css": "4rem",
       "variable": "--ce-font-size-hero"
     },
@@ -530,7 +530,7 @@
         "value": 1.125,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Intro paragraphs and small headings.",
       "css": "1.125rem",
       "variable": "--ce-font-size-lead"
     },
@@ -540,7 +540,7 @@
         "value": 8,
         "unit": "rem"
       },
-      "description": "",
+      "description": "In-store signage read at distance.",
       "css": "8rem",
       "variable": "--ce-font-size-signage"
     },
@@ -550,7 +550,7 @@
         "value": 0.875,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Product details, codes, labels, buttons and notes.",
       "css": "0.875rem",
       "variable": "--ce-font-size-sm"
     },
@@ -560,7 +560,7 @@
         "value": 1.5,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Card and section titles (h3).",
       "css": "1.5rem",
       "variable": "--ce-font-size-title"
     },
@@ -570,35 +570,35 @@
         "value": 0.75,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Badges, eyebrows and fine print.",
       "css": "0.75rem",
       "variable": "--ce-font-size-xs"
     },
     "font.weight.bold": {
       "type": "fontWeight",
       "value": 700,
-      "description": "",
+      "description": "Headings, labels, buttons, chips and product models.",
       "css": "700",
       "variable": "--ce-font-weight-bold"
     },
     "font.weight.heavy": {
       "type": "fontWeight",
       "value": 800,
-      "description": "",
+      "description": "Display prices and large campaign type.",
       "css": "800",
       "variable": "--ce-font-weight-heavy"
     },
     "font.weight.regular": {
       "type": "fontWeight",
       "value": 400,
-      "description": "",
+      "description": "Body copy, product names and code labels.",
       "css": "400",
       "variable": "--ce-font-weight-regular"
     },
     "font.weight.semibold": {
       "type": "fontWeight",
       "value": 600,
-      "description": "",
+      "description": "Status text and price unit labels.",
       "css": "600",
       "variable": "--ce-font-weight-semibold"
     },
@@ -608,7 +608,7 @@
         "value": 1024,
         "unit": "px"
       },
-      "description": "",
+      "description": "Four product columns from this width.",
       "css": "1024px",
       "variable": "--ce-layout-breakpoint-desktop"
     },
@@ -618,7 +618,7 @@
         "value": 640,
         "unit": "px"
       },
-      "description": "",
+      "description": "Three product columns from this width.",
       "css": "640px",
       "variable": "--ce-layout-breakpoint-tablet"
     },
@@ -628,7 +628,7 @@
         "value": 1440,
         "unit": "px"
       },
-      "description": "",
+      "description": "Maximum content width.",
       "css": "1440px",
       "variable": "--ce-layout-content"
     },
@@ -638,7 +638,7 @@
         "value": 48,
         "unit": "px"
       },
-      "description": "",
+      "description": "Side gutter from 1024px.",
       "css": "48px",
       "variable": "--ce-layout-gutter-desktop"
     },
@@ -648,7 +648,7 @@
         "value": 16,
         "unit": "px"
       },
-      "description": "",
+      "description": "Side gutter below 640px.",
       "css": "16px",
       "variable": "--ce-layout-gutter-mobile"
     },
@@ -658,7 +658,7 @@
         "value": 24,
         "unit": "px"
       },
-      "description": "",
+      "description": "Side gutter from 640px.",
       "css": "24px",
       "variable": "--ce-layout-gutter-tablet"
     },
@@ -668,7 +668,7 @@
         "value": 160,
         "unit": "ms"
       },
-      "description": "",
+      "description": "Color and border transitions on controls; disabled under reduced motion.",
       "css": "160ms",
       "variable": "--ce-motion-quick"
     },
@@ -959,7 +959,7 @@
         "value": 20,
         "unit": "px"
       },
-      "description": "",
+      "description": "Floating product callout cards.",
       "css": "20px",
       "variable": "--ce-radius-callout"
     },
@@ -969,7 +969,7 @@
         "value": 0,
         "unit": "px"
       },
-      "description": "",
+      "description": "Product code labels, badges and photography: square corners.",
       "css": "0px",
       "variable": "--ce-radius-none"
     },
@@ -979,7 +979,7 @@
         "value": 999,
         "unit": "px"
       },
-      "description": "",
+      "description": "Buttons, icon buttons, chips and swatches.",
       "css": "999px",
       "variable": "--ce-radius-pill"
     },
@@ -989,7 +989,7 @@
         "value": 8,
         "unit": "px"
       },
-      "description": "",
+      "description": "Offer price blocks.",
       "css": "8px",
       "variable": "--ce-radius-price"
     },
@@ -999,7 +999,7 @@
         "value": 4,
         "unit": "px"
       },
-      "description": "",
+      "description": "Inputs and selects.",
       "css": "4px",
       "variable": "--ce-radius-small"
     },
@@ -1009,7 +1009,7 @@
         "value": 0,
         "unit": "px"
       },
-      "description": "",
+      "description": "No space.",
       "css": "0px",
       "variable": "--ce-space-0"
     },
@@ -1019,7 +1019,7 @@
         "value": 12,
         "unit": "px"
       },
-      "description": "",
+      "description": "Button vertical padding; input vertical padding; price block gap.",
       "css": "12px",
       "variable": "--ce-space-12"
     },
@@ -1029,7 +1029,7 @@
         "value": 16,
         "unit": "px"
       },
-      "description": "",
+      "description": "Input horizontal padding; mobile gutter; product grid column gap on mobile.",
       "css": "16px",
       "variable": "--ce-space-16"
     },
@@ -1039,7 +1039,7 @@
         "value": 2,
         "unit": "px"
       },
-      "description": "",
+      "description": "Code label vertical padding; price fragment gap.",
       "css": "2px",
       "variable": "--ce-space-2"
     },
@@ -1049,7 +1049,7 @@
         "value": 20,
         "unit": "px"
       },
-      "description": "",
+      "description": "Chip horizontal padding; callout padding; gap below product media.",
       "css": "20px",
       "variable": "--ce-space-20"
     },
@@ -1059,7 +1059,7 @@
         "value": 24,
         "unit": "px"
       },
-      "description": "",
+      "description": "Button horizontal padding; tablet gutter; grid column gap from 640px.",
       "css": "24px",
       "variable": "--ce-space-24"
     },
@@ -1069,7 +1069,7 @@
         "value": 32,
         "unit": "px"
       },
-      "description": "",
+      "description": "Separation between related blocks.",
       "css": "32px",
       "variable": "--ce-space-32"
     },
@@ -1079,7 +1079,7 @@
         "value": 4,
         "unit": "px"
       },
-      "description": "",
+      "description": "Badge vertical padding; tight stacks.",
       "css": "4px",
       "variable": "--ce-space-4"
     },
@@ -1089,7 +1089,7 @@
         "value": 40,
         "unit": "px"
       },
-      "description": "",
+      "description": "Separation between groups.",
       "css": "40px",
       "variable": "--ce-space-40"
     },
@@ -1099,7 +1099,7 @@
         "value": 48,
         "unit": "px"
       },
-      "description": "",
+      "description": "Product grid row gap; desktop gutter.",
       "css": "48px",
       "variable": "--ce-space-48"
     },
@@ -1109,7 +1109,7 @@
         "value": 64,
         "unit": "px"
       },
-      "description": "",
+      "description": "Section spacing on small screens.",
       "css": "64px",
       "variable": "--ce-space-64"
     },
@@ -1119,7 +1119,7 @@
         "value": 8,
         "unit": "px"
       },
-      "description": "",
+      "description": "Gap inside buttons, fields and product info; badge horizontal padding.",
       "css": "8px",
       "variable": "--ce-space-8"
     },
@@ -1129,7 +1129,7 @@
         "value": 80,
         "unit": "px"
       },
-      "description": "",
+      "description": "Section spacing.",
       "css": "80px",
       "variable": "--ce-space-80"
     },
@@ -1139,7 +1139,7 @@
         "value": 96,
         "unit": "px"
       },
-      "description": "",
+      "description": "Large section and campaign spacing.",
       "css": "96px",
       "variable": "--ce-space-96"
     },
@@ -1149,7 +1149,7 @@
         "value": 2,
         "unit": "px"
       },
-      "description": "",
+      "description": "Focus outline width.",
       "css": "2px",
       "variable": "--ce-stroke-focus"
     },
@@ -1159,7 +1159,7 @@
         "value": 3,
         "unit": "px"
       },
-      "description": "",
+      "description": "Focus outline offset.",
       "css": "3px",
       "variable": "--ce-stroke-offset"
     },
@@ -1169,7 +1169,7 @@
         "value": 1,
         "unit": "px"
       },
-      "description": "",
+      "description": "Borders and dividers.",
       "css": "1px",
       "variable": "--ce-stroke-thin"
     }

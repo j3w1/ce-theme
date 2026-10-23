@@ -4,63 +4,63 @@
       "red": {
         "$type": "color",
         "$value": "{palette.red}",
-        "$description": ""
+        "$description": "Brand red for large brand surfaces, logo grounds and decorative emphasis. Not a fill for small white text; use color.action.primary.bg."
       },
       "yellow": {
         "$type": "color",
         "$value": "{palette.yellow}",
-        "$description": ""
+        "$description": "Promotional yellow for offer blocks and campaign panels. Always pair with color.text.primary."
       }
     },
     "surface": {
       "canvas": {
         "$type": "color",
         "$value": "{palette.white}",
-        "$description": ""
+        "$description": "Default page and card background. White surfaces carry product photography."
       },
       "subtle": {
         "$type": "color",
         "$value": "{palette.subtle}",
-        "$description": ""
+        "$description": "Quiet neutral background for chips, table headers and grouped regions."
       },
       "inverse": {
         "$type": "color",
         "$value": "{palette.ink}",
-        "$description": ""
+        "$description": "Dark background for ink buttons, badges, utility bars and photo panels."
       }
     },
     "text": {
       "primary": {
         "$type": "color",
         "$value": "{palette.ink}",
-        "$description": ""
+        "$description": "Headings, body copy and labels on color.surface.canvas, color.surface.subtle and color.brand.yellow."
       },
       "secondary": {
         "$type": "color",
         "$value": "{palette.secondary}",
-        "$description": ""
+        "$description": "Supporting paragraphs on color.surface.canvas and color.surface.subtle."
       },
       "muted": {
         "$type": "color",
         "$value": "{palette.muted}",
-        "$description": ""
+        "$description": "Product details, field notes and captions on color.surface.canvas and color.surface.subtle."
       },
       "inverse": {
         "$type": "color",
         "$value": "{palette.white}",
-        "$description": ""
+        "$description": "Text on color.surface.inverse and on photography protected by color.overlay."
       }
     },
     "border": {
       "default": {
         "$type": "color",
         "$value": "{palette.border}",
-        "$description": ""
+        "$description": "Decorative dividers and table rules. Not a control boundary."
       },
       "control": {
         "$type": "color",
         "$value": "{palette.control}",
-        "$description": ""
+        "$description": "Input, select, swatch and secondary-button boundaries (3:1 on canvas)."
       }
     },
     "action": {
@@ -68,69 +68,69 @@
         "bg": {
           "$type": "color",
           "$value": "{palette.red-action}",
-          "$description": ""
+          "$description": "Primary button fill under white labels."
         },
         "text": {
           "$type": "color",
           "$value": "{palette.white}",
-          "$description": ""
+          "$description": "Label on primary action fills in every state."
         },
         "hover": {
           "$type": "color",
           "$value": "{palette.red-hover}",
-          "$description": ""
+          "$description": "Primary button fill on hover; also link hover color."
         },
         "active": {
           "$type": "color",
           "$value": "{palette.red-active}",
-          "$description": ""
+          "$description": "Primary button fill while pressed."
         }
       }
     },
     "focus": {
       "$type": "color",
       "$value": "{palette.ink}",
-      "$description": ""
+      "$description": "Focus outline: 2px solid with a 3px offset on every interactive recipe."
     },
     "code": {
       "bg": {
         "$type": "color",
         "$value": "{palette.ink}",
-        "$description": ""
+        "$description": "Product code label background."
       },
       "text": {
         "$type": "color",
         "$value": "{palette.white}",
-        "$description": ""
+        "$description": "Product code label text on color.code.bg."
       }
     },
     "price": {
       "regular": {
         "$type": "color",
         "$value": "{palette.ink}",
-        "$description": ""
+        "$description": "Everyday price on white surfaces."
       },
       "previous": {
         "$type": "color",
         "$value": "{palette.muted}",
-        "$description": ""
+        "$description": "Struck-through previous price and its “Antes” label."
       },
       "offer": {
         "bg": {
           "$type": "color",
           "$value": "{palette.yellow}",
-          "$description": ""
+          "$description": "Offer price block background."
         },
         "text": {
           "$type": "color",
           "$value": "{palette.ink}",
-          "$description": ""
+          "$description": "Offer price amount on color.price.offer.bg."
         }
       },
       "inverse": {
         "$type": "color",
         "$value": "{palette.white}",
-        "$description": ""
+        "$description": "Price on photography protected by color.overlay or a dark area."
       }
     },
     "status": {
@@ -138,55 +138,55 @@
         "text": {
           "$type": "color",
           "$value": "{palette.red-active}",
-          "$description": ""
+          "$description": "Error text and invalid-field borders on color.status.danger.bg and canvas."
         },
         "bg": {
           "$type": "color",
           "$value": "{palette.danger-bg}",
-          "$description": ""
+          "$description": "Error message surface."
         }
       },
       "success": {
         "text": {
           "$type": "color",
           "$value": "{palette.success}",
-          "$description": ""
+          "$description": "Success text on color.status.success.bg."
         },
         "bg": {
           "$type": "color",
           "$value": "{palette.success-bg}",
-          "$description": ""
+          "$description": "Success message surface."
         }
       },
       "warning": {
         "text": {
           "$type": "color",
           "$value": "{palette.warning}",
-          "$description": ""
+          "$description": "Warning text on color.status.warning.bg."
         },
         "bg": {
           "$type": "color",
           "$value": "{palette.warning-bg}",
-          "$description": ""
+          "$description": "Warning message surface."
         }
       },
       "info": {
         "text": {
           "$type": "color",
           "$value": "{palette.info}",
-          "$description": ""
+          "$description": "Information text on color.status.info.bg."
         },
         "bg": {
           "$type": "color",
           "$value": "{palette.info-bg}",
-          "$description": ""
+          "$description": "Information message surface."
         }
       }
     },
     "overlay": {
       "$type": "color",
       "$value": "{palette.scrim}",
-      "$description": ""
+      "$description": "Gradient scrim behind text on photography. Validate each final crop."
     }
   }
 }

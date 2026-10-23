@@ -52,12 +52,13 @@ Set the price's font size for its context. `ce-product` sets it to 44px; campaig
 | `recipes/` | Framework-neutral styles and decimal-string price formatting |
 | `docs/` | Usage, accessibility, identity, and decisions |
 | `site/` | Static Astro reference site and demonstration fixtures |
-| `exports/`, `public/downloads/` | Generated consumer files; never hand-edit |
+| `design-system/` | Brand book, component guidelines and previews for the Claude Design System bundle |
+| `exports/`, `public/downloads/` | Generated consumer files, including `exports/design-system/`; never hand-edit |
 | `public/assets/manifest.json` | Supplied and public-company asset provenance and hashes |
 
 Run `pnpm generate` after changing token, recipe, manifest, or usage sources. Generated files are committed and checked for drift. The first foundation has 98 tokens and a light theme; the separate `j3w1/theme` project is not a dependency.
 
-Read [the consumer guide](docs/usage.md), [pricing contract](docs/pricing.md), [accessibility rules](docs/accessibility.md), and [foundation decisions](docs/decisions.md).
+Read [the consumer guide](docs/usage.md), [pricing contract](docs/pricing.md), [accessibility rules](docs/accessibility.md), [foundation decisions](docs/decisions.md), and [the Claude Design System bundle](docs/design-system.md).
 
 ## Status and rights
 

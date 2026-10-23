@@ -1,0 +1,118 @@
+/* Casa Elida — generated from tokens.json */
+@font-face { font-family: "Noto Sans Variable"; src: url("fonts/noto-sans-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+:root, [data-theme="light"] {
+  --ce-palette-red: #e6303d;
+  --ce-palette-red-action: #da2e3a;
+  --ce-palette-red-hover: #bd2431;
+  --ce-palette-red-active: #a61e2a;
+  --ce-palette-yellow: #f9eb10;
+  --ce-palette-ink: #111111;
+  --ce-palette-secondary: #484848;
+  --ce-palette-muted: #666666;
+  --ce-palette-control: #767676;
+  --ce-palette-border: #dddddd;
+  --ce-palette-subtle: #f5f5f5;
+  --ce-palette-white: #ffffff;
+  --ce-palette-success: #17613b;
+  --ce-palette-success-bg: #eaf5ee;
+  --ce-palette-warning: #81590a;
+  --ce-palette-warning-bg: #fff6dc;
+  --ce-palette-info: #0058a3;
+  --ce-palette-info-bg: #eaf3fb;
+  --ce-palette-danger-bg: #fff0f1;
+  --ce-palette-scrim: rgba(0, 0, 0, 0.72);
+  --ce-color-brand-red: var(--ce-palette-red);
+  --ce-color-brand-yellow: var(--ce-palette-yellow);
+  --ce-color-surface-canvas: var(--ce-palette-white);
+  --ce-color-surface-subtle: var(--ce-palette-subtle);
+  --ce-color-surface-inverse: var(--ce-palette-ink);
+  --ce-color-text-primary: var(--ce-palette-ink);
+  --ce-color-text-secondary: var(--ce-palette-secondary);
+  --ce-color-text-muted: var(--ce-palette-muted);
+  --ce-color-text-inverse: var(--ce-palette-white);
+  --ce-color-border-default: var(--ce-palette-border);
+  --ce-color-border-control: var(--ce-palette-control);
+  --ce-color-action-primary-bg: var(--ce-palette-red-action);
+  --ce-color-action-primary-text: var(--ce-palette-white);
+  --ce-color-action-primary-hover: var(--ce-palette-red-hover);
+  --ce-color-action-primary-active: var(--ce-palette-red-active);
+  --ce-color-focus: var(--ce-palette-ink);
+  --ce-color-code-bg: var(--ce-palette-ink);
+  --ce-color-code-text: var(--ce-palette-white);
+  --ce-color-price-regular: var(--ce-palette-ink);
+  --ce-color-price-previous: var(--ce-palette-muted);
+  --ce-color-price-offer-bg: var(--ce-palette-yellow);
+  --ce-color-price-offer-text: var(--ce-palette-ink);
+  --ce-color-price-inverse: var(--ce-palette-white);
+  --ce-color-status-danger-text: var(--ce-palette-red-active);
+  --ce-color-status-danger-bg: var(--ce-palette-danger-bg);
+  --ce-color-status-success-text: var(--ce-palette-success);
+  --ce-color-status-success-bg: var(--ce-palette-success-bg);
+  --ce-color-status-warning-text: var(--ce-palette-warning);
+  --ce-color-status-warning-bg: var(--ce-palette-warning-bg);
+  --ce-color-status-info-text: var(--ce-palette-info);
+  --ce-color-status-info-bg: var(--ce-palette-info-bg);
+  --ce-color-overlay: var(--ce-palette-scrim);
+}
+:root {
+  --ce-space-0: 0px;
+  --ce-space-2: 2px;
+  --ce-space-4: 4px;
+  --ce-space-8: 8px;
+  --ce-space-12: 12px;
+  --ce-space-16: 16px;
+  --ce-space-20: 20px;
+  --ce-space-24: 24px;
+  --ce-space-32: 32px;
+  --ce-space-40: 40px;
+  --ce-space-48: 48px;
+  --ce-space-64: 64px;
+  --ce-space-80: 80px;
+  --ce-space-96: 96px;
+  --ce-radius-none: 0px;
+  --ce-radius-small: 4px;
+  --ce-radius-price: 8px;
+  --ce-radius-callout: 20px;
+  --ce-radius-pill: 999px;
+  --ce-font-size-xs: 0.75rem;
+  --ce-font-size-sm: 0.875rem;
+  --ce-font-size-body: 1rem;
+  --ce-font-size-lead: 1.125rem;
+  --ce-font-size-title: 1.5rem;
+  --ce-font-size-heading: 2rem;
+  --ce-font-size-display: 3rem;
+  --ce-font-size-hero: 4rem;
+  --ce-font-size-signage: 8rem;
+  --ce-font-weight-regular: 400;
+  --ce-font-weight-semibold: 600;
+  --ce-font-weight-bold: 700;
+  --ce-font-weight-heavy: 800;
+  --ce-font-line-tight: 1.1;
+  --ce-font-line-heading: 1.2;
+  --ce-font-line-body: 1.5;
+  --ce-stroke-thin: 1px;
+  --ce-stroke-focus: 2px;
+  --ce-stroke-offset: 3px;
+  --ce-layout-content: 1440px;
+  --ce-layout-breakpoint-tablet: 640px;
+  --ce-layout-breakpoint-desktop: 1024px;
+  --ce-layout-gutter-mobile: 16px;
+  --ce-layout-gutter-tablet: 24px;
+  --ce-layout-gutter-desktop: 48px;
+  --ce-motion-quick: 160ms;
+  --font-sans: "Noto Sans Variable", "Noto Sans", Arial, sans-serif;
+}
+.ce-type-signage { font-family: var(--font-sans); font-size: 8rem; line-height: 1.1; font-weight: 800; letter-spacing: -0.05em; }
+.ce-type-hero { font-family: var(--font-sans); font-size: 4rem; line-height: 1.1; font-weight: 700; letter-spacing: -0.035em; }
+.ce-type-display { font-family: var(--font-sans); font-size: 3rem; line-height: 1.1; font-weight: 800; letter-spacing: -0.05em; }
+.ce-type-heading { font-family: var(--font-sans); font-size: 2rem; line-height: 1.2; font-weight: 700; letter-spacing: -0.035em; }
+.ce-type-title { font-family: var(--font-sans); font-size: 1.5rem; line-height: 1.2; font-weight: 700; letter-spacing: -0.035em; }
+.ce-type-lead { font-family: var(--font-sans); font-size: 1.125rem; line-height: 1.5; font-weight: 400; }
+.ce-type-body { font-family: var(--font-sans); font-size: 1rem; line-height: 1.5; font-weight: 400; }
+.ce-type-small { font-family: var(--font-sans); font-size: 0.875rem; line-height: 1.5; font-weight: 400; }
+.ce-type-label { font-family: var(--font-sans); font-size: 0.875rem; line-height: 1.2; font-weight: 700; }
+.ce-type-eyebrow { font-family: var(--font-sans); font-size: 0.75rem; line-height: 1.5; font-weight: 700; letter-spacing: 0.1em; }
+.ce-type-badge { font-family: var(--font-sans); font-size: 0.75rem; line-height: 1.2; font-weight: 700; }
+.ce-type-price-card { font-family: var(--font-sans); font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -0.045em; }
+.ce-type-price-callout { font-family: var(--font-sans); font-size: 48px; line-height: 1; font-weight: 800; letter-spacing: -0.045em; }
+.ce-type-price-campaign { font-family: var(--font-sans); font-size: 96px; line-height: 1; font-weight: 800; letter-spacing: -0.045em; }

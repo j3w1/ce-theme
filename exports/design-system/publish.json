@@ -1,0 +1,125 @@
+{
+  "title": "Casa Elida",
+  "namespace": "CasaElida",
+  "libraries": [],
+  "files": {
+    "project/fonts/noto-sans-latin-wght-normal.woff2": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-latin-wght-normal.woff2",
+    "project/media/product-mene.png": "public/assets/product-mene.png",
+    "project/media/product-nome.png": "public/assets/product-nome.png",
+    "project/media/product-tilen.png": "public/assets/product-tilen.png"
+  },
+  "assetGroups": [
+    {
+      "name": "Logos",
+      "tile": "l",
+      "files": [
+        {
+          "name": "logo.png",
+          "source": "public/assets/logo.png"
+        },
+        {
+          "name": "logo-brand.jpg",
+          "source": "public/assets/logo-brand.jpg"
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "tile": "m",
+      "files": [
+        {
+          "name": "product-mene.png",
+          "source": "public/assets/product-mene.png"
+        },
+        {
+          "name": "product-nome.png",
+          "source": "public/assets/product-nome.png"
+        },
+        {
+          "name": "product-tilen.png",
+          "source": "public/assets/product-tilen.png"
+        },
+        {
+          "name": "product-talen.png",
+          "source": "public/assets/product-talen.png"
+        }
+      ]
+    },
+    {
+      "name": "Campaigns",
+      "tile": "l",
+      "files": [
+        {
+          "name": "campaign-umbrella.jpg",
+          "source": "public/assets/campaign-umbrella.jpg"
+        },
+        {
+          "name": "campaign-organisers.jpg",
+          "source": "public/assets/campaign-organisers.jpg"
+        },
+        {
+          "name": "campaign-kitchen.jpg",
+          "source": "public/assets/campaign-kitchen.jpg"
+        }
+      ]
+    },
+    {
+      "name": "Icons",
+      "tile": "xs",
+      "files": [
+        {
+          "name": "arrow.svg",
+          "source": "exports/design-system/project/assets/Icons/arrow.svg"
+        },
+        {
+          "name": "search.svg",
+          "source": "exports/design-system/project/assets/Icons/search.svg"
+        },
+        {
+          "name": "menu.svg",
+          "source": "exports/design-system/project/assets/Icons/menu.svg"
+        },
+        {
+          "name": "bag.svg",
+          "source": "exports/design-system/project/assets/Icons/bag.svg"
+        },
+        {
+          "name": "heart.svg",
+          "source": "exports/design-system/project/assets/Icons/heart.svg"
+        },
+        {
+          "name": "download.svg",
+          "source": "exports/design-system/project/assets/Icons/download.svg"
+        },
+        {
+          "name": "copy.svg",
+          "source": "exports/design-system/project/assets/Icons/copy.svg"
+        },
+        {
+          "name": "check.svg",
+          "source": "exports/design-system/project/assets/Icons/check.svg"
+        },
+        {
+          "name": "sun.svg",
+          "source": "exports/design-system/project/assets/Icons/sun.svg"
+        },
+        {
+          "name": "grid.svg",
+          "source": "exports/design-system/project/assets/Icons/grid.svg"
+        },
+        {
+          "name": "plus.svg",
+          "source": "exports/design-system/project/assets/Icons/plus.svg"
+        },
+        {
+          "name": "close.svg",
+          "source": "exports/design-system/project/assets/Icons/close.svg"
+        },
+        {
+          "name": "ruler.svg",
+          "source": "exports/design-system/project/assets/Icons/ruler.svg"
+        }
+      ]
+    }
+  ]
+}

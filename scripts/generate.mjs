@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { readSources } from './tokens.mjs';
+import { buildDesignSystem } from './design-system.mjs';
 
 const check = process.argv.includes('--check');
 const { manifest, tokens } = await readSources();
@@ -14,6 +15,7 @@ const outputs = new Map([
   ['public/downloads/recipes.css', recipes], ['public/downloads/price.mjs', price],
   ['public/downloads/ce-theme.json', JSON.stringify(manifest, null, 2) + '\n'],
   ['public/downloads/usage.md', usage],
+  ...await buildDesignSystem(manifest, tokens),
 ]);
 for (const [path, content] of outputs) {
   const file = new URL(`../${path}`, import.meta.url);
