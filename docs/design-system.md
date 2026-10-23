@@ -7,13 +7,13 @@
 | Bundle path (`project/…`) | Generated from |
 | --- | --- |
 | `tokens.json`, `tokens.css` | `tokens/*.tokens.json` (DTCG) through `scripts/design-system.mjs`. Variable names match `exports/tokens.css` (`--ce-…`); semantic colors stay aliases of palette colors. Every token's `$description` becomes its usage note. |
-| `components/bundle.css` | `recipes/recipes.css`, plus one line mapping `--ce-font-family` to the design system's `--font-sans`. |
+| `components/bundle.css` | Every recipe source (`recipes/recipes.css`, `interface.css`, `retail.css`, `workspace.css`, `share-card.css`, `print-label.css`), plus one line mapping `--ce-font-family` to the design system's `--font-sans`. |
 | `README.md`, `components/<Name>/README.md` and `preview.html`, `assets/<Group>/README.md`, `components/Cover/preview.html` | Authored in `design-system/`. |
-| `pricing.md`, `accessibility.md` | `docs/` (copied). |
+| `apply-ce-theme.md`, `product-identity.md`, `pricing.md`, `sharing.md`, `accessibility.md`, `coverage.md`, `decisions.md`, `sources.md`, `evolution.md` | `docs/` (copied; links to files outside the bundle point at the repository). |
 | `assets/Icons/*.svg` | `site/data/icons.mjs`, drawn in ink `#111111`. |
 | `licenses/inter-OFL.txt` | `fonts/inter/OFL.txt`. |
 
-Binary files are not copied into the repository. `exports/design-system/publish.json` lists them with their repository sources: the four Inter weights (from `fonts/inter/`), the product photos that component previews load from `project/media/`, and the supplied logos, product photos, campaign references and icons that become the design system's asset library.
+Binary files are not copied into the repository. `exports/design-system/publish.json` lists them with their repository sources: the four Inter weights (from `fonts/inter/`), the product photos and logos that component previews load from `project/media/`, and the asset library groups: Logos and Products (from `public/assets/`), References (from `public/references/`, reference-only) and Icons.
 
 There is no JavaScript component bundle: components are the framework-neutral HTML/CSS recipes, and previews are static markup styled by `bundle.css`.
 
