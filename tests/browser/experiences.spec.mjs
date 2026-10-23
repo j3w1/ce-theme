@@ -107,6 +107,7 @@ test('scene markers are black letters without periods, can be hidden, and the li
 test('share previews never carry prices and keep their text inside the 1200 × 630 canvas', async ({ page }) => {
   for (const route of ['/compartir/', '/sistemas/']) {
     await page.goto(route);
+    await page.evaluate(() => document.fonts.ready);
     await page.evaluate(() => document.querySelectorAll('[hidden]').forEach((el) => el.removeAttribute('hidden')));
     const cards = page.locator('.ce-share-card');
     expect(await cards.count()).toBeGreaterThan(0);
@@ -120,6 +121,24 @@ test('share previews never carry prices and keep their text inside the 1200 × 6
       }).map((el) => el.className);
     }));
     expect(problems, route).toEqual([]);
+    // The centred square crop (x 285–915) shows the product only: no text is sliced at its edges,
+    // and no word is split mid-word in the narrow text band.
+    const crop = await cards.evaluateAll((items) => items.filter((card) => !card.matches('.ce-share-card--text, .ce-share-card--brand')).flatMap((card) => {
+      const box = card.getBoundingClientRect();
+      const scale = box.width / 1200;
+      return [...card.querySelectorAll('.ce-share-card-text, .ce-share-card-logo')].filter((el) => {
+        const r = el.getBoundingClientRect();
+        return r.right > box.left + 285 * scale && r.left < box.left + 915 * scale;
+      }).map((el) => el.className);
+    }));
+    expect(crop, route).toEqual([]);
+    const split = await page.locator('.ce-share-card-text p').evaluateAll((items) => items.filter((el) => {
+      el.style.overflowWrap = 'normal';
+      const over = el.scrollWidth > el.clientWidth + 1;
+      el.style.overflowWrap = '';
+      return over;
+    }).map((el) => el.textContent));
+    expect(split, route).toEqual([]);
   }
 });
 

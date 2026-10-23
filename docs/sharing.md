@@ -14,23 +14,24 @@ Status: **locked design rules (2026-10-23), implementation pending in the ecomme
 
 | Page | Variant | Content |
 | --- | --- | --- |
-| Product with catalogue cutout | `ce-share-card` | Wordmark, NAME, Description, ≤ 1 spec line; product in the right-centre zone (x 400–1000). |
-| Product with lifestyle photo | `ce-share-card--photo` | Photo across the canvas (`--ce-x`/`--ce-y` focal point); white card with wordmark, NAME, Description. |
+| Product with catalogue cutout | `ce-share-card` | Three bands: NAME, Description and specs on the left (x 40–265); the product filling the centre square (x 285–915); the wordmark on the right. |
+| Product with lifestyle photo | `ce-share-card--photo` | Photo across the canvas (`--ce-x`/`--ce-y` focal point); white card in the left band with wordmark, NAME, Description. |
 | Product without approved photo | `ce-share-card--text` | Centred wordmark, Description, NAME, ≤ 1 spec line. |
-| Category or collection | `ce-share-card--photo` | Eyebrow (“Categoría”, “Colección”) and title on the card. |
+| Category or collection | `ce-share-card` or `--photo` | Eyebrow (“Categoría”, “Colección”) and title in the left band. |
 | Campaign | `ce-share-card--photo` or `--brand` | Eyebrow with the campaign period as supplied, campaign title; no monetary promise. |
 | Store or service page | `ce-share-card--brand` or `--photo` | Eyebrow “Tienda” or the service name, store or service title. |
 | Home | `ce-share-card--brand` | White-and-yellow wordmark, “Regalos, decoración y hogar”, tagline. |
 
-## Crops and scale (tested 2026-10-23)
+## Crops and scale (tested 2026-10-23, revised the same day)
 
 The canvas is 1200 × 630. Rendered in Chromium and scaled to the sizes receiving apps commonly use:
 
 | Presentation | Finding | Design response |
 | --- | --- | --- |
 | Large preview, ~500–600px wide | All text legible. | — |
-| Chat preview, ~300px wide (¼ scale) | Photo, NAME (≈11px) and Description (≈12px) legible; 28px code and spec text fell to 7–8px. | Description 48px, NAME 45px, specs 34px and at most two lines, code off by default (36px when enabled). |
-| Square thumbnail, centre crop, ~96–120px | The earlier right-hand product zone lost most of the product; left-aligned text was cut. | Product zone moved to x 400–1000; text-only and brand variants centred in a 600px column. Text in a thumbnail is not expected to be readable; the product or wordmark must be. |
+| Chat preview, ~300px wide (¼ scale) | The product is what reads; the app prints `og:title` and `og:description` under the image anyway. Small catalogue photos with wide white margins looked tiny when the template did not enlarge them. | The product fills the centre square and the photo is scaled up to it. Trim uniform background margins from the photo before composing. Image text is secondary: Description 36px, NAME 34px, specs 26px; code off by default. |
+| Square thumbnail, centre crop (x 285–915), ~88–120px | A text column reaching into the square left sliced letters at its edge. | All text stays left of x 265 and the wordmark right of x 915, so the crop shows the whole product and nothing cut. Text-only and brand variants are centred inside the square. |
+| Long Spanish words in the narrow text band | Headless Chromium does not hyphenate, so “Antideslizante” split mid-word. | Run `fitShareCard(card)` from `recipes/behaviors.mjs` before capture: it adds break points after slashes and scales the band's text evenly (not below 60%) until every word fits. |
 
 No alternate aspect ratio is added: the tests did not show a need, and platforms do not reliably choose an alternate image. Receiving apps add their own title, description, domain and crop; Casa Elida controls only the image and the metadata, and rendering will differ between apps.
 
@@ -65,6 +66,7 @@ Rendered in the initial HTML of every public URL, without client-side scripts, l
 - **Text.** Title: Description (and NAME when the page leads with it) plus “· Casa Elida”. Description: supplied specifications in a sentence. Alt text describes the photo, not the brand.
 - **Images.**
   - Generate from approved public fields with the share-card template and the self-hosted Inter files: a headless browser or an HTML-to-image renderer.
+  - Before capture, trim uniform white or transparent margins from the product photo, wait for `document.fonts.ready`, then run `fitShareCard` on the card.
   - Output sRGB JPEG 1200 × 630, flattened on white (transparent catalogue PNGs can render on black). Aim for a small file; under 300 KB is a common target, to be confirmed by testing.
   - Version the file name with a hash of its inputs (photo, NAME, Description, specs, code if shown), so a change produces a new URL.
   - Serve from Casa Elida's own domain or CDN, publicly and with long cache lifetimes. Never use personal file-sharing links.

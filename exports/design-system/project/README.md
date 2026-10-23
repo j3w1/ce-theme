@@ -119,7 +119,7 @@ Customers must be able to tell which product is priced and what is being describ
 
 A shared link shows the `ShareCard`: a 1200 × 630 image that never carries a price, because prices differ by store and change.
 
-- **Product links:** the catalogue photo sits in the centre zone, with the wordmark, NAME, Description and specs on the left.
+- **Product links:** the catalogue photo fills the centre square, NAME, Description and specs sit in the left band and the wordmark in the right band, so a square crop shows only the product.
 - **Other page types:** category, collection and campaign links use an eyebrow and a title. Home and store links use the brand surface.
 - **Scale:** the card is tested at chat size (about 300px wide) and as a centre-square crop.
 - Metadata rules are in `sharing.md`.

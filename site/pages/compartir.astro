@@ -20,7 +20,7 @@ const cards = [
         <h2 id={`c-${card.id}`} style="font-size:var(--ce-font-size-title)">{card.title}</h2>
         <p class="section-description" style="margin-bottom:var(--ce-space-24)">{card.note}</p>
         <div style="display:flex;flex-wrap:wrap;gap:var(--ce-space-24);align-items:flex-start;max-width:100%;overflow-x:auto">
-          {['', ' share-scale--half'].reverse().map((size) => (
+          {[' share-scale--half', '', ' share-crop'].map((size) => (
             <figure style="margin:0">
               <div class={`share-scale${size}`}>
                 {card.id === 'producto' && <article class="ce-share-card"><div class="ce-share-card-media"><img src={mene.image} alt="" width="900" height="900" /></div><div class="ce-share-card-text"><img class="ce-share-card-logo" src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="840" height="372" /><p class="ce-product-name">{mene.name}</p><p class="ce-product-description">{mene.description}</p><p class="ce-product-specs">{mene.specs.join(', ')}</p></div></article>}
@@ -29,7 +29,7 @@ const cards = [
                 {card.id === 'categoria' && <article class="ce-share-card"><div class="ce-share-card-media"><img src={mene.image} alt="" width="900" height="900" /></div><div class="ce-share-card-text"><img class="ce-share-card-logo" src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="840" height="372" /><p class="ce-share-card-eyebrow">Colección</p><p class="ce-share-card-title">Tazas de vidrio</p></div></article>}
                 {card.id === 'inicio' && <article class="ce-share-card ce-share-card--brand"><div class="ce-share-card-text"><img class="ce-share-card-logo" src="/assets/logo-wordmark-white-yellow.png" alt="Casa Elida" width="840" height="372" /><p class="ce-share-card-eyebrow">Regalos, decoración y hogar</p><p class="ce-share-card-title">El buen gusto, no cuesta más.</p></div></article>}
               </div>
-              <figcaption class="small-note">{size ? '600 px · vista grande' : '300 px · tamaño de chat'}</figcaption>
+              <figcaption class="small-note">{size === ' share-scale--half' ? '600 px · vista grande' : size ? 'Recorte cuadrado' : '300 px · tamaño de chat'}</figcaption>
             </figure>
           ))}
         </div>
@@ -37,4 +37,5 @@ const cards = [
     ))}
     <p class="small-note">Las imágenes se generan en el servidor con <code>exports/share-card.css</code>. Ver <a class="ce-link" href="/downloads/sharing.md">el contrato de metadatos</a>.</p>
   </div>
+  <script>import { fitShareCard } from '../../recipes/behaviors.mjs'; document.fonts.ready.then(() => document.querySelectorAll('.ce-share-card').forEach((card) => fitShareCard(card)));</script>
 </Layout>

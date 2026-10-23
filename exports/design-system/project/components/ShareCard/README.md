@@ -5,7 +5,9 @@ The 1200 × 630 image served as a page's `og:image`, so links shared on WhatsApp
 ## Layout
 
 - `ce-share-card`: fixed 1200 × 630 canvas on `ce-color-surface-canvas`, rendered to JPEG by the commerce application (never in the browser of the person sharing). Set `--ce-product-text` to scale NAME, Description and specs together (48px default).
-- `ce-share-card-media`: the product zone from x 400 to 1000, so a centre-square crop keeps most of the product; the photo is whole (`contain`).
+- Three bands sized for the centre-square crop (x 285–915) that chat apps use: `ce-share-card-text` on the left (x 40–265), `ce-share-card-media` filling the square, and the `ce-share-card-logo` wordmark in the right band. A square crop shows the whole product and no cut letters.
+- `ce-share-card-media`: the photo is whole (`contain`) and scaled up to the square; trim white margins from the photo before composing.
+- Long words: the renderer runs `fitShareCard` from `behaviors.mjs` after fonts load, so “Antideslizante” is never split mid-word.
 - `ce-share-card-text`: the left column with `ce-share-card-logo` (supplied wordmark), then `ce-product-name`, `ce-product-description` (up to 4 lines), `ce-product-specs` (2 lines) and an optional `ce-code`. Category and campaign links use `ce-share-card-eyebrow` and `ce-share-card-title` instead.
 - `ce-share-card--photo`: a full-bleed lifestyle photo (focal point `--ce-x`, `--ce-y`) with the text on a white card.
 - `ce-share-card--text`: no approved photo; centred text on the subtle surface.

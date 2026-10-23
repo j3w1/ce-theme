@@ -247,3 +247,5 @@ pre { overflow: auto; margin: 0; padding: var(--ce-space-24); font-size: var(--c
 .share-scale > .ce-share-card { transform: scale(.25); transform-origin: 0 0; }
 .share-scale--half { width: 600px; height: 315px; }
 .share-scale--half > .ce-share-card { transform: scale(.5); }
+.share-crop { width: 120px; height: 120px; overflow: hidden; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+.share-crop > .ce-share-card { transform: translateX(-54.3px) scale(.1905); transform-origin: 0 0; }

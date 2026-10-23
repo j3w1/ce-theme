@@ -157,6 +157,32 @@ export function enhanceMarkers(root = document) {
   }
 }
 
+/** Share images: run on each .ce-share-card after document.fonts.ready and before the server captures it. The text band is narrow
+ * so the centred square crop stays clean; long words such as “Antideslizante” must not be split
+ * mid-word. Adds break opportunities after slashes (“vidrio/bambú”), then scales the band's text
+ * down evenly, keeping the NAME / Description ratio, until every word fits (not below `min`). */
+export function fitShareCard(card, { min = 0.6, step = 0.04 } = {}) {
+  const block = card.querySelector('.ce-share-card-text');
+  if (!block || card.matches('.ce-share-card--text, .ce-share-card--brand')) return 1;
+  const items = [...block.querySelectorAll('p, .ce-code')];
+  const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) node.data = node.data.replace(/\/(?!​)/g, '/​');
+  const base = items.map((el) => parseFloat(getComputedStyle(el).fontSize));
+  const overflows = () => items.some((el) => {
+    const wrap = el.style.overflowWrap;
+    el.style.overflowWrap = 'normal';
+    const over = el.scrollWidth > el.clientWidth + 1;
+    el.style.overflowWrap = wrap;
+    return over;
+  });
+  let factor = 1;
+  while (overflows() && factor - step >= min) {
+    factor -= step;
+    items.forEach((el, index) => { el.style.fontSize = `${(base[index] * factor).toFixed(1)}px`; });
+  }
+  return factor;
+}
+
 export function enhanceAll(root = document) {
   enhanceTabs(root); enhanceDialogs(root); enhanceQuantity(root); enhanceChoices(root); enhanceCopy(root);
   enhanceToggles(root); enhanceRails(root); enhanceGallery(root); enhanceMarkers(root);
