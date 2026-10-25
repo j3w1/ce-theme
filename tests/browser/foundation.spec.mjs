@@ -139,7 +139,7 @@ test('Novedad is green and promotion tiles keep the neutral surface; S/ sits on 
   await page.goto('/tienda/');
   const tiles=await page.locator('.ce-mosaic .ce-tile').evaluateAll(els=>els.map(el=>getComputedStyle(el).backgroundColor));
   for (const bg of tiles) expect(bg).not.toBe('rgb(249, 235, 16)');
-  expect(await page.locator('.ce-mosaic .ce-badge--novedad').first().evaluate(el=>getComputedStyle(el).backgroundColor)).toBe('rgb(71, 185, 0)');
+  expect(await page.locator('.ce-mosaic .ce-badge--novedad').first().evaluate(el=>getComputedStyle(el).backgroundColor)).toBe('rgb(54, 133, 0)');
   expect(await page.locator('.ce-price-currency').first().evaluate(el=>getComputedStyle(el).alignSelf)).toBe('auto');
 });
 

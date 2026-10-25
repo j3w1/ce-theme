@@ -226,7 +226,7 @@
         },
         "text": {
           "$type": "color",
-          "$value": "{palette.ink}",
+          "$value": "{palette.white}",
           "$description": "Label on color.tag.novedad.bg."
         }
       },

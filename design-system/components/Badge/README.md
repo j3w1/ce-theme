@@ -7,7 +7,7 @@ Small square-cornered label for short promotional or product facts.
 - `ce-badge`: ink with white 12px bold text.
 - `ce-badge--offer`: action red with white text, for campaigns and discount labels (`−20%`).
 - `ce-badge--yellow`: brand yellow with ink text, for special prices.
-- Product tags, with the colours of the old casaelida.com: `ce-badge--novedad` (green `#47b900`, ink text), `ce-badge--promo` (amber `#ec9e00`, ink text), `ce-badge--top` (“Top en ventas”, crimson `#e00751`, white text) and `ce-badge--limited` (“Edición limitada”, black, white text). Tokens: `color.tag.*`.
+- Product tags, with the colours of the old casaelida.com: `ce-badge--novedad` (green `#368500`, white text; the old site's `#47b900` darkened so white text passes AA), `ce-badge--promo` (amber `#ec9e00`, ink text), `ce-badge--top` (“Top en ventas”, crimson `#e00751`, white text) and `ce-badge--limited` (“Edición limitada”, black, white text). Tokens: `color.tag.*`.
 
 ## The consumer supplies
 

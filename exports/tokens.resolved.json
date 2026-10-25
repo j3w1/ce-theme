@@ -498,13 +498,13 @@
       "value": {
         "colorSpace": "srgb",
         "components": [
-          0.2784313725490196,
-          0.7254901960784313,
+          0.21176470588235294,
+          0.5215686274509804,
           0
         ]
       },
       "description": "Novedad: new products. Tag fill.",
-      "css": "#47b900",
+      "css": "#368500",
       "variable": "--ce-color-tag-novedad-bg"
     },
     "color.tag.novedad.text": {
@@ -512,13 +512,13 @@
       "value": {
         "colorSpace": "srgb",
         "components": [
-          0.06666666666666667,
-          0.06666666666666667,
-          0.06666666666666667
+          1,
+          1,
+          1
         ]
       },
       "description": "Label on color.tag.novedad.bg.",
-      "css": "#111111",
+      "css": "#ffffff",
       "variable": "--ce-color-tag-novedad-text"
     },
     "color.tag.promo.bg": {
@@ -1153,13 +1153,13 @@
       "value": {
         "colorSpace": "srgb",
         "components": [
-          0.2784313725490196,
-          0.7254901960784313,
+          0.21176470588235294,
+          0.5215686274509804,
           0
         ]
       },
-      "description": "Novedad tag fill (the old casaelida.com “Nuevo” green). Carries ink text, never white.",
-      "css": "#47b900",
+      "description": "Novedad tag fill: the old casaelida.com “Nuevo” green (#47b900) darkened to #368500 so white text passes AA (4.7:1). Carries white text.",
+      "css": "#368500",
       "variable": "--ce-palette-tag-green"
     },
     "palette.warning": {

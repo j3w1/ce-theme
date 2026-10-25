@@ -24,7 +24,7 @@
   --ce-palette-info-bg: #eaf3fb;
   --ce-palette-danger-bg: #fff0f1;
   --ce-palette-scrim: rgba(0, 0, 0, 0.72);
-  --ce-palette-tag-green: #47b900;
+  --ce-palette-tag-green: #368500;
   --ce-palette-tag-amber: #ec9e00;
   --ce-palette-tag-crimson: #e00751;
   --ce-palette-black: #000000;
@@ -66,7 +66,7 @@
   --ce-color-sale-text: var(--ce-palette-white);
   --ce-color-sale-accent: var(--ce-palette-yellow);
   --ce-color-tag-novedad-bg: var(--ce-palette-tag-green);
-  --ce-color-tag-novedad-text: var(--ce-palette-ink);
+  --ce-color-tag-novedad-text: var(--ce-palette-white);
   --ce-color-tag-promo-bg: var(--ce-palette-tag-amber);
   --ce-color-tag-promo-text: var(--ce-palette-ink);
   --ce-color-tag-top-bg: var(--ce-palette-tag-crimson);
