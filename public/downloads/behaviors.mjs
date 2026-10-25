@@ -170,7 +170,7 @@ export function placeFeatureTags(frame, { gap = 6 } = {}) {
     tag.style.setProperty('--ce-y', base);
     tag.classList.remove('ce-feature-tag--auto-start');
     let rect = tag.getBoundingClientRect();
-    if (rect.right > box.right + 0.5 && !tag.classList.contains('ce-feature-tag--start')) { tag.classList.add('ce-feature-tag--start', 'ce-feature-tag--auto-start'); rect = tag.getBoundingClientRect(); }
+    if (rect.right > box.right + 0.5 && !tag.matches('.ce-feature-tag--start, .ce-feature-tag--above, .ce-feature-tag--below')) { tag.classList.add('ce-feature-tag--start', 'ce-feature-tag--auto-start'); rect = tag.getBoundingClientRect(); }
     const step = rect.height + gap;
     for (const offset of [0, 1, -1, 2, -2, 3, -3].map((n) => n * step)) {
       const top = rect.top + offset, bottom = rect.bottom + offset;

@@ -8,9 +8,9 @@ import { products } from '../data/products.mjs';
 import { productView, codeSegments } from '../../recipes/product.mjs';
 // Marker letters are plain capitals without periods; the list repeats every marked product in text.
 const tagged = [
-  { letter: 'A', id: 'etiqueta-mene', x: '22%', y: '34%', product: products[0] },
-  { letter: 'B', id: 'etiqueta-nome', x: '52%', y: '30%', product: products[1] },
-  { letter: 'C', id: 'etiqueta-tilen', x: '80%', y: '46%', product: products[2] },
+  { letter: 'A', id: 'etiqueta-mene', x: '22.6%', y: '31.4%', product: products[0] },
+  { letter: 'B', id: 'etiqueta-nome', x: '50%', y: '31%', product: products[1] },
+  { letter: 'C', id: 'etiqueta-tilen', x: '85.8%', y: '45.6%', product: products[2] },
 ].map((item) => ({ ...item, view: productView(item.product) }));
 const segments = (code: string) => codeSegments(code).map((part) => part.part === 'number' ? `<span class="ce-code-number">${part.text}</span>` : part.text).join('');
 const codeHtml = `<span class="ce-code">${segments('CE26061509')}</span>`;
@@ -90,8 +90,8 @@ const cardCode = `<article class="ce-product">
       <figure class="tagged-scene"><div class="ce-tagged-media" data-ce-tags="auto">
         <div class="tagged-scene-art" role="img" aria-label="Composición de ejemplo con dos tazas de vidrio y un tapete de ducha"><img src="/assets/product-mene.png" alt="" width="300" height="300" loading="lazy"/><img src="/assets/product-nome.png" alt="" width="300" height="300" loading="lazy"/><img src="/assets/product-tilen.png" alt="" width="300" height="300" loading="lazy"/></div>
         {tagged.map((item) => <a class="ce-hotspot" href={`#${item.id}`} style={`--ce-x:${item.x};--ce-y:${item.y}`}><span aria-hidden="true">{item.letter}</span><span class="ce-sr-only">{`Producto ${item.letter}: ${item.view.accessibleName}`}</span></a>)}
-        <span class="ce-feature-tag ce-feature-tag--light" style="--ce-x:7%;--ce-y:72%;--ce-line:18px;--ce-tag-width:8em"><span class="ce-feature-tag-label">de <strong>vidrio borosilicato</strong></span></span>
-        <span class="ce-feature-tag" style="--ce-x:69%;--ce-y:60%;--ce-line:16px;--ce-tag-width:10em"><span class="ce-feature-tag-label">base <strong>antideslizante</strong></span></span></div>
+        <span class="ce-feature-tag ce-feature-tag--light ce-feature-tag--above" style="--ce-x:9.8%;--ce-y:43%;--ce-line:36px;--ce-tag-width:9em"><span class="ce-feature-tag-label">de <strong>vidrio borosilicato</strong></span></span>
+        <span class="ce-feature-tag ce-feature-tag--above" style="--ce-x:75%;--ce-y:50%;--ce-line:100px;--ce-tag-width:12em"><span class="ce-feature-tag-label">base <strong>antideslizante</strong></span></span></div>
         <figcaption class="small-note">Composición de ejemplo con fotos del catálogo. Precios de ejemplo.</figcaption>
       </figure>
       <ol class="ce-tag-list">{tagged.map((item) => <li class="ce-tag-item" id={item.id}><img src={item.view.image} alt="" width="160" height="160" loading="lazy"/><div class="ce-tag-item-info"><span class="ce-code">{item.view.code}</span><h3 class="ce-tag-item-title"><span class="ce-hotspot ce-hotspot--inline" aria-hidden="true">{item.letter}</span><span class="ce-product-heading"><span class="ce-product-name">{item.view.name}</span><span class="ce-product-description">{item.view.description}</span></span></h3><p class="ce-product-specs">{item.view.specs.join(', ')}</p><Price amount={item.product.amount} previousAmount={item.product.previousAmount} discountLabel={item.product.discountLabel}/></div></li>)}</ol>

@@ -99,7 +99,7 @@ Generated from `recipes/names.mjs` by `pnpm generate`; do not edit between the m
 | --- | --- | --- | --- |
 | `TaggedPhoto` | Foto etiquetada | `ce-tagged-media` | Photo frame with markers and feature tags; clips anything outside it. |
 | `Marker` | Marcador | `ce-hotspot` | Black circle with a white capital letter A, B, C. |
-| `FeatureTag` | Rótulo | `ce-feature-tag` | Dot, line and label for one feature; stays inside its photo and never overlaps. |
+| `FeatureTag` | Rótulo | `ce-feature-tag` | Dot on the feature, a leader line and a label for it; the label sits in the empty area of the photo, stays inside it and never overlaps. |
 
 ### Tienda
 

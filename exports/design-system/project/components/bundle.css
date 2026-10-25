@@ -152,6 +152,11 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-feature-tag--light { color: var(--ce-color-text-primary); }
 .ce-feature-tag--light .ce-feature-tag-label { background: var(--ce-color-surface-canvas); }
 .ce-feature-tag--light .ce-feature-tag-label strong { color: var(--ce-color-action-primary-bg); }
+.ce-feature-tag--above, .ce-feature-tag--below { flex-direction: column-reverse; align-items: center; width: max-content; max-width: min(var(--ce-tag-width, 16em), 100%); }
+.ce-feature-tag--above { transform: translate(-50%, calc(-100% + 6px)); }
+.ce-feature-tag--below { flex-direction: column; transform: translate(-50%, -6px); }
+.ce-feature-tag--above::after, .ce-feature-tag--below::after { order: 1; width: var(--ce-stroke-focus); height: var(--ce-line, 40px); }
+.ce-feature-tag--below::before { order: 0; }
 .ce-feature-tag--start { max-width: calc(var(--ce-x, 50%) + 6px); transform: translate(calc(-100% + 6px), -50%); }
 .ce-feature-tag--start::before { order: 3; }
 .ce-feature-tag--start::after { order: 2; }
