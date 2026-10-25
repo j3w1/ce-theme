@@ -43,7 +43,7 @@ Use native elements: buttons, links, inputs, selects, `<details>`, `<dialog>` an
 
 - **Identity:** `ce-product-heading` with `ce-product-name` (NAME) and `ce-product-description`, then `ce-product-specs`. Set `--ce-product-text` to scale all three. Format through `productView`.
 - **Codes:** `ce-code`, optionally segmented with `codeSegments` and `ce-code-number`. Render the original string as text, never as a number.
-- **Prices:** the price recipe below; `ce-price--raised` for the raised `S/`, `ce-price--offer` (yellow, default promotion), `ce-price--sale` (red).
+- **Prices:** the price recipe below; `ce-price--baseline` for `S/` on the baseline (the raised `S/` is the default), `ce-price--offer` (yellow, default promotion), `ce-price--sale` (red).
 - **Retail:** `ce-site-header`, `ce-store-context`, `ce-category-rail`, `ce-mosaic`, `ce-tile`, `ce-rail`, `ce-filter-bar`, `ce-listing`, `ce-product-grid--divided`, `ce-pdp`, `ce-buy-box`, `ce-scene`, `ce-cart`, `ce-auth`, `ce-timeline`, `ce-site-footer`.
 - **Interface:** `ce-tabs`, `ce-disclosure`, `ce-dialog`, `ce-drawer`, `ce-menu`, `ce-tooltip`, `ce-notice`, `ce-toast`, `ce-empty`, `ce-skeleton`, form controls.
 - **Workspace:** `data-ce-density`, `ce-app`, `ce-data-table`, `ce-bulk-bar`, `ce-record-header`, `ce-form-section`, `ce-locked`, `ce-audit`.

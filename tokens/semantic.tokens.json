@@ -216,6 +216,56 @@
         "$value": "{palette.yellow}",
         "$description": "Large promotional price on color.sale.bg (24px and larger only)."
       }
+    },
+    "tag": {
+      "novedad": {
+        "bg": {
+          "$type": "color",
+          "$value": "{palette.tag-green}",
+          "$description": "Novedad: new products. Tag fill."
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{palette.ink}",
+          "$description": "Label on color.tag.novedad.bg."
+        }
+      },
+      "promo": {
+        "bg": {
+          "$type": "color",
+          "$value": "{palette.tag-amber}",
+          "$description": "Promo: products on promotion (brand yellow stays for offer prices and promotion surfaces). Tag fill."
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{palette.ink}",
+          "$description": "Label on color.tag.promo.bg."
+        }
+      },
+      "top": {
+        "bg": {
+          "$type": "color",
+          "$value": "{palette.tag-crimson}",
+          "$description": "Top en ventas: best sellers. Tag fill."
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{palette.white}",
+          "$description": "Label on color.tag.top.bg."
+        }
+      },
+      "limited": {
+        "bg": {
+          "$type": "color",
+          "$value": "{palette.black}",
+          "$description": "Edici\u00f3n limitada: limited editions. Tag fill."
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{palette.white}",
+          "$description": "Label on color.tag.limited.bg."
+        }
+      }
     }
   }
 }

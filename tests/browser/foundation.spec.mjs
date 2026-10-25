@@ -84,7 +84,7 @@ test('long identifiers, larger text and failed product images do not break card 
   await page.goto('/patrones/');
   await page.evaluate(()=>{
     document.documentElement.style.fontSize='200%';
-    const code=document.querySelector('.ce-code');code.textContent='000000000000000000000000000000000000000000000000000000000000000';
+    const code=document.querySelector('.ce-code');code.textContent='CE2606144100123';
     document.querySelector('#productos .ce-product-description').textContent='Nombre de producto muy largo con detalles de presentación y capacidad adicional';
     document.querySelector('#productos .ce-product-media img').src='/intentionally-missing.png';
   });
@@ -112,4 +112,33 @@ test('tagged photography links every marker to a product with the same letter',a
   }
   await markers.first().click();
   await expect(page).toHaveURL(/#etiqueta-mene$/);
+});
+
+test('product codes never wrap and have barely rounded corners',async({page})=>{
+  for (const path of ['/sistemas/','/patrones/']) {
+    await page.goto(path);
+    const codes=await page.locator('.ce-code').evaluateAll(els=>els.map(el=>({lines:Math.round(el.getBoundingClientRect().height/parseFloat(getComputedStyle(el).lineHeight||'1')),white:getComputedStyle(el).whiteSpace,radius:parseFloat(getComputedStyle(el).borderTopLeftRadius),font:parseFloat(getComputedStyle(el).fontSize),h:el.getBoundingClientRect().height})));
+    expect(codes.length).toBeGreaterThan(0);
+    for (const code of codes) { expect(code.white).toBe('nowrap'); expect(code.radius).toBeLessThanOrEqual(3); expect(code.h).toBeLessThan(code.font*2); }
+  }
+});
+test('feature tags stay inside their frame and never overlap each other or a marker',async({page})=>{
+  await page.goto('/patrones/');
+  const frame=page.locator('#etiquetas .ce-tagged-media');
+  const rects=await frame.evaluate(el=>{const r=(n)=>{const b=n.getBoundingClientRect();return {l:b.left,r:b.right,t:b.top,b:b.bottom};};return {frame:r(el),tags:[...el.querySelectorAll('.ce-feature-tag')].map(r),markers:[...el.querySelectorAll('.ce-hotspot')].map(r)};});
+  const hit=(a,b)=>a.l<b.r&&a.r>b.l&&a.t<b.b&&a.b>b.t;
+  expect(rects.tags.length).toBeGreaterThan(1);
+  rects.tags.forEach((tag,i)=>{
+    expect(tag.l).toBeGreaterThanOrEqual(rects.frame.l-1); expect(tag.r).toBeLessThanOrEqual(rects.frame.r+1);
+    expect(tag.t).toBeGreaterThanOrEqual(rects.frame.t-1); expect(tag.b).toBeLessThanOrEqual(rects.frame.b+1);
+    rects.markers.forEach((m)=>expect(hit(tag,m)).toBe(false));
+    rects.tags.slice(i+1).forEach((other)=>expect(hit(tag,other)).toBe(false));
+  });
+});
+test('Novedad is green and promotion tiles keep the neutral surface; S/ is raised by default',async({page})=>{
+  await page.goto('/tienda/');
+  const tiles=await page.locator('.ce-mosaic .ce-tile').evaluateAll(els=>els.map(el=>getComputedStyle(el).backgroundColor));
+  for (const bg of tiles) expect(bg).not.toBe('rgb(249, 235, 16)');
+  expect(await page.locator('.ce-mosaic .ce-badge--novedad').first().evaluate(el=>getComputedStyle(el).backgroundColor)).toBe('rgb(71, 185, 0)');
+  expect(await page.locator('.ce-price-currency').first().evaluate(el=>getComputedStyle(el).alignSelf)).toBe('flex-start');
 });

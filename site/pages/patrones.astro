@@ -19,7 +19,7 @@ const taggedCode = `<figure class="ce-tagged-media">
   <a class="ce-hotspot" href="#taza-mene" style="--ce-x:22%;--ce-y:34%">
     <span aria-hidden="true">A</span><span class="ce-sr-only">Producto A: MENE Taza de Vidrio Resistente al Calor</span>
   </a>
-  <span class="ce-feature-tag" style="--ce-x:30%;--ce-y:62%">
+  <span class="ce-feature-tag" style="--ce-x:30%;--ce-y:62%;--ce-tag-width:8em">
     <span class="ce-feature-tag-label">de <strong>vidrio borosilicato</strong></span>
   </span>
 </figure>
@@ -39,7 +39,7 @@ const priceCode = `<span class="ce-price"><span class="ce-sr-only">Precio actual
   <span class="ce-price-currency" aria-hidden="true">S/</span>
   <span class="ce-price-value" aria-hidden="true">8.5</span>
 </span>
-<!-- Raised S/ variant: add ce-price--raised -->`;
+<!-- S/ on the baseline (the fallback): add ce-price--baseline -->`;
 const offerCode = `<div class="ce-price-block">
   <div class="ce-price-history">
     <span>Antes <del>S/15.5</del></span>
@@ -78,7 +78,7 @@ const cardCode = `<article class="ce-product">
 
     <div id="codigos"><Recipe title="Un código con su propio lugar" description="Blanco y negrita sobre negro, con relleno proporcional y esquinas apenas redondeadas. En pantalla se subrayan los cuatro dígitos del número; al imprimir, no. Copiar devuelve el código exacto." code={codeHtml}><div class="code-specimens"><span class="ce-code" set:html={segments('CE26061509')} /><span class="ce-code" set:html={segments('CE26031111R12R')} /><span class="ce-code">7730744292227</span><span class="ce-code" style="font-size:24px" set:html={segments('CE26061477')} /></div><p class="small-note">Un código no se convierte a número, no se corta y no se sustituye por un nombre comercial. El estilo de insignia es solo para códigos Casa Elida.</p></Recipe></div>
 
-    <div id="precios"><Recipe title="El precio de todos los días" description="Negro sobre blanco. La cifra tiene el mayor peso visual; S/ es más pequeño y se apoya en la línea base. La variante elevada sigue disponible." code={priceCode}><div class="demo-prices"><div><p class="demo-label">Entero</p><Price amount="20.00"/></div><div><p class="demo-label">Un decimal</p><Price amount="8.50"/></div><div><p class="demo-label">S/ elevado (variante)</p><Price amount="8.50" alignment="raised"/></div></div></Recipe></div>
+    <div id="precios"><Recipe title="El precio de todos los días" description="Negro sobre blanco. La cifra tiene el mayor peso visual; S/ es más pequeño y va elevado. Si no se puede elevar, se apoya en la línea base." code={priceCode}><div class="demo-prices"><div><p class="demo-label">Entero</p><Price amount="20.00"/></div><div><p class="demo-label">Un decimal</p><Price amount="8.50"/></div><div><p class="demo-label">Línea base (alternativa)</p><Price amount="8.50" alignment="baseline"/></div></div></Recipe></div>
 
     <div id="ofertas"><Recipe title="Una oferta que destaca" description="Bloque amarillo por defecto. El importe anterior lleva “Antes” y tachado. El porcentaje es un dato comercial suministrado, no un cálculo del componente." code={offerCode}><div class="demo-prices"><div><p class="demo-label">Amarillo (por defecto)</p><Price amount="12.50" previousAmount="15.50" discountLabel="19.35%"/></div><div><p class="demo-label">Rojo de rebajas</p><Price amount="11" previousAmount="16" discountLabel="31.25%" variant="sale"/></div><div><p class="demo-label">Precio por unidad</p><Price amount="5.50" unitLabel="cada uno"/></div></div></Recipe></div>
 
@@ -87,10 +87,11 @@ const cardCode = `<article class="ce-product">
     <Recipe title="La tarjeta que acompaña al producto" description="Una tarjeta blanca con foto, identificación y precio para piezas editoriales donde el producto ya se ve en contexto." code={'<article class="ce-callout">\n  <img src="taza.png" alt="NOME Taza de Vidrio">\n  <div>\n    <h3 class="ce-product-heading"><span class="ce-product-name">NOME</span><span class="ce-product-description">Taza de Vidrio</span></h3>\n    <p class="ce-product-specs">vidrio borosilicato, 350ml</p>\n    <!-- Insert the shared price recipe here. -->\n  </div>\n</article>'}><div class="callout-stage"><article class="ce-callout"><img src="/assets/product-nome.png" alt="NOME Taza de Vidrio" width="300" height="300" loading="lazy"/><div><h3 class="ce-product-heading"><span class="ce-product-name">NOME</span><span class="ce-product-description">Taza de Vidrio</span></h3><p class="ce-product-specs">vidrio borosilicato, 350ml</p><Price amount="8" unitLabel="cada una"/></div></article></div></Recipe>
 
     <div id="etiquetas"><Recipe title="Marcas sobre la fotografía" description="Círculos negros con letras blancas A, B, C, sin punto. Cada letra lleva a su producto en la lista, que repite toda la información en texto." code={taggedCode}>
-      <figure class="tagged-scene"><div class="ce-tagged-media">
+      <figure class="tagged-scene"><div class="ce-tagged-media" data-ce-tags="auto">
         <div class="tagged-scene-art" role="img" aria-label="Composición de ejemplo con dos tazas de vidrio y un tapete de ducha"><img src="/assets/product-mene.png" alt="" width="300" height="300" loading="lazy"/><img src="/assets/product-nome.png" alt="" width="300" height="300" loading="lazy"/><img src="/assets/product-tilen.png" alt="" width="300" height="300" loading="lazy"/></div>
         {tagged.map((item) => <a class="ce-hotspot" href={`#${item.id}`} style={`--ce-x:${item.x};--ce-y:${item.y}`}><span aria-hidden="true">{item.letter}</span><span class="ce-sr-only">{`Producto ${item.letter}: ${item.view.accessibleName}`}</span></a>)}
-        <span class="ce-feature-tag ce-feature-tag--light" style="--ce-x:24%;--ce-y:60%"><span class="ce-feature-tag-label">de <strong>vidrio borosilicato</strong></span></span></div>
+        <span class="ce-feature-tag ce-feature-tag--light" style="--ce-x:7%;--ce-y:72%;--ce-line:18px;--ce-tag-width:8em"><span class="ce-feature-tag-label">de <strong>vidrio borosilicato</strong></span></span>
+        <span class="ce-feature-tag" style="--ce-x:69%;--ce-y:60%;--ce-line:16px;--ce-tag-width:10em"><span class="ce-feature-tag-label">base <strong>antideslizante</strong></span></span></div>
         <figcaption class="small-note">Composición de ejemplo con fotos del catálogo. Precios de ejemplo.</figcaption>
       </figure>
       <ol class="ce-tag-list">{tagged.map((item) => <li class="ce-tag-item" id={item.id}><img src={item.view.image} alt="" width="160" height="160" loading="lazy"/><div class="ce-tag-item-info"><span class="ce-code">{item.view.code}</span><h3 class="ce-tag-item-title"><span class="ce-hotspot ce-hotspot--inline" aria-hidden="true">{item.letter}</span><span class="ce-product-heading"><span class="ce-product-name">{item.view.name}</span><span class="ce-product-description">{item.view.description}</span></span></h3><p class="ce-product-specs">{item.view.specs.join(', ')}</p><Price amount={item.product.amount} previousAmount={item.product.previousAmount} discountLabel={item.product.discountLabel}/></div></li>)}</ol>

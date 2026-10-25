@@ -465,6 +465,118 @@
       "css": "#f5f5f5",
       "variable": "--ce-color-surface-subtle"
     },
+    "color.tag.limited.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ]
+      },
+      "description": "Edición limitada: limited editions. Tag fill.",
+      "css": "#000000",
+      "variable": "--ce-color-tag-limited-bg"
+    },
+    "color.tag.limited.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ]
+      },
+      "description": "Label on color.tag.limited.bg.",
+      "css": "#ffffff",
+      "variable": "--ce-color-tag-limited-text"
+    },
+    "color.tag.novedad.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.2784313725490196,
+          0.7254901960784313,
+          0
+        ]
+      },
+      "description": "Novedad: new products. Tag fill.",
+      "css": "#47b900",
+      "variable": "--ce-color-tag-novedad-bg"
+    },
+    "color.tag.novedad.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.06666666666666667,
+          0.06666666666666667,
+          0.06666666666666667
+        ]
+      },
+      "description": "Label on color.tag.novedad.bg.",
+      "css": "#111111",
+      "variable": "--ce-color-tag-novedad-text"
+    },
+    "color.tag.promo.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9254901960784314,
+          0.6196078431372549,
+          0
+        ]
+      },
+      "description": "Promo: products on promotion (brand yellow stays for offer prices and promotion surfaces). Tag fill.",
+      "css": "#ec9e00",
+      "variable": "--ce-color-tag-promo-bg"
+    },
+    "color.tag.promo.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.06666666666666667,
+          0.06666666666666667,
+          0.06666666666666667
+        ]
+      },
+      "description": "Label on color.tag.promo.bg.",
+      "css": "#111111",
+      "variable": "--ce-color-tag-promo-text"
+    },
+    "color.tag.top.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8784313725490196,
+          0.027450980392156862,
+          0.3176470588235294
+        ]
+      },
+      "description": "Top en ventas: best sellers. Tag fill.",
+      "css": "#e00751",
+      "variable": "--ce-color-tag-top-bg"
+    },
+    "color.tag.top.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ]
+      },
+      "description": "Label on color.tag.top.bg.",
+      "css": "#ffffff",
+      "variable": "--ce-color-tag-top-text"
+    },
     "color.text.inverse": {
       "type": "color",
       "value": {
@@ -769,6 +881,20 @@
       "css": "160ms",
       "variable": "--ce-motion-quick"
     },
+    "palette.black": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ]
+      },
+      "description": "Edición limitada tag fill (pure black, as on the old casaelida.com). Carries white text.",
+      "css": "#000000",
+      "variable": "--ce-palette-black"
+    },
     "palette.border": {
       "type": "color",
       "value": {
@@ -994,6 +1120,48 @@
       "css": "#eaf5ee",
       "variable": "--ce-palette-success-bg"
     },
+    "palette.tag-amber": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9254901960784314,
+          0.6196078431372549,
+          0
+        ]
+      },
+      "description": "Promo tag fill (the old casaelida.com “Promo” amber). Carries ink text.",
+      "css": "#ec9e00",
+      "variable": "--ce-palette-tag-amber"
+    },
+    "palette.tag-crimson": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8784313725490196,
+          0.027450980392156862,
+          0.3176470588235294
+        ]
+      },
+      "description": "Top en ventas tag fill (the old casaelida.com crimson). Carries white text.",
+      "css": "#e00751",
+      "variable": "--ce-palette-tag-crimson"
+    },
+    "palette.tag-green": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.2784313725490196,
+          0.7254901960784313,
+          0
+        ]
+      },
+      "description": "Novedad tag fill (the old casaelida.com “Nuevo” green). Carries ink text, never white.",
+      "css": "#47b900",
+      "variable": "--ce-palette-tag-green"
+    },
     "palette.warning": {
       "type": "color",
       "value": {
@@ -1063,11 +1231,11 @@
     "radius.code": {
       "type": "dimension",
       "value": {
-        "value": 3,
+        "value": 2,
         "unit": "px"
       },
-      "description": "CE code badges: slightly rounded corners.",
-      "css": "3px",
+      "description": "CE code badges: barely rounded corners (2px), just visible.",
+      "css": "2px",
       "variable": "--ce-radius-code"
     },
     "radius.none": {

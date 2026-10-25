@@ -1,12 +1,12 @@
 # Price
 
-The Casa Elida price: a small `S/` on the baseline beside a large heavy amount with full-size decimals, in regular, offer, sale and inverse styles.
+The Casa Elida price: a small raised `S/` beside a large heavy amount with full-size decimals, in regular, offer, sale and inverse styles.
 
 ## Classes
 
 - `ce-price-block`: row holding an optional history and the price.
-- `ce-price`: weight 800, tracking −0.045em. Set `font-size` for the context (44px in cards, 48px in callouts, 56px on product pages, up to 96px on photography). `ce-price-currency` is 46% of it and sits on the baseline; `ce-price-value` stays full size.
-- `ce-price--raised`: supported variant that lifts `S/` to the top of the figures.
+- `ce-price`: weight 800, tracking −0.045em. Set `font-size` for the context (44px in cards, 48px in callouts, 56px on product pages, up to 96px on photography). `ce-price-currency` is 46% of it and is raised to the top of the figures by default; `ce-price-value` stays full size.
+- `ce-price--baseline`: the fallback that sets `S/` on the baseline of the figures (use it when the raised `S/` cannot be drawn, for example in a constrained print or table cell). `ce-price--raised` is kept as an alias of the default.
 - `ce-price--offer`: the default promotion, an ink amount on the yellow block (`ce-color-price-offer-bg`, `ce-radius-price`).
 - `ce-price--sale`: red sale block (`ce-color-sale-bg`, white text) for REBAJAS campaigns.
 - `ce-price--inverse`: white amount for photography.

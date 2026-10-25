@@ -29,6 +29,10 @@
     ["color.focus", "color.surface.canvas", 3],
     ["color.marker.text", "color.marker.bg", 4.5],
     ["color.sale.text", "color.sale.bg", 4.5],
-    ["color.sale.accent", "color.sale.bg", 3]
+    ["color.sale.accent", "color.sale.bg", 3],
+    ["color.tag.novedad.text", "color.tag.novedad.bg", 4.5],
+    ["color.tag.promo.text", "color.tag.promo.bg", 4.5],
+    ["color.tag.top.text", "color.tag.top.bg", 4.5],
+    ["color.tag.limited.text", "color.tag.limited.bg", 4.5]
   ]
 }

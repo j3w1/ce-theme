@@ -157,6 +157,42 @@ export function enhanceMarkers(root = document) {
   }
 }
 
+/** Feature tags that come from data: keeps every .ce-feature-tag inside its frame and clear of the other tags and the markers.
+ * A tag whose label would leave the frame is flipped with ce-feature-tag--start; a tag that touches another is moved up or down in
+ * steps of its own height. Authors still choose sensible positions; this is the guard for positions nobody checked by eye. */
+export function placeFeatureTags(frame, { gap = 6 } = {}) {
+  const box = frame.getBoundingClientRect();
+  const taken = [...frame.querySelectorAll('.ce-hotspot')].map((el) => el.getBoundingClientRect());
+  const clash = (r) => taken.some((o) => r.left < o.right + gap && r.right > o.left - gap && r.top < o.bottom + gap && r.bottom > o.top - gap);
+  let moved = 0;
+  for (const tag of frame.querySelectorAll('.ce-feature-tag')) {
+    const base = tag.dataset.ceY ??= tag.style.getPropertyValue('--ce-y') || '50%';
+    tag.style.setProperty('--ce-y', base);
+    tag.classList.remove('ce-feature-tag--auto-start');
+    let rect = tag.getBoundingClientRect();
+    if (rect.right > box.right + 0.5 && !tag.classList.contains('ce-feature-tag--start')) { tag.classList.add('ce-feature-tag--start', 'ce-feature-tag--auto-start'); rect = tag.getBoundingClientRect(); }
+    const step = rect.height + gap;
+    for (const offset of [0, 1, -1, 2, -2, 3, -3].map((n) => n * step)) {
+      const top = rect.top + offset, bottom = rect.bottom + offset;
+      if (top < box.top || bottom > box.bottom) continue;
+      if (!clash({ left: rect.left, right: rect.right, top, bottom })) {
+        if (offset) { tag.style.setProperty('--ce-y', `calc(${base} + ${offset}px)`); moved += 1; }
+        taken.push(tag.getBoundingClientRect());
+        break;
+      }
+    }
+  }
+  return moved;
+}
+
+/** Runs placeFeatureTags on every frame marked data-ce-tags="auto", now and when the frame is resized. */
+export function enhanceFeatureTags(root = document) {
+  for (const frame of root.querySelectorAll('.ce-tagged-media[data-ce-tags="auto"]')) {
+    placeFeatureTags(frame);
+    if (typeof ResizeObserver === 'function') new ResizeObserver(() => placeFeatureTags(frame)).observe(frame);
+  }
+}
+
 /** Share images: run on each .ce-share-card after document.fonts.ready and before the server captures it. The text band is narrow
  * so the centred square crop stays clean; long words such as “Antideslizante” must not be split
  * mid-word. Adds break opportunities after slashes (“vidrio/bambú”), then scales the band's text
@@ -185,5 +221,5 @@ export function fitShareCard(card, { min = 0.6, step = 0.04 } = {}) {
 
 export function enhanceAll(root = document) {
   enhanceTabs(root); enhanceDialogs(root); enhanceQuantity(root); enhanceChoices(root); enhanceCopy(root);
-  enhanceToggles(root); enhanceRails(root); enhanceGallery(root); enhanceMarkers(root);
+  enhanceToggles(root); enhanceRails(root); enhanceGallery(root); enhanceMarkers(root); enhanceFeatureTags(root);
 }

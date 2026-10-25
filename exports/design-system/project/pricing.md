@@ -12,7 +12,7 @@ The reference product card accepts `name` (NAME), `description`, `specs`, `image
 
 ## Display rules
 
-- **Currency.** `S/` at 46% of the amount size, on the amount's baseline (default). The raised `S/` is a supported variant: `ce-price--raised`. Fraction digits stay full size; never raise or shrink decimals.
+- **Currency.** `S/` at 46% of the amount size, raised to the top of the figures (default). The fallback sets it on the amount's baseline: `ce-price--baseline`. Fraction digits stay full size; never raise or shrink decimals.
 - **Compact amounts.** `S/20`, `S/8.5`, `S/0.05`. Do not force `.00` and do not group thousands.
 - **Styles.**
   - Regular prices: ink on white.

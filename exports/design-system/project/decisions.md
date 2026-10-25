@@ -34,7 +34,13 @@ Later owner instructions supersede the rows above where they conflict. Proposals
 | 2026-10-23 | Specifications | Lowercase except abbreviations, proper names, technical designations and case-sensitive units; actual values preserved. | Owner consolidated brief |
 | 2026-10-23 | CE code badge | Black, bold white uppercase CE code, proportional padding (0.3em × 0.35em), slightly rounded corners (0.2em); on-screen underline of the four-digit number only. | Owner consolidated brief; `1688toPL` code display |
 | 2026-10-23 | Image markers | `A`, `B`, `C` without periods; solid black circles with bold white letters; no white ring, no red default; separate focus indicator. | Owner consolidated brief |
-| 2026-10-23 | P4 currency | `S/` on the baseline is the default; the raised `S/` remains a supported variant (`ce-price--raised`). Fraction digits stay full size. | Owner consolidated brief |
+| 2026-10-23 | P4 currency | Superseded on 2026-10-25: see P4b. | Owner consolidated brief |
+| 2026-10-25 | P4b currency | The raised `S/` is the default; `S/` on the baseline is the fallback (`ce-price--baseline`). `ce-price--raised` stays as an alias. Fraction digits stay full size. | Owner review |
+| 2026-10-25 | Codes | Product codes are always one line and never wrap (`ce-code` is `nowrap`); corners are barely rounded (`radius.code` 2px). | Owner review |
+| 2026-10-25 | Links | Text links are bold. | Owner review |
+| 2026-10-25 | Tags and yellow | Yellow means promotion only (offer prices and promotion surfaces); it is never a ground or a tint behind a product photo. Product tags use the colours of the old casaelida.com: Novedad green `#47b900`, Promo amber `#ec9e00`, Top en ventas `#e00751`, Edición limitada black `#000000` (`color.tag.*`). The word is “Novedad”, not “Nuevo”. Mosaic layout is unchanged. | Owner review |
+| 2026-10-25 | Feature tags | Feature tags stay inside the photo of the product they describe and never overlap each other, a marker or a neighbouring photo. | Owner review |
+| 2026-10-25 | Gondola label | NAME smaller; Description bold and larger; specs in lowercase below it; the price is the largest element. | Owner review |
 | 2026-10-23 | P5 promotions | The yellow price block is the default promotion; the red block or card and `REBAJAS` treatments remain supported (`ce-price--sale`). | Owner consolidated brief |
 | 2026-10-23 | Campaign colours | Authorized users may choose campaign colours per campaign (`ce-campaign`, checked by `recipes/campaign.mjs`) without changing global tokens or legibility. | Owner consolidated brief |
 | 2026-10-23 | P9 public previews | No price in default public link previews, titles or descriptions, even when prices match across stores. | Owner consolidated brief |

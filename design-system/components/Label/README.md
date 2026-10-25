@@ -4,10 +4,10 @@ The 80 × 40 mm gondola price label in black ink, on white paper or on yellow pa
 
 ## Classes
 
-- `ce-label`: fixed 80 × 40 mm grid with 2.5 × 3 mm padding; `--ce-product-text: 3.9mm` keeps the NAME/Description ratio in print.
-- `ce-label-specs` (2 lines), `ce-label-ident` (NAME 5.6mm heavy, Description), `ce-label-foot` (`ce-label-logo` from `logo-wordmark-black.png`, `ce-code`).
-- `ce-label-qr`: 14mm QR area (12mm with `ce-label--wide-price`); the payload comes from the consuming system.
-- `ce-label-prices`: optional `ce-label-bulk` quantity prices, optional `ce-label-previous` with `ce-label-discount`, then the price at 11mm (8.5mm with `ce-label--wide-price` for long amounts).
+- `ce-label`: fixed 80 × 40 mm grid with 2.5 × 3 mm padding; Reading order on the paper: NAME, Description, specs, price. The price is the largest element, the Description is the loudest text and the NAME is small.
+- `ce-label-ident` (NAME 4mm heavy; Description 4.6mm bold, up to 3 lines), `ce-label-specs` (lowercase specs, 3.4mm semibold, below the Description), `ce-label-foot` (`ce-label-logo` from `logo-wordmark-black.png`, `ce-code`).
+- `ce-label-qr`: 12mm QR area, top right; the payload comes from the consuming system.
+- `ce-label-prices`: optional `ce-label-bulk` quantity prices, optional `ce-label-previous` with `ce-label-discount`, then the price at 11.5mm with a raised `S/` (9mm with `ce-label--wide-price` for long amounts).
 - `ce-label--yellow-paper`: yellow on screen only; prints transparent for pre-printed yellow stock. `ce-label-sheet`: A4, 2 × 7, dashed cut guides.
 - The on-screen code underline is removed in print.
 

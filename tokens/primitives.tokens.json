@@ -241,6 +241,54 @@
         "alpha": 0.72
       },
       "$description": "Photographic text protection. Validate the final composition."
+    },
+    "tag-green": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.2784313725490196,
+          0.7254901960784313,
+          0.0
+        ]
+      },
+      "$description": "Novedad tag fill (the old casaelida.com \u201cNuevo\u201d green). Carries ink text, never white."
+    },
+    "tag-amber": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9254901960784314,
+          0.6196078431372549,
+          0.0
+        ]
+      },
+      "$description": "Promo tag fill (the old casaelida.com \u201cPromo\u201d amber). Carries ink text."
+    },
+    "tag-crimson": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8784313725490196,
+          0.027450980392156862,
+          0.3176470588235294
+        ]
+      },
+      "$description": "Top en ventas tag fill (the old casaelida.com crimson). Carries white text."
+    },
+    "black": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "$description": "Edici\u00f3n limitada tag fill (pure black, as on the old casaelida.com). Carries white text."
     }
   },
   "space": {
@@ -532,10 +580,10 @@
     "code": {
       "$type": "dimension",
       "$value": {
-        "value": 3,
+        "value": 2,
         "unit": "px"
       },
-      "$description": "CE code badges: slightly rounded corners."
+      "$description": "CE code badges: barely rounded corners (2px), just visible."
     }
   },
   "layout": {

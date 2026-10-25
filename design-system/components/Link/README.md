@@ -1,10 +1,10 @@
 # Link
 
-Underlined inline text link in ink that turns action red on hover.
+Bold underlined inline text link in ink that turns action red on hover.
 
 ## Classes
 
-- `ce-link`: `ce-color-text-primary` with an underline offset of 0.2em; hover uses `ce-color-action-primary-hover`.
+- `ce-link`: bold `ce-color-text-primary` with an underline offset of 0.2em; hover uses `ce-color-action-primary-hover`.
 
 ## The consumer supplies
 

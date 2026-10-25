@@ -17,7 +17,7 @@ const shareCard = await readFile(new URL('recipes/share-card.css', root), 'utf8'
 const printLabel = await readFile(new URL('recipes/print-label.css', root), 'utf8');
 const variables = new Set(Object.values(tokens).map((token) => token.variable));
 // Component inputs set by consumers on an element; documented with each component.
-const componentInputs = ['--ce-x', '--ce-y', '--ce-line', '--ce-size', '--ce-product-text', '--ce-campaign-surface', '--ce-campaign-text', '--ce-columns', '--ce-control', '--ce-row', '--ce-cell-pad'];
+const componentInputs = ['--ce-x', '--ce-y', '--ce-line', '--ce-tag-width', '--ce-size', '--ce-product-text', '--ce-campaign-surface', '--ce-campaign-text', '--ce-columns', '--ce-control', '--ce-row', '--ce-cell-pad'];
 componentInputs.forEach((name) => variables.add(name));
 for (const css of [...recipes, site, shareCard, printLabel]) {
   for (const [, variable] of css.matchAll(/var\((--ce-[\w-]+)/g)) {

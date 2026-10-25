@@ -4,7 +4,7 @@ Black badge with bold white type that shows a Casa Elida product code exactly as
 
 ## Classes
 
-- `ce-code`: `ce-color-code-text` on `ce-color-code-bg`, bold, tabular figures, padding 0.3em × 0.35em and a 0.2em radius, so the badge scales with its font size.
+- `ce-code`: `ce-color-code-text` on `ce-color-code-bg`, bold, tabular figures, padding 0.3em × 0.35em and a barely visible 2px radius (`ce-radius-code`). A code is always one line: `ce-code` never wraps, so give its column or row room (tables, cards and labels size to the code, not the other way round).
 - `ce-code-number`: wraps the four-digit item number of a `CE` code (`CE2606` + `1441`) and underlines it on screen as a reading aid. The underline is removed in print and is never part of barcode or carton artwork.
 
 ## The consumer supplies

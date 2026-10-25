@@ -63,7 +63,7 @@ Examples: storefront `/tienda/` (home, `categoria`, `producto`, `escena`, `carri
 | NAME / Description / specs | `ce-product-name`, `ce-product-description`, `ce-product-specs`, `productView` | Tested | Unit tests for casing rules. |
 | CE code badge with on-screen number underline | `ce-code`, `codeSegments` | Tested | Underline removed in print; copying returns the exact code. |
 | Product card: flag, favourite, add-to-bag, availability, more options, compare | `ce-product` plus `ce-product-flag`, `ce-product-row`, `ce-stock`, `ce-variant-thumbs`, `ce-product-select` | Tested | Ratings and review counts are not shown: no review data exists. |
-| Prices: baseline S/, raised variant, yellow offer, red sale, unit price | `ce-price`, `preparePrice` | Tested | |
+| Prices: raised S/ (default), baseline S/ (fallback), yellow offer, red sale, unit price | `ce-price`, `preparePrice` | Tested | |
 | Store-aware price states | `ce-store-note`, `ce-price-pending`, per-store views | Tested | No store, price unavailable, store switch without stale amounts. Loading state styled (`aria-busy`) but not exercised. |
 | Quantity prices | `ce-tiers`; label `ce-label-bulk` | Implemented | **Needs input:** the quantity-price rule and its source in CE Systems. |
 | Listing: quick filters, result count, active filters, sidebar or drawer, sort | `ce-filter-bar`, `ce-filter-chips`, `ce-result-count`, `ce-active-filters`, `ce-listing`, `ce-listing-aside` | Tested | Columns 2 / 3 / 3 + sidebar / 4 + sidebar. Filter facets and counts come from the search service. |

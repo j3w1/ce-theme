@@ -13,7 +13,7 @@ const base = ({ amount, previousAmount, discountLabel, badge, ...identity }) => 
 const [mene, nome, tilen, talen] = products.map(base);
 
 export const catalogue = [
-  { ...mene, flag: 'Nuevo', prices: { tacna: '6.50', arequipa: '6.90' }, stock: { tacna: 'available', arequipa: 'limited' }, family: 'tazas', options: [mene, nome] },
+  { ...mene, flag: 'Novedad', prices: { tacna: '6.50', arequipa: '6.90' }, stock: { tacna: 'available', arequipa: 'limited' }, family: 'tazas', options: [mene, nome] },
   { ...nome, prices: { tacna: '8.00', arequipa: '8.50' }, stock: { tacna: 'available', arequipa: 'available' }, family: 'tazas', options: [nome, mene] },
   { ...tilen, prices: { tacna: '6.00' }, previous: { tacna: '7.50' }, discount: { tacna: '20%' }, stock: { tacna: 'available', arequipa: 'unavailable' }, family: 'tapetes', options: [tilen, talen] },
   { ...talen, prices: { tacna: '8.50', arequipa: '8.50' }, stock: { tacna: 'limited', arequipa: 'available' }, family: 'tapetes', options: [talen, tilen] },

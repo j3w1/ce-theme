@@ -43,7 +43,7 @@
 .ce-site-brand img { display: block; width: auto; height: 36px; }
 .ce-site-nav { grid-area: nav; display: none; }
 .ce-site-nav ul { display: flex; gap: var(--ce-space-4); margin: 0; padding: 0; list-style: none; }
-.ce-site-nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--ce-space-12); border-radius: var(--ce-radius-pill); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); text-decoration: none; white-space: nowrap; }
+.ce-site-nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--ce-space-12); border-radius: var(--ce-radius-pill); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-bold); text-decoration: none; white-space: nowrap; }
 .ce-site-nav a:hover, .ce-site-nav a[aria-current] { color: var(--ce-color-text-primary); text-decoration: underline; text-underline-offset: .35em; }
 .ce-search { grid-area: search; position: relative; display: flex; align-items: center; min-width: 0; margin: 0; }
 .ce-search > svg { position: absolute; left: var(--ce-space-16); width: 20px; height: 20px; pointer-events: none; }
@@ -88,6 +88,11 @@
 .ce-tile--light { background: var(--ce-campaign-surface, var(--ce-color-surface-subtle)); color: var(--ce-campaign-text, var(--ce-color-text-primary)); }
 .ce-tile--light::before { content: none; }
 .ce-tile--light > img { padding: 10% 14% 22%; object-fit: contain; mix-blend-mode: multiply; }
+/* Yellow means promotion, so a product tile never gets a yellow ground or a yellow cast. A promotion tile keeps the neutral
+   surface and carries the Promo tag plus the supplied offer price in the yellow offer block. */
+.ce-tile > .ce-tile-offer { position: absolute; top: var(--ce-space-16); right: var(--ce-space-16); display: grid; justify-items: end; gap: var(--ce-space-4); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); }
+.ce-tile-offer .ce-price { font-size: 30px; padding: var(--ce-space-4) var(--ce-space-8); }
+.ce-tile-offer del { font-weight: var(--ce-font-weight-bold); }
 .ce-tile--wide { aspect-ratio: 16 / 9; }
 .ce-tile--tall { aspect-ratio: 6 / 7; }
 .ce-mosaic { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ce-space-12); }
@@ -157,7 +162,10 @@
 .ce-load-more .ce-progress { width: 200px; height: 2px; border-radius: 0; }
 
 /* Product card additions ------------------------------------------------------------------------------- */
-.ce-product-flag { margin: 0; color: var(--ce-color-action-primary-bg); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-bold); line-height: var(--ce-font-line-heading); }
+.ce-product-flag { align-self: flex-start; margin: 0; padding: var(--ce-space-2) var(--ce-space-8); background: var(--ce-color-tag-novedad-bg); color: var(--ce-color-tag-novedad-text); font-size: var(--ce-font-size-xs); font-weight: var(--ce-font-weight-bold); line-height: var(--ce-font-line-heading); }
+.ce-product-flag--promo { background: var(--ce-color-tag-promo-bg); color: var(--ce-color-tag-promo-text); }
+.ce-product-flag--top { background: var(--ce-color-tag-top-bg); color: var(--ce-color-tag-top-text); }
+.ce-product-flag--limited { background: var(--ce-color-tag-limited-bg); color: var(--ce-color-tag-limited-text); }
 .ce-product-media > a { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
 .ce-product-link { display: flex; flex-direction: column; gap: var(--ce-space-2); color: inherit; text-decoration: none; }
 .ce-product-link:hover .ce-product-description { color: var(--ce-color-text-primary); text-decoration: underline; text-underline-offset: .2em; }
@@ -309,12 +317,12 @@
 .ce-footer-group > summary { list-style: none; }
 .ce-footer-group > summary::-webkit-details-marker { display: none; }
 .ce-footer-links { display: grid; margin: 0; padding: 0 0 var(--ce-space-16); list-style: none; }
-.ce-footer-links a { display: inline-flex; align-items: center; min-height: 36px; color: var(--ce-color-text-secondary); text-decoration: none; }
+.ce-footer-links a { display: inline-flex; align-items: center; min-height: 36px; color: var(--ce-color-text-secondary); font-weight: var(--ce-font-weight-bold); text-decoration: none; }
 .ce-footer-links a:hover { color: var(--ce-color-text-primary); text-decoration: underline; text-underline-offset: .2em; }
 .ce-social-links { display: flex; flex-wrap: wrap; gap: var(--ce-space-8); margin: 0; padding: 0; list-style: none; }
 .ce-footer-legal { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ce-space-12) var(--ce-space-24); margin-top: var(--ce-space-32); padding-top: var(--ce-space-24); border-top: var(--ce-stroke-thin) solid var(--ce-color-border-default); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); }
 .ce-footer-legal ul { display: flex; flex-wrap: wrap; gap: var(--ce-space-4) var(--ce-space-16); margin: 0; padding: 0; list-style: none; }
-.ce-footer-legal a { color: inherit; }
+.ce-footer-legal a { color: inherit; font-weight: var(--ce-font-weight-bold); }
 
 /* Breakpoints ------------------------------------------------------------------------------------------- */
 @media (min-width: 640px) {

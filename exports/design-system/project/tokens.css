@@ -24,6 +24,10 @@
   --ce-palette-info-bg: #eaf3fb;
   --ce-palette-danger-bg: #fff0f1;
   --ce-palette-scrim: rgba(0, 0, 0, 0.72);
+  --ce-palette-tag-green: #47b900;
+  --ce-palette-tag-amber: #ec9e00;
+  --ce-palette-tag-crimson: #e00751;
+  --ce-palette-black: #000000;
   --ce-color-brand-red: var(--ce-palette-red);
   --ce-color-brand-yellow: var(--ce-palette-yellow);
   --ce-color-surface-canvas: var(--ce-palette-white);
@@ -61,6 +65,14 @@
   --ce-color-sale-bg: var(--ce-palette-red-action);
   --ce-color-sale-text: var(--ce-palette-white);
   --ce-color-sale-accent: var(--ce-palette-yellow);
+  --ce-color-tag-novedad-bg: var(--ce-palette-tag-green);
+  --ce-color-tag-novedad-text: var(--ce-palette-ink);
+  --ce-color-tag-promo-bg: var(--ce-palette-tag-amber);
+  --ce-color-tag-promo-text: var(--ce-palette-ink);
+  --ce-color-tag-top-bg: var(--ce-palette-tag-crimson);
+  --ce-color-tag-top-text: var(--ce-palette-white);
+  --ce-color-tag-limited-bg: var(--ce-palette-black);
+  --ce-color-tag-limited-text: var(--ce-palette-white);
 }
 :root {
   --ce-space-0: 0px;
@@ -82,7 +94,7 @@
   --ce-radius-price: 8px;
   --ce-radius-callout: 20px;
   --ce-radius-pill: 999px;
-  --ce-radius-code: 3px;
+  --ce-radius-code: 2px;
   --ce-font-size-xs: 0.75rem;
   --ce-font-size-sm: 0.875rem;
   --ce-font-size-body: 1rem;
