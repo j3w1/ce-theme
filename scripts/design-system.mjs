@@ -182,6 +182,10 @@ export async function buildDesignSystem(manifest, tokens) {
   const recipes = await readRecipes() + await read('recipes/share-card.css') + await read('recipes/print-label.css');
   put('components/bundle.css', `/* ${manifest.name} ${manifest.version} — generated from the recipes/*.css sources. Do not edit. */\n/* The design system declares the font stack as --font-sans; the recipes read --ce-font-family. */\n:root { --ce-font-family: var(--font-sans); }\n${recipes}`);
   for (const file of await listFiles('design-system/')) put(file, await read(`design-system/${file}`));
+  // The viewer runs previews live only when components/bundle.js exists. The recipes are plain HTML and CSS, so the
+  // script only declares the namespace and the component names (no JavaScript components, no libraries).
+  const names = [...new Set((await listFiles('design-system/components/')).map((file) => file.split('/')[0]))].filter((name) => name !== 'bundle.css').sort();
+  put('components/bundle.js', `/* @ds-bundle: ${JSON.stringify({ format: 4, namespace: 'CasaElida', components: names.map((name) => ({ name })) })} */\n(function () { window.CasaElida = window.CasaElida || {}; })();\n`);
   // Repository docs travel with the bundle; links to files outside it point at the repository.
   const bundled = new Map(DOCS.map(([name, path]) => [path, name]));
   const relink = (text, from) => text.replace(/\]\(([\w./-]+)(#[\w-]*)?\)/g, (match, target, hash = '') => {
