@@ -17,7 +17,7 @@
   .radio-frame .ce-admin-prompt { position: absolute; height: calc(358px - var(--ce-chrome-height)); }
   .radio-frame--sidebar { width: 320px; height: 720px; }
   .radio-frame--sidebar .ce-admin { height: calc(718px - var(--ce-chrome-height)); }
-  /* CE Radio's own stylesheets (chrome.css, user.css, admin.css) at j3w1/ce-radio a3671d8. They draw only with --ce-* tokens on top of the ce-theme recipes. */
+  /* CE Radio's own stylesheets (chrome.css, user.css, admin.css) at j3w1/ce-radio 3851c1d. They draw only with --ce-* tokens on top of the ce-theme recipes. */
 .ce-chrome { position: relative; z-index: 10; box-sizing: border-box; display: flex; align-items: stretch; height: var(--ce-chrome-height);
   background: var(--ce-color-surface-inverse); color: var(--ce-color-text-inverse); font-family: var(--ce-font-family); user-select: none; }
 .ce-chrome__drag { position: relative; flex: 1; min-width: 24px; display: flex; align-items: center; padding-left: var(--ce-space-12); -webkit-app-region: drag; app-region: drag; }
@@ -225,8 +225,16 @@
 .ce-player.is-christmas .ce-player__artist, .ce-player.is-christmas .ce-player__times { color: var(--ce-campaign-text); opacity: 0.85; }
 .ce-player.is-christmas .ce-track-skip__label, .ce-player.is-christmas .ce-track-skip__title, .ce-player.is-christmas .ce-track-skip__artist { color: var(--ce-campaign-text); }
 .ce-player.is-christmas .ce-track-skip__artist { opacity: 0.8; }
-.ce-player.is-christmas .ce-player__chip { background: var(--ce-color-surface-canvas); border-color: var(--ce-color-brand-red); box-shadow: inset 0 0 0 1px var(--ce-color-brand-red); }
-.ce-player.is-christmas .ce-player__chip-icon { color: var(--ce-color-brand-red); }
+.ce-player.is-christmas :is(.ce-hero, .ce-player__heading) .ce-icon-button:not(.ce-player__retry) { background: transparent; color: var(--ce-color-surface-canvas); border: var(--ce-stroke-thin) solid var(--ce-color-surface-canvas); }
+.ce-player.is-christmas :is(.ce-hero, .ce-player__heading) .ce-icon-button:not(.ce-player__retry):hover:not(:disabled) { background: var(--ce-campaign-tree); border-color: var(--ce-color-surface-canvas); }
+.ce-player.is-christmas .ce-player__mode[data-mode="shuffle"], .ce-player.is-christmas .ce-player__mode[data-mode="smart"] { background: var(--ce-campaign-tree); box-shadow: inset 0 0 0 1px var(--ce-color-surface-canvas); }
+.ce-player.is-christmas .ce-player__chip { background: var(--ce-campaign-tree); color: var(--ce-campaign-text); border-color: var(--ce-color-brand-red); box-shadow: inset 0 0 0 1px var(--ce-color-brand-red); }
+.ce-player.is-christmas .ce-player__chip:hover:not(:disabled) { background: var(--ce-campaign-tree); }
+.ce-player.is-christmas .ce-player__chip .ce-live { background: var(--ce-color-surface-canvas); }
+.ce-player.is-christmas .ce-status { background: var(--ce-campaign-tree); color: var(--ce-campaign-text); }
+.ce-player.is-christmas .ce-status[data-sign="alert"], .ce-player.is-christmas .ce-status[data-sign="offline"] { background: var(--ce-color-action-primary-bg); color: var(--ce-color-action-primary-text); }
+.ce-player.is-christmas .ce-status[data-sign="spot"] { box-shadow: inset 0 0 0 1px var(--ce-color-surface-canvas); }
+.ce-player.is-christmas .ce-player__chip-icon { color: var(--ce-color-surface-canvas); }
 .ce-player.is-christmas .ce-player__bar { background: var(--ce-color-status-success-text); }
 .ce-player.is-christmas .ce-player__fill { background: var(--ce-color-surface-canvas); }
 .ce-player.is-christmas .ce-stage__track { stroke: var(--ce-color-surface-canvas); }
