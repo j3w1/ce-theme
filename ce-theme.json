@@ -29,22 +29,6 @@
     ["color.focus", "color.surface.canvas", 3],
     ["color.marker.text", "color.marker.bg", 4.5],
     ["color.sale.text", "color.sale.bg", 4.5],
-    ["color.sale.accent", "color.sale.bg", 3],
-    ["color.radio.text", "color.radio.bg", 4.5],
-    ["color.radio.text", "color.radio.raised", 4.5],
-    ["color.radio.muted", "color.radio.surface", 4.5],
-    ["color.radio.faint", "color.radio.bg", 4.5],
-    ["color.radio.faint", "color.radio.surface", 4.5],
-    ["color.radio.signal", "color.radio.raised", 3],
-    ["color.radio.on-signal", "color.radio.signal", 4.5],
-    ["color.radio.alert", "color.radio.bg", 4.5],
-    ["color.radio.alert", "color.radio.surface", 4.5],
-    ["color.radio.ok", "color.radio.surface", 4.5],
-    ["color.radio.control", "color.radio.surface", 3],
-    ["color.radio.focus", "color.radio.bg", 3],
-    ["color.radio.text", "color.radio.navidad.raised", 4.5],
-    ["color.radio.faint", "color.radio.navidad.surface", 4.5],
-    ["color.radio.navidad.pine", "color.radio.navidad.raised", 4.5],
-    ["color.radio.navidad.accent", "color.radio.navidad.bg", 3]
+    ["color.sale.accent", "color.sale.bg", 3]
   ]
 }

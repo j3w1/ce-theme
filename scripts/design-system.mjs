@@ -33,7 +33,7 @@ const PREVIEW_MEDIA = ['product-mene.png', 'product-nome.png', 'product-tilen.pn
 const DOCS = [
   ['apply-ce-theme.md', 'docs/apply-ce-theme.md'], ['product-identity.md', 'docs/product-identity.md'],
   ['pricing.md', 'docs/pricing.md'], ['sharing.md', 'docs/sharing.md'], ['accessibility.md', 'docs/accessibility.md'],
-  ['radio.md', 'docs/radio.md'], ['coverage.md', 'docs/coverage.md'], ['decisions.md', 'docs/decisions.md'], ['sources.md', 'docs/sources.md'],
+  ['coverage.md', 'docs/coverage.md'], ['decisions.md', 'docs/decisions.md'], ['sources.md', 'docs/sources.md'],
   ['evolution.md', 'docs/evolution/2026-10-design-evolution.md'],
 ];
 
@@ -179,7 +179,7 @@ export async function buildDesignSystem(manifest, tokens) {
   const ds = await buildTokens(manifest, tokens);
   put('tokens.json', JSON.stringify(ds, null, 2) + '\n');
   put('tokens.css', compileTokensCss(ds));
-  const recipes = await readRecipes() + await read('recipes/share-card.css') + await read('recipes/print-label.css') + await read('recipes/radio.css');
+  const recipes = await readRecipes() + await read('recipes/share-card.css') + await read('recipes/print-label.css');
   put('components/bundle.css', `/* ${manifest.name} ${manifest.version} — generated from the recipes/*.css sources. Do not edit. */\n/* The design system declares the font stack as --font-sans; the recipes read --ce-font-family. */\n:root { --ce-font-family: var(--font-sans); }\n${recipes}`);
   for (const file of await listFiles('design-system/')) put(file, await read(`design-system/${file}`));
   // Repository docs travel with the bundle; links to files outside it point at the repository.
