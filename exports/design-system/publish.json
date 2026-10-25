@@ -14,7 +14,8 @@
     "project/media/logo-wordmark-color.png": "public/assets/logo-wordmark-color.png",
     "project/media/logo-wordmark-black.png": "public/assets/logo-wordmark-black.png",
     "project/media/logo-wordmark-white-yellow.png": "public/assets/logo-wordmark-white-yellow.png",
-    "project/media/logo-ce-radio.png": "public/assets/logo-ce-radio.png"
+    "project/media/logo-ce-radio.png": "public/assets/logo-ce-radio.png",
+    "project/media/logo-ce-radio-navidad.png": "public/assets/logo-ce-radio-navidad.png"
   },
   "assetGroups": [
     {
@@ -60,6 +61,10 @@
         {
           "name": "logo-ce-radio.png",
           "source": "public/assets/logo-ce-radio.png"
+        },
+        {
+          "name": "logo-ce-radio-navidad.png",
+          "source": "public/assets/logo-ce-radio-navidad.png"
         }
       ]
     },

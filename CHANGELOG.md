@@ -28,6 +28,7 @@ Locked product identity, retail and enterprise recipes, labels, price-free share
 - Reference site: storefront `/tienda/`, internal tools `/sistemas/`, label sheet `/sistemas/etiquetas/`, share previews `/compartir/`.
 - Docs: `apply-ce-theme.md`, `product-identity.md`, `coverage.md`, `sources.md`; pricing store states; sharing rewritten.
 - `CLAUDE.md` as a symbolic link to `AGENTS.md`.
+- CE Radio as a ce-theme application: the `logo-ce-radio.png` and `logo-ce-radio-navidad.png` badges and four design-system cards captured from the restyled app.
 - Validation: reference-only manifest, component-input allow-list, a guard against naming the external retail reference, stale-file guard for downloads.
 
 ### Not changed

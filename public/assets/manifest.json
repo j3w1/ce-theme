@@ -128,5 +128,14 @@
     "description": "CE Radio badge: Casa Elida RADIO with wings, antenna and lightning. CE Radio surfaces only; shown whole, never cropped, recoloured or dragged.",
     "rights": "Casa Elida brand asset; not covered by a software license.",
     "sha256": "ab47b269bd5b71fd0db224b0f3fda11ee1169c67cbda6b8e9aea72daf389961a"
+  },
+  {
+    "file": "logo-ce-radio-navidad.png",
+    "originalName": "icon-christmas.png",
+    "role": "production",
+    "source": "j3w1/ce-radio at def1171, assets/brand/icon-christmas.png: the CE Radio badge with the owner-approved Christmas hat (owner decisions of 2026-10-08). Byte-identical copy.",
+    "description": "CE Radio badge in its Navidad version (hat on the emblem). Only while a Navidad playlist is confirmed playing; shown whole, never cropped, recoloured or dragged.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "8225b86a58fbb2eeab8ab8f536b3e5b2d864940db6e7060c0232a4f04e9dec94"
   }
 ]

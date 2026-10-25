@@ -161,6 +161,7 @@ Instagram campaigns use full-bleed lifestyle photography, the script wordmark, l
 - **Workspace:** `AppShell`, `RecordEditor`, `Table`.
 - **Print:** `Label`.
 - **Sharing:** `ShareCard`.
+- **CE Radio (an application built on ce-theme):** `RadioPlayer`, `RadioStates`, `RadioPlaylists`, `RadioAdmin`. They show the real CE Radio window (DOM and stylesheets captured from the app), not new recipes: CE Radio uses the ce-theme recipes and draws its player-only parts with `--ce-*` tokens.
 - **Cover:** the system cover card.
 
 Each component's guidelines list its classes and what the consumer supplies. Behaviour and data belong to the consuming application: CE Systems and the commerce services own records, prices, stock, permissions and workflows. A hidden or disabled control is presentation, not authorization.

@@ -14,5 +14,6 @@ Supplied Casa Elida logo files. Provenance and checksums are in `public/assets/m
 | `logo-matte-red-tagline.jpg` | 1003 × 627 | Matte-red wordmark with “Regalos Decoración y Hogar”. |
 | `logo-square-red.jpg` | 2048 × 2048 | Square red-ground lockup: avatars, square brand placements, share end cards. |
 | `logo-ce-radio.png` | 512 × 512, transparent | The CE Radio badge. CE Radio surfaces only; always whole and contained, on white. |
+| `logo-ce-radio-navidad.png` | 256 × 256, transparent | The CE Radio badge with its Christmas hat. Only while a Navidad playlist is confirmed playing. |
 
 Use the files exactly as supplied: never redraw, recolour, crop into the mark, stretch, outline or add effects. Choose the file made for the background instead of recolouring one. Minimum wordmark width 96px on screen and 18mm in print; clear space equals the height of “Casa”. These are Casa Elida brand assets, not covered by any software licence.

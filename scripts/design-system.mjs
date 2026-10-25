@@ -21,13 +21,13 @@ const FONTS = JSON.parse(await read('fonts/manifest.json')).map((font) => ({
 // Supplied assets as they appear in the design system's asset library.
 // Production files come from public/assets/; reference-only files from public/references/.
 const ASSET_GROUPS = [
-  { name: 'Logos', tile: 'l', dir: 'public/assets/', files: ['logo-wordmark-color.png', 'logo-wordmark-black.png', 'logo-wordmark-white-yellow.png', 'logo-on-white.jpg', 'logo-on-yellow.jpg', 'logo-on-red.png', 'logo-matte-red.jpg', 'logo-matte-red-tagline.jpg', 'logo-square-red.jpg', 'logo-ce-radio.png'] },
+  { name: 'Logos', tile: 'l', dir: 'public/assets/', files: ['logo-wordmark-color.png', 'logo-wordmark-black.png', 'logo-wordmark-white-yellow.png', 'logo-on-white.jpg', 'logo-on-yellow.jpg', 'logo-on-red.png', 'logo-matte-red.jpg', 'logo-matte-red-tagline.jpg', 'logo-square-red.jpg', 'logo-ce-radio.png', 'logo-ce-radio-navidad.png'] },
   { name: 'Products', tile: 'm', dir: 'public/assets/', files: ['product-mene.png', 'product-nome.png', 'product-tilen.png', 'product-talen.png'] },
   { name: 'References', tile: 'l', dir: 'public/references/', files: ['product-card-wilul.png', 'price-label-yellow-historical.png', 'price-label-white-historical.png', 'campaign-umbrella.jpg', 'campaign-organisers.jpg', 'campaign-kitchen.jpg', 'brand-tote-bag.png'] },
   { name: 'Icons', tile: 'xs', dir: null, files: Object.keys(icons).map((name) => `${name}.svg`) },
 ];
 // Files that component previews load by relative path (each must stay under 512 KB).
-const PREVIEW_MEDIA = ['product-mene.png', 'product-nome.png', 'product-tilen.png', 'logo-square-red.jpg', 'logo-wordmark-color.png', 'logo-wordmark-black.png', 'logo-wordmark-white-yellow.png', 'logo-ce-radio.png'];
+const PREVIEW_MEDIA = ['product-mene.png', 'product-nome.png', 'product-tilen.png', 'logo-square-red.jpg', 'logo-wordmark-color.png', 'logo-wordmark-black.png', 'logo-wordmark-white-yellow.png', 'logo-ce-radio.png', 'logo-ce-radio-navidad.png'];
 
 // Docs copied into the bundle as [bundle name, repository path].
 const DOCS = [

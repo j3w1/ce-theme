@@ -104,6 +104,7 @@ Examples: storefront `/tienda/` (home, `categoria`, `producto`, `escena`, `carri
 | Compare versions | `ce-compare` | Specified | |
 | Dashboards and charts | — | Specified | Follow the dataviz rules of the consuming tool; no chart recipes here. |
 | HR, finance, approvals | — | Needs input | No business contracts supplied. |
+| CE Radio player, playlists, Admin | ce-theme recipes plus CE Radio's token-only `user.css`, `chrome.css`, `admin.css` | Implemented | Applied in `j3w1/ce-radio` (branch `claude/great-meitner-hw3udm`); design-system cards `RadioPlayer`, `RadioStates`, `RadioPlaylists`, `RadioAdmin` are captured from the app. Windows checks on the store PC are pending. |
 
 ## Cross-channel outputs
 
