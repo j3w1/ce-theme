@@ -37,7 +37,7 @@ const sheet = Array.from({ length: 14 }, (_, index) => labels[index % labels.len
           <div class="ce-label-prices">
             {bulk.map(([quantity, amount]) => <p class="ce-label-bulk">{quantity} · S/{preparePrice({ amount }).current} c/u</p>)}
             {price.previous !== undefined && <p class="ce-label-previous">Antes <del>S/{price.previous}</del>{price.discountLabel && <span class="ce-label-discount">−{price.discountLabel}</span>}</p>}
-            <span class="ce-price"><span class="ce-sr-only">{`Precio: ${price.current} soles`}</span><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">{price.current}</span></span>
+            <span class="ce-price"><span class="ce-sr-only">{`Precio: ${price.current} soles`}</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">{price.current}</span></span></span>
           </div>
         </article>
       ))}

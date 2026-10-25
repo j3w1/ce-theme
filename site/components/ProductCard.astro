@@ -42,12 +42,13 @@ const label = view.accessibleName;
           ? <a class="ce-product-link" href={href}>{view.name && <span class="ce-product-name">{view.name}</span>}{view.description && <span class="ce-product-description">{view.description}</span>}</a>
           : <>{view.name && <span class="ce-product-name">{view.name}</span>}{view.description && <span class="ce-product-description">{view.description}</span>}</>}
       </Heading>
-      {actions && amount && <button class="ce-icon-button ce-icon-button--action ce-icon-button--small" type="button" aria-label={`Agregar ${label} a la bolsa`}><Icon name="bag-plus" size={20} /></button>}
+      {actions && amount && <button class="ce-icon-button ce-icon-button--action ce-icon-button--small" type="button" aria-label={`Añadir ${label} al carrito`}><Icon name="bag-plus" size={20} /></button>}
     </div>
     {view.specs.length > 0 && <p class="ce-product-specs">{view.specs.join(', ')}</p>}
     {amount && <Price amount={amount.amount} previousAmount={amount.previousAmount} discountLabel={amount.discountLabel} />}
     {!amount && priceNote && <p class="ce-store-note">{priceNote}</p>}
     {stock.length > 0 && <ul class="ce-stock">{stock.map((line) => <li data-state={line.state}>{line.text}</li>)}</ul>}
     {options.length > 1 && <div class="ce-variant-more"><span>Más opciones</span><ul class="ce-variant-thumbs">{options.map((option) => <li><a href={option.href ?? href ?? '#'} aria-current={option.current ? 'true' : undefined}><img src={option.image} alt={option.name ?? ''} width="44" height="44" loading="lazy" /></a></li>)}</ul></div>}
+    {actions && amount && <button class="ce-button ce-button--secondary ce-product-add" type="button" aria-label={`Añadir ${label} al carrito`}>Añadir al carrito</button>}
   </div>
 </article>

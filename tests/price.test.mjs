@@ -26,6 +26,13 @@ test('invalid offer labels, previous amounts, and units are rejected', () => {
   assert.throws(()=>preparePrice({amount:'8',variant:'unknown'}));
   assert.throws(()=>preparePrice({amount:'8',unitLabel:''}));
   assert.equal(preparePrice({amount:'1.99',packLabel:'pack de 50'}).packLabel,'pack de 50');
+  assert.equal(preparePrice({amount:'1.99',presentationLabel:'pack de 50'}).presentationLabel,'pack de 50');
+  assert.equal(preparePrice({amount:'5.5',unitLabel:'cada uno'}).unitShort,'c/u');
+  assert.equal(preparePrice({amount:'5.5',unitLabel:'por metro',unitShortLabel:'x m'}).unitShort,'x m');
+  assert.equal(preparePrice({amount:'5.5',unitLabel:'por metro'}).unitShort,undefined);
+  assert.equal(preparePrice({amount:'5.5'}).currencyStyle,'baseline');
+  assert.throws(()=>preparePrice({amount:'5.5',currencyStyle:'big'}));
+  assert.throws(()=>preparePrice({amount:'5.5',unitShortLabel:'c/u'}));
   assert.throws(()=>preparePrice({amount:'1.99',packLabel:'/pack de 50'}));
   assert.throws(()=>preparePrice({amount:'1.99',packLabel:''}));
   assert.throws(()=>preparePrice({amount:'1.99',packLabel:'pack de 50',unitLabel:'cada uno'}));

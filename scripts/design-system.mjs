@@ -6,6 +6,7 @@ import { posix, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { icons } from '../site/data/icons.mjs';
 import { readRecipes } from './sources.mjs';
+import { NAMES, NAME_GROUPS } from '../recipes/names.mjs';
 
 const root = new URL('../', import.meta.url);
 const read = (path) => readFile(new URL(path, root), 'utf8');
@@ -182,6 +183,60 @@ export async function buildDesignSystem(manifest, tokens) {
   const recipes = await readRecipes() + await read('recipes/share-card.css') + await read('recipes/print-label.css');
   put('components/bundle.css', `/* ${manifest.name} ${manifest.version} — generated from the recipes/*.css sources. Do not edit. */\n/* The design system declares the font stack as --font-sans; the recipes read --ce-font-family. */\n:root { --ce-font-family: var(--font-sans); }\n${recipes}`);
   for (const file of await listFiles('design-system/')) put(file, await read(`design-system/${file}`));
+  // The Standard names cards are generated from recipes/names.mjs so the registry, the samples and the cards cannot drift apart.
+  for (const group of NAME_GROUPS) {
+    const entries = NAMES.filter((entry) => entry.group === group.es);
+    const rows = entries.map((entry) => `    <tr id="${entry.id}"><th scope="row"><code>${entry.id}</code></th><td>${entry.es}</td><td class="sample">${entry.sample}</td><td class="rule">${entry.rule}${entry.aliases ? ` <em>Retired name: ${entry.aliases.join(', ')}.</em>` : ''}</td></tr>`).join('\n');
+    put(`components/${group.card}/preview.html`, `<!-- @dsCard group="Standard names" height=${120 + entries.length * 100} width=1100 subtitle="${group.title}: id, nombre CE, muestra and rule" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>${group.card}</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .wrap { padding: var(--ce-space-16); }
+  table { width: 100%; border-collapse: collapse; font-size: var(--ce-font-size-sm); }
+  th, td { padding: var(--ce-space-12); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); text-align: left; vertical-align: middle; }
+  thead th { background: var(--ce-color-surface-subtle); }
+  td.sample { min-width: 280px; }
+  .sample-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12); }
+  .rule { color: var(--ce-color-text-secondary); }
+  .sample-mosaic .ce-tile-title { padding: var(--ce-space-8); font-size: var(--ce-font-size-sm); }
+  .sample-mosaic .ce-badge { top: var(--ce-space-8); left: var(--ce-space-8); }
+  code { font-weight: var(--ce-font-weight-bold); }
+</style>
+</head>
+<body>
+<div class="ce-scope wrap">
+  <table>
+    <thead><tr><th scope="col">Id</th><th scope="col">Nombre CE</th><th scope="col">Muestra</th><th scope="col">Rule</th></tr></thead>
+    <tbody>
+${rows}
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
+`);
+    put(`components/${group.card}/README.md`, `# ${group.card}
+
+Standard names for ${group.title.toLowerCase()}: ${entries.map((entry) => `**${entry.id}** (${entry.es})`).join(', ')}.
+
+## Classes
+
+${entries.map((entry) => `- **${entry.id}** · ${entry.es}: ${entry.recipe.map((cls) => `\`${cls}\``).join(', ')}. ${entry.rule}`).join('\n')}
+
+## The consumer supplies
+
+Real products, each with a NAME; supplied prices, discount labels and bases. Nothing in a sample is a live offer.
+
+## Do and don't
+
+- Do say the name, not the look: “Precio Promo”, not “the yellow price”.
+- Don't rename a pattern or reuse a name for another one; add a new entry to \`recipes/names.mjs\` in the same change as its recipe.
+`);
+  }
   // The viewer runs previews live only when components/bundle.js exists. The recipes are plain HTML and CSS, so the
   // script only declares the namespace and the component names (no JavaScript components, no libraries).
   const names = [...new Set((await listFiles('design-system/components/')).map((file) => file.split('/')[0]))].filter((name) => name !== 'bundle.css').sort();

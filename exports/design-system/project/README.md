@@ -18,7 +18,7 @@ Reference sections bundled with this system: `apply-ce-theme.md` (start here whe
   - **Specifications** are lowercase except abbreviations, proper names and case-sensitive units (`vidrio/bambú, 450ml`, `cuero PU`, `talla M`).
   - `productView()` applies these rules to supplied values.
 - **Information order:** NAME → Description → specifications → price → availability. The code badge is optional on retail cards; internal tools, labels and campaign information cards show it. Show only fields the data supplies.
-- **Buttons say what happens:** “Ver productos”, “Agregar a la bolsa”, “Usar esta tienda”. Errors explain how to continue.
+- **Buttons say what happens:** “Ver productos”, “Añadir al carrito”, “Usar esta tienda”. Errors explain how to continue.
 - **Availability is per store, in words:** “Disponible en Tacna”, “Pocas unidades en Arequipa”, “Agotado en Arequipa”.
 - **Product codes are strings.**
   - `CE26061509`, `7730744292227` and `CE26031111R12R` keep every character, case and leading zero.
@@ -148,6 +148,10 @@ Instagram campaigns use full-bleed lifestyle photography, the script wordmark, l
 - Icons accompany words or carry an accessible name. Decorative icons get `aria-hidden="true"`. Social platforms are named in text, not drawn with their marks.
 - No emoji.
 
+## Standard names
+
+Every pattern has one stable English id for code and designs and one Spanish name for people: **PricePromo** (Precio Promo) is the yellow price, **ProductIdentity** (Identidad) is NAME, Description and specs, **ProductStack** (Pila de producto) is the full vertical order and spacing of a product, **CECode** (Código CE) is the black one-line code badge, **PriceUnit** (Unidad: “cada uno” / “c/u”), **PricePresentation** (Presentación: “/pack de 12”), **PriceOld** (Precio anterior) and **DiscountLabel** (Etiqueta de descuento). Say the name, not the look. Every product shown anywhere must have a NAME. The full registry, with a Muestra for each name, is in the Components view under the group “Standard names” (`StandardNamesProduct`, `StandardNamesPrices`, `StandardNamesSurfaces`, `StandardNamesPhotos`, `StandardNamesStore`, `StandardNamesOutputs`, `StandardNamesInterface`, `StandardNamesFeedback`, `StandardNamesNavigation`) and in `names.md`; the source is `recipes/names.mjs`.
+
 ## Components
 
 - **Actions:** `Button`, `IconButton`, `Link`, `Chip`.
@@ -161,6 +165,7 @@ Instagram campaigns use full-bleed lifestyle photography, the script wordmark, l
 - **Workspace:** `AppShell`, `RecordEditor`, `Table`.
 - **Print:** `Label`.
 - **Sharing:** `ShareCard`.
+- **Standard names:** nine cards, one per group of names, each with a sample.
 - **CE Radio (an application built on ce-theme):** `RadioPlayer`, `RadioStates`, `RadioPlaylists`, `RadioAdmin`. They show the real CE Radio window (DOM and stylesheets captured from the app), not new recipes: CE Radio uses the ce-theme recipes and draws its player-only parts with `--ce-*` tokens.
 - **Cover:** the system cover card.
 

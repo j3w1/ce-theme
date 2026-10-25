@@ -55,19 +55,34 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 @media print { .ce-code-number { text-decoration: none; } }
 .ce-price-block { display: flex; align-items: center; flex-wrap: wrap; gap: var(--ce-space-12); }
 .ce-price { display: inline-flex; align-items: baseline; gap: var(--ce-space-2); color: var(--ce-color-price-regular); font-weight: var(--ce-font-weight-heavy); line-height: 1; white-space: nowrap; letter-spacing: -.045em; font-variant-numeric: lining-nums; }
+/* Currency styles. Default (Precio en línea base): S/ at 46% sitting on the baseline of the figures. Fallbacks: ce-price--joined
+   (S/ at the size of the figures, attached to them: S/10) and ce-price--raised (S/ at the top of the figures). */
 .ce-price-currency { font-size: .46em; letter-spacing: -.03em; }
-/* S/ is raised to the top of the figures by default; ce-price--baseline sets it on the baseline (the fallback). ce-price--raised stays as an alias. */
-.ce-price-currency { align-self: flex-start; padding-top: .18em; }
-.ce-price--baseline .ce-price-currency { align-self: baseline; padding-top: 0; }
+.ce-price--joined { gap: 0; }
+.ce-price--joined .ce-price-currency { font-size: 1em; letter-spacing: inherit; }
+.ce-price--raised .ce-price-currency { align-self: flex-start; padding-top: .18em; }
 .ce-price-value { font-size: 1em; }
-.ce-price--offer { background: var(--ce-color-price-offer-bg); color: var(--ce-color-price-offer-text); border-radius: var(--ce-radius-price); padding: var(--ce-space-8) var(--ce-space-12); }
+.ce-price-amount { display: inline-flex; align-items: baseline; gap: inherit; }
+/* Promo (yellow) and Rebajas (red) prices: the colour box surrounds only S/ and the figures, never the price basis beside it. */
+.ce-price--offer .ce-price-amount { background: var(--ce-color-price-offer-bg); color: var(--ce-color-price-offer-text); border-radius: var(--ce-radius-price); padding: var(--ce-space-8) var(--ce-space-12); }
+.ce-price--sale .ce-price-amount { background: var(--ce-color-sale-bg); color: var(--ce-color-sale-text); border-radius: var(--ce-radius-price); padding: var(--ce-space-8) var(--ce-space-12); }
+.ce-price--offer:not(:has(.ce-price-amount)) { background: var(--ce-color-price-offer-bg); color: var(--ce-color-price-offer-text); border-radius: var(--ce-radius-price); padding: var(--ce-space-8) var(--ce-space-12); }
+.ce-price--sale:not(:has(.ce-price-amount)) { background: var(--ce-color-sale-bg); color: var(--ce-color-sale-text); border-radius: var(--ce-radius-price); padding: var(--ce-space-8) var(--ce-space-12); }
+.ce-price--offer, .ce-price--sale { gap: var(--ce-space-4); }
 .ce-price--inverse { color: var(--ce-color-price-inverse); }
-.ce-price--sale { background: var(--ce-color-sale-bg); color: var(--ce-color-sale-text); border-radius: var(--ce-radius-price); padding: var(--ce-space-8) var(--ce-space-12); }
-.ce-price-unit { max-width: 7em; font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-semibold); letter-spacing: normal; line-height: var(--ce-font-line-heading); align-self: center; margin-left: var(--ce-space-8); white-space: normal; }
-/* Pack price: the supplied basis after a slash (“/pack de 12”), bold, on the baseline of the figures, never below the price. */
-.ce-price-pack { align-self: baseline; margin-left: var(--ce-space-4); font-size: max(var(--ce-font-size-sm), .34em); font-weight: var(--ce-font-weight-bold); letter-spacing: normal; line-height: var(--ce-font-line-heading); white-space: nowrap; }
+/* Price basis (Base del precio): short text after the price that says what it covers, bold and leaning to the top like a superscript.
+   Two kinds: the unit (“cada uno”, short form “c/u”: a price for one piece) and the presentation (“/pack de 12”, “/par”: the selling
+   format the price is for). The unit shows its short form when the card or block is narrow. */
+.ce-price-basis, .ce-price-unit, .ce-price-presentation, .ce-price-pack { align-self: flex-start; margin-left: var(--ce-space-4); padding-top: .16em; font-size: max(var(--ce-font-size-sm), .34em); font-weight: var(--ce-font-weight-bold); letter-spacing: normal; line-height: var(--ce-font-line-heading); white-space: nowrap; }
+.ce-price--offer .ce-price-basis, .ce-price--offer .ce-price-unit, .ce-price--offer .ce-price-presentation, .ce-price--offer .ce-price-pack,
+.ce-price--sale .ce-price-basis, .ce-price--sale .ce-price-unit, .ce-price--sale .ce-price-presentation, .ce-price--sale .ce-price-pack { padding-top: calc(var(--ce-space-8) + .16em); color: var(--ce-color-price-regular); }
+.ce-price-unit-short { display: none; }
+.ce-price-unit--short .ce-price-unit-long { display: none; }
+.ce-price-unit--short .ce-price-unit-short { display: inline; }
+/* Old price (Precio anterior): “Antes” and the struck previous price, with the red discount label tight around its text. */
 .ce-price-history { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ce-space-4); color: var(--ce-color-price-previous); font-size: var(--ce-font-size-sm); line-height: var(--ce-font-line-heading); }
 .ce-price-history del { font-weight: var(--ce-font-weight-bold); }
+.ce-discount, .ce-price-history .ce-badge--offer { display: inline-block; padding: 1px var(--ce-space-4); background: var(--ce-color-action-primary-bg); color: var(--ce-color-action-primary-text); font-size: var(--ce-font-size-xs); font-weight: var(--ce-font-weight-bold); line-height: 1.3; }
 .ce-product { display: flex; flex-direction: column; min-width: 0; background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); }
 .ce-product-media { position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; margin-bottom: var(--ce-size-product-gap-media); }
 .ce-product-media img { display: block; width: 100%; height: 100%; object-fit: contain; }
@@ -155,6 +170,8 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 @media (min-width: 1024px) { .ce-product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @container (max-width: 480px) { .ce-hotspot { width: 28px; height: 28px; font-size: var(--ce-font-size-xs); } .ce-feature-tag { font-size: var(--ce-font-size-xs); } .ce-detail-inset { font-size: var(--ce-font-size-xs); } }
 @media (prefers-reduced-motion: reduce) { .ce-button, .ce-chip, .ce-icon-button { transition: none; } }
+.ce-product, .ce-tag-item { container-type: inline-size; }
+@container (max-width: 13.5rem) { .ce-price-unit-long { display: none; } .ce-price-unit-short { display: inline; } }
 
 /* Casa Elida shared interface elements. Native HTML first: <details>, <dialog>, popover, native inputs.
    Behaviour (opening dialogs, moving between tabs, validation) belongs to the consuming application;
@@ -354,7 +371,8 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 /* Yellow means promotion, so a product tile never gets a yellow ground or a yellow cast. A promotion tile keeps the neutral
    surface and carries the Promo tag plus the supplied offer price in the yellow offer block. */
 .ce-tile > .ce-tile-offer { position: absolute; top: var(--ce-space-16); right: var(--ce-space-16); display: grid; justify-items: end; gap: var(--ce-space-4); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); }
-.ce-tile-offer .ce-price { font-size: 30px; padding: var(--ce-space-4) var(--ce-space-8); }
+.ce-tile-offer .ce-price { font-size: 30px; }
+.ce-tile-offer .ce-price .ce-price-amount, .ce-tile-offer .ce-price:not(:has(.ce-price-amount)) { padding: var(--ce-space-4) var(--ce-space-8); }
 .ce-tile-offer del { font-weight: var(--ce-font-weight-bold); }
 .ce-tile--wide { aspect-ratio: 16 / 9; }
 .ce-tile--tall { aspect-ratio: 6 / 7; }
@@ -432,6 +450,12 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-product-media > a { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
 .ce-product-link { display: flex; flex-direction: column; gap: var(--ce-space-2); color: inherit; text-decoration: none; }
 .ce-product-link:hover .ce-product-description { color: var(--ce-color-text-primary); text-decoration: underline; text-underline-offset: .2em; }
+/* Add to cart (Añadir al carrito): the icon button shows only on hover or keyboard focus of the card. On touch and narrow screens it
+   is replaced by a full-width button at the bottom of the card, so the action is always reachable without hover. */
+.ce-product-row > .ce-icon-button--action { opacity: 0; transition: opacity var(--ce-motion-quick); }
+.ce-product:hover .ce-product-row > .ce-icon-button--action, .ce-product:focus-within .ce-product-row > .ce-icon-button--action { opacity: 1; }
+.ce-product-add { display: none; width: 100%; margin-top: var(--ce-space-16); }
+@media (hover: none), (max-width: 639.98px) { .ce-product-row > .ce-icon-button--action { display: none; } .ce-product-add { display: inline-flex; } }
 .ce-product-row { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--ce-space-12); width: 100%; }
 .ce-product-row .ce-product-heading { flex: 1; min-width: 0; }
 .ce-icon-button--action { background: var(--ce-color-action-primary-bg); color: var(--ce-color-action-primary-text); border-color: transparent; }
@@ -826,7 +850,9 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-label-previous del { font-weight: var(--ce-font-weight-bold); }
 .ce-label-discount { padding: .3mm .8mm; border: .25mm solid currentColor; font-weight: var(--ce-font-weight-bold); }
 .ce-label .ce-price { font-size: 11.5mm; letter-spacing: -.04em; }
-.ce-label .ce-price-unit { margin-left: .6mm; font-size: 2.6mm; }
+.ce-label .ce-price-unit, .ce-label .ce-price-presentation, .ce-label .ce-price-pack { margin-left: .6mm; font-size: 2.6mm; }
+.ce-label .ce-price-unit-long { display: none; }
+.ce-label .ce-price-unit-short { display: inline; }
 .ce-label--wide-price .ce-price { font-size: 9mm; }
 
 /* A4 sheet: 2 × 7 labels with dashed cut guides. */

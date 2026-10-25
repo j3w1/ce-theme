@@ -21,7 +21,7 @@ const rooms = [
       <h2 class="ce-sr-only" id="destacados">Destacados</h2>
       <div class="ce-mosaic">
         <a class="ce-tile ce-tile--light" href="/tienda/categoria/"><img src="/assets/product-nome.png" alt="" width="900" height="900" /><span class="ce-badge ce-badge--novedad">Novedad</span><p class="ce-tile-title"><span>Vidrio que aguanta el calor del día a día</span><Icon name="arrow" /></p></a>
-        <a class="ce-tile ce-tile--light" href="/tienda/categoria/"><img src="/assets/product-tilen.png" alt="" width="900" height="900" /><span class="ce-badge ce-badge--promo">Promo</span><span class="ce-tile-offer"><span class="ce-price ce-price--offer"><span class="ce-sr-only">Precio actual: 6 soles</span><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6</span></span></span><p class="ce-tile-title"><span>Un baño más seguro, sin complicarte</span><Icon name="arrow" /></p></a>
+        <a class="ce-tile ce-tile--light" href="/tienda/categoria/"><img src="/assets/product-tilen.png" alt="" width="900" height="900" /><span class="ce-badge ce-badge--promo">Promo</span><span class="ce-tile-offer"><span class="ce-price ce-price--offer"><span class="ce-sr-only">Precio actual: 6 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6</span></span></span></span><p class="ce-tile-title"><span>Un baño más seguro, sin complicarte</span><Icon name="arrow" /></p></a>
         <a class="ce-tile ce-tile--light" href="/tienda/escena/" style="--ce-campaign-surface:var(--ce-color-border-default)"><img src="/assets/product-mene.png" alt="" width="900" height="900" /><p class="ce-tile-title"><span>Ideas para tu cocina</span><Icon name="arrow" /></p></a>
         <a class="ce-tile ce-tile--light" href="/tienda/categoria/"><img src="/assets/product-talen.png" alt="" width="900" height="900" /><span class="ce-badge ce-badge--top">Top en ventas</span><p class="ce-tile-title"><span>Regalos útiles</span><Icon name="arrow" /></p></a>
       </div>
@@ -54,7 +54,7 @@ const rooms = [
   <div class="ce-container">
     <section class="ce-section" aria-labelledby="precios">
       <div class="ce-section-head"><div><h2 id="precios">Buenos precios, todo el año</h2><p>Montos de ejemplo.</p></div></div>
-      <ul class="ce-price-points">{['5', '10', '20'].map((amount) => <li><a class="ce-price-point" href="/tienda/categoria/#ofertas"><span>Hasta</span><span class="ce-price" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">{amount}</span></span><span class="ce-sr-only">{`Productos de hasta ${amount} soles`}</span></a></li>)}</ul>
+      <ul class="ce-price-points">{['5', '10', '20'].map((amount) => <li><a class="ce-price-point" href="/tienda/categoria/#ofertas"><span>Hasta</span><span class="ce-price" aria-hidden="true"><span class="ce-price-amount"><span class="ce-price-currency">S/</span><span class="ce-price-value">{amount}</span></span></span><span class="ce-sr-only">{`Productos de hasta ${amount} soles`}</span></a></li>)}</ul>
     </section>
   </div>
 

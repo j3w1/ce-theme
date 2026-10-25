@@ -5,13 +5,11 @@ The Casa Elida price: a small raised `S/` beside a large heavy amount with full-
 ## Classes
 
 - `ce-price-block`: row holding an optional history and the price.
-- `ce-price`: weight 800, tracking −0.045em. Set `font-size` for the context (44px in cards, 48px in callouts, 56px on product pages, up to 96px on photography). `ce-price-currency` is 46% of it and is raised to the top of the figures by default; `ce-price-value` stays full size.
-- `ce-price--baseline`: the fallback that sets `S/` on the baseline of the figures (use it when the raised `S/` cannot be drawn, for example in a constrained print or table cell). `ce-price--raised` is kept as an alias of the default.
-- `ce-price--offer`: the default promotion, an ink amount on the yellow block (`ce-color-price-offer-bg`, `ce-radius-price`).
-- `ce-price--sale`: red sale block (`ce-color-sale-bg`, white text) for REBAJAS campaigns.
-- `ce-price--inverse`: white amount for photography.
-- `ce-price-pack` (**PricePack**, Precio por pack): the supplied basis after a slash, bold, on the baseline of the figures: `/pack de 50`, `/pack de 12`, `/par`. It is 34% of the price size (never below 14px), sits inside `ce-price` after the value and works in the regular, Promo and Rebajas styles. A price has a pack label or a unit label, not both.
-- `ce-price-unit`: a qualifier such as “cada uno”. `ce-price-history`: “Antes” + `<del>` previous price, with an optional supplied `ce-badge--offer` discount.
+- `ce-price`: weight 800, tracking −0.045em. Set `font-size` for the context (44px in cards, 48px in callouts, 56px on product pages, up to 96px on photography). **Default (S/ en línea base):** `ce-price-currency` is 46% of it and sits on the baseline of `ce-price-value`. `ce-price--joined` (S/ unido) makes S/ the size of the figures and attaches it (S/10); `ce-price--raised` (S/ elevado) lifts the small S/ to the top.
+- `ce-price-amount`: wraps S/ and the figures. In the Promo and Rebajas styles the colour box is on this element only, so the price basis stays outside it.
+- `ce-price--offer` (**PricePromo**): the yellow block (`ce-color-price-offer-bg`, `ce-radius-price`). `ce-price--sale` (**PriceSale**): the red REBAJAS block. `ce-price--inverse`: white amount for photography.
+- Price basis: `ce-price-unit` (**PriceUnit**: “cada uno”, with `ce-price-unit-long` and `ce-price-unit-short` “c/u”; the short form appears when the card is narrower than 13.5rem or with `ce-price-unit--short`) and `ce-price-presentation` (**PricePresentation**: the supplied selling format after a slash, `/pack de 12`, `/par`). Both are bold, lean to the top and sit after the amount; a price has one of them. `ce-price-pack` is the retired name of `ce-price-presentation`.
+- `ce-price-history` (**PriceOld**): “Antes” and the struck `<del>` previous price, with the supplied `ce-discount` (**DiscountLabel**): red, tight padding.
 
 ## The consumer supplies
 

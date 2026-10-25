@@ -74,13 +74,18 @@ test('published binary sources exist and preview media fits the file cap', async
   }
 });
 
-test('standard names: every named recipe class exists, ids are unique, and the names page lists each name', async () => {
-  const { NAMES } = await import('../recipes/names.mjs');
+test('standard names: every name has a sample and a card row, every recipe class exists, ids are unique, and the names page lists each name', async () => {
+  const { NAMES, NAME_GROUPS } = await import('../recipes/names.mjs');
   const css = await readFile(new URL('../exports/recipes.css', import.meta.url), 'utf8') + await readFile(new URL('../exports/share-card.css', import.meta.url), 'utf8') + await readFile(new URL('../exports/print-label.css', import.meta.url), 'utf8');
   const page = await readFile(new URL('../docs/names.md', import.meta.url), 'utf8');
   assert.equal(new Set(NAMES.map((entry) => entry.id)).size, NAMES.length);
+  assert.deepEqual([...new Set(NAMES.map((entry) => entry.group))].sort(), NAME_GROUPS.map((group) => group.es).sort());
+  const cards = new Map();
+  for (const group of NAME_GROUPS) cards.set(group.es, await read(`components/${group.card}/preview.html`));
   for (const entry of NAMES) {
+    assert.ok(entry.sample && entry.sample.length > 20, `${entry.id} needs a Muestra`);
     assert.match(page, new RegExp(`\`${entry.id}\``), entry.id);
+    assert.ok(cards.get(entry.group).includes(`id="${entry.id}"`), `${entry.id} is missing from its card`);
     for (const cls of entry.recipe) assert.ok(css.includes(`.${cls}`), `${entry.id}: .${cls} is not in the recipes`);
   }
 });

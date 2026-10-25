@@ -39,11 +39,11 @@ const priceCode = `<span class="ce-price"><span class="ce-sr-only">Precio actual
   <span class="ce-price-currency" aria-hidden="true">S/</span>
   <span class="ce-price-value" aria-hidden="true">8.5</span>
 </span>
-<!-- S/ on the baseline (the fallback): add ce-price--baseline -->`;
+<!-- S/ at the size of the figures: add ce-price--joined. S/ raised: add ce-price--raised -->`;
 const offerCode = `<div class="ce-price-block">
   <div class="ce-price-history">
     <span>Antes <del>S/15.5</del></span>
-    <span class="ce-badge ce-badge--offer">−19.35%</span>
+    <span class="ce-discount">−19.35%</span>
   </div>
   <span class="ce-price ce-price--offer"><span class="ce-sr-only">Precio actual: 12.5 soles</span>
     <span class="ce-price-currency" aria-hidden="true">S/</span>
@@ -78,7 +78,7 @@ const cardCode = `<article class="ce-product">
 
     <div id="codigos"><Recipe title="Un código con su propio lugar" description="Blanco y negrita sobre negro, con relleno proporcional y esquinas apenas redondeadas. En pantalla se subrayan los cuatro dígitos del número; al imprimir, no. Copiar devuelve el código exacto." code={codeHtml}><div class="code-specimens"><span class="ce-code" set:html={segments('CE26061509')} /><span class="ce-code" set:html={segments('CE26031111R12R')} /><span class="ce-code">7730744292227</span><span class="ce-code" style="font-size:24px" set:html={segments('CE26061477')} /></div><p class="small-note">Un código no se convierte a número, no se corta y no se sustituye por un nombre comercial. El estilo de insignia es solo para códigos Casa Elida.</p></Recipe></div>
 
-    <div id="precios"><Recipe title="El precio de todos los días" description="Negro sobre blanco. La cifra tiene el mayor peso visual; S/ es más pequeño y va elevado. Si no se puede elevar, se apoya en la línea base." code={priceCode}><div class="demo-prices"><div><p class="demo-label">Entero</p><Price amount="20.00"/></div><div><p class="demo-label">Un decimal</p><Price amount="8.50"/></div><div><p class="demo-label">Línea base (alternativa)</p><Price amount="8.50" alignment="baseline"/></div></div></Recipe></div>
+    <div id="precios"><Recipe title="El precio de todos los días" description="Negro sobre blanco. La cifra tiene el mayor peso visual; S/ es más pequeño y se apoya en la línea base. La segunda opción es S/ unido, del mismo tamaño que la cifra; el S/ elevado sigue disponible. La base del precio (cada uno, /pack de 12) se inclina hacia arriba." code={priceCode}><div class="demo-prices"><div><p class="demo-label">Entero</p><Price amount="20.00"/></div><div><p class="demo-label">Un decimal</p><Price amount="8.50"/></div><div><p class="demo-label">S/ unido (segunda opción)</p><Price amount="8.50" currencyStyle="joined"/></div><div><p class="demo-label">S/ elevado (variante)</p><Price amount="8.50" currencyStyle="raised"/></div><div><p class="demo-label">Unidad: cada uno</p><Price amount="5.50" unitLabel="cada uno"/></div><div><p class="demo-label">Presentación: pack</p><Price amount="1.99" presentationLabel="pack de 50"/></div><div><p class="demo-label">Precio Promo con presentación</p><Price amount="10" previousAmount="12.50" discountLabel="20%" presentationLabel="pack de 25"/></div><div><p class="demo-label">Precio Rebajas con presentación</p><Price amount="6" previousAmount="8" discountLabel="25%" variant="sale" presentationLabel="pack de 6"/></div></div></Recipe></div>
 
     <div id="ofertas"><Recipe title="Una oferta que destaca" description="Bloque amarillo por defecto. El importe anterior lleva “Antes” y tachado. El porcentaje es un dato comercial suministrado, no un cálculo del componente." code={offerCode}><div class="demo-prices"><div><p class="demo-label">Amarillo (por defecto)</p><Price amount="12.50" previousAmount="15.50" discountLabel="19.35%"/></div><div><p class="demo-label">Rojo de rebajas</p><Price amount="11" previousAmount="16" discountLabel="31.25%" variant="sale"/></div><div><p class="demo-label">Precio por unidad</p><Price amount="5.50" unitLabel="cada uno"/></div></div></Recipe></div>
 

@@ -12,7 +12,11 @@ export function amountInCents(amount) {
   return BigInt(whole) * 100n + BigInt(fraction.padEnd(2, '0'));
 }
 
-export function preparePrice({ amount, previousAmount, discountLabel, unitLabel, packLabel, variant }) {
+/** The short form of the unit label for narrow places: “cada uno” becomes “c/u”. Another unit needs its own `unitShortLabel`. */
+const UNIT_SHORT = new Map([['cada uno', 'c/u']]);
+
+export function preparePrice({ amount, previousAmount, discountLabel, unitLabel, unitShortLabel, packLabel, presentationLabel, variant, currencyStyle }) {
+  packLabel = presentationLabel ?? packLabel;
   const current = formatAmount(amount);
   const previous = previousAmount === undefined ? undefined : formatAmount(previousAmount);
   if (previous !== undefined && amountInCents(previousAmount) <= amountInCents(amount)) {
@@ -25,7 +29,9 @@ export function preparePrice({ amount, previousAmount, discountLabel, unitLabel,
   if (unitLabel !== undefined && (typeof unitLabel !== 'string' || !unitLabel.trim())) throw new TypeError('Unit label must be text.');
   if (packLabel !== undefined && (typeof packLabel !== 'string' || !packLabel.trim() || packLabel.trim().startsWith('/'))) throw new TypeError('Pack label is the supplied text after the slash, such as “pack de 12”.');
   if (packLabel !== undefined && unitLabel !== undefined) throw new TypeError('Supply a unit label or a pack label, not both.');
+  if (unitShortLabel !== undefined && (typeof unitShortLabel !== 'string' || !unitShortLabel.trim() || unitLabel === undefined)) throw new TypeError('A short unit label needs a unit label and must be text.');
+  if (currencyStyle !== undefined && !['baseline', 'joined', 'raised'].includes(currencyStyle)) throw new TypeError('Unknown currency style.');
   const style = variant ?? (previous === undefined ? 'regular' : 'offer');
   if (!['regular', 'offer', 'inverse', 'sale'].includes(style)) throw new TypeError('Unknown price variant.');
-  return { current, previous, discountLabel, unitLabel, packLabel: packLabel?.trim(), variant: style };
+  return { current, previous, discountLabel, unitLabel, unitShort: unitLabel === undefined ? undefined : (unitShortLabel?.trim() ?? UNIT_SHORT.get(unitLabel.trim().toLowerCase())), presentationLabel: packLabel?.trim(), packLabel: packLabel?.trim(), currencyStyle: currencyStyle ?? 'baseline', variant: style };
 }

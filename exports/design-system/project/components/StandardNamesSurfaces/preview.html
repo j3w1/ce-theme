@@ -1,0 +1,37 @@
+<!-- @dsCard group="Standard names" height=820 width=1100 subtitle="Surfaces: id, nombre CE, muestra and rule" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>StandardNamesSurfaces</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .wrap { padding: var(--ce-space-16); }
+  table { width: 100%; border-collapse: collapse; font-size: var(--ce-font-size-sm); }
+  th, td { padding: var(--ce-space-12); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); text-align: left; vertical-align: middle; }
+  thead th { background: var(--ce-color-surface-subtle); }
+  td.sample { min-width: 280px; }
+  .sample-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12); }
+  .rule { color: var(--ce-color-text-secondary); }
+  .sample-mosaic .ce-tile-title { padding: var(--ce-space-8); font-size: var(--ce-font-size-sm); }
+  .sample-mosaic .ce-badge { top: var(--ce-space-8); left: var(--ce-space-8); }
+  code { font-weight: var(--ce-font-weight-bold); }
+</style>
+</head>
+<body>
+<div class="ce-scope wrap">
+  <table>
+    <thead><tr><th scope="col">Id</th><th scope="col">Nombre CE</th><th scope="col">Muestra</th><th scope="col">Rule</th></tr></thead>
+    <tbody>
+    <tr id="ProductCard"><th scope="row"><code>ProductCard</code></th><td>Tarjeta de producto</td><td class="sample"><article class="ce-product" style="width:200px"><div class="ce-product-media"><img src="../../media/product-mene.png" alt="" width="200" height="200"></div><div class="ce-product-info"><h3 class="ce-product-heading"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio</span></h3><p class="ce-product-specs">vidrio borosilicato, 250ml</p><div class="ce-price-block"><span class="ce-price " style="font-size:32px"><span class="ce-sr-only">Precio actual: 6.5 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6.5</span></span></span></div></div></article></td><td class="rule">Photo, then the ProductStack. No borders, shadows or rounded corners.</td></tr>
+    <tr id="AddToCart"><th scope="row"><code>AddToCart</code></th><td>Añadir al carrito</td><td class="sample"><span class="sample-row"><button class="ce-icon-button ce-icon-button--action ce-icon-button--small" type="button" aria-label="Añadir al carrito" style="opacity:1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 7h14l1 14H4L5 7Zm3 0V5a4 4 0 0 1 8 0v2m-4 5v6m-3-3h6"/></svg></button><button class="ce-button ce-button--secondary" type="button">Añadir al carrito</button></span></td><td class="rule">On hover-capable screens an icon button appears on card hover or focus; on touch and narrow screens a full-width button sits at the bottom of the card.</td></tr>
+    <tr id="ProductCallout"><th scope="row"><code>ProductCallout</code></th><td>Tarjeta flotante</td><td class="sample"><article class="ce-callout" style="max-width:340px;box-shadow:none;border:1px solid var(--ce-color-border-default)"><img src="../../media/product-nome.png" alt="" width="120" height="120"><div><h3 class="ce-product-heading"><span class="ce-product-name">NOME</span><span class="ce-product-description">Taza de Vidrio</span></h3><p class="ce-product-specs">vidrio borosilicato, 350ml</p><span class="ce-price " style="font-size:32px"><span class="ce-sr-only">Precio actual: 8 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">8</span></span></span></div></article></td><td class="rule">White floating card with a photo, identity and price for editorial pieces.</td></tr>
+    <tr id="Mosaic"><th scope="row"><code>Mosaic</code></th><td>Mosaico</td><td class="sample"><div class="sample-mosaic" style="width:360px"><div class="ce-mosaic"><a class="ce-tile ce-tile--light" href="#"><img src="../../media/product-nome.png" alt=""><span class="ce-badge ce-badge--novedad">Novedad</span><p class="ce-tile-title"><span>Vidrio para el día a día</span></p></a><a class="ce-tile ce-tile--light" href="#"><img src="../../media/product-tilen.png" alt=""><p class="ce-tile-title"><span>Un baño más seguro</span></p></a><a class="ce-tile ce-tile--light" href="#"><img src="../../media/product-mene.png" alt=""><p class="ce-tile-title"><span>Ideas para tu cocina</span></p></a><a class="ce-tile ce-tile--light" href="#"><img src="../../media/product-nome.png" alt=""><p class="ce-tile-title"><span>Regalos útiles</span></p></a></div></div></td><td class="rule">Editorial grid of tiles; one large tile, one wide, two small.</td></tr>
+    <tr id="MosaicTile"><th scope="row"><code>MosaicTile</code></th><td>Baldosa</td><td class="sample"><a class="ce-tile ce-tile--light" href="#" style="width:220px"><img src="../../media/product-nome.png" alt=""><span class="ce-badge ce-badge--novedad">Novedad</span><p class="ce-tile-title"><span>Vidrio para el día a día</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></p></a></td><td class="rule">One link in a mosaic. Neutral surface; yellow never sits behind or over a product photo.</td></tr>
+    <tr id="PromoTile"><th scope="row"><code>PromoTile</code></th><td>Baldosa Promo</td><td class="sample"><a class="ce-tile ce-tile--light" href="#" style="width:220px"><img src="../../media/product-tilen.png" alt=""><span class="ce-badge ce-badge--promo">Promo</span><span class="ce-tile-offer"><span class="ce-price ce-price--offer" style="font-size:30px"><span class="ce-sr-only">Precio actual: 6 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6</span></span></span></span><p class="ce-tile-title"><span>Un baño más seguro</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></p></a></td><td class="rule">A tile with the Promo tag and the supplied offer price in the yellow block.</td></tr>
+    <tr id="PromoPanel"><th scope="row"><code>PromoPanel</code></th><td>Panel Promo</td><td class="sample"><aside class="ce-grid-promo" style="max-width:260px"><p class="ce-eyebrow">Precios amarillos</p><h3>Frascos en oferta</h3><p>Ofertas de ejemplo.</p></aside></td><td class="rule">A campaign surface in brand yellow with ink text, for a promotion or campaign message.</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

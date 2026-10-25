@@ -1,0 +1,38 @@
+<!-- @dsCard group="Standard names" height=920 width=1100 subtitle="Navigation and tools: id, nombre CE, muestra and rule" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>StandardNamesNavigation</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .wrap { padding: var(--ce-space-16); }
+  table { width: 100%; border-collapse: collapse; font-size: var(--ce-font-size-sm); }
+  th, td { padding: var(--ce-space-12); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); text-align: left; vertical-align: middle; }
+  thead th { background: var(--ce-color-surface-subtle); }
+  td.sample { min-width: 280px; }
+  .sample-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12); }
+  .rule { color: var(--ce-color-text-secondary); }
+  .sample-mosaic .ce-tile-title { padding: var(--ce-space-8); font-size: var(--ce-font-size-sm); }
+  .sample-mosaic .ce-badge { top: var(--ce-space-8); left: var(--ce-space-8); }
+  code { font-weight: var(--ce-font-weight-bold); }
+</style>
+</head>
+<body>
+<div class="ce-scope wrap">
+  <table>
+    <thead><tr><th scope="col">Id</th><th scope="col">Nombre CE</th><th scope="col">Muestra</th><th scope="col">Rule</th></tr></thead>
+    <tbody>
+    <tr id="Breadcrumbs"><th scope="row"><code>Breadcrumbs</code></th><td>Ruta de navegación</td><td class="sample"><nav class="ce-breadcrumbs" aria-label="Ruta"><ol><li><a href="#">Inicio</a></li><li><a href="#">Cocina</a></li><li><span aria-current="page">Frascos</span></li></ol></nav></td><td class="rule">Where the page sits: Inicio, section, current page.</td></tr>
+    <tr id="SiteNav"><th scope="row"><code>SiteNav</code></th><td>Navegación principal</td><td class="sample"><nav class="ce-site-nav" aria-label="Principal"><ul><li><a href="#" aria-current="page">Cocina</a></li><li><a href="#">Baño</a></li><li><a href="#">Ofertas</a></li></ul></nav></td><td class="rule">The main sections of the store.</td></tr>
+    <tr id="SearchField"><th scope="row"><code>SearchField</code></th><td>Buscador</td><td class="sample"><form class="ce-search" role="search" style="width:300px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m21 21-5-5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg><label class="ce-sr-only" for="n-q">Buscar productos</label><input id="n-q" type="search" placeholder="¿Qué estás buscando?"></form></td><td class="rule">The product search field.</td></tr>
+    <tr id="CategoryTile"><th scope="row"><code>CategoryTile</code></th><td>Categoría con foto</td><td class="sample"><ul class="ce-category-tiles"><li><a class="ce-category-tile" href="#"><img src="../../media/product-mene.png" alt="" width="96" height="96">Tazas</a></li></ul></td><td class="rule">A photo tile with a label that links to a category.</td></tr>
+    <tr id="ModuleNav"><th scope="row"><code>ModuleNav</code></th><td>Navegación de módulos</td><td class="sample"><nav class="ce-module-nav" aria-label="Módulos" style="position:static;width:200px"><h2>Catálogo</h2><a href="#" aria-current="page">Productos</a><a href="#">Precios por tienda</a></nav></td><td class="rule">The side navigation of CE apps, grouped by module.</td></tr>
+    <tr id="PageHeader"><th scope="row"><code>PageHeader</code></th><td>Encabezado de página</td><td class="sample"><div class="ce-page-header" style="width:320px"><h1 style="font-size:20px">Productos</h1><div class="ce-page-actions"><button class="ce-button ce-button--secondary" type="button">Exportar</button></div></div></td><td class="rule">The title of a tool page with its main actions.</td></tr>
+    <tr id="DataTable"><th scope="row"><code>DataTable</code></th><td>Tabla de datos</td><td class="sample"><table class="ce-data-table" style="width:280px"><thead><tr><th scope="col">Código</th><th scope="col" class="is-number">Precio</th></tr></thead><tbody><tr><td><span class="ce-code ce-code--sm">CE26061441</span></td><td class="is-number">S/6.5</td></tr></tbody></table></td><td class="rule">Dense, sortable table for tools; numbers right-aligned.</td></tr>
+    <tr id="BulkBar"><th scope="row"><code>BulkBar</code></th><td>Barra de selección</td><td class="sample"><div class="ce-bulk-bar" role="region" aria-label="Acciones" style="position:static"><strong>2 seleccionados</strong><button class="ce-link" type="button">Quitar selección</button></div></td><td class="rule">Appears when rows are selected, with actions for the selection.</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

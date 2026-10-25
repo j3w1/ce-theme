@@ -26,7 +26,7 @@ for (const width of [390,768,1440]) {
     const columns=await page.locator('.ce-product-grid').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
     expect(columns).toBe(width<640?2:width<1024?3:4);
     await expect(page.locator('.ce-code').filter({hasText:'7730744292227'})).toHaveText('7730744292227');
-    const style=await page.locator('.ce-price--offer').first().evaluate(el=>({bg:getComputedStyle(el).backgroundColor,color:getComputedStyle(el).color}));
+    const style=await page.locator('.ce-price--offer .ce-price-amount').first().evaluate(el=>({bg:getComputedStyle(el).backgroundColor,color:getComputedStyle(el).color}));
     expect(style).toEqual({bg:'rgb(249, 235, 16)',color:'rgb(17, 17, 17)'});
     const gaps=await page.locator('.ce-product-info').evaluateAll(items=>items.flatMap((info)=>{const specs=info.querySelector('.ce-product-specs'),price=info.querySelector('.ce-price-block');return specs&&price?[price.getBoundingClientRect().top-specs.getBoundingClientRect().bottom]:[];}));
     expect(gaps.length).toBeGreaterThan(0);
@@ -135,10 +135,26 @@ test('feature tags stay inside their frame and never overlap each other or a mar
     rects.tags.slice(i+1).forEach((other)=>expect(hit(tag,other)).toBe(false));
   });
 });
-test('Novedad is green and promotion tiles keep the neutral surface; S/ is raised by default',async({page})=>{
+test('Novedad is green and promotion tiles keep the neutral surface; S/ sits on the baseline by default',async({page})=>{
   await page.goto('/tienda/');
   const tiles=await page.locator('.ce-mosaic .ce-tile').evaluateAll(els=>els.map(el=>getComputedStyle(el).backgroundColor));
   for (const bg of tiles) expect(bg).not.toBe('rgb(249, 235, 16)');
   expect(await page.locator('.ce-mosaic .ce-badge--novedad').first().evaluate(el=>getComputedStyle(el).backgroundColor)).toBe('rgb(71, 185, 0)');
-  expect(await page.locator('.ce-price-currency').first().evaluate(el=>getComputedStyle(el).alignSelf)).toBe('flex-start');
+  expect(await page.locator('.ce-price-currency').first().evaluate(el=>getComputedStyle(el).alignSelf)).toBe('auto');
+});
+
+test('touch and narrow screens show a full-width Añadir al carrito button instead of the hover icon',async({page})=>{
+  await page.setViewportSize({width:390,height:900});
+  await page.goto('/tienda/categoria/');
+  const card=page.locator('[data-store-view="tacna"] .ce-product').first();
+  const big=card.locator('.ce-product-add');
+  await expect(big).toBeVisible(); await expect(big).toHaveText('Añadir al carrito');
+  await expect(card.locator('.ce-product-row > .ce-icon-button--action')).toBeHidden();
+  const [b,c]=await Promise.all([big.boundingBox(),card.locator('.ce-product-info').boundingBox()]);
+  expect(Math.abs(b.width-c.width)).toBeLessThan(2);
+});
+test('promo and sale boxes surround only the price, never the basis label',async({page})=>{
+  await page.goto('/patrones/');
+  const geometry=await page.locator('.ce-price--offer:has(.ce-price-presentation), .ce-price--sale:has(.ce-price-presentation)').first().evaluate(el=>{const a=el.querySelector('.ce-price-amount').getBoundingClientRect(),b=el.querySelector('.ce-price-presentation').getBoundingClientRect();return {amountRight:a.right,basisLeft:b.left,bg:getComputedStyle(el).backgroundColor};});
+  expect(geometry.bg).toBe('rgba(0, 0, 0, 0)'); expect(geometry.basisLeft).toBeGreaterThanOrEqual(geometry.amountRight);
 });

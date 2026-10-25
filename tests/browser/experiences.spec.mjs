@@ -71,7 +71,10 @@ test('product cards keep identity order, readable controls and named actions', a
   const card = page.locator('[data-store-view="tacna"] .ce-product').first();
   await expect(card.locator('.ce-product-name')).toHaveText('MENE');
   await expect(card.locator('.ce-product-description')).toHaveText('Taza de Vidrio Resistente al Calor');
-  await expect(card.getByRole('button', { name: 'Agregar MENE, Taza de Vidrio Resistente al Calor a la bolsa' })).toBeVisible();
+  const add = card.getByRole('button', { name: 'Añadir MENE, Taza de Vidrio Resistente al Calor al carrito' });
+  await expect(add).toHaveCSS('opacity', '0');
+  await card.hover();
+  await expect(add).toHaveCSS('opacity', '1');
   const favourite = card.getByRole('button', { name: /favoritos/ });
   await favourite.click();
   await expect(favourite).toHaveAttribute('aria-pressed', 'true');

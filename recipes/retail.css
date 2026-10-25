@@ -91,7 +91,8 @@
 /* Yellow means promotion, so a product tile never gets a yellow ground or a yellow cast. A promotion tile keeps the neutral
    surface and carries the Promo tag plus the supplied offer price in the yellow offer block. */
 .ce-tile > .ce-tile-offer { position: absolute; top: var(--ce-space-16); right: var(--ce-space-16); display: grid; justify-items: end; gap: var(--ce-space-4); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); }
-.ce-tile-offer .ce-price { font-size: 30px; padding: var(--ce-space-4) var(--ce-space-8); }
+.ce-tile-offer .ce-price { font-size: 30px; }
+.ce-tile-offer .ce-price .ce-price-amount, .ce-tile-offer .ce-price:not(:has(.ce-price-amount)) { padding: var(--ce-space-4) var(--ce-space-8); }
 .ce-tile-offer del { font-weight: var(--ce-font-weight-bold); }
 .ce-tile--wide { aspect-ratio: 16 / 9; }
 .ce-tile--tall { aspect-ratio: 6 / 7; }
@@ -169,6 +170,12 @@
 .ce-product-media > a { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
 .ce-product-link { display: flex; flex-direction: column; gap: var(--ce-space-2); color: inherit; text-decoration: none; }
 .ce-product-link:hover .ce-product-description { color: var(--ce-color-text-primary); text-decoration: underline; text-underline-offset: .2em; }
+/* Add to cart (Añadir al carrito): the icon button shows only on hover or keyboard focus of the card. On touch and narrow screens it
+   is replaced by a full-width button at the bottom of the card, so the action is always reachable without hover. */
+.ce-product-row > .ce-icon-button--action { opacity: 0; transition: opacity var(--ce-motion-quick); }
+.ce-product:hover .ce-product-row > .ce-icon-button--action, .ce-product:focus-within .ce-product-row > .ce-icon-button--action { opacity: 1; }
+.ce-product-add { display: none; width: 100%; margin-top: var(--ce-space-16); }
+@media (hover: none), (max-width: 639.98px) { .ce-product-row > .ce-icon-button--action { display: none; } .ce-product-add { display: inline-flex; } }
 .ce-product-row { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--ce-space-12); width: 100%; }
 .ce-product-row .ce-product-heading { flex: 1; min-width: 0; }
 .ce-icon-button--action { background: var(--ce-color-action-primary-bg); color: var(--ce-color-action-primary-text); border-color: transparent; }

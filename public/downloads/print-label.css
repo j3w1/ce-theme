@@ -23,7 +23,9 @@
 .ce-label-previous del { font-weight: var(--ce-font-weight-bold); }
 .ce-label-discount { padding: .3mm .8mm; border: .25mm solid currentColor; font-weight: var(--ce-font-weight-bold); }
 .ce-label .ce-price { font-size: 11.5mm; letter-spacing: -.04em; }
-.ce-label .ce-price-unit { margin-left: .6mm; font-size: 2.6mm; }
+.ce-label .ce-price-unit, .ce-label .ce-price-presentation, .ce-label .ce-price-pack { margin-left: .6mm; font-size: 2.6mm; }
+.ce-label .ce-price-unit-long { display: none; }
+.ce-label .ce-price-unit-short { display: inline; }
 .ce-label--wide-price .ce-price { font-size: 9mm; }
 
 /* A4 sheet: 2 × 7 labels with dashed cut guides. */
