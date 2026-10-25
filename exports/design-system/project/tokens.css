@@ -126,6 +126,12 @@
   --ce-size-control-compact: 36px;
   --ce-size-row-comfortable: 56px;
   --ce-size-row-compact: 40px;
+  --ce-size-product-gap-media: 16px;
+  --ce-size-product-gap-flag: 4px;
+  --ce-size-product-gap-code: 8px;
+  --ce-size-product-gap-identity: 2px;
+  --ce-size-product-gap-price: 12px;
+  --ce-size-product-gap-note: 8px;
   --ce-layer-sticky: 10;
   --ce-layer-overlay: 100;
   --ce-layer-toast: 200;

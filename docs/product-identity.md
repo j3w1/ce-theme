@@ -6,11 +6,13 @@ How Casa Elida products are named, identified and presented across the store, in
 
 | Field | Rule | Example | Typography |
 | --- | --- | --- | --- |
-| NAME | Uppercase catalogue name or model; separate from Description and codes. | `WILUL`, `BALTEL STORM` | `ce-product-name`: bold, 15:16 of the Description size. |
+| NAME | **Mandatory on every product shown anywhere.** Uppercase invented catalogue name or model; separate from Description and codes. See [names.md](names.md). | `WILUL`, `BALTEL STORM` | `ce-product-name`: bold, 15:16 of the Description size. |
 | Description | Title Case; Spanish connectors (`de`, `con`, `y`, `para`, `al`…) lowercase except first; abbreviations and digit-led tokens kept. | `Frasco con Cucharita` | `ce-product-description`: regular, 16px reference. |
 | Specifications | Lowercase except abbreviations, proper names, technical designations and case-sensitive units; values exact. `CM`, `MM`, `ML`, `KG` directly after a number display as `cm`, `mm`, `ml`, `kg`. | `vidrio/bambú, 450ml`, `cuero PU` | `ce-product-specs`: 14px, muted. |
 | CE code | Exact string; badge style; on-screen underline of the four-digit number. | `CE26061477` | `ce-code` |
 | Price | Supplied decimal string, compact display. | `S/9`, `S/10.5`, `S/0.05` | `ce-price`; see [pricing](pricing.md). |
+
+The standard names for these parts and for the price, tag and code patterns (ProductIdentity, ProductStack, CECode, PricePromo…) are in [names.md](names.md). `productView()` throws for a product without a NAME. The spacing between the parts is the `size.product.*` tokens.
 
 Set `--ce-product-text` on a container to scale NAME, Description and specs together: 16px in cards, 40–52px in share images, 3.9mm on printed labels. The ratio keeps the optical hierarchy in print.
 

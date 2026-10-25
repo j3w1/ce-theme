@@ -28,9 +28,9 @@ for (const width of [390,768,1440]) {
     await expect(page.locator('.ce-code').filter({hasText:'7730744292227'})).toHaveText('7730744292227');
     const style=await page.locator('.ce-price--offer').first().evaluate(el=>({bg:getComputedStyle(el).backgroundColor,color:getComputedStyle(el).color}));
     expect(style).toEqual({bg:'rgb(249, 235, 16)',color:'rgb(17, 17, 17)'});
-    const priceBottoms=await page.locator('.ce-product-info .ce-price-block').evaluateAll(items=>items.map(item=>item.getBoundingClientRect().bottom));
-    const firstRow=priceBottoms.slice(0,columns);
-    expect(Math.max(...firstRow)-Math.min(...firstRow)).toBeLessThan(2);
+    const gaps=await page.locator('.ce-product-info').evaluateAll(items=>items.flatMap((info)=>{const specs=info.querySelector('.ce-product-specs'),price=info.querySelector('.ce-price-block');return specs&&price?[price.getBoundingClientRect().top-specs.getBoundingClientRect().bottom]:[];}));
+    expect(gaps.length).toBeGreaterThan(0);
+    for (const gap of gaps) expect(Math.abs(gap-12)).toBeLessThan(1.5);
   });
 }
 test('mobile navigation supports keyboard focus and Escape recovery',async({page})=>{

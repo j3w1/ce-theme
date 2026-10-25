@@ -12,6 +12,7 @@ The reference product card accepts `name` (NAME), `description`, `specs`, `image
 
 ## Display rules
 
+- **Pack price.** When a price is for a pack, show the supplied basis after the figures as `/pack de 12` (`ce-price-pack`, bold, on the baseline). `preparePrice({ amount, packLabel })`; the label is supplied text without the slash and is never computed or converted. A price has a pack label or a unit label (“cada uno”), not both. Screen readers hear “Precio actual: 3.99 soles por pack de 12”.
 - **Currency.** `S/` at 46% of the amount size, raised to the top of the figures (default). The fallback sets it on the amount's baseline: `ce-price--baseline`. Fraction digits stay full size; never raise or shrink decimals.
 - **Compact amounts.** `S/20`, `S/8.5`, `S/0.05`. Do not force `.00` and do not group thousands.
 - **Styles.**

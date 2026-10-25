@@ -12,7 +12,7 @@ export function amountInCents(amount) {
   return BigInt(whole) * 100n + BigInt(fraction.padEnd(2, '0'));
 }
 
-export function preparePrice({ amount, previousAmount, discountLabel, unitLabel, variant }) {
+export function preparePrice({ amount, previousAmount, discountLabel, unitLabel, packLabel, variant }) {
   const current = formatAmount(amount);
   const previous = previousAmount === undefined ? undefined : formatAmount(previousAmount);
   if (previous !== undefined && amountInCents(previousAmount) <= amountInCents(amount)) {
@@ -23,7 +23,9 @@ export function preparePrice({ amount, previousAmount, discountLabel, unitLabel,
     throw new TypeError('Supply a positive percentage label without a sign and a valid previous price.');
   }
   if (unitLabel !== undefined && (typeof unitLabel !== 'string' || !unitLabel.trim())) throw new TypeError('Unit label must be text.');
+  if (packLabel !== undefined && (typeof packLabel !== 'string' || !packLabel.trim() || packLabel.trim().startsWith('/'))) throw new TypeError('Pack label is the supplied text after the slash, such as “pack de 12”.');
+  if (packLabel !== undefined && unitLabel !== undefined) throw new TypeError('Supply a unit label or a pack label, not both.');
   const style = variant ?? (previous === undefined ? 'regular' : 'offer');
   if (!['regular', 'offer', 'inverse', 'sale'].includes(style)) throw new TypeError('Unknown price variant.');
-  return { current, previous, discountLabel, unitLabel, variant: style };
+  return { current, previous, discountLabel, unitLabel, packLabel: packLabel?.trim(), variant: style };
 }

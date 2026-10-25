@@ -36,9 +36,11 @@ test('the product view never invents fields and keeps codes exact', () => {
   assert.equal(view.code, 'CE26061477');
   assert.equal(view.image, undefined);
   assert.equal(view.accessibleName, 'FRASCO, Frasco con Cucharita');
-  assert.deepEqual(productView({ description: 'x', specs: ['a', 'b', 'c'] }, { maxSpecs: 2 }).specs, ['a', 'b']);
+  assert.deepEqual(productView({ name: 'KEL', description: 'x', specs: ['a', 'b', 'c'] }, { maxSpecs: 2 }).specs, ['a', 'b']);
   assert.throws(() => productView({ name: 'A', code: 26061477 }), /strings/);
-  assert.throws(() => productView({ specs: ['a'] }), /NAME or a Description/);
+  assert.throws(() => productView({ specs: ['a'] }), /NAME/);
+  assert.throws(() => productView({ description: 'Taza de vidrio' }), /NAME/);
+  assert.throws(() => productView({ name: '  ', description: 'Taza de vidrio' }), /NAME/);
 });
 
 test('campaign colours must keep text legible', () => {

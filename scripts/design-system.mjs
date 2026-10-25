@@ -33,7 +33,7 @@ const PREVIEW_MEDIA = ['product-mene.png', 'product-nome.png', 'product-tilen.pn
 const DOCS = [
   ['apply-ce-theme.md', 'docs/apply-ce-theme.md'], ['product-identity.md', 'docs/product-identity.md'],
   ['pricing.md', 'docs/pricing.md'], ['sharing.md', 'docs/sharing.md'], ['accessibility.md', 'docs/accessibility.md'],
-  ['coverage.md', 'docs/coverage.md'], ['decisions.md', 'docs/decisions.md'], ['sources.md', 'docs/sources.md'],
+  ['coverage.md', 'docs/coverage.md'], ['names.md', 'docs/names.md'], ['decisions.md', 'docs/decisions.md'], ['sources.md', 'docs/sources.md'],
   ['evolution.md', 'docs/evolution/2026-10-design-evolution.md'],
 ];
 

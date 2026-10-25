@@ -162,7 +162,7 @@
 .ce-load-more .ce-progress { width: 200px; height: 2px; border-radius: 0; }
 
 /* Product card additions ------------------------------------------------------------------------------- */
-.ce-product-flag { align-self: flex-start; margin: 0; padding: var(--ce-space-2) var(--ce-space-8); background: var(--ce-color-tag-novedad-bg); color: var(--ce-color-tag-novedad-text); font-size: var(--ce-font-size-xs); font-weight: var(--ce-font-weight-bold); line-height: var(--ce-font-line-heading); }
+.ce-product-flag { align-self: flex-start; margin: 0 0 var(--ce-size-product-gap-flag); padding: var(--ce-space-2) var(--ce-space-8); background: var(--ce-color-tag-novedad-bg); color: var(--ce-color-tag-novedad-text); font-size: var(--ce-font-size-xs); font-weight: var(--ce-font-weight-bold); line-height: var(--ce-font-line-heading); }
 .ce-product-flag--promo { background: var(--ce-color-tag-promo-bg); color: var(--ce-color-tag-promo-text); }
 .ce-product-flag--top { background: var(--ce-color-tag-top-bg); color: var(--ce-color-tag-top-text); }
 .ce-product-flag--limited { background: var(--ce-color-tag-limited-bg); color: var(--ce-color-tag-limited-text); }

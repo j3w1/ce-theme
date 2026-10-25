@@ -40,6 +40,10 @@ Later owner instructions supersede the rows above where they conflict. Proposals
 | 2026-10-25 | Links | Text links are bold. | Owner review |
 | 2026-10-25 | Tags and yellow | Yellow means promotion only (offer prices and promotion surfaces); it is never a ground or a tint behind a product photo. Product tags use the colours of the old casaelida.com: Novedad green `#47b900`, Promo amber `#ec9e00`, Top en ventas `#e00751`, Edición limitada black `#000000` (`color.tag.*`). The word is “Novedad”, not “Nuevo”. Mosaic layout is unchanged. | Owner review |
 | 2026-10-25 | Feature tags | Feature tags stay inside the photo of the product they describe and never overlap each other, a marker or a neighbouring photo. | Owner review |
+| 2026-10-25 | Standard names | Every pattern has one stable English id and one Spanish name (`recipes/names.mjs`, `docs/names.md`): PricePromo (yellow price), ProductIdentity, ProductStack, CECode and the rest. Say the name, not the look. | Owner review |
+| 2026-10-25 | Product NAME | Every product shown anywhere must have a NAME; `productView()` refuses a product without one. NAMEs are invented, unique, one or two uppercase words. | Owner review |
+| 2026-10-25 | Product stack spacing | NAME, Description and specs are 2px apart and the price follows the specs at 12px (`size.product.*`), never pushed to the bottom of the card. Prices are not aligned across cards. | Owner review |
+| 2026-10-25 | Pack price | A price may carry the supplied basis after a slash, bold, on the baseline (`/pack de 12`, `ce-price-pack`). | Owner review |
 | 2026-10-25 | Gondola label | NAME smaller; Description bold and larger; specs in lowercase below it; the price is the largest element. | Owner review |
 | 2026-10-23 | P5 promotions | The yellow price block is the default promotion; the red block or card and `REBAJAS` treatments remain supported (`ce-price--sale`). | Owner consolidated brief |
 | 2026-10-23 | Campaign colours | Authorized users may choose campaign colours per campaign (`ce-campaign`, checked by `recipes/campaign.mjs`) without changing global tokens or legibility. | Owner consolidated brief |

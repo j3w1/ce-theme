@@ -720,6 +720,56 @@
         },
         "$description": "Table row height in compact density."
       }
+    },
+    "product": {
+      "gap-media": {
+        "$type": "dimension",
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        },
+        "$description": "Product display: photo to the first line of text."
+      },
+      "gap-flag": {
+        "$type": "dimension",
+        "$value": {
+          "value": 4,
+          "unit": "px"
+        },
+        "$description": "Product display: tag (Novedad, Promo\u2026) to the NAME or code below it."
+      },
+      "gap-code": {
+        "$type": "dimension",
+        "$value": {
+          "value": 8,
+          "unit": "px"
+        },
+        "$description": "Product display: CE code to the NAME."
+      },
+      "gap-identity": {
+        "$type": "dimension",
+        "$value": {
+          "value": 2,
+          "unit": "px"
+        },
+        "$description": "Product display: between NAME, Description and specs."
+      },
+      "gap-price": {
+        "$type": "dimension",
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        },
+        "$description": "Product display: last line of the identity (specs) to the price. Never pushed to the bottom of the card."
+      },
+      "gap-note": {
+        "$type": "dimension",
+        "$value": {
+          "value": 8,
+          "unit": "px"
+        },
+        "$description": "Product display: price to the availability or store note below it."
+      }
     }
   },
   "layer": {

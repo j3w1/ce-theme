@@ -25,6 +25,10 @@ test('invalid offer labels, previous amounts, and units are rejected', () => {
   assert.throws(()=>preparePrice({amount:'8',discountLabel:'20%'}));
   assert.throws(()=>preparePrice({amount:'8',variant:'unknown'}));
   assert.throws(()=>preparePrice({amount:'8',unitLabel:''}));
+  assert.equal(preparePrice({amount:'1.99',packLabel:'pack de 50'}).packLabel,'pack de 50');
+  assert.throws(()=>preparePrice({amount:'1.99',packLabel:'/pack de 50'}));
+  assert.throws(()=>preparePrice({amount:'1.99',packLabel:''}));
+  assert.throws(()=>preparePrice({amount:'1.99',packLabel:'pack de 50',unitLabel:'cada uno'}));
 });
 test('commercial percentage remains a supplied label, never calculated by the view', () => {
   const view = preparePrice({amount:'550',previousAmount:'1040',discountLabel:'47.12%'});

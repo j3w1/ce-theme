@@ -66,7 +66,7 @@ export function productView(record, { maxSpecs = Infinity, preserve = [] } = {})
   if (!record || typeof record !== 'object') throw new TypeError('Product record required.');
   const name = formatName(record.name);
   const description = formatDescription(record.description);
-  if (!name && !description) throw new TypeError('A product needs a NAME or a Description.');
+  if (!name) throw new TypeError('Every product needs a NAME; no product is shown without one.');
   if (record.code !== undefined && (typeof record.code !== 'string' || !record.code.trim())) {
     throw new TypeError('Codes are non-empty strings, never numbers.');
   }

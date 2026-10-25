@@ -1,14 +1,15 @@
 ---
 import { preparePrice } from '../../recipes/price.mjs';
-interface Props { amount: string; previousAmount?: string; discountLabel?: string; unitLabel?: string; variant?: 'regular' | 'offer' | 'inverse' | 'sale'; alignment?: 'raised' | 'baseline'; class?: string }
+interface Props { amount: string; previousAmount?: string; discountLabel?: string; unitLabel?: string; packLabel?: string; variant?: 'regular' | 'offer' | 'inverse' | 'sale'; alignment?: 'raised' | 'baseline'; class?: string }
 const { class: className = '', alignment = 'raised', ...props } = Astro.props;
 const price = preparePrice(props);
 ---
 <div class:list={['ce-price-block', className]}>
   {price.previous !== undefined && <div class="ce-price-history"><span>Antes <del>S/{price.previous}</del></span>{price.discountLabel && <span class="ce-badge ce-badge--offer"><span class="ce-sr-only">Descuento: </span>−{price.discountLabel}</span>}</div>}
   <span class:list={['ce-price', `ce-price--${price.variant}`, alignment === 'baseline' && 'ce-price--baseline']}>
-    <span class="ce-sr-only">{`Precio actual: ${price.current} soles${price.unitLabel ? `, ${price.unitLabel}` : ''}`}</span>
+    <span class="ce-sr-only">{`Precio actual: ${price.current} soles${price.unitLabel ? `, ${price.unitLabel}` : ''}${price.packLabel ? ` por ${price.packLabel}` : ''}`}</span>
     <span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">{price.current}</span>
     {price.unitLabel && <span class="ce-price-unit" aria-hidden="true">{price.unitLabel}</span>}
+    {price.packLabel && <span class="ce-price-pack" aria-hidden="true">/{price.packLabel}</span>}
   </span>
 </div>

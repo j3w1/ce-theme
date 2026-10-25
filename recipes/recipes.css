@@ -46,6 +46,8 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-status--warning { color: var(--ce-color-status-warning-text); background: var(--ce-color-status-warning-bg); }
 .ce-status--info { color: var(--ce-color-status-info-text); background: var(--ce-color-status-info-bg); }
 .ce-code { display: inline-block; flex: none; padding: .3em .35em; white-space: nowrap; word-break: keep-all; background: var(--ce-color-code-bg); color: var(--ce-color-code-text); border: 0; border-radius: var(--ce-radius-code); font-family: var(--ce-font-family); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-bold); line-height: 1; letter-spacing: .02em; font-kerning: none; font-variant-numeric: tabular-nums; font-feature-settings: "ss04"; overflow-wrap: normal; user-select: all; }
+.ce-code--sm { font-size: var(--ce-font-size-xs); }
+.ce-code--lg { font-size: var(--ce-font-size-body); }
 .ce-code-number { text-decoration: underline; text-decoration-thickness: max(1px, .04em); text-underline-offset: .16em; }
 @media print { .ce-code-number { text-decoration: none; } }
 .ce-price-block { display: flex; align-items: center; flex-wrap: wrap; gap: var(--ce-space-12); }
@@ -59,16 +61,20 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-price--inverse { color: var(--ce-color-price-inverse); }
 .ce-price--sale { background: var(--ce-color-sale-bg); color: var(--ce-color-sale-text); border-radius: var(--ce-radius-price); padding: var(--ce-space-8) var(--ce-space-12); }
 .ce-price-unit { max-width: 7em; font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-semibold); letter-spacing: normal; line-height: var(--ce-font-line-heading); align-self: center; margin-left: var(--ce-space-8); white-space: normal; }
+/* Pack price: the supplied basis after a slash (“/pack de 12”), bold, on the baseline of the figures, never below the price. */
+.ce-price-pack { align-self: baseline; margin-left: var(--ce-space-4); font-size: max(var(--ce-font-size-sm), .34em); font-weight: var(--ce-font-weight-bold); letter-spacing: normal; line-height: var(--ce-font-line-heading); white-space: nowrap; }
 .ce-price-history { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ce-space-4); color: var(--ce-color-price-previous); font-size: var(--ce-font-size-sm); line-height: var(--ce-font-line-heading); }
 .ce-price-history del { font-weight: var(--ce-font-weight-bold); }
 .ce-product { display: flex; flex-direction: column; min-width: 0; background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); }
-.ce-product-media { position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; margin-bottom: var(--ce-space-20); }
+.ce-product-media { position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; margin-bottom: var(--ce-size-product-gap-media); }
 .ce-product-media img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .ce-product-media .ce-badge { position: absolute; top: var(--ce-space-8); left: 0; }
 .ce-product-media .ce-icon-button { position: absolute; right: 0; bottom: 0; }
-.ce-product-info { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ce-space-4); flex: 1; }
-.ce-product-info .ce-code { margin-bottom: var(--ce-space-4); }
-.ce-product-heading { display: flex; flex-direction: column; gap: var(--ce-space-2); margin: 0; font: inherit; }
+/* Product display stack (standard name: Pila de producto). Top to bottom: tag, CE code, NAME, Description, specs, price, note. The gaps are the size.product tokens;
+   the price follows the specs at a fixed gap and is never pushed to the bottom of the card. */
+.ce-product-info { display: flex; flex-direction: column; align-items: flex-start; gap: 0; flex: 1; }
+.ce-product-info .ce-code { margin-bottom: var(--ce-size-product-gap-code); }
+.ce-product-heading { display: flex; flex-direction: column; gap: var(--ce-size-product-gap-identity); margin: 0; font: inherit; }
 .ce-media-missing { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: var(--ce-color-surface-subtle); color: var(--ce-color-text-muted); font-size: var(--ce-font-size-sm); }
 /* Product identity: NAME (uppercase catalogue name), Description (Title Case, 1px larger at 16px), specs (lowercase).
    Set --ce-product-text on any container to scale all three together. */
@@ -76,7 +82,10 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-product-name { font-size: calc(var(--ce-product-text, 1rem) * var(--ce-font-ratio-name)); font-weight: var(--ce-font-weight-bold); line-height: var(--ce-font-line-heading); letter-spacing: .01em; }
 .ce-product-description { font-size: var(--ce-product-text, 1rem); font-weight: var(--ce-font-weight-regular); line-height: var(--ce-font-line-heading); color: var(--ce-color-text-secondary); }
 .ce-product-specs { font-size: calc(var(--ce-product-text, 1rem) * .875); line-height: var(--ce-font-line-heading); color: var(--ce-color-text-muted); }
-.ce-product-info .ce-price-block { margin-top: auto; padding-top: var(--ce-space-12); }
+.ce-product-info .ce-product-specs { margin-top: var(--ce-size-product-gap-identity); }
+.ce-product-info .ce-price-block, .ce-product-info .ce-store-note { margin-top: var(--ce-size-product-gap-price); }
+.ce-product-info .ce-stock { margin-top: var(--ce-size-product-gap-note); }
+.ce-product-info .ce-variant-more { margin-top: var(--ce-space-16); }
 .ce-product .ce-price { font-size: 44px; }
 .ce-swatches { display: flex; gap: var(--ce-space-8); padding: var(--ce-space-8) 0; }
 .ce-swatch { width: 28px; height: 28px; border-radius: var(--ce-radius-pill); border: var(--ce-stroke-thin) solid var(--ce-color-border-control); background: var(--ce-color-surface-subtle); cursor: pointer; padding: 0; }

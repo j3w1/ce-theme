@@ -1,6 +1,6 @@
 # ProductCard
 
-Catalogue product card: a whole product photo on white, then NAME, Description, specifications and the price aligned to the bottom. In the store it adds favourites, add-to-bag, availability for the chosen store and variant thumbnails.
+Catalogue product card: a whole product photo on white, then the product stack: NAME, Description, specifications and the price at a fixed 12px below the specs (never pushed to the bottom of the card). In the store it adds favourites, add-to-bag, availability for the chosen store and variant thumbnails.
 
 ## Classes
 
@@ -17,7 +17,7 @@ Catalogue product card: a whole product photo on white, then NAME, Description, 
 
 ## Do and don't
 
-- Do keep the order NAME, Description, specs, price, availability. On retail cards the code is optional; tools and labels show it.
+- Do keep the order NAME, Description, specs, price, availability, with the `size.product.*` gaps (the **ProductStack**, see `names.md`). Every card has a NAME. On retail cards the code is optional; tools and labels show it.
 - Do show the whole product; never crop a catalogue photo.
 - Don't add borders, shadows or rounded corners to the card; white space or the divided grid separates cards.
 - Don't show ratings or review counts: there is no review data.

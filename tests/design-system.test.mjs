@@ -73,3 +73,14 @@ test('published binary sources exist and preview media fits the file cap', async
     for (const file of group.files) await stat(new URL(file.source, root));
   }
 });
+
+test('standard names: every named recipe class exists, ids are unique, and the names page lists each name', async () => {
+  const { NAMES } = await import('../recipes/names.mjs');
+  const css = await readFile(new URL('../exports/recipes.css', import.meta.url), 'utf8') + await readFile(new URL('../exports/share-card.css', import.meta.url), 'utf8') + await readFile(new URL('../exports/print-label.css', import.meta.url), 'utf8');
+  const page = await readFile(new URL('../docs/names.md', import.meta.url), 'utf8');
+  assert.equal(new Set(NAMES.map((entry) => entry.id)).size, NAMES.length);
+  for (const entry of NAMES) {
+    assert.match(page, new RegExp(`\`${entry.id}\``), entry.id);
+    for (const cls of entry.recipe) assert.ok(css.includes(`.${cls}`), `${entry.id}: .${cls} is not in the recipes`);
+  }
+});

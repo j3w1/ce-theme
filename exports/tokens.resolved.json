@@ -1308,6 +1308,66 @@
       "css": "56px",
       "variable": "--ce-size-control-touch"
     },
+    "size.product.gap-code": {
+      "type": "dimension",
+      "value": {
+        "value": 8,
+        "unit": "px"
+      },
+      "description": "Product display: CE code to the NAME.",
+      "css": "8px",
+      "variable": "--ce-size-product-gap-code"
+    },
+    "size.product.gap-flag": {
+      "type": "dimension",
+      "value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "description": "Product display: tag (Novedad, Promo…) to the NAME or code below it.",
+      "css": "4px",
+      "variable": "--ce-size-product-gap-flag"
+    },
+    "size.product.gap-identity": {
+      "type": "dimension",
+      "value": {
+        "value": 2,
+        "unit": "px"
+      },
+      "description": "Product display: between NAME, Description and specs.",
+      "css": "2px",
+      "variable": "--ce-size-product-gap-identity"
+    },
+    "size.product.gap-media": {
+      "type": "dimension",
+      "value": {
+        "value": 16,
+        "unit": "px"
+      },
+      "description": "Product display: photo to the first line of text.",
+      "css": "16px",
+      "variable": "--ce-size-product-gap-media"
+    },
+    "size.product.gap-note": {
+      "type": "dimension",
+      "value": {
+        "value": 8,
+        "unit": "px"
+      },
+      "description": "Product display: price to the availability or store note below it.",
+      "css": "8px",
+      "variable": "--ce-size-product-gap-note"
+    },
+    "size.product.gap-price": {
+      "type": "dimension",
+      "value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "description": "Product display: last line of the identity (specs) to the price. Never pushed to the bottom of the card.",
+      "css": "12px",
+      "variable": "--ce-size-product-gap-price"
+    },
     "size.row.comfortable": {
       "type": "dimension",
       "value": {
