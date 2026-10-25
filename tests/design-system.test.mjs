@@ -44,7 +44,7 @@ test('design-system CSS variables match the foundation exports exactly', async (
   const bundle = await read('components/bundle.css');
   assert.ok(bundle.includes('--ce-font-family: var(--font-sans)'));
   const css = (path) => readFile(new URL(path, root), 'utf8');
-  assert.ok(bundle.endsWith(await readRecipes() + await css('recipes/share-card.css') + await css('recipes/print-label.css')));
+  assert.ok(bundle.endsWith(await readRecipes() + await css('recipes/share-card.css') + await css('recipes/print-label.css') + await css('recipes/radio.css')));
 });
 
 test('every component has guidelines and a marked live preview using only shipped media', async () => {

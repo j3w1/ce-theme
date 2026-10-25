@@ -116,6 +116,7 @@ Examples: storefront `/tienda/` (home, `categoria`, `producto`, `escena`, `carri
 | Social posts and stories | `ce-photo-panel`, `ce-callout` | Implemented | |
 | Vuetify / Vuexy adapter | `exports/adapters/vuetify.mjs` | Implemented | Theme and defaults only; not tested inside a Vuexy application. |
 | Claude Design system | `exports/design-system/` | Implemented | Synced copy for visual exploration. |
+| CE Radio dark theme | `color.radio.*`, `exports/radio.css`, `exports/adapters/ce-radio.css` | Tested | Contrast pairs validated; reference page `/radio/` checked by axe and at window size. **Needs input:** owner approval before CE Radio adopts it (Inter instead of Public Sans, lighter faint text and alert red). The Admin sidebar keeps its own theme. |
 
 ## Accessibility notes from the reference
 

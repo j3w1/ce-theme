@@ -45,6 +45,7 @@ Optional outputs:
 | Storefront, campaigns | [usage.md](usage.md), [coverage.md](coverage.md) | `ce-site-header`, `ce-search`, `ce-category-rail`, `ce-filter-bar`, `ce-product-grid`, `ce-product`, `ce-rail`, `ce-editorial`, `ce-tagged-media`, `ce-tag-list`, `ce-store-context`, `ce-gallery` |
 | Internal tools (CE Systems, CE Meta, CE Radio) | [coverage.md](coverage.md) | `ce-app`, `ce-module-nav`, `data-ce-density`, `ce-data-table`, `ce-bulk-bar`, `ce-record-header`, `ce-form-actions`, `ce-audit`, `ce-pos` |
 | Print | [product-identity.md](product-identity.md) | `ce-label`, `ce-label-sheet` |
+| CE Radio player | [radio.md](radio.md) | `data-ce-theme="radio"`, `ce-radio-*`, `exports/adapters/ce-radio.css` |
 | Overlays and feedback | — | `ce-dialog`, `ce-drawer`, `ce-disclosure`, `ce-tabs`, `ce-notice`, `ce-toast`, `ce-empty`, `ce-skeleton` |
 
 The reference site (`pnpm dev`) shows runnable markup for each recipe. [coverage.md](coverage.md) states what is implemented, tested, only specified, or waiting for a business rule.

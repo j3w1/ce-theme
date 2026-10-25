@@ -249,3 +249,13 @@ pre { overflow: auto; margin: 0; padding: var(--ce-space-24); font-size: var(--c
 .share-scale--half > .ce-share-card { transform: scale(.5); }
 .share-crop { width: 120px; height: 120px; overflow: hidden; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
 .share-crop > .ce-share-card { transform: translateX(-54.3px) scale(.1905); transform-origin: 0 0; }
+/* CE Radio reference page (site/pages/radio.astro). */
+.radio-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr)); gap: var(--ce-space-32) var(--ce-space-24); }
+.radio-window { margin: 0; overflow-x: auto; }
+.radio-window-frame { display: flex; flex-direction: column; width: 480px; overflow: hidden; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+.radio-window-frame > :last-child { flex: 1; min-height: 0; height: auto; }
+.radio-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--ce-space-16); padding: var(--ce-space-24); }
+.radio-swatch { display: grid; gap: var(--ce-space-4); font-size: var(--ce-font-size-sm); }
+.radio-swatch span { height: 56px; border: var(--ce-stroke-thin) solid var(--ce-color-radio-line); }
+.radio-swatch code { color: var(--ce-color-radio-faint); font-size: var(--ce-font-size-xs); }
+.radio-recipes { display: grid; gap: var(--ce-space-24); padding: var(--ce-space-32); }

@@ -15,11 +15,12 @@ const recipes = await Promise.all(RECIPE_SOURCES.map((path) => readFile(new URL(
 const site = await readFile(new URL('site/styles/site.css', root), 'utf8');
 const shareCard = await readFile(new URL('recipes/share-card.css', root), 'utf8');
 const printLabel = await readFile(new URL('recipes/print-label.css', root), 'utf8');
+const radio = await readFile(new URL('recipes/radio.css', root), 'utf8');
 const variables = new Set(Object.values(tokens).map((token) => token.variable));
 // Component inputs set by consumers on an element; documented with each component.
-const componentInputs = ['--ce-x', '--ce-y', '--ce-line', '--ce-size', '--ce-product-text', '--ce-campaign-surface', '--ce-campaign-text', '--ce-columns', '--ce-control', '--ce-row', '--ce-cell-pad'];
+const componentInputs = ['--ce-x', '--ce-y', '--ce-line', '--ce-size', '--ce-product-text', '--ce-campaign-surface', '--ce-campaign-text', '--ce-columns', '--ce-control', '--ce-row', '--ce-cell-pad', '--ce-progress'];
 componentInputs.forEach((name) => variables.add(name));
-for (const css of [...recipes, site, shareCard, printLabel]) {
+for (const css of [...recipes, site, shareCard, printLabel, radio]) {
   for (const [, variable] of css.matchAll(/var\((--ce-[\w-]+)/g)) {
     if (!variables.has(variable)) throw new Error(`Unresolved CSS variable: ${variable}`);
   }

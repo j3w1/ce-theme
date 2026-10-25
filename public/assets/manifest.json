@@ -119,5 +119,14 @@
     "description": "Public Casa Elida catalogue hero image: TALEN (catalogue cutout).",
     "rights": "Casa Elida catalogue asset; used for this company design reference.",
     "sha256": "583e9662eafa126db05fef8252ee231c95c5e90dbd74362060d9db552214698d"
+  },
+  {
+    "file": "logo-ce-radio.png",
+    "originalName": "icon-512.png",
+    "role": "production",
+    "source": "j3w1/ce-radio at 9aba845, assets/brand/icon-512.png: a proportional resize of the owner-provided CE Radio badge (ce-radio-logo-source.png, 2026-10-06). Byte-identical copy.",
+    "description": "CE Radio badge: Casa Elida RADIO with wings, antenna and lightning. CE Radio surfaces only; shown whole, never cropped, recoloured or dragged.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "ab47b269bd5b71fd0db224b0f3fda11ee1169c67cbda6b8e9aea72daf389961a"
   }
 ]

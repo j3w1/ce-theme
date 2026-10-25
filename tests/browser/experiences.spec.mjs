@@ -188,3 +188,23 @@ test('focus stays visible on dark and light retail surfaces', async ({ page }) =
     expect(style).toBe('solid');
   }
 });
+
+test('CE Radio windows keep their size, stay dark and keep every row inside the window', async ({ page }) => {
+  await page.goto('/radio/');
+  const frames = page.locator('.radio-window-frame');
+  await expect(frames).toHaveCount(6);
+  const report = await frames.evaluateAll((items) => items.map((frame) => {
+    const box = frame.getBoundingClientRect();
+    const spill = [...frame.querySelectorAll('.ce-radio-deck > *, .ce-radio-sheet-footer')].filter((el) => el.getBoundingClientRect().bottom > box.bottom + 0.5).map((el) => el.className);
+    return { width: Math.round(box.width), height: Math.round(box.height), bg: getComputedStyle(frame).backgroundColor, spill };
+  }));
+  for (const item of report) {
+    expect(item.width).toBe(480);
+    expect([360, 320]).toContain(item.height);
+    expect(item.spill).toEqual([]);
+    expect(item.bg).not.toBe('rgb(255, 255, 255)');
+  }
+  // The shared recipes follow the theme: a field inside the radio scope is dark with warm-white text.
+  const input = page.locator('#radio-carpeta');
+  expect(await input.evaluate((el) => [getComputedStyle(el).backgroundColor, getComputedStyle(el).color])).toEqual(['rgb(29, 27, 25)', 'rgb(243, 237, 226)']);
+});

@@ -148,6 +148,10 @@ Instagram campaigns use full-bleed lifestyle photography, the script wordmark, l
 - Icons accompany words or carry an accessible name. Decorative icons get `aria-hidden="true"`. Social platforms are named in text, not drawn with their marks.
 - No emoji.
 
+## CE Radio
+
+CE Radio, the in-store music and announcement player, uses a dark theme: set `data-ce-theme="radio"` on the window. Charcoal and warm white carry the screen; the brand yellow marks music (live dot, progress, next SPOT, focus) and the red marks a SPOT on air and alerts, always as dots, rings, thin lines or light tints, never as a flood. The CE Radio badge (`logo-ce-radio.png`) is shown whole. A Christmas look (`data-ce-season="navidad"`) applies only while a Christmas playlist plays. Interface copy stays Spanish. Rules and states are in `radio.md`.
+
 ## Components
 
 - **Actions:** `Button`, `IconButton`, `Link`, `Chip`.
@@ -161,6 +165,7 @@ Instagram campaigns use full-bleed lifestyle photography, the script wordmark, l
 - **Workspace:** `AppShell`, `RecordEditor`, `Table`.
 - **Print:** `Label`.
 - **Sharing:** `ShareCard`.
+- **CE Radio (dark theme):** `RadioTheme`, `RadioPlayer`, `RadioStates`, `RadioPlaylists`.
 - **Cover:** the system cover card.
 
 Each component's guidelines list its classes and what the consumer supplies. Behaviour and data belong to the consuming application: CE Systems and the commerce services own records, prices, stock, permissions and workflows. A hidden or disabled control is presentation, not authorization.

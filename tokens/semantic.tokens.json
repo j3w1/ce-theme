@@ -113,7 +113,7 @@
       "previous": {
         "$type": "color",
         "$value": "{palette.muted}",
-        "$description": "Struck-through previous price and its \u201cAntes\u201d label."
+        "$description": "Struck-through previous price and its “Antes” label."
       },
       "offer": {
         "bg": {
@@ -215,6 +215,115 @@
         "$type": "color",
         "$value": "{palette.yellow}",
         "$description": "Large promotional price on color.sale.bg (24px and larger only)."
+      }
+    },
+    "radio": {
+      "bg": {
+        "$type": "color",
+        "$value": "{palette.radio-bg}",
+        "$description": "CE Radio player background (dark theme)."
+      },
+      "chrome": {
+        "$type": "color",
+        "$value": "{palette.radio-chrome}",
+        "$description": "CE Radio window chrome strip."
+      },
+      "surface": {
+        "$type": "color",
+        "$value": "{palette.radio-surface}",
+        "$description": "CE Radio buttons, chips, cards."
+      },
+      "raised": {
+        "$type": "color",
+        "$value": "{palette.radio-raised}",
+        "$description": "CE Radio hover and pressed surfaces."
+      },
+      "line": {
+        "$type": "color",
+        "$value": "{palette.radio-line}",
+        "$description": "CE Radio decorative dividers and outlines."
+      },
+      "control": {
+        "$type": "color",
+        "$value": "{palette.radio-control}",
+        "$description": "CE Radio input and control boundaries."
+      },
+      "text": {
+        "$type": "color",
+        "$value": "{palette.radio-text}",
+        "$description": "CE Radio primary text on color.radio.bg, surface and raised."
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "{palette.radio-muted}",
+        "$description": "CE Radio secondary text."
+      },
+      "faint": {
+        "$type": "color",
+        "$value": "{palette.radio-faint}",
+        "$description": "CE Radio small supporting text on color.radio.bg and surface."
+      },
+      "signal": {
+        "$type": "color",
+        "$value": "{palette.yellow}",
+        "$description": "CE Radio music signal: live dot, progress, next SPOT, focus. Muted by opacity, never a flood."
+      },
+      "on-signal": {
+        "$type": "color",
+        "$value": "{palette.radio-bg}",
+        "$description": "Text or icon on a filled color.radio.signal surface."
+      },
+      "alert": {
+        "$type": "color",
+        "$value": "{palette.radio-alert}",
+        "$description": "CE Radio SPOT on air and alerts: text, icons, rings."
+      },
+      "ok": {
+        "$type": "color",
+        "$value": "{palette.radio-pine}",
+        "$description": "CE Radio confirmations (added files) and the Navidad group."
+      },
+      "focus": {
+        "$type": "color",
+        "$value": "{palette.yellow}",
+        "$description": "CE Radio focus ring."
+      },
+      "navidad": {
+        "bg": {
+          "$type": "color",
+          "$value": "{palette.navidad-bg}",
+          "$description": "Christmas look background; only while a Christmas playlist is confirmed playing."
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "{palette.navidad-surface}",
+          "$description": "Christmas look surfaces."
+        },
+        "raised": {
+          "$type": "color",
+          "$value": "{palette.navidad-raised}",
+          "$description": "Christmas look hover surfaces."
+        },
+        "line": {
+          "$type": "color",
+          "$value": "{palette.navidad-line}",
+          "$description": "Christmas look dividers."
+        },
+        "pine": {
+          "$type": "color",
+          "$value": "{palette.navidad-pine}",
+          "$description": "Christmas look accent text and icons."
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "{palette.navidad-accent}",
+          "$description": "Christmas look decorative red; never text."
+        },
+        "snow": {
+          "$type": "color",
+          "$value": "{palette.navidad-snow}",
+          "$description": "Christmas look snow and stripes."
+        }
       }
     }
   }

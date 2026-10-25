@@ -13,7 +13,8 @@
     "project/media/logo-square-red.jpg": "public/assets/logo-square-red.jpg",
     "project/media/logo-wordmark-color.png": "public/assets/logo-wordmark-color.png",
     "project/media/logo-wordmark-black.png": "public/assets/logo-wordmark-black.png",
-    "project/media/logo-wordmark-white-yellow.png": "public/assets/logo-wordmark-white-yellow.png"
+    "project/media/logo-wordmark-white-yellow.png": "public/assets/logo-wordmark-white-yellow.png",
+    "project/media/logo-ce-radio.png": "public/assets/logo-ce-radio.png"
   },
   "assetGroups": [
     {
@@ -55,6 +56,10 @@
         {
           "name": "logo-square-red.jpg",
           "source": "public/assets/logo-square-red.jpg"
+        },
+        {
+          "name": "logo-ce-radio.png",
+          "source": "public/assets/logo-ce-radio.png"
         }
       ]
     },

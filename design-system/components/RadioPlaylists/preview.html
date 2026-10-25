@@ -1,0 +1,26 @@
+<!-- @dsCard group="CE Radio" height=394 width=520 subtitle="Playlist sheet with the Navidad group" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>RadioPlaylists</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .stage { display: flex; flex-wrap: wrap; gap: 24px; padding: 16px; }
+  .radio-window { margin: 0; }
+  .radio-window-frame { display: flex; flex-direction: column; width: 480px; overflow: hidden; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+  .radio-window-frame > :last-child { flex: 1; min-height: 0; height: auto; }
+  .radio-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; padding: 24px; }
+  .radio-swatch { display: grid; gap: 4px; font-size: var(--ce-font-size-sm); }
+  .radio-swatch span { height: 48px; border: var(--ce-stroke-thin) solid var(--ce-color-radio-line); }
+  .radio-swatch code { color: var(--ce-color-radio-faint); font-size: var(--ce-font-size-xs); }
+  .radio-recipes { display: grid; gap: 24px; padding: 24px; }
+  .demo-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+</style>
+</head>
+<body>
+<div class="ce-scope stage">
+<figure class="radio-window"><div class="radio-window-frame" data-ce-theme="radio" style="height:360px"><div class="ce-radio-chrome"><span class="ce-radio-chrome-title">CE Radio</span><button class="ce-radio-chrome-button" type="button" aria-label="Minimizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"></path></svg></button><button class="ce-radio-chrome-button ce-radio-chrome-button--close" type="button" aria-label="Ocultar en la bandeja"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"></path></svg></button></div><div class="ce-radio-sheet"><div class="ce-radio-groups"><section class="ce-radio-group" aria-label="Radio"><p class="ce-radio-group-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16v11H4V9Zm3-3 10-3M8 15a2 2 0 1 0 4 0 2 2 0 0 0-4 0M15 13h2m-2 3h2"></path></svg>Radio</p><ul class="ce-radio-cards"><li><button class="ce-radio-card" type="button"><span>Mix</span></button></li><li><button class="ce-radio-card" type="button" aria-current="true"><span>Modernas</span><span class="ce-radio-live" aria-hidden="true"></span></button></li><li><button class="ce-radio-card" type="button"><span>Retail</span></button></li><li><button class="ce-radio-card" type="button"><span>Pop</span></button></li><li><button class="ce-radio-card" type="button"><span>Español</span></button></li><li><button class="ce-radio-card" type="button"><span>Ritmo romántica</span></button></li></ul></section><section class="ce-radio-group ce-radio-group--navidad" aria-label="Navidad"><p class="ce-radio-group-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"></path></svg>Navidad</p><ul class="ce-radio-cards"><li><button class="ce-radio-card" type="button"><span>Latinas</span></button></li><li><button class="ce-radio-card" type="button"><span>Inglés</span></button></li><li><button class="ce-radio-card" type="button"><span>Instrumental</span></button></li></ul></section></div><div class="ce-radio-sheet-footer"><span>Listas de CE Radio</span><button class="ce-radio-button ce-radio-button--signal" type="button" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"></path></svg></button></div></div></div></figure>
+</div>
+</body>
+</html>

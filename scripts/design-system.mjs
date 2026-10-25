@@ -21,19 +21,19 @@ const FONTS = JSON.parse(await read('fonts/manifest.json')).map((font) => ({
 // Supplied assets as they appear in the design system's asset library.
 // Production files come from public/assets/; reference-only files from public/references/.
 const ASSET_GROUPS = [
-  { name: 'Logos', tile: 'l', dir: 'public/assets/', files: ['logo-wordmark-color.png', 'logo-wordmark-black.png', 'logo-wordmark-white-yellow.png', 'logo-on-white.jpg', 'logo-on-yellow.jpg', 'logo-on-red.png', 'logo-matte-red.jpg', 'logo-matte-red-tagline.jpg', 'logo-square-red.jpg'] },
+  { name: 'Logos', tile: 'l', dir: 'public/assets/', files: ['logo-wordmark-color.png', 'logo-wordmark-black.png', 'logo-wordmark-white-yellow.png', 'logo-on-white.jpg', 'logo-on-yellow.jpg', 'logo-on-red.png', 'logo-matte-red.jpg', 'logo-matte-red-tagline.jpg', 'logo-square-red.jpg', 'logo-ce-radio.png'] },
   { name: 'Products', tile: 'm', dir: 'public/assets/', files: ['product-mene.png', 'product-nome.png', 'product-tilen.png', 'product-talen.png'] },
   { name: 'References', tile: 'l', dir: 'public/references/', files: ['product-card-wilul.png', 'price-label-yellow-historical.png', 'price-label-white-historical.png', 'campaign-umbrella.jpg', 'campaign-organisers.jpg', 'campaign-kitchen.jpg', 'brand-tote-bag.png'] },
   { name: 'Icons', tile: 'xs', dir: null, files: Object.keys(icons).map((name) => `${name}.svg`) },
 ];
 // Files that component previews load by relative path (each must stay under 512 KB).
-const PREVIEW_MEDIA = ['product-mene.png', 'product-nome.png', 'product-tilen.png', 'logo-square-red.jpg', 'logo-wordmark-color.png', 'logo-wordmark-black.png', 'logo-wordmark-white-yellow.png'];
+const PREVIEW_MEDIA = ['product-mene.png', 'product-nome.png', 'product-tilen.png', 'logo-square-red.jpg', 'logo-wordmark-color.png', 'logo-wordmark-black.png', 'logo-wordmark-white-yellow.png', 'logo-ce-radio.png'];
 
 // Docs copied into the bundle as [bundle name, repository path].
 const DOCS = [
   ['apply-ce-theme.md', 'docs/apply-ce-theme.md'], ['product-identity.md', 'docs/product-identity.md'],
   ['pricing.md', 'docs/pricing.md'], ['sharing.md', 'docs/sharing.md'], ['accessibility.md', 'docs/accessibility.md'],
-  ['coverage.md', 'docs/coverage.md'], ['decisions.md', 'docs/decisions.md'], ['sources.md', 'docs/sources.md'],
+  ['radio.md', 'docs/radio.md'], ['coverage.md', 'docs/coverage.md'], ['decisions.md', 'docs/decisions.md'], ['sources.md', 'docs/sources.md'],
   ['evolution.md', 'docs/evolution/2026-10-design-evolution.md'],
 ];
 
@@ -179,7 +179,7 @@ export async function buildDesignSystem(manifest, tokens) {
   const ds = await buildTokens(manifest, tokens);
   put('tokens.json', JSON.stringify(ds, null, 2) + '\n');
   put('tokens.css', compileTokensCss(ds));
-  const recipes = await readRecipes() + await read('recipes/share-card.css') + await read('recipes/print-label.css');
+  const recipes = await readRecipes() + await read('recipes/share-card.css') + await read('recipes/print-label.css') + await read('recipes/radio.css');
   put('components/bundle.css', `/* ${manifest.name} ${manifest.version} — generated from the recipes/*.css sources. Do not edit. */\n/* The design system declares the font stack as --font-sans; the recipes read --ce-font-family. */\n:root { --ce-font-family: var(--font-sans); }\n${recipes}`);
   for (const file of await listFiles('design-system/')) put(file, await read(`design-system/${file}`));
   // Repository docs travel with the bundle; links to files outside it point at the repository.

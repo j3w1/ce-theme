@@ -1,0 +1,30 @@
+/* Casa Elida 0.2.0 — CE Radio station adapter, generated from tokens/ by scripts/adapters.mjs. Do not edit. */
+:root {
+  --station-bg: #1d1b19;
+  --station-chrome: #161412;
+  --station-surface: #262320;
+  --station-raised: #302c28;
+  --station-line: #3a3530;
+  --station-control: #776e64;
+  --station-text: #f3ede2;
+  --station-muted: #b3aa9c;
+  --station-faint: #a0978a;
+  --station-yellow: #f9eb10;
+  --station-yellow-soft: rgb(249 235 16 / 14%);
+  --station-red: #e46b63;
+  --station-red-soft: rgb(228 107 99 / 18%);
+  --station-pine: #7f9c86;
+  --station-action: #da2e3a;
+  --ce-font: Inter, Arial, sans-serif;
+  --ce-focus: 0 0 0 2px #1d1b19, 0 0 0 4px #f9eb10;
+}
+/* The Christmas look, applied by CE Radio only while a Christmas playlist is confirmed playing. */
+.ce-player.is-christmas {
+  --station-bg: #10201a;
+  --station-surface: #172b22;
+  --station-raised: #1f382c;
+  --station-line: #2b4838;
+  --station-pine: #8cc79c;
+  --xmas-accent: #d8383f;
+  --xmas-flake: #f4f8f5;
+}

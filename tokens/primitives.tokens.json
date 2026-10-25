@@ -241,6 +241,222 @@
         "alpha": 0.72
       },
       "$description": "Photographic text protection. Validate the final composition."
+    },
+    "radio-bg": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.11372549019607843,
+          0.10588235294117647,
+          0.09803921568627451
+        ]
+      },
+      "$description": "CE Radio charcoal: the player background."
+    },
+    "radio-chrome": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.08627450980392157,
+          0.0784313725490196,
+          0.07058823529411765
+        ]
+      },
+      "$description": "CE Radio window title strip."
+    },
+    "radio-surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.14901960784313725,
+          0.13725490196078433,
+          0.12549019607843137
+        ]
+      },
+      "$description": "CE Radio buttons, chips and cards."
+    },
+    "radio-raised": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.18823529411764706,
+          0.17254901960784313,
+          0.1568627450980392
+        ]
+      },
+      "$description": "CE Radio hover and pressed surfaces."
+    },
+    "radio-line": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.22745098039215686,
+          0.20784313725490197,
+          0.18823529411764706
+        ]
+      },
+      "$description": "CE Radio dividers and decorative outlines."
+    },
+    "radio-control": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.4666666666666667,
+          0.43137254901960786,
+          0.39215686274509803
+        ]
+      },
+      "$description": "CE Radio control boundaries; 3:1 on charcoal and surface."
+    },
+    "radio-text": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9529411764705882,
+          0.9294117647058824,
+          0.8862745098039215
+        ]
+      },
+      "$description": "CE Radio warm white text."
+    },
+    "radio-muted": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7019607843137254,
+          0.6666666666666666,
+          0.611764705882353
+        ]
+      },
+      "$description": "CE Radio secondary text."
+    },
+    "radio-faint": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6274509803921569,
+          0.592156862745098,
+          0.5411764705882353
+        ]
+      },
+      "$description": "CE Radio small supporting text (times, neighbour songs); 4.5:1 on charcoal and surface."
+    },
+    "radio-alert": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8941176470588236,
+          0.4196078431372549,
+          0.38823529411764707
+        ]
+      },
+      "$description": "CE Radio alert red for text and icons on charcoal and surface."
+    },
+    "radio-pine": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.4980392156862745,
+          0.611764705882353,
+          0.5254901960784314
+        ]
+      },
+      "$description": "CE Radio pine: added files and the Navidad group outside the Christmas look."
+    },
+    "navidad-bg": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.06274509803921569,
+          0.12549019607843137,
+          0.10196078431372549
+        ]
+      },
+      "$description": "CE Radio Christmas look: background."
+    },
+    "navidad-surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.09019607843137255,
+          0.16862745098039217,
+          0.13333333333333333
+        ]
+      },
+      "$description": "CE Radio Christmas look: surfaces."
+    },
+    "navidad-raised": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.12156862745098039,
+          0.2196078431372549,
+          0.17254901960784313
+        ]
+      },
+      "$description": "CE Radio Christmas look: hover surfaces."
+    },
+    "navidad-line": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.16862745098039217,
+          0.2823529411764706,
+          0.2196078431372549
+        ]
+      },
+      "$description": "CE Radio Christmas look: dividers."
+    },
+    "navidad-pine": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5490196078431373,
+          0.7803921568627451,
+          0.611764705882353
+        ]
+      },
+      "$description": "CE Radio Christmas look: pine accent text and icons."
+    },
+    "navidad-accent": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8470588235294118,
+          0.2196078431372549,
+          0.24705882352941178
+        ]
+      },
+      "$description": "CE Radio Christmas look: decorative red stripes and borders only."
+    },
+    "navidad-snow": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9568627450980393,
+          0.9725490196078431,
+          0.9607843137254902
+        ]
+      },
+      "$description": "CE Radio Christmas look: snow and stripe white."
     }
   },
   "space": {

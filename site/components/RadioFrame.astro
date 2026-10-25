@@ -1,0 +1,79 @@
+---
+// One CE Radio window (480 wide) drawn with exports/radio.css. Demonstration content only.
+interface Props {
+  view?: 'player' | 'sheet';
+  state?: 'live' | 'spot-next' | 'spot-on' | 'paused' | 'alert' | 'tuning';
+  season?: 'navidad';
+  offline?: boolean;
+  height?: 360 | 320;
+  label: string;
+  playlist?: string;
+  status?: string;
+  progress?: number;
+  spot?: { name: string; hint: string; phase?: 'due' | 'playing'; progress: number };
+  badge?: 'signal' | 'ok' | 'alert';
+}
+const { view = 'player', state = 'live', season, offline = false, height = 360, label, playlist = 'Modernas', status = 'Próximo SPOT · 2:05', progress = 33, spot = { name: 'Siguiente SPOT', hint: 'en 2:05', progress: 40 }, badge } = Astro.props;
+const sign = offline || state === 'alert' ? 'alert' : state === 'spot-on' || state === 'spot-next' ? 'spot' : 'playing';
+const path = {
+  prev: 'M7 6v12M18 6l-8 6 8 6V6Z', next: 'M17 6v12M6 6l8 6-8 6V6Z', list: 'M4 7h11M4 12h11M4 17h7M18 15.5V6l3-1M18 15.5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z',
+  shuffle: 'M4 7h3c3 0 4 10 8 10h5m0 0-2.5-2.5M20 17l-2.5 2.5M4 17h3c1.4 0 2.3-1.3 3-3M14 7h6m0 0-2.5-2.5M20 7l-2.5 2.5',
+  speaker: 'M4 10v4h3l5 4V6l-5 4H4Zm12-1.5a4 4 0 0 1 0 7', alert: 'M12 8v5m0 3v.01M3.5 19 12 4l8.5 15h-17Z',
+  cloud: 'M3 3l18 18M8 8a5 5 0 0 0-3 8.6c.6.3 1.3.4 2 .4h9M19 16.5A4 4 0 0 0 16 9.2a6 6 0 0 0-5.2-3', retry: 'M20 12a8 8 0 1 1-2.3-5.7M20 4v4h-4',
+  close: 'm6 6 12 12M6 18 18 6', min: 'M6 12h12', radio: 'M4 9h16v11H4V9Zm3-3 10-3M8 15a2 2 0 1 0 4 0 2 2 0 0 0-4 0M15 13h2m-2 3h2', star: 'm12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z', check: 'm5 12 4 4L19 6',
+};
+const lists = { radio: ['Mix', 'Modernas', 'Retail', 'Pop', 'Español', 'Ritmo romántica'], navidad: ['Latinas', 'Inglés', 'Instrumental'] };
+---
+<figure class="radio-window">
+  <div class="radio-window-frame" data-ce-theme="radio" data-ce-season={season} style={`height:${height}px`}>
+    <div class="ce-radio-chrome"><span class="ce-radio-chrome-title">CE Radio</span><button class="ce-radio-chrome-button" type="button" aria-label="Minimizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d={path.min} /></svg></button><button class="ce-radio-chrome-button ce-radio-chrome-button--close" type="button" aria-label="Ocultar en la bandeja"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d={path.close} /></svg></button></div>
+    {view === 'sheet' ? (
+      <div class="ce-radio-sheet">
+        <div class="ce-radio-groups">
+          {(['radio', 'navidad'] as const).map((group) => (
+            <section class:list={['ce-radio-group', group === 'navidad' && 'ce-radio-group--navidad']} aria-label={group === 'radio' ? 'Radio' : 'Navidad'}>
+              <p class="ce-radio-group-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d={group === 'radio' ? path.radio : path.star} /></svg>{group === 'radio' ? 'Radio' : 'Navidad'}</p>
+              <ul class="ce-radio-cards">{lists[group].map((name) => <li><button class="ce-radio-card" type="button" aria-current={name === playlist ? 'true' : undefined}><span>{name}</span>{name === playlist && <span class="ce-radio-live" aria-hidden="true"></span>}</button></li>)}</ul>
+            </section>
+          ))}
+        </div>
+        <div class="ce-radio-sheet-footer"><span>Listas de CE Radio</span><button class="ce-radio-button ce-radio-button--signal" type="button" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d={path.close} /></svg></button></div>
+      </div>
+    ) : (
+      <div class="ce-radio-player">
+        <div class="ce-radio-volume" role="slider" tabindex="0" aria-label="Volumen de la música" aria-valuemin="10" aria-valuemax="100" aria-valuenow="70" aria-valuetext="70 %">
+          <svg viewBox="0 0 40 150" fill="none" aria-hidden="true">
+            <path d="M20 22 9 146h22L20 22Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity=".65" />
+            <path d="M12.7 104 27.3 104 9.8 136M27.3 104 12.4 136M14.6 80h10.8M15.7 62h8.6" stroke="currentColor" stroke-width=".8" opacity=".35" />
+            <path d="M12.3 58 27.7 58 31 146H9L12.3 58Z" fill="currentColor" opacity=".22" />
+            <path d="M20 8v14" stroke="var(--ce-color-radio-muted)" stroke-width="3" stroke-linecap="round" />
+            <circle cx="20" cy="8" r="5" stroke="currentColor" stroke-width="3" opacity=".8" />
+            <rect x="9" y="56" width="22" height="4" rx="2" fill="currentColor" /><circle cx="31" cy="58" r="4" fill="var(--ce-color-radio-text)" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <div class="ce-radio-deck">
+          <div class="ce-radio-hero">
+            <div class="ce-radio-skip"><button class="ce-radio-button" type="button" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={path.prev} /></svg></button><span class="ce-radio-skip-label" aria-hidden="true"><span>Canción anterior</span><span>Artista</span></span></div>
+            <div class="ce-radio-stage" data-state={offline ? 'alert' : state} style={`--ce-progress:${progress}%`}>
+              <img src="/assets/logo-ce-radio.png" alt="" width="512" height="512" />
+              {badge && <span class="ce-radio-badge" data-tone={badge} role="img" aria-label={badge === 'ok' ? 'SPOT añadido' : badge === 'alert' ? 'Archivo no válido' : 'Revisando archivos'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d={badge === 'ok' ? path.check : path.alert} /></svg></span>}
+            </div>
+            <div class="ce-radio-skip"><button class="ce-radio-button" type="button" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={path.next} /></svg></button><span class="ce-radio-skip-label" aria-hidden="true"><span>Canción siguiente</span><span>Artista</span></span></div>
+          </div>
+          <p class="ce-radio-status" data-sign={sign} role="status" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={offline ? path.cloud : sign === 'alert' ? path.alert : path.speaker} /></svg><span>{offline ? 'El reproductor no responde — revisa internet' : status}</span></p>
+          <div class="ce-radio-row"><button class="ce-radio-chip" type="button" aria-label={`Lista: ${playlist}`}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d={path.list} /></svg><span>{playlist}</span>{!offline && state !== 'paused' && <span class="ce-radio-live" aria-hidden="true"></span>}</button><button class="ce-radio-button" type="button" aria-pressed="true" aria-label="Modo: Aleatorio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={path.shuffle} /></svg></button></div>
+          {offline ? (
+            <div class="ce-radio-offline"><span class="ce-radio-offline-sign"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d={path.cloud} /></svg></span><button class="ce-radio-button ce-radio-button--signal ce-radio-button--large" type="button" aria-label="Reintentar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d={path.retry} /></svg></button></div>
+          ) : (
+            <>
+              <div class="ce-radio-now"><p class="ce-radio-song">Canción de ejemplo</p><p class="ce-radio-artist">Artista</p></div>
+              <div class="ce-radio-progress"><div class="ce-radio-progress-bar" role="progressbar" aria-label="Avance de la canción" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"><span style={`--ce-progress:${progress}%`}></span></div><div class="ce-radio-times"><span>1:06</span><span>3:20</span></div></div>
+              <div class="ce-radio-spot" data-phase={spot.phase}><div class="ce-radio-spot-line"><span>{spot.name}</span><span>{spot.hint}</span></div><div class="ce-radio-spot-bar"><span style={`--ce-progress:${spot.progress}%`}></span></div></div>
+            </>
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+  <figcaption class="small-note">{label}</figcaption>
+</figure>

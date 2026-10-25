@@ -1,0 +1,26 @@
+<!-- @dsCard group="CE Radio" height=767 width=1040 subtitle="Station palette and the shared recipes inside data-ce-theme=radio" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>RadioTheme</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .stage { display: flex; flex-wrap: wrap; gap: 24px; padding: 16px; }
+  .radio-window { margin: 0; }
+  .radio-window-frame { display: flex; flex-direction: column; width: 480px; overflow: hidden; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+  .radio-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; padding: 24px; }
+  .radio-swatch { display: grid; gap: 4px; font-size: var(--ce-font-size-sm); }
+  .radio-swatch span { height: 48px; border: var(--ce-stroke-thin) solid var(--ce-color-radio-line); }
+  .radio-swatch code { color: var(--ce-color-radio-faint); font-size: var(--ce-font-size-xs); }
+  .radio-recipes { display: grid; gap: 24px; padding: 24px; }
+  .demo-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+</style>
+</head>
+<body>
+<div class="ce-scope stage" style="display:grid">
+<div class="radio-swatches" data-ce-theme="radio"><div class="radio-swatch"><span style="background:var(--ce-color-radio-bg)"></span><strong>Fondo</strong><code>color.radio.bg</code></div><div class="radio-swatch"><span style="background:var(--ce-color-radio-surface)"></span><strong>Superficie</strong><code>color.radio.surface</code></div><div class="radio-swatch"><span style="background:var(--ce-color-radio-raised)"></span><strong>Elevada</strong><code>color.radio.raised</code></div><div class="radio-swatch"><span style="background:var(--ce-color-radio-line)"></span><strong>Línea</strong><code>color.radio.line</code></div><div class="radio-swatch"><span style="background:var(--ce-color-radio-control)"></span><strong>Borde de control</strong><code>color.radio.control</code></div><div class="radio-swatch"><span style="background:var(--ce-color-radio-text)"></span><strong>Texto</strong><code>color.radio.text</code></div><div class="radio-swatch"><span style="background:var(--ce-color-radio-muted)"></span><strong>Texto secundario</strong><code>color.radio.muted</code></div><div class="radio-swatch"><span style="background:var(--ce-color-radio-faint)"></span><strong>Texto pequeño</strong><code>color.radio.faint</code></div><div class="radio-swatch"><span style="background:var(--ce-color-radio-signal)"></span><strong>Señal: música</strong><code>color.radio.signal</code></div><div class="radio-swatch"><span style="background:var(--ce-color-radio-alert)"></span><strong>Señal: SPOT y alertas</strong><code>color.radio.alert</code></div><div class="radio-swatch"><span style="background:var(--ce-color-radio-ok)"></span><strong>Confirmación</strong><code>color.radio.ok</code></div></div>
+<div class="radio-recipes" data-ce-theme="radio"><div class="demo-row"><button class="ce-button" type="button">Probar SPOT</button><button class="ce-button ce-button--secondary" type="button">Cancelar SPOT</button><button class="ce-chip" type="button" aria-pressed="true">Siempre activa</button></div><div class="ce-field" style="max-width:320px"><label for="radio-carpeta">Carpeta de SPOTS</label><input class="ce-input" id="radio-carpeta" value="Escritorio\SPOTS"><span class="ce-field-note">MP3, WAV o FLAC.</span></div><div class="ce-notice ce-notice--warning"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 8v5m0 3v.01M3.5 19 12 4l8.5 15h-17Z"></path></svg><div><strong>Un archivo no es válido</strong><p>Se omitirá hasta que lo reemplaces.</p></div></div></div>
+</div>
+</body>
+</html>

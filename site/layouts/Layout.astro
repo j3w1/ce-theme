@@ -7,12 +7,13 @@ import '../../recipes/retail.css';
 import '../../recipes/workspace.css';
 import '../../recipes/share-card.css';
 import '../../recipes/print-label.css';
+import '../../recipes/radio.css';
 import '../styles/site.css';
 import Icon from '../components/Icon.astro';
 interface Props { title?: string; description?: string }
 const { title = 'Diseñamos para la vida en casa', description = 'La base visual de Casa Elida: identidad, fundamentos y recetas para crear experiencias claras, cercanas y accesibles.' } = Astro.props;
 const pathname = Astro.url.pathname;
-const nav = [['/', 'Visión general'], ['/fundamentos/', 'Fundamentos'], ['/componentes/', 'Componentes'], ['/patrones/', 'Precios y productos'], ['/aplicaciones/', 'Aplicaciones'], ['/compartir/', 'Compartir'], ['/tienda/', 'Tienda de ejemplo'], ['/sistemas/', 'Sistemas internos']];
+const nav = [['/', 'Visión general'], ['/fundamentos/', 'Fundamentos'], ['/componentes/', 'Componentes'], ['/patrones/', 'Precios y productos'], ['/aplicaciones/', 'Aplicaciones'], ['/compartir/', 'Compartir'], ['/tienda/', 'Tienda de ejemplo'], ['/sistemas/', 'Sistemas internos'], ['/radio/', 'CE Radio']];
 ---
 <!doctype html>
 <html lang="es-PE">
@@ -40,7 +41,7 @@ const nav = [['/', 'Visión general'], ['/fundamentos/', 'Fundamentos'], ['/comp
     <footer class="site-footer">
       <div class="container footer-grid">
         <div><a class="brand" href="/"><img src="/assets/logo-wordmark-color.png" alt="Casa Elida — inicio" width="135" height="60" /></a><p>Todo lo que hace casa.<br/>Todo lo que nos hace Casa Elida.</p><span class="footer-version">Sistema de diseño · 0.2.0</span></div>
-        <div><h2>Diseñar con Casa Elida</h2><a href="/fundamentos/">Identidad y fundamentos</a><a href="/componentes/">Componentes esenciales</a><a href="/patrones/">Precios y productos</a><a href="/aplicaciones/">Aplicaciones de marca</a><a href="/tienda/">Tienda de ejemplo</a><a href="/sistemas/">Sistemas internos</a></div>
+        <div><h2>Diseñar con Casa Elida</h2><a href="/fundamentos/">Identidad y fundamentos</a><a href="/componentes/">Componentes esenciales</a><a href="/patrones/">Precios y productos</a><a href="/aplicaciones/">Aplicaciones de marca</a><a href="/tienda/">Tienda de ejemplo</a><a href="/sistemas/">Sistemas internos</a><a href="/radio/">CE Radio</a></div>
         <div><h2>Construir con la base</h2><a href="/descargas/">Tokens y recetas</a><a href="https://github.com/j3w1/ce-theme">Repositorio en GitHub ↗</a><a href="/downloads/usage.md" download>Guía técnica · English</a></div>
       </div>
       <div class="container footer-bottom"><span>Casa Elida · Una base compartida, hecha para crecer.</span><span>Precios de ejemplo; no constituyen ofertas vigentes.</span></div>
