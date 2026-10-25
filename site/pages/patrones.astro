@@ -6,6 +6,7 @@ import Recipe from '../components/Recipe.astro';
 import Icon from '../components/Icon.astro';
 import { products } from '../data/products.mjs';
 import { productView, codeSegments } from '../../recipes/product.mjs';
+import Pin from '../components/Pin.astro';
 // Marker letters are plain capitals without periods; the list repeats every marked product in text.
 const tagged = [
   { letter: 'A', id: 'etiqueta-mene', x: '22.6%', y: '31.4%', product: products[0] },
@@ -35,6 +36,22 @@ const taggedCode = `<figure class="ce-tagged-media">
     </div>
   </li>
 </ol>`;
+const pinCode = `<figure class="ce-tagged-media">
+  <img src="ambiente.jpg" alt="Tazas de vidrio y tapete de ducha en uso">
+  <div class="ce-pin" style="--ce-x:22%;--ce-y:34%">
+    <button class="ce-pin-dot" type="button" aria-expanded="false" aria-controls="pin-mene-card">
+      <span class="ce-sr-only">Ver MENE, Taza de Vidrio Resistente al Calor</span></button>
+    <a class="ce-pin-card" id="pin-mene-card" href="/catalogo/mene">
+      <div class="ce-pin-text">
+        <span class="ce-product-name">MENE</span>
+        <span class="ce-product-description">Taza de Vidrio Resistente al Calor</span>
+        <!-- Insert the shared price recipe here. -->
+      </div>
+      <span class="ce-pin-chevron" aria-hidden="true"><!-- chevron icon --></span>
+    </a>
+  </div>
+</figure>
+<!-- enhancePins() from behaviors.mjs adds tap-to-open and keeps the card inside the photo. -->`;
 const priceCode = `<span class="ce-price"><span class="ce-sr-only">Precio actual: 8.5 soles</span>
   <span class="ce-price-currency" aria-hidden="true">S/</span>
   <span class="ce-price-value" aria-hidden="true">8.5</span>
@@ -86,7 +103,15 @@ const cardCode = `<article class="ce-product">
 
     <Recipe title="La tarjeta que acompaña al producto" description="Una tarjeta blanca con foto, identificación y precio para piezas editoriales donde el producto ya se ve en contexto." code={'<article class="ce-callout">\n  <img src="taza.png" alt="NOME Taza de Vidrio">\n  <div>\n    <h3 class="ce-product-heading"><span class="ce-product-name">NOME</span><span class="ce-product-description">Taza de Vidrio</span></h3>\n    <p class="ce-product-specs">vidrio borosilicato, 350ml</p>\n    <!-- Insert the shared price recipe here. -->\n  </div>\n</article>'}><div class="callout-stage"><article class="ce-callout"><img src="/assets/product-nome.png" alt="NOME Taza de Vidrio" width="300" height="300" loading="lazy"/><div><h3 class="ce-product-heading"><span class="ce-product-name">NOME</span><span class="ce-product-description">Taza de Vidrio</span></h3><p class="ce-product-specs">vidrio borosilicato, 350ml</p><Price amount="8" unitLabel="cada una"/></div></article></div></Recipe>
 
-    <div id="etiquetas"><Recipe title="Marcas sobre la fotografía" description="Círculos negros con letras blancas A, B, C, sin punto. Cada letra lleva a su producto en la lista, que repite toda la información en texto." code={taggedCode}>
+    <div id="puntos"><Recipe title="Puntos con ficha en la web" description="Un punto sobre la foto muestra la ficha del producto al pasar el cursor, al enfocar con el teclado o al tocar: NAME, descripción, precio de la tienda elegida y una flecha que lleva a la ficha completa. Es el estilo de la tienda en línea; las letras A, B, C quedan para medios sin cursor." code={pinCode}>
+      <figure class="tagged-scene"><div class="ce-tagged-media">
+        <div class="tagged-scene-art" role="img" aria-label="Composición de ejemplo con dos tazas de vidrio y un tapete de ducha"><img src="/assets/product-mene.png" alt="" width="300" height="300" loading="lazy"/><img src="/assets/product-nome.png" alt="" width="300" height="300" loading="lazy"/><img src="/assets/product-tilen.png" alt="" width="300" height="300" loading="lazy"/></div>
+        {tagged.map((item, index) => <Pin item={item.product} x={item.x} y={item.y} id={`patron-pin-${item.letter.toLowerCase()}`} open={index === 0} />)}</div>
+        <figcaption class="small-note">Pasa el cursor sobre un punto, o tócalo. Composición de ejemplo con fotos del catálogo. Precios de ejemplo.</figcaption>
+      </figure>
+    </Recipe></div>
+
+    <div id="etiquetas"><Recipe title="Marcas con letra para publicaciones y medios sin cursor" description="Círculos negros con letras blancas A, B, C, sin punto, para redes sociales, impresos e imágenes compartidas, donde no hay cursor. Cada letra lleva a su producto en la lista, que repite toda la información en texto." code={taggedCode}>
       <figure class="tagged-scene"><div class="ce-tagged-media" data-ce-tags="auto">
         <div class="tagged-scene-art" role="img" aria-label="Composición de ejemplo con dos tazas de vidrio y un tapete de ducha"><img src="/assets/product-mene.png" alt="" width="300" height="300" loading="lazy"/><img src="/assets/product-nome.png" alt="" width="300" height="300" loading="lazy"/><img src="/assets/product-tilen.png" alt="" width="300" height="300" loading="lazy"/></div>
         {tagged.map((item) => <a class="ce-hotspot" href={`#${item.id}`} style={`--ce-x:${item.x};--ce-y:${item.y}`}><span aria-hidden="true">{item.letter}</span><span class="ce-sr-only">{`Producto ${item.letter}: ${item.view.accessibleName}`}</span></a>)}

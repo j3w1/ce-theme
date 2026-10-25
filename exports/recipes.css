@@ -141,6 +141,29 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-hotspot--inline { position: static; transform: none; flex: 0 0 auto; width: 24px; height: 24px; font-size: var(--ce-font-size-xs); cursor: default; }
 .ce-hotspot--inline::after { content: none; }
 .ce-hotspot:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); box-shadow: 0 0 0 calc(var(--ce-stroke-offset) + var(--ce-stroke-focus) + 2px) var(--ce-color-surface-canvas); }
+/* Web pins: a dot on the photo that opens a product card on hover, focus or tap. The lettered .ce-hotspot is the static
+   variant for media that cannot hover (social posts, print, share images); the TagList below repeats every product. */
+/* The pin has no stacking context of its own, so every dot stays above every card and a neighbouring dot is never covered. */
+.ce-pin { position: absolute; left: var(--ce-x, 50%); top: var(--ce-y, 50%); width: 0; height: 0; }
+.ce-pin-dot { position: absolute; z-index: 3; top: 0; left: 0; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; transform: translate(-50%, -50%); border: 0; border-radius: var(--ce-radius-pill); background: var(--ce-color-marker-bg); box-shadow: 0 0 0 2px var(--ce-color-surface-canvas); cursor: pointer; transition: transform var(--ce-motion-quick); }
+.ce-pin-dot::before { width: 8px; height: 8px; content: ''; border-radius: var(--ce-radius-pill); background: var(--ce-color-marker-text); }
+.ce-pin-dot::after { position: absolute; inset: -8px; content: ''; border-radius: inherit; }
+.ce-pin:hover .ce-pin-dot, .ce-pin[data-open] .ce-pin-dot { transform: translate(-50%, -50%) scale(1.12); }
+.ce-pin-dot:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: calc(var(--ce-stroke-offset) + 2px); }
+.ce-pin-card { position: absolute; z-index: 2; top: 20px; left: -14px; display: grid; grid-template-columns: minmax(0, 1fr) 44px; width: max-content; min-width: 11rem; max-width: min(17rem, 80cqw); overflow: hidden; border-radius: var(--ce-radius-small); background: var(--ce-color-surface-canvas); box-shadow: 0 0 0 1px var(--ce-color-overlay); color: var(--ce-color-text-primary); text-decoration: none; visibility: hidden; opacity: 0; transform: translateY(-4px); transition: opacity var(--ce-motion-quick), transform var(--ce-motion-quick), visibility 0s linear var(--ce-motion-quick); --ce-product-text: 16px; }
+.ce-pin:hover .ce-pin-card, .ce-pin:focus-within .ce-pin-card, .ce-pin[data-open] .ce-pin-card { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+.ce-pin--above .ce-pin-card { top: auto; bottom: 20px; transform: translateY(4px); }
+.ce-pin--start .ce-pin-card { left: auto; right: -14px; }
+.ce-pin:hover .ce-pin-card, .ce-pin:focus-within .ce-pin-card, .ce-pin[data-open] .ce-pin-card { transform: none; }
+.ce-pin-text { display: grid; gap: var(--ce-space-4); min-width: 0; padding: var(--ce-space-12) var(--ce-space-16); }
+.ce-pin-text .ce-product-name, .ce-pin-text .ce-product-description { display: block; color: var(--ce-color-text-primary); }
+.ce-pin-text .ce-product-description { font-weight: var(--ce-font-weight-regular); }
+.ce-pin-text .ce-price { font-size: 32px; }
+.ce-pin-text .ce-price-block { margin-top: var(--ce-space-4); }
+.ce-pin-chevron { display: grid; place-items: center; border-left: var(--ce-stroke-thin) solid var(--ce-color-border-default); color: var(--ce-color-text-primary); }
+.ce-pin-chevron svg { width: 20px; height: 20px; }
+.ce-pin-card:hover .ce-pin-chevron, .ce-pin-card:focus-visible .ce-pin-chevron { background: var(--ce-color-surface-subtle); }
+.ce-pin-card:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); }
 .ce-feature-tag { position: absolute; z-index: 1; left: var(--ce-x, 50%); top: var(--ce-y, 50%); display: flex; align-items: center; transform: translate(-6px, -50%); max-width: calc(100% - var(--ce-x, 50%) + 6px); color: var(--ce-color-text-inverse); font-size: var(--ce-font-size-sm); line-height: var(--ce-font-line-heading); pointer-events: none; }
 .ce-feature-tag::before { flex: 0 0 auto; width: 12px; height: 12px; content: ''; border: var(--ce-stroke-focus) solid var(--ce-color-surface-inverse); border-radius: var(--ce-radius-pill); background: var(--ce-color-surface-canvas); }
 .ce-feature-tag::after { order: 1; flex: 0 0 auto; width: var(--ce-line, 40px); height: var(--ce-stroke-focus); content: ''; background: var(--ce-color-surface-canvas); box-shadow: 0 0 0 1px var(--ce-color-overlay); }
@@ -599,7 +622,7 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 /* Shoppable scenes and social gallery ------------------------------------------------------------------- */
 .ce-scene { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ce-space-24); }
 .ce-scene-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ce-space-12); margin-top: var(--ce-space-12); }
-.ce-tagged-media[data-ce-markers="hidden"] .ce-hotspot, .ce-tagged-media[data-ce-markers="hidden"] .ce-feature-tag { display: none; }
+.ce-tagged-media[data-ce-markers="hidden"] .ce-hotspot, .ce-tagged-media[data-ce-markers="hidden"] .ce-pin, .ce-tagged-media[data-ce-markers="hidden"] .ce-feature-tag { display: none; }
 .ce-collage { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ce-space-12); }
 .ce-collage > :first-child { grid-column: 1 / -1; }
 .ce-collage img { display: block; width: 100%; height: 100%; object-fit: cover; }

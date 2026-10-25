@@ -157,6 +157,51 @@ export function enhanceMarkers(root = document) {
   }
 }
 
+/** Web pins: a .ce-pin shows its card on hover and focus in CSS; this adds tap-to-open for touch (aria-expanded on the dot),
+ * Escape and outside-tap to close, one open card per photo, and keeps each card inside its frame by flipping it
+ * (ce-pin--start, ce-pin--above) when the side it would open on has no room. */
+export function placePins(frame, { gap = 20, inset = 14 } = {}) {
+  const box = frame.getBoundingClientRect();
+  for (const pin of frame.querySelectorAll('.ce-pin')) {
+    const card = pin.querySelector('.ce-pin-card');
+    if (!card) continue;
+    const { offsetWidth: width, offsetHeight: height } = card;
+    const at = pin.getBoundingClientRect();
+    const start = at.left + width - inset > box.right;
+    const above = at.top + gap + height > box.bottom && (at.top - gap - height >= box.top || at.top - box.top > box.bottom - at.top);
+    pin.classList.toggle('ce-pin--start', start);
+    pin.classList.toggle('ce-pin--above', above);
+    // Preferred offset from the dot, then clamped so the whole card stays inside the photo.
+    const clamp = (value, low, high) => Math.max(low, Math.min(value, Math.max(low, high)));
+    const left = clamp(start ? -(width - inset) : -inset, box.left - at.left, box.right - at.left - width);
+    const top = clamp(above ? -(height + gap) : gap, box.top - at.top, box.bottom - at.top - height);
+    Object.assign(card.style, { left: `${left}px`, right: 'auto', top: `${top}px`, bottom: 'auto' });
+  }
+}
+
+export function enhancePins(root = document) {
+  for (const frame of root.querySelectorAll('.ce-tagged-media')) {
+    const pins = [...frame.querySelectorAll('.ce-pin')];
+    if (!pins.length || frame.dataset.cePins) continue;
+    frame.dataset.cePins = 'ready';
+    const close = () => pins.forEach((pin) => { delete pin.dataset.open; pin.querySelector('.ce-pin-dot')?.setAttribute('aria-expanded', 'false'); });
+    for (const pin of pins) {
+      const dot = pin.querySelector('.ce-pin-dot');
+      dot.setAttribute('aria-expanded', pin.hasAttribute('data-open') ? 'true' : 'false');
+      dot.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const open = !pin.hasAttribute('data-open');
+        close();
+        if (open) { pin.dataset.open = ''; dot.setAttribute('aria-expanded', 'true'); }
+      });
+    }
+    document.addEventListener('click', (event) => { if (!frame.contains(event.target)) close(); });
+    frame.addEventListener('keydown', (event) => { if (event.key === 'Escape') { const open = pins.find((pin) => pin.hasAttribute('data-open')); close(); open?.querySelector('.ce-pin-dot').focus(); } });
+    placePins(frame);
+    if (typeof ResizeObserver === 'function') new ResizeObserver(() => placePins(frame)).observe(frame);
+  }
+}
+
 /** Feature tags that come from data: keeps every .ce-feature-tag inside its frame and clear of the other tags and the markers.
  * A tag whose label would leave the frame is flipped with ce-feature-tag--start; a tag that touches another is moved up or down in
  * steps of its own height. Authors still choose sensible positions; this is the guard for positions nobody checked by eye. */
@@ -221,5 +266,5 @@ export function fitShareCard(card, { min = 0.6, step = 0.04 } = {}) {
 
 export function enhanceAll(root = document) {
   enhanceTabs(root); enhanceDialogs(root); enhanceQuantity(root); enhanceChoices(root); enhanceCopy(root);
-  enhanceToggles(root); enhanceRails(root); enhanceGallery(root); enhanceMarkers(root); enhanceFeatureTags(root);
+  enhanceToggles(root); enhanceRails(root); enhanceGallery(root); enhanceMarkers(root); enhancePins(root); enhanceFeatureTags(root);
 }

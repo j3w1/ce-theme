@@ -1,4 +1,4 @@
-<!-- @dsCard group="Tagging" height=506 -->
+<!-- @dsCard group="Tagging" height=1020 -->
 <!doctype html>
 <html lang="es">
 <head>
@@ -6,15 +6,37 @@
 <title>TaggedMedia</title>
 <style>
   body { margin: 0; background: var(--ce-color-surface-canvas); }
-  .wrap { padding: var(--ce-space-16); }
+  .wrap { display: grid; gap: var(--ce-space-24); max-width: 720px; padding: var(--ce-space-16); }
   .scene { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; gap: var(--ce-space-16); aspect-ratio: 16 / 9; padding: var(--ce-space-24); background: var(--ce-color-surface-subtle); }
   .scene img { width: 100%; height: auto; }
+  h2 { margin: 0 0 var(--ce-space-8); font-size: var(--ce-font-size-lead); }
   .note { margin: var(--ce-space-8) 0 0; color: var(--ce-color-text-muted); font-size: var(--ce-font-size-xs); }
 </style>
 </head>
 <body>
 <div class="ce-scope wrap">
-  <figure class="ce-tagged-media" style="margin:0">
+  <section>
+    <h2>Website: pins that open a product card</h2>
+    <figure class="ce-tagged-media" style="margin:0">
+    <div class="scene" role="img" aria-label="Composición de ejemplo con dos tazas de vidrio y un tapete de ducha"><img src="../../media/product-mene.png" alt=""><img src="../../media/product-nome.png" alt=""><img src="../../media/product-tilen.png" alt=""></div>
+    <div class="ce-pin" style="--ce-x:22.6%;--ce-y:31.4%" data-open>
+      <button class="ce-pin-dot" type="button" aria-expanded="true" aria-controls="mene-card"><span class="ce-sr-only">Ver MENE, Taza de Vidrio Resistente al Calor</span></button>
+      <a class="ce-pin-card" id="mene-card" href="#mene"><div class="ce-pin-text"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span><div class="ce-price-block"><span class="ce-price "><span class="ce-sr-only">Precio actual: 6.5 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">6.5</span></span></span></div></div><span class="ce-pin-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m9 5 7 7-7 7"/></svg></span></a>
+    </div>
+    <div class="ce-pin" style="--ce-x:50%;--ce-y:31%">
+      <button class="ce-pin-dot" type="button" aria-expanded="false" aria-controls="nome-card"><span class="ce-sr-only">Ver NOME, Taza de Vidrio Resistente al Calor</span></button>
+      <a class="ce-pin-card" id="nome-card" href="#nome"><div class="ce-pin-text"><span class="ce-product-name">NOME</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span><div class="ce-price-block"><span class="ce-price "><span class="ce-sr-only">Precio actual: 8 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">8</span></span></span></div></div><span class="ce-pin-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m9 5 7 7-7 7"/></svg></span></a>
+    </div>
+    <div class="ce-pin ce-pin--start" style="--ce-x:85.8%;--ce-y:45.6%">
+      <button class="ce-pin-dot" type="button" aria-expanded="false" aria-controls="tilen-card"><span class="ce-sr-only">Ver TILEN, Tapete de Ducha Antideslizante</span></button>
+      <a class="ce-pin-card" id="tilen-card" href="#tilen"><div class="ce-pin-text"><span class="ce-product-name">TILEN</span><span class="ce-product-description">Tapete de Ducha Antideslizante</span><div class="ce-price-block"><div class="ce-price-history"><span>Antes <del>S/7.5</del></span><span class="ce-discount"><span class="ce-sr-only">Descuento: </span>−20%</span></div><span class="ce-price ce-price--offer"><span class="ce-sr-only">Precio actual: 6 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">6</span></span></span></div></div><span class="ce-pin-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m9 5 7 7-7 7"/></svg></span></a>
+    </div>
+  </figure>
+    <p class="note">Hover, focus or tap a dot to open its card: NAME, Description, the store's price and a link to the product. The first card is shown open. Touch devices open it with a tap.</p>
+  </section>
+  <section>
+    <h2>Static media: lettered markers</h2>
+    <figure class="ce-tagged-media" style="margin:0">
     <div class="scene" role="img" aria-label="Composición de ejemplo con dos tazas de vidrio y un tapete de ducha"><img src="../../media/product-mene.png" alt=""><img src="../../media/product-nome.png" alt=""><img src="../../media/product-tilen.png" alt=""></div>
     <a class="ce-hotspot" href="#mene" style="--ce-x:22.6%;--ce-y:31.4%"><span aria-hidden="true">A</span><span class="ce-sr-only">Producto A: MENE, Taza de Vidrio Resistente al Calor</span></a>
     <a class="ce-hotspot" href="#nome" style="--ce-x:50%;--ce-y:31%"><span aria-hidden="true">B</span><span class="ce-sr-only">Producto B: NOME, Taza de Vidrio Resistente al Calor</span></a>
@@ -22,7 +44,8 @@
     <span class="ce-feature-tag ce-feature-tag--light ce-feature-tag--above" style="--ce-x:9.8%;--ce-y:43%;--ce-line:36px;--ce-tag-width:9em"><span class="ce-feature-tag-label">de <strong>vidrio borosilicato</strong></span></span>
     <span class="ce-feature-tag ce-feature-tag--above" style="--ce-x:75%;--ce-y:50%;--ce-line:100px;--ce-tag-width:12em"><span class="ce-feature-tag-label">base <strong>antideslizante</strong></span></span>
   </figure>
-  <p class="note">Composición de ejemplo con fotos del catálogo.</p>
+    <p class="note">For social posts, print and share images, where nothing can hover. Composición de ejemplo con fotos del catálogo.</p>
+  </section>
 </div>
 </body>
 </html>

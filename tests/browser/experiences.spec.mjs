@@ -94,17 +94,79 @@ test('rail buttons scroll the rail and disable at the ends', async ({ page }) =>
   await expect(prev).toBeEnabled();
 });
 
-test('scene markers are black letters without periods, can be hidden, and the list keeps every product', async ({ page }) => {
+test('web scenes use hover pins: a dot opens a product card with NAME, Description, price and a link', async ({ page }) => {
   await page.goto('/tienda/escena/');
-  const markers = page.locator('#escena-cocina .ce-hotspot');
-  await expect(markers).toHaveCount(3);
-  expect(await markers.locator('[aria-hidden="true"]').allTextContents()).toEqual(['A', 'B', 'C']);
+  const pins = page.locator('#escena-cocina .ce-pin');
+  await expect(pins).toHaveCount(3);
+  await expect(page.locator('#escena-cocina .ce-hotspot')).toHaveCount(0);
+  const first = pins.first();
+  const card = first.locator('.ce-pin-card');
+  await expect(card).toBeHidden();
+  await first.locator('.ce-pin-dot').hover();
+  await expect(card).toBeVisible();
+  await expect(card.locator('.ce-product-name')).toHaveText('MENE');
+  await expect(card.locator('.ce-product-description')).toHaveText('Taza de Vidrio Resistente al Calor');
+  await expect(card.locator('.ce-price-value').first()).toHaveText(/\d/);
+  await expect(card).toHaveAttribute('href', '/tienda/producto/');
+  const frame = await page.locator('#escena-cocina').boundingBox();
+  const box = await card.boundingBox();
+  expect(box.x).toBeGreaterThanOrEqual(frame.x - 1);
+  expect(box.x + box.width).toBeLessThanOrEqual(frame.x + frame.width + 1);
+  await page.mouse.move(0, 0);
+  await expect(card).toBeHidden();
+});
+
+test('pins open by keyboard and tap, close with Escape, and keep one card open', async ({ page }) => {
+  await page.goto('/tienda/escena/');
+  const pins = page.locator('#escena-cocina .ce-pin');
+  const dot = pins.nth(0).locator('.ce-pin-dot');
+  await dot.focus();
+  await expect(pins.nth(0).locator('.ce-pin-card')).toBeVisible();
+  await page.keyboard.press('Enter');
+  await expect(dot).toHaveAttribute('aria-expanded', 'true');
+  await page.keyboard.press('Escape');
+  await expect(dot).toHaveAttribute('aria-expanded', 'false');
+  await pins.nth(1).locator('.ce-pin-dot').click();
+  await pins.nth(2).locator('.ce-pin-dot').click();
+  await expect(pins.nth(1).locator('.ce-pin-dot')).toHaveAttribute('aria-expanded', 'false');
+  await expect(pins.nth(2).locator('.ce-pin-card')).toBeVisible();
+});
+
+test('on a phone every pin card opens inside the photo', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/tienda/escena/');
+  const frame = await page.locator('#escena-cocina').boundingBox();
+  const pins = page.locator('#escena-cocina .ce-pin');
+  for (let index = 0; index < 3; index += 1) {
+    await pins.nth(index).locator('.ce-pin-dot').click();
+    const card = pins.nth(index).locator('.ce-pin-card');
+    await expect(card).toBeVisible();
+    const box = await card.boundingBox();
+    expect(box.x, `pin ${index} left`).toBeGreaterThanOrEqual(frame.x - 1);
+    expect(box.x + box.width, `pin ${index} right`).toBeLessThanOrEqual(frame.x + frame.width + 1);
+    expect(box.y, `pin ${index} top`).toBeGreaterThanOrEqual(frame.y - 1);
+    expect(box.y + box.height, `pin ${index} bottom`).toBeLessThanOrEqual(frame.y + frame.height + 1);
+  }
+});
+
+test('pins can be hidden and the list keeps every product; the pin dot is a 44px target', async ({ page }) => {
+  await page.goto('/tienda/escena/');
+  const pins = page.locator('#escena-cocina .ce-pin');
   const toggle = page.getByRole('button', { name: 'Mostrar etiquetas' });
   await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+  const target = await pins.first().locator('.ce-pin-dot').evaluate((el) => { const r = el.getBoundingClientRect(); const a = getComputedStyle(el, '::after'); return r.width + 2 * Math.abs(parseFloat(a.top)); });
+  expect(target).toBeGreaterThanOrEqual(44);
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-pressed', 'false');
-  await expect(markers.first()).toBeHidden();
+  await expect(pins.first()).toBeHidden();
   await expect(page.locator('.ce-tag-item')).toHaveCount(3);
+});
+
+test('static media keep the black lettered markers', async ({ page }) => {
+  await page.goto('/patrones/');
+  const markers = page.locator('#etiquetas .ce-hotspot:not(.ce-hotspot--inline)');
+  await expect(markers).toHaveCount(3);
+  expect(await markers.locator('[aria-hidden="true"]').allTextContents()).toEqual(['A', 'B', 'C']);
 });
 
 test('share previews never carry prices and keep their text inside the 1200 × 630 canvas', async ({ page }) => {

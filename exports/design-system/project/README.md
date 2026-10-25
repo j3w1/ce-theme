@@ -105,12 +105,13 @@ Reference sections bundled with this system: `apply-ce-theme.md` (start here whe
 
 Customers must be able to tell which product is priced and what is being described. On any photo that shows more than one product, or a feature worth naming:
 
-- **Markers:** mark each product with a `ce-hotspot`.
+- **On the website, use pins:** mark each product with a `ce-pin`, a 28px black dot with a white centre. Hovering, focusing or tapping it opens a white card with NAME, Description, the store's price and a chevron link to the product. Run `enhancePins()` for tap-to-open and to keep each card inside the photo.
+- **On media that cannot hover** (social posts, print, share images), mark each product with a lettered `ce-hotspot` instead.
   - A marker is a 32px black circle with a bold white capital letter `A`, `B`, `C` in reading order.
   - It has no period, no white ring and no promotional colour.
   - Focus adds a separate outline and halo.
-- **Answer the markers with a `TagList`** next to or below the photo: the same letter, then NAME, Description, specs, price and availability for each product. The photo is never the only place a name or price appears.
-- **Hiding markers:** a “Mostrar etiquetas” toggle may hide them (`data-ce-markers="hidden"`); the list stays.
+- **Answer the pins and markers with a `TagList`** next to or below the photo: the same letter, then NAME, Description, specs, price and availability for each product. The photo is never the only place a name or price appears.
+- **Hiding markers:** a “Mostrar etiquetas” toggle may hide pins and markers (`data-ce-markers="hidden"`); the list stays.
 - **Features:** name a feature with a `ce-feature-tag`, using only supplied attributes. Show a hidden detail with a round `ce-detail-inset`.
 - **Single product:** for one product on a campaign photo, use the white `Callout` with the speech-bubble tail (`ce-callout--bubble`).
 - **Limits:** a marker letter is not a variant code. Use at most about five markers and three feature tags per image.

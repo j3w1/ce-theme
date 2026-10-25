@@ -57,7 +57,7 @@ Missing marketing fields stay missing: no Description is manufactured from suppl
 
 ## Photo tags and image markers
 
-`1688toPL` photo tags are black rounded badges with free text, and are deliberately not variant codes. In retail, lettered markers (`A`, `B`, `C`) link a photo to products through structured data supplied by the application. A marker letter is not a variant suffix, and the number of objects in a photo never implies sellable variants.
+`1688toPL` photo tags are black rounded badges with free text, and are deliberately not variant codes. On the website, pins (`ce-pin`) open a product card on hover, focus or tap; on media that cannot hover, lettered markers (`A`, `B`, `C`) link a photo to products. Both work from structured data supplied by the application. A marker letter is not a variant suffix, and the number of objects in a photo never implies sellable variants.
 
 ## Outputs
 

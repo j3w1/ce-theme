@@ -236,7 +236,7 @@
 /* Shoppable scenes and social gallery ------------------------------------------------------------------- */
 .ce-scene { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ce-space-24); }
 .ce-scene-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ce-space-12); margin-top: var(--ce-space-12); }
-.ce-tagged-media[data-ce-markers="hidden"] .ce-hotspot, .ce-tagged-media[data-ce-markers="hidden"] .ce-feature-tag { display: none; }
+.ce-tagged-media[data-ce-markers="hidden"] .ce-hotspot, .ce-tagged-media[data-ce-markers="hidden"] .ce-pin, .ce-tagged-media[data-ce-markers="hidden"] .ce-feature-tag { display: none; }
 .ce-collage { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ce-space-12); }
 .ce-collage > :first-child { grid-column: 1 / -1; }
 .ce-collage img { display: block; width: 100%; height: 100%; object-fit: cover; }

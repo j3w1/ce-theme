@@ -18,7 +18,7 @@ Version: **0.2.0**, light foundation. `ce-theme.json` lists the token sources, g
 | `recipes/price.mjs` | `formatAmount`, `amountInCents`, `preparePrice`. |
 | `recipes/product.mjs` | `formatName`, `formatDescription`, `formatSpec`, `codeSegments`, `productView`. |
 | `recipes/campaign.mjs` | `contrastRatio`, `campaignColors`. |
-| `recipes/behaviors.mjs` | Optional progressive-enhancement behaviour for tabs, dialogs, quantity, choices, copy, toggles, rails, gallery and marker visibility. |
+| `recipes/behaviors.mjs` | Optional progressive-enhancement behaviour for tabs, dialogs, quantity, choices, copy, toggles, rails, gallery, pins and marker visibility. |
 
 The static site exposes the same files under `/downloads/`. DTCG sources remain in `tokens/`; the resolved export is a consumer convenience, not a second authoring format.
 
@@ -47,7 +47,7 @@ Use native elements: buttons, links, inputs, selects, `<details>`, `<dialog>` an
 - **Retail:** `ce-site-header`, `ce-store-context`, `ce-category-rail`, `ce-mosaic`, `ce-tile`, `ce-rail`, `ce-filter-bar`, `ce-listing`, `ce-product-grid--divided`, `ce-pdp`, `ce-buy-box`, `ce-scene`, `ce-cart`, `ce-auth`, `ce-timeline`, `ce-site-footer`.
 - **Interface:** `ce-tabs`, `ce-disclosure`, `ce-dialog`, `ce-drawer`, `ce-menu`, `ce-tooltip`, `ce-notice`, `ce-toast`, `ce-empty`, `ce-skeleton`, form controls.
 - **Workspace:** `data-ce-density`, `ce-app`, `ce-data-table`, `ce-bulk-bar`, `ce-record-header`, `ce-form-section`, `ce-locked`, `ce-audit`.
-- **Photography:** `ce-photo-panel`, `ce-tagged-media` with `ce-hotspot` markers (`A`, `B`, `C`), `ce-feature-tag`, `ce-tag-list`. Position with `--ce-x` and `--ce-y`.
+- **Photography:** `ce-photo-panel`, `ce-tagged-media` with `ce-pin` hover pins on the website and `ce-hotspot` markers (`A`, `B`, `C`) on static media, `ce-feature-tag`, `ce-tag-list`. Position with `--ce-x` and `--ce-y`.
 
 Component inputs are custom properties prefixed `--ce-`: `--ce-x`, `--ce-y`, `--ce-line`, `--ce-size`, `--ce-product-text`, `--ce-campaign-surface`, `--ce-campaign-text`, `--ce-columns`, `--ce-control`, `--ce-row`, `--ce-cell-pad`.
 

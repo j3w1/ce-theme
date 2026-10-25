@@ -98,7 +98,9 @@ Generated from `recipes/names.mjs` by `pnpm generate`; do not edit between the m
 | Id | Nombre CE | Recipe | Rule |
 | --- | --- | --- | --- |
 | `TaggedPhoto` | Foto etiquetada | `ce-tagged-media` | Photo frame with markers and feature tags; clips anything outside it. |
-| `Marker` | Marcador | `ce-hotspot` | Black circle with a white capital letter A, B, C. |
+| `Marker` | Marcador | `ce-hotspot` | Black circle with a white capital letter A, B, C; only for media that cannot hover (social posts, print, share images). |
+| `ProductPin` | Punto de producto | `ce-pin`, `ce-pin-dot` | The web tag: a black dot with a white centre on the photo; hover, focus or tap opens its product card. |
+| `ProductPinCard` | Ficha del punto | `ce-pin-card`, `ce-pin-text`, `ce-pin-chevron` | The card a pin opens: NAME, Description, the store price and a chevron link to the product. |
 | `FeatureTag` | Rótulo | `ce-feature-tag` | Dot on the feature, a leader line and a label for it; the label sits in the empty area of the photo, stays inside it and never overlaps. |
 
 ### Tienda

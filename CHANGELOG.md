@@ -28,6 +28,7 @@ Locked product identity, retail and enterprise recipes, labels, price-free share
 - Reference site: storefront `/tienda/`, internal tools `/sistemas/`, label sheet `/sistemas/etiquetas/`, share previews `/compartir/`.
 - Docs: `apply-ce-theme.md`, `product-identity.md`, `coverage.md`, `sources.md`; pricing store states; sharing rewritten.
 - Native control styling policy ([docs/controls.md](docs/controls.md)): inventory of every HTML control with its recipe, states, keyboard and intentional native fallbacks; new `ce-textarea`, `ce-radio`, `ce-range`, `ce-color`, `ce-meter`, `ce-media`, date, time and file styling and a `base-select` customizable select; a browser test that fails on an unstyled control.
+- Hover pins for photo tagging on the web (`ce-pin`, `enhancePins`): a dot opens a card with NAME, Description, price and a chevron link; the lettered markers stay for static media. New registry names `ProductPin` and `ProductPinCard`.
 - Share previews read like the gondola label (bold Description, semibold specs, code in `ce-share-card-foot`), with a 240 px wordmark and every page type shown on `/compartir/` and in the `ShareCard` design-system card.
 - `CLAUDE.md` as a symbolic link to `AGENTS.md`.
 - CE Radio as a ce-theme application: the `logo-ce-radio.png` and `logo-ce-radio-navidad.png` badges and four design-system cards captured from the restyled app.

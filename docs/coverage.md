@@ -71,7 +71,8 @@ Examples: storefront `/tienda/` (home, `categoria`, `producto`, `escena`, `carri
 | In-grid promotion | `ce-grid-promo` | Implemented | |
 | Load more with progress | `ce-load-more`, `ce-progress` | Implemented | Keep a crawlable next-page link in the application. |
 | Product detail: gallery, buy box, variants, quantity, fulfilment, facts, disclosures | `ce-pdp`, `ce-gallery`, `ce-buy-box`, `ce-variant-picker`, `ce-quantity`, `ce-fulfilment`, `ce-facts` | Tested | Missing care information is stated, not invented. |
-| Shoppable scene with A, B, C markers and accessible list | `ce-scene`, `ce-tagged-media`, `ce-hotspot`, `ce-tag-list`, `enhanceMarkers` | Tested | Markers can be hidden; the list remains. Marker positions are supplied data. |
+| Shoppable scene with hover pins and accessible list | `ce-scene`, `ce-tagged-media`, `ce-pin`, `ce-tag-list`, `enhancePins`, `enhanceMarkers` | Tested | Pins open a product card on hover, focus or tap, stay inside the photo, and can be hidden; the list remains. Positions and prices are supplied data. |
+| Lettered A, B, C markers for static media | `ce-tagged-media`, `ce-hotspot` | Tested | Social posts, print and share images, where nothing can hover. |
 | Collage of scene photos | `ce-collage` | Specified | Recipe present; no approved lifestyle set to demonstrate. |
 | Feature tags and detail insets on photos | `ce-feature-tag`, `ce-detail-inset` | Implemented | |
 | Comparison table | — | Specified | Compare selection exists; the comparison view needs the attribute model. |
