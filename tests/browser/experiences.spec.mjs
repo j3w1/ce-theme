@@ -129,7 +129,7 @@ test('share previews never carry prices and keep their text inside the 1200 × 6
     const crop = await cards.evaluateAll((items) => items.filter((card) => !card.matches('.ce-share-card--text, .ce-share-card--brand')).flatMap((card) => {
       const box = card.getBoundingClientRect();
       const scale = box.width / 1200;
-      return [...card.querySelectorAll('.ce-share-card-text, .ce-share-card-logo')].filter((el) => {
+      return [...card.querySelectorAll('.ce-share-card-text, .ce-share-card-foot, .ce-share-card-logo')].filter((el) => {
         const r = el.getBoundingClientRect();
         return r.right > box.left + 285 * scale && r.left < box.left + 915 * scale;
       }).map((el) => el.className);

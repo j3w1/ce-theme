@@ -27,6 +27,8 @@ Locked product identity, retail and enterprise recipes, labels, price-free share
 - `exports/adapters/vuetify.mjs`.
 - Reference site: storefront `/tienda/`, internal tools `/sistemas/`, label sheet `/sistemas/etiquetas/`, share previews `/compartir/`.
 - Docs: `apply-ce-theme.md`, `product-identity.md`, `coverage.md`, `sources.md`; pricing store states; sharing rewritten.
+- Native control styling policy ([docs/controls.md](docs/controls.md)): inventory of every HTML control with its recipe, states, keyboard and intentional native fallbacks; new `ce-textarea`, `ce-radio`, `ce-range`, `ce-color`, `ce-meter`, `ce-media`, date, time and file styling and a `base-select` customizable select; a browser test that fails on an unstyled control.
+- Share previews read like the gondola label (bold Description, semibold specs, code in `ce-share-card-foot`), with a 240 px wordmark and every page type shown on `/compartir/` and in the `ShareCard` design-system card.
 - `CLAUDE.md` as a symbolic link to `AGENTS.md`.
 - CE Radio as a ce-theme application: the `logo-ce-radio.png` and `logo-ce-radio-navidad.png` badges and four design-system cards captured from the restyled app.
 - Validation: reference-only manifest, component-input allow-list, a guard against naming the external retail reference, stale-file guard for downloads.

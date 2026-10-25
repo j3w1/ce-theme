@@ -34,7 +34,7 @@ const outputs = new Map([
   ['public/downloads/usage.md', usage],
   ['public/downloads/share-card.css', shareCard], ['public/downloads/print-label.css', printLabel],
   ...await Promise.all(['product.mjs', 'campaign.mjs', 'behaviors.mjs', 'names.mjs'].map(async (file) => [`public/downloads/${file}`, await source(`recipes/${file}`)])),
-  ...await Promise.all(['apply-ce-theme.md', 'product-identity.md', 'pricing.md', 'sharing.md', 'coverage.md'].map(async (file) => [`public/downloads/${file}`, await source(`docs/${file}`)])),
+  ...await Promise.all(['apply-ce-theme.md', 'product-identity.md', 'pricing.md', 'sharing.md', 'coverage.md', 'controls.md'].map(async (file) => [`public/downloads/${file}`, await source(`docs/${file}`)])),
   ...await buildDesignSystem(manifest, tokens),
 ]);
 for (const [path, content] of outputs) {

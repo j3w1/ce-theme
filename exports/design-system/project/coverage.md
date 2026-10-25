@@ -27,7 +27,8 @@ Examples: storefront `/tienda/` (home, `categoria`, `producto`, `escena`, `carri
 | Pattern | Recipe | Status | Notes |
 | --- | --- | --- | --- |
 | Buttons, icon buttons, links, chips | `ce-button`, `ce-icon-button`, `ce-link`, `ce-chip` | Tested | `ce-icon-button--action` for add-to-bag, `--small` for 40 px card actions. |
-| Fields, validation, select | `ce-field`, `ce-input`, `ce-select` | Tested | |
+| Fields, validation, select | `ce-field`, `ce-input`, `ce-select` | Tested | `base-select` customizable list where supported; token chevron fallback elsewhere. |
+| Native controls: textarea, radio, range, date and time, file, colour, meter, media | `ce-textarea`, `ce-radio`, `ce-range`, `ce-input`, `ce-color`, `ce-meter`, `ce-media` | Tested | [controls.md](controls.md) maps every HTML control to a recipe; a browser test fails on a raw control. Date, colour and file pop-ups stay with the browser. |
 | Checkbox, switch, fieldset, input with prefix, quantity, upload, tokens, combobox list | `interface.css` | Implemented | Combobox needs the application's filtering and `aria-activedescendant` handling. |
 | Breadcrumbs, tabs, disclosure | `ce-breadcrumbs`, `ce-tabs`, `ce-disclosure` | Tested | Tabs follow the arrow-key pattern in `behaviors.mjs`. |
 | Dialog, drawer, menu, tooltip | `<dialog>`, `popover` | Tested | Dialogs return focus to the control that opened them. Menu and tooltip positioning is left to the application. |

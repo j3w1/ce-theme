@@ -47,7 +47,7 @@ Optional outputs:
 | Print | [product-identity.md](product-identity.md) | `ce-label`, `ce-label-sheet` |
 | Overlays and feedback | — | `ce-dialog`, `ce-drawer`, `ce-disclosure`, `ce-tabs`, `ce-notice`, `ce-toast`, `ce-empty`, `ce-skeleton` |
 
-The reference site (`pnpm dev`) shows runnable markup for each recipe. [coverage.md](coverage.md) states what is implemented, tested, only specified, or waiting for a business rule.
+Every form control follows the [native control policy](controls.md): style the native element with its ce-theme class, never ship an unstyled browser control. The reference site (`pnpm dev`) shows runnable markup for each recipe. [coverage.md](coverage.md) states what is implemented, tested, only specified, or waiting for a business rule.
 
 ## 4. Do not
 

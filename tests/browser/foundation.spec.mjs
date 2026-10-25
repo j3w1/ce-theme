@@ -33,6 +33,44 @@ for (const width of [390,768,1440]) {
     for (const gap of gaps) expect(Math.abs(gap-12)).toBeLessThan(1.5);
   });
 }
+for (const route of routes) {
+  test(`${route}: no unstyled browser-native control (native controls policy)`,async({page})=>{
+    await page.goto(route);
+    const offenders=await page.evaluate(()=>{
+      const out=[];
+      const visible=(el)=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return s.visibility!=='hidden'&&s.display!=='none'&&(r.width>1&&r.height>1);};
+      for (const el of document.querySelectorAll('input:not([type=hidden]),select,textarea,button,meter,progress')) {
+        const type=el.type||el.localName;
+        const checkLike=['checkbox','radio'].includes(type);
+        const own=[...el.classList].some((c)=>c.startsWith('ce-'));
+        const labelled=el.closest('label[class*="ce-"]')!==null;
+        // Fields carry their own ce- class; checks, radios, switches and uploads sit in a ce- label; buttons may sit in a ce- component; the search field, the quantity stepper and table row checkboxes are styled by `ce-search`, `ce-quantity` and `ce-data-table`.
+        const ok=el.localName==='button'?own||el.closest('[class*="ce-"]:not(.ce-scope)')!==null:own||(checkLike||type==='file')&&labelled||type==='search'&&el.closest('.ce-search')!==null||type==='number'&&el.closest('.ce-quantity')!==null||type==='checkbox'&&el.closest('.ce-data-table')!==null;
+        if (!ok) out.push(`${el.localName}[${type}] has no ce-theme class`);
+        if (!visible(el)&&!(checkLike||type==='file')) continue;
+        const s=getComputedStyle(el);
+        if (!s.fontFamily.includes('Inter')&&!checkLike&&!['range','color','meter','progress'].includes(type)) out.push(`${el.localName}[${type}] is not set in Inter`);
+        if (el.localName==='select'&&!el.multiple&&s.appearance==='auto') out.push('select keeps the browser appearance');
+        if (['text','email','search','tel','url','password','number','date','time'].includes(type)&&s.appearance==='auto'&&s.borderTopWidth==='2px'&&s.borderTopStyle==='inset') out.push(`${type} input keeps the browser border`);
+      }
+      return out;
+    });
+    expect(offenders).toEqual([]);
+  });
+}
+test('native control families render with ce-theme states',async({page})=>{
+  await page.goto('/componentes/');
+  const area=page.locator('#nat-text');
+  await expect(area).toHaveCSS('font-family',/Inter/);
+  await area.focus();
+  expect(await area.evaluate(el=>getComputedStyle(el).outlineStyle)).toBe('solid');
+  expect(await page.locator('#nat-select').evaluate(el=>getComputedStyle(el).appearance)).toMatch(/none|base-select/);
+  expect(await page.locator('#nat-range').evaluate(el=>getComputedStyle(el).appearance)).toBe('none');
+  const radio=page.locator('input[name=nat-delivery]').first();
+  expect(await radio.evaluate(el=>getComputedStyle(el).appearance)).toBe('none');
+  await expect(radio).toBeChecked();
+  await page.keyboard.press('Tab');
+});
 test('mobile navigation supports keyboard focus and Escape recovery',async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');

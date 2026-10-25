@@ -46,6 +46,15 @@ const formsCode=`<label class="ce-switch"><input type="checkbox" role="switch">P
 </div>
 <label class="ce-upload"><input type="file" accept="image/*">
   <span><strong>Elige una foto</strong> o arrástrala aquí</span></label>`;
+const nativeCode=`<textarea class="ce-textarea"></textarea>
+<fieldset class="ce-fieldset"><legend>Entrega</legend>
+  <label class="ce-radio"><input type="radio" name="e" checked>Retiro en tienda</label>
+</fieldset>
+<input class="ce-range" type="range" aria-label="Volumen">
+<input class="ce-input" type="date">
+<input class="ce-input" type="file">
+<input class="ce-color" type="color">
+<meter class="ce-meter" value="72" min="0" max="100"></meter>`;
 ---
 <Layout title="Componentes">
   <div class="container">
@@ -93,6 +102,18 @@ const formsCode=`<label class="ce-switch"><input type="checkbox" role="switch">P
         <div class="ce-field"><label for="demo-amount">Precio de venta</label><div class="ce-input-group"><span class="ce-input-affix">S/</span><input class="ce-input ce-input--number" id="demo-amount" inputmode="decimal" value="6.50"/></div><span class="ce-field-note">Texto decimal; el sistema de precios lo valida.</span></div>
         <fieldset class="ce-fieldset"><legend>Materiales</legend><ul class="ce-token-list"><li class="ce-token">vidrio borosilicato<button type="button" aria-label="Quitar vidrio borosilicato"><Icon name="close" size={14}/></button></li><li class="ce-token">bambú<button type="button" aria-label="Quitar bambú"><Icon name="close" size={14}/></button></li></ul></fieldset>
         <label class="ce-upload"><input type="file" accept="image/*"/><Icon name="download"/><span><strong>Elige una foto</strong> o arrástrala aquí</span><span>PNG o JPG, fondo blanco</span></label>
+      </div>
+    </Recipe>
+    <Recipe title="Controles nativos con la marca" description="Cada elemento HTML tiene su receta: se estiliza el control nativo, no se reemplaza. La lista abierta del selector usa appearance: base-select donde el navegador lo admite; el selector de fecha, el de color y el diálogo de archivos siguen siendo del navegador." code={nativeCode}>
+      <div class="demo-fields">
+        <div class="ce-field"><label for="nat-select">Selector con grupos</label><select class="ce-select" id="nat-select"><optgroup label="Hogar"><option>Cocina</option><option>Baño</option></optgroup><optgroup label="Regalos"><option>Navidad</option><option disabled>Agotado</option></optgroup></select></div>
+        <div class="ce-field"><label for="nat-text">Comentario</label><textarea class="ce-textarea" id="nat-text" placeholder="Cuéntanos qué necesitas"></textarea></div>
+        <fieldset class="ce-fieldset"><legend>Entrega</legend><label class="ce-radio"><input type="radio" name="nat-delivery" checked/>Retiro en tienda</label><label class="ce-radio"><input type="radio" name="nat-delivery"/>Envío a domicilio</label></fieldset>
+        <div class="ce-field"><label for="nat-range">Volumen</label><input class="ce-range" id="nat-range" type="range" min="0" max="100" value="70"/></div>
+        <div class="ce-field"><label for="nat-date">Fecha de entrega</label><input class="ce-input" id="nat-date" type="date" value="2026-10-30"/></div>
+        <div class="ce-field"><label for="nat-file">Foto del producto</label><input class="ce-input" id="nat-file" type="file" accept="image/*"/></div>
+        <div class="ce-field"><label for="nat-color">Color de campaña</label><input class="ce-color" id="nat-color" type="color" value="#1f5f45"/></div>
+        <div class="ce-field"><label for="nat-meter">Stock disponible</label><meter class="ce-meter" id="nat-meter" min="0" max="100" low="25" high="60" optimum="90" value="72">72</meter></div>
       </div>
     </Recipe>
   </div>

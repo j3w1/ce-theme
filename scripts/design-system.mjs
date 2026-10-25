@@ -30,11 +30,14 @@ const ASSET_GROUPS = [
 // Files that component previews load by relative path (each must stay under 512 KB).
 const PREVIEW_MEDIA = ['product-mene.png', 'product-nome.png', 'product-tilen.png', 'logo-square-red.jpg', 'logo-wordmark-color.png', 'logo-wordmark-black.png', 'logo-wordmark-white-yellow.png', 'logo-ce-radio.png', 'logo-ce-radio-navidad.png'];
 
+// Reference-only photographs that previews show as illustrative examples (never production assets).
+const PREVIEW_REFERENCES = ['brand-tote-bag.png'];
+
 // Docs copied into the bundle as [bundle name, repository path].
 const DOCS = [
   ['apply-ce-theme.md', 'docs/apply-ce-theme.md'], ['product-identity.md', 'docs/product-identity.md'],
   ['pricing.md', 'docs/pricing.md'], ['sharing.md', 'docs/sharing.md'], ['accessibility.md', 'docs/accessibility.md'],
-  ['coverage.md', 'docs/coverage.md'], ['names.md', 'docs/names.md'], ['decisions.md', 'docs/decisions.md'], ['sources.md', 'docs/sources.md'],
+  ['coverage.md', 'docs/coverage.md'], ['names.md', 'docs/names.md'], ['controls.md', 'docs/controls.md'], ['decisions.md', 'docs/decisions.md'], ['sources.md', 'docs/sources.md'],
   ['evolution.md', 'docs/evolution/2026-10-design-evolution.md'],
 ];
 
@@ -260,6 +263,7 @@ Real products, each with a NAME; supplied prices, discount labels and bases. Not
     files: {
       ...Object.fromEntries(FONTS.map((font) => [`project/${font.file}`, font.source])),
       ...Object.fromEntries(PREVIEW_MEDIA.map((file) => [`project/media/${file}`, `public/assets/${file}`])),
+      ...Object.fromEntries(PREVIEW_REFERENCES.map((file) => [`project/media/${file}`, `public/references/${file}`])),
     },
     assetGroups: ASSET_GROUPS.map((group) => ({ name: group.name, tile: group.tile, files: group.files.map((file) => ({ name: file, source: source(group, file) })) })),
   };

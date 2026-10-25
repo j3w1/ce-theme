@@ -5,7 +5,7 @@ Status: **locked design rules (2026-10-23), implementation pending in the ecomme
 ## Rules
 
 1. **Default public previews never show a price.** This covers the image, `og:title`, `og:description`, the Twitter/X fields and the page `<title>` used for sharing. It applies to every case: regular, promotional, uniform across stores, store-specific and missing-photo fallbacks. Previous prices, discount percentages and location-dependent claims (“disponible solo en…”) are also excluded.
-2. **The photograph leads.** A small supplied wordmark identifies the source; it never takes a band or column of the canvas.
+2. **The photograph leads.** The supplied wordmark identifies the source at a size that stays legible in a chat preview (240 px wide); it never takes a band of its own across the product.
 3. **Only what helps recognise the destination.** Product: photo, NAME when available, Description, at most one short line of verified specifications. The product code is optional and off by default.
 4. **Missing data stays missing.** No placeholders, no `S/0`, no invented copy. A missing photo produces the text-led card, not a price.
 5. **Public content only.** No customer details, procurement costs, unpublished stock or internal notes in images or metadata.
@@ -14,9 +14,9 @@ Status: **locked design rules (2026-10-23), implementation pending in the ecomme
 
 | Page | Variant | Content |
 | --- | --- | --- |
-| Product with catalogue cutout | `ce-share-card` | Three bands: NAME, Description and specs on the left (x 40–265); the product filling the centre square (x 285–915); the wordmark on the right. |
-| Product with lifestyle photo | `ce-share-card--photo` | Photo across the canvas (`--ce-x`/`--ce-y` focal point); white card in the left band with wordmark, NAME, Description. |
-| Product without approved photo | `ce-share-card--text` | Centred wordmark, Description, NAME, ≤ 1 spec line. |
+| Product with catalogue cutout | `ce-share-card` | Three bands: NAME (small, heavy), Description (bold, loudest) and specs (semibold) on the left (x 32–272); the product filling the centre square (x 285–915); the wordmark, 240 px wide, on the right (x 930–1170). The optional code sits in `ce-share-card-foot`, bottom left. |
+| Product with lifestyle photo | `ce-share-card--photo` | Photo across the canvas (`--ce-x`/`--ce-y` focal point); white card in the left band (x 20–272) with NAME, Description, specs, the code and the wordmark. |
+| Product without approved photo | `ce-share-card--text` | Centred wordmark, NAME, Description, ≤ 1 spec line. |
 | Category or collection | `ce-share-card` or `--photo` | Eyebrow (“Categoría”, “Colección”) and title in the left band. |
 | Campaign | `ce-share-card--photo` or `--brand` | Eyebrow with the campaign period as supplied, campaign title; no monetary promise. |
 | Store or service page | `ce-share-card--brand` or `--photo` | Eyebrow “Tienda” or the service name, store or service title. |
@@ -29,8 +29,8 @@ The canvas is 1200 × 630. Rendered in Chromium and scaled to the sizes receivin
 | Presentation | Finding | Design response |
 | --- | --- | --- |
 | Large preview, ~500–600px wide | All text legible. | — |
-| Chat preview, ~300px wide (¼ scale) | The product is what reads; the app prints `og:title` and `og:description` under the image anyway. Small catalogue photos with wide white margins looked tiny when the template did not enlarge them. | The product fills the centre square and the photo is scaled up to it. Trim uniform background margins from the photo before composing. Image text is secondary: Description 36px, NAME 34px, specs 26px; code off by default. |
-| Square thumbnail, centre crop (x 285–915), ~88–120px | A text column reaching into the square left sliced letters at its edge. | All text stays left of x 265 and the wordmark right of x 915, so the crop shows the whole product and nothing cut. Text-only and brand variants are centred inside the square. |
+| Chat preview, ~300px wide (¼ scale) | The product is what reads; the app prints `og:title` and `og:description` under the image anyway. Small catalogue photos with wide white margins looked tiny when the template did not enlarge them. | The product fills the centre square and the photo is scaled up to it. Trim uniform background margins from the photo before composing. Image text follows the gondola label order: NAME 34px heavy, Description 36px bold, specs 25px semibold; the code is off by default. |
+| Square thumbnail, centre crop (x 285–915), ~88–120px | A text column reaching into the square left sliced letters at its edge. | All text stays left of x 285 (the left band ends at x 272) and the wordmark right of x 915, so the crop shows the whole product and nothing cut. Text-only and brand variants are centred inside the square. |
 | Long Spanish words in the narrow text band | Headless Chromium does not hyphenate, so “Antideslizante” split mid-word. | Run `fitShareCard(card)` from `recipes/behaviors.mjs` before capture: it adds break points after slashes and scales the band's text evenly (not below 60%) until every word fits. |
 
 No alternate aspect ratio is added: the tests did not show a need, and platforms do not reliably choose an alternate image. Receiving apps add their own title, description, domain and crop; Casa Elida controls only the image and the metadata, and rendering will differ between apps.

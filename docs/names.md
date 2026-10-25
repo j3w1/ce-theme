@@ -114,7 +114,11 @@ Generated from `recipes/names.mjs` by `pnpm generate`; do not edit between the m
 | Id | Nombre CE | Recipe | Rule |
 | --- | --- | --- | --- |
 | `GondolaLabel` | Etiqueta de góndola | `ce-label` | 80 × 40 mm: NAME, Description, specs, price (the largest). |
-| `ShareCard` | Tarjeta para compartir | `ce-share-card` | 1200 × 630 price-free link preview. |
+| `ShareCard` | Tarjeta para compartir | `ce-share-card` | 1200 × 630 price-free link preview: NAME, Description, specs on the left, the product in the centre square, the wordmark on the right. |
+| `ShareCardFoot` | Pie de la vista previa | `ce-share-card-foot` | The optional product code, bottom left of a share card, like the foot of a gondola label. |
+| `ShareCardPhoto` | Vista previa con foto | `ce-share-card--photo` | A full-bleed photograph with the white identification card in the left band. |
+| `ShareCardText` | Vista previa solo texto | `ce-share-card--text` | No approved photograph: centred text on the subtle surface. Never a price. |
+| `ShareCardBrand` | Vista previa de marca | `ce-share-card--brand` | Home, store and campaign links: brand surface, large title, no monetary promise. |
 
 ### Interfaz
 
@@ -131,6 +135,16 @@ Generated from `recipes/names.mjs` by `pnpm generate`; do not edit between the m
 | `CheckOption` | Casilla | `ce-check` | A checkbox with its label in one tap target. |
 | `Switch` | Interruptor | `ce-switch` | An on/off setting that applies at once. |
 | `Swatch` | Muestra de color | `ce-swatch` | A round colour choice; the name is in its accessible label. |
+| `TextArea` | Área de texto | `ce-textarea` | A multi-line native textarea with the field look. |
+| `RadioOption` | Opción única | `ce-radio` | A native radio drawn as a ring with an ink dot; one choice per group. |
+| `RangeSlider` | Deslizador | `ce-range` | A native range with a thin track and an ink thumb. |
+| `DateField` | Campo de fecha | `ce-input` | A native date, time, month or week field; the pop-up picker belongs to the browser. |
+| `FileField` | Campo de archivo | `ce-input`, `ce-upload` | A native file input with a secondary-button file selector, or the dashed dropzone. |
+| `ColorField` | Selector de color | `ce-color` | A native colour input as a square swatch; the pop-up belongs to the browser. |
+| `MeterBar` | Medidor | `ce-meter` | A native meter: green is good, amber is low, red is critical. |
+| `Tooltip` | Ayuda emergente | `ce-tooltip` | A short ink hint with role tooltip; never the only place for essential information. |
+| `Menu` | Menú | `ce-menu`, `ce-menu-item` | A popover menu with role menu and 44px items. |
+| `MediaFrame` | Marco de medios | `ce-media` | Audio and video keep the browser controls; the frame and caption are ours. |
 
 ### Retroalimentación
 

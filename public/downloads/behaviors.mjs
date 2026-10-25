@@ -207,7 +207,7 @@ export function fitShareCard(card, { min = 0.6, step = 0.04 } = {}) {
   const overflows = () => items.some((el) => {
     const wrap = el.style.overflowWrap;
     el.style.overflowWrap = 'normal';
-    const over = el.scrollWidth > el.clientWidth + 1;
+    const over = el.scrollWidth > el.clientWidth;
     el.style.overflowWrap = wrap;
     return over;
   });

@@ -30,7 +30,7 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-chip[aria-pressed="true"], .ce-chip[aria-current="page"] { border-color: var(--ce-color-text-primary); box-shadow: inset 0 0 0 1px var(--ce-color-text-primary); }
 .ce-field { display: grid; gap: var(--ce-space-8); }
 .ce-field label { font-weight: var(--ce-font-weight-bold); font-size: var(--ce-font-size-sm); }
-.ce-input, .ce-select { width: 100%; min-height: 48px; padding: var(--ce-space-12) var(--ce-space-16); border: var(--ce-stroke-thin) solid var(--ce-color-border-control); border-radius: var(--ce-radius-small); background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); }
+.ce-input, .ce-select { box-sizing: border-box; width: 100%; min-height: 48px; padding: var(--ce-space-12) var(--ce-space-16); border: var(--ce-stroke-thin) solid var(--ce-color-border-control); border-radius: var(--ce-radius-small); background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); }
 .ce-input::placeholder { color: var(--ce-color-text-muted); opacity: 1; }
 .ce-input[aria-invalid="true"] { border-color: var(--ce-color-status-danger-text); border-width: 2px; }
 .ce-field-note { color: var(--ce-color-text-muted); font-size: var(--ce-font-size-sm); }
@@ -282,6 +282,87 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-pagination { display: grid; justify-items: center; gap: var(--ce-space-12); padding-block: var(--ce-space-32); font-size: var(--ce-font-size-sm); }
 .ce-pagination .ce-progress { width: min(240px, 100%); }
 @media (prefers-reduced-motion: reduce) { .ce-spinner, .ce-skeleton { animation: none; } .ce-disclosure > summary::after, .ce-switch input, .ce-switch input::after { transition: none; } }
+
+/* Native controls (policy: docs/controls.md). Every field is a native element styled with tokens; none shows the browser default.
+   Safety net: a bare control inside a ce-scope still gets Inter and the ink accent (zero specificity, so every recipe wins). */
+.ce-scope :where(input, select, textarea, button, meter, progress) { font-family: var(--ce-font-family); accent-color: var(--ce-color-text-primary); }
+.ce-input, .ce-select, .ce-textarea { font: inherit; font-size: var(--ce-font-size-body); line-height: var(--ce-font-line-body); transition: border-color var(--ce-motion-quick); }
+.ce-textarea { display: block; width: 100%; min-height: 120px; padding: var(--ce-space-12) var(--ce-space-16); border: var(--ce-stroke-thin) solid var(--ce-color-border-control); border-radius: var(--ce-radius-small); background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); resize: vertical; }
+.ce-textarea::placeholder { color: var(--ce-color-text-muted); opacity: 1; }
+.ce-input:hover:not(:disabled):not([aria-invalid="true"]), .ce-select:hover:not(:disabled), .ce-textarea:hover:not(:disabled) { border-color: var(--ce-color-text-primary); }
+.ce-input:focus-visible, .ce-select:focus-visible, .ce-textarea:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); }
+.ce-input:disabled, .ce-select:disabled, .ce-textarea:disabled { border-color: var(--ce-color-border-default); background: var(--ce-color-surface-subtle); color: var(--ce-color-text-muted); cursor: not-allowed; }
+.ce-input:user-invalid, .ce-select:user-invalid, .ce-textarea:user-invalid, .ce-textarea[aria-invalid="true"] { border-color: var(--ce-color-status-danger-text); border-width: 2px; }
+.ce-input[readonly] { background: var(--ce-color-surface-subtle); }
+.ce-field[aria-busy="true"] .ce-input, .ce-field[aria-busy="true"] .ce-select { cursor: progress; background: var(--ce-color-surface-subtle); }
+/* Date, time, month and week: a native field with the input look; the picker pop-up belongs to the browser. */
+.ce-input[type="date"], .ce-input[type="time"], .ce-input[type="datetime-local"], .ce-input[type="month"], .ce-input[type="week"] { color-scheme: light; font-variant-numeric: tabular-nums; }
+.ce-input::-webkit-calendar-picker-indicator { cursor: pointer; opacity: .8; }
+.ce-input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
+/* File: the native field with the file button drawn as a secondary button. */
+.ce-input[type="file"] { padding: var(--ce-space-8) var(--ce-space-12); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); }
+.ce-input[type="file"]::file-selector-button { margin-right: var(--ce-space-12); padding: var(--ce-space-8) var(--ce-space-16); border: var(--ce-stroke-thin) solid var(--ce-color-border-control); border-radius: var(--ce-radius-pill); background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); font: inherit; font-weight: var(--ce-font-weight-bold); cursor: pointer; }
+.ce-input[type="file"]::file-selector-button:hover { border-color: var(--ce-color-text-primary); background: var(--ce-color-surface-subtle); }
+/* Colour: the swatch fills a square control; the picker pop-up belongs to the browser. */
+.ce-color { width: 48px; height: 48px; padding: var(--ce-space-4); border: var(--ce-stroke-thin) solid var(--ce-color-border-control); border-radius: var(--ce-radius-small); background: var(--ce-color-surface-canvas); cursor: pointer; }
+.ce-color::-webkit-color-swatch-wrapper { padding: 0; }
+.ce-color::-webkit-color-swatch { border: 0; border-radius: var(--ce-radius-none); }
+.ce-color::-moz-color-swatch { border: 0; border-radius: var(--ce-radius-none); }
+.ce-color:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); }
+.ce-color:disabled { opacity: .45; cursor: not-allowed; }
+/* Select. Where the browser supports customizable selects (appearance: base-select) the button and the list are drawn with tokens;
+   elsewhere a native select with a token chevron, and the operating system draws the open list (it cannot be restyled reliably). */
+.ce-select { appearance: none; padding-right: calc(var(--ce-space-16) * 2 + 10px); background-image: linear-gradient(45deg, transparent 50%, var(--ce-color-text-primary) 50%), linear-gradient(135deg, var(--ce-color-text-primary) 50%, transparent 50%); background-position: calc(100% - 21px) 50%, calc(100% - 16px) 50%; background-size: 5px 5px; background-repeat: no-repeat; cursor: pointer; }
+.ce-select[multiple], .ce-select[size]:not([size="1"]) { padding: var(--ce-space-4); background-image: none; cursor: default; }
+.ce-select[multiple] option, .ce-select[size]:not([size="1"]) option { min-height: 40px; padding: var(--ce-space-8) var(--ce-space-12); border-radius: var(--ce-radius-small); }
+.ce-select[multiple] option:checked, .ce-select[size]:not([size="1"]) option:checked { background: var(--ce-color-text-primary) linear-gradient(0deg, var(--ce-color-text-primary), var(--ce-color-text-primary)); color: var(--ce-color-text-inverse); font-weight: var(--ce-font-weight-bold); }
+@supports (appearance: base-select) {
+  .ce-select:not([multiple]):not([size]), .ce-select:not([multiple]):not([size])::picker(select) { appearance: base-select; }
+  .ce-select:not([multiple]):not([size]) { display: flex; align-items: center; justify-content: space-between; gap: var(--ce-space-12); padding-right: var(--ce-space-16); background-image: none; }
+  .ce-select:not([multiple]):not([size])::picker-icon { flex: none; width: 8px; height: 8px; margin-top: -4px; content: ''; border-right: var(--ce-stroke-focus) solid currentColor; border-bottom: var(--ce-stroke-focus) solid currentColor; transform: rotate(45deg); transition: transform var(--ce-motion-quick); }
+  .ce-select:not([multiple]):not([size]):open::picker-icon { margin-top: 4px; transform: rotate(-135deg); }
+  .ce-select:not([multiple]):not([size])::picker(select) { box-sizing: border-box; margin-top: var(--ce-space-4); padding: var(--ce-space-4) 0; border: var(--ce-stroke-thin) solid var(--ce-color-border-control); border-radius: var(--ce-radius-small); background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); max-height: 320px; }
+  .ce-select:not([multiple]):not([size]) option { display: flex; align-items: center; gap: var(--ce-space-12); min-height: 44px; padding: var(--ce-space-8) var(--ce-space-16); color: var(--ce-color-text-primary); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-regular); letter-spacing: normal; text-transform: none; cursor: pointer; }
+  .ce-select:not([multiple]):not([size]) option:hover, .ce-select:not([multiple]):not([size]) option:focus-visible { background: var(--ce-color-surface-subtle); }
+  .ce-select:not([multiple]):not([size]) option:checked { background: var(--ce-color-surface-subtle); box-shadow: inset 3px 0 0 var(--ce-color-text-primary); font-weight: var(--ce-font-weight-bold); }
+  .ce-select:not([multiple]):not([size]) option::checkmark { display: none; }
+  .ce-select:not([multiple]):not([size]) option:disabled { color: var(--ce-color-text-muted); cursor: not-allowed; }
+  .ce-select:not([multiple]):not([size]) optgroup { padding: var(--ce-space-8) var(--ce-space-16) 0; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); font-weight: var(--ce-font-weight-bold); letter-spacing: .1em; text-transform: uppercase; }
+}
+/* Radio: a native radio drawn as a ring with an ink dot. */
+.ce-radio { display: flex; align-items: flex-start; gap: var(--ce-space-12); min-height: 44px; padding-block: var(--ce-space-8); font-size: var(--ce-font-size-sm); cursor: pointer; }
+.ce-radio input { flex: 0 0 auto; width: 20px; height: 20px; margin: 2px 0 0; appearance: none; border: var(--ce-stroke-focus) solid var(--ce-color-border-control); border-radius: var(--ce-radius-pill); background: var(--ce-color-surface-canvas); cursor: pointer; transition: border-color var(--ce-motion-quick); }
+.ce-radio input:hover:not(:disabled) { border-color: var(--ce-color-text-primary); }
+.ce-radio input:checked { border-color: var(--ce-color-text-primary); background: radial-gradient(circle, var(--ce-color-text-primary) 0 4px, var(--ce-color-surface-canvas) 5px); }
+.ce-radio input:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); }
+.ce-radio input:disabled, .ce-check input:disabled { opacity: .45; cursor: not-allowed; }
+.ce-radio:has(input:disabled), .ce-check:has(input:disabled), .ce-switch:has(input:disabled) { color: var(--ce-color-text-muted); cursor: not-allowed; }
+.ce-switch input:hover:not(:disabled), .ce-check input:hover:not(:disabled) { border-color: var(--ce-color-text-primary); }
+.ce-switch input:disabled { opacity: .45; cursor: not-allowed; }
+.ce-check input[aria-invalid="true"], .ce-radio input[aria-invalid="true"] { outline: var(--ce-stroke-focus) solid var(--ce-color-status-danger-text); outline-offset: 1px; }
+/* Range: a native slider with a thin track and an ink thumb. */
+.ce-range { display: block; width: 100%; height: 24px; margin: 0; appearance: none; background: transparent; cursor: pointer; }
+.ce-range::-webkit-slider-runnable-track { height: 4px; border-radius: var(--ce-radius-pill); background: var(--ce-color-border-default); }
+.ce-range::-moz-range-track { height: 4px; border-radius: var(--ce-radius-pill); background: var(--ce-color-border-default); }
+.ce-range::-webkit-slider-thumb { width: 24px; height: 24px; margin-top: -10px; appearance: none; border: var(--ce-stroke-focus) solid var(--ce-color-surface-canvas); border-radius: var(--ce-radius-pill); background: var(--ce-color-text-primary); }
+.ce-range::-moz-range-thumb { width: 20px; height: 20px; border: var(--ce-stroke-focus) solid var(--ce-color-surface-canvas); border-radius: var(--ce-radius-pill); background: var(--ce-color-text-primary); }
+.ce-range:hover::-webkit-slider-thumb { background: var(--ce-color-text-secondary); }
+.ce-range:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); }
+.ce-range:disabled { opacity: .45; cursor: not-allowed; }
+/* Meter: a native gauge; green is good, amber is low, red is critical. */
+.ce-meter { display: block; width: 100%; height: 8px; appearance: none; border: 0; border-radius: var(--ce-radius-pill); background: var(--ce-color-border-default); }
+.ce-meter::-webkit-meter-bar { height: 8px; border: 0; border-radius: var(--ce-radius-pill); background: var(--ce-color-border-default); }
+.ce-meter::-webkit-meter-optimum-value { border-radius: var(--ce-radius-pill); background: var(--ce-color-status-success-text); }
+.ce-meter::-webkit-meter-suboptimum-value { border-radius: var(--ce-radius-pill); background: var(--ce-color-status-warning-text); }
+.ce-meter::-webkit-meter-even-less-good-value { border-radius: var(--ce-radius-pill); background: var(--ce-color-status-danger-text); }
+.ce-meter::-moz-meter-bar { border-radius: var(--ce-radius-pill); background: var(--ce-color-status-success-text); }
+.ce-meter:-moz-meter-sub-optimum::-moz-meter-bar { background: var(--ce-color-status-warning-text); }
+.ce-meter:-moz-meter-sub-sub-optimum::-moz-meter-bar { background: var(--ce-color-status-danger-text); }
+/* Media: audio and video keep the browser's own controls (they cannot be restyled reliably); the frame, caption and spacing are ours. */
+.ce-media { margin: 0; color-scheme: light; }
+.ce-media :where(video, audio) { display: block; width: 100%; background: var(--ce-color-surface-subtle); }
+.ce-media figcaption { margin-top: var(--ce-space-8); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); }
+@media (prefers-reduced-motion: reduce) { .ce-select::picker-icon, .ce-radio input, .ce-input, .ce-select, .ce-textarea { transition: none; } }
 
 /* Casa Elida retail recipes: navigation, discovery, product presentation and customer journeys.
    Photography carries the page. Images and cards have square corners; controls are pills. Type is plain and black;
@@ -792,44 +873,51 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-pos-total { display: grid; gap: var(--ce-space-8); padding: var(--ce-space-16); border-top: var(--ce-stroke-thin) solid var(--ce-color-border-default); background: var(--ce-color-surface-canvas); }
 @media (max-width: 1023px) { .ce-pos { grid-template-columns: minmax(0, 1fr); } .ce-pos-ticket { border-left: 0; } }
 /* Casa Elida share image: a fixed 1200 × 630 canvas rendered server-side to JPEG for og:image.
-   Load after tokens.css, fonts.css and recipes.css. Product-led and price-free: the photograph leads,
-   a small wordmark identifies the source, and only text that stays legible at chat-preview scale
-   (about a quarter size) is drawn. The receiving app adds its own title, description and crop. */
+   Load after tokens.css, fonts.css and recipes.css. Product-led and price-free, and read like the gondola label:
+   NAME small and heavy, Description loudest (bold), specs semibold, then a foot with the code and the wordmark.
+   The receiving app adds its own title, description and crop. */
 .ce-share-card { position: relative; box-sizing: border-box; width: 1200px; height: 630px; overflow: hidden; background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); font-family: var(--ce-font-family); --ce-product-text: 36px; }
 .ce-share-card *, .ce-share-card *::before, .ce-share-card *::after { box-sizing: border-box; }
 /* Three bands sized for the centred square crop (x 285–915) that chat apps use in compact previews:
-   text on the left (x 40–265), the product filling the square, the wordmark on the right. A square crop
-   shows the whole product and no cut-off letters. */
+   text on the left (x 32–272), the product filling the square, the wordmark on the right (x 930–1170).
+   A square crop shows the whole product and no cut-off letters. */
 .ce-share-card-media { position: absolute; top: 0; bottom: 0; left: 285px; display: flex; align-items: center; justify-content: center; width: 630px; padding: 20px; }
 /* The photo is scaled up to the zone; trim uniform background margins from it before composing. */
 .ce-share-card-media img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.ce-share-card-text { position: absolute; top: 48px; bottom: 48px; left: 40px; display: flex; flex-direction: column; justify-content: center; gap: 12px; width: 225px; hyphens: auto; }
-.ce-share-card-logo { position: absolute; top: 50%; left: 914px; display: block; width: 205px; height: 72px; object-fit: contain; transform: translateY(-50%); }
-.ce-share-card-eyebrow { margin: 0; color: var(--ce-color-text-secondary); font-size: 22px; font-weight: var(--ce-font-weight-bold); letter-spacing: .06em; text-transform: uppercase; }
-.ce-share-card-title { margin: 0; font-size: 44px; font-weight: var(--ce-font-weight-bold); line-height: 1.05; letter-spacing: -.03em; overflow-wrap: anywhere; }
-.ce-share-card .ce-product-name { letter-spacing: .01em; }
-.ce-share-card .ce-product-description { color: var(--ce-color-text-primary); line-height: 1.1; letter-spacing: -.02em; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
-.ce-share-card .ce-product-specs { font-size: 26px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ce-share-card-text { position: absolute; top: 56px; bottom: 120px; left: 32px; display: flex; flex-direction: column; justify-content: center; gap: 10px; width: 240px; hyphens: auto; }
+/* Foot, as on the label: the optional code bottom left, the wordmark bottom right. */
+.ce-share-card-foot { position: absolute; bottom: 48px; left: 32px; display: flex; align-items: center; width: 240px; }
+.ce-share-card-logo { position: absolute; top: 50%; left: 930px; display: block; width: 240px; height: 106px; object-fit: contain; object-position: center; transform: translateY(-50%); }
+.ce-share-card-eyebrow { margin: 0; color: var(--ce-color-text-secondary); font-size: 28px; font-weight: var(--ce-font-weight-heavy); letter-spacing: .02em; line-height: 1.1; }
+.ce-share-card-title { margin: 0; font-size: 48px; font-weight: var(--ce-font-weight-bold); line-height: 1.05; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.ce-share-card .ce-product-name { font-weight: var(--ce-font-weight-heavy); letter-spacing: .01em; line-height: 1.1; }
+.ce-share-card .ce-product-description { color: var(--ce-color-text-primary); font-weight: var(--ce-font-weight-bold); line-height: 1.1; letter-spacing: -.01em; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.ce-share-card .ce-product-specs { color: var(--ce-color-text-secondary); font-size: calc(var(--ce-product-text) * .7); font-weight: var(--ce-font-weight-semibold); line-height: 1.15; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 /* Codes are optional and readable in large previews only. */
 .ce-share-card .ce-code { align-self: flex-start; font-size: 26px; }
 
-/* Lifestyle photograph across the whole canvas; the text sits on a white card in the left band. */
+/* Lifestyle photograph across the whole canvas; the text sits on a white card in the left band,
+   with the same label order and the wordmark and code in its foot. */
 .ce-share-card--photo .ce-share-card-media { right: 0; left: 0; width: auto; padding: 0; }
 .ce-share-card--photo .ce-share-card-media img { object-fit: cover; object-position: var(--ce-x, 50%) var(--ce-y, 50%); }
-.ce-share-card--photo .ce-share-card-text { top: auto; bottom: 24px; left: 24px; justify-content: flex-start; gap: 8px; width: 245px; padding: 20px 20px 24px; border-radius: var(--ce-radius-callout); background: var(--ce-color-surface-canvas); --ce-product-text: 30px; }
-.ce-share-card--photo .ce-share-card-logo { position: static; width: auto; height: 36px; margin-bottom: 4px; object-position: left center; transform: none; }
-.ce-share-card--photo .ce-share-card-title { font-size: 36px; }
+.ce-share-card--photo .ce-share-card-text { top: auto; bottom: 24px; left: 20px; justify-content: flex-start; gap: 8px; width: 252px; padding: 20px 20px 16px; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); border-radius: var(--ce-radius-callout); background: var(--ce-color-surface-canvas); --ce-product-text: 30px; }
+.ce-share-card--photo .ce-share-card-logo { position: static; width: auto; height: 56px; margin-top: 8px; object-position: left center; transform: none; order: 9; align-self: flex-start; }
+.ce-share-card--photo .ce-share-card-text .ce-code { order: 8; margin-top: 6px; font-size: 22px; }
+.ce-share-card--photo .ce-share-card-title { font-size: 34px; }
+.ce-share-card--photo .ce-share-card-eyebrow { font-size: 24px; }
 
-/* No approved photograph: text-led identification on the subtle surface. Never a price. */
+/* No approved photo: text-led identification on the subtle surface, wordmark at the top. Never a price. */
 .ce-share-card--text { background: var(--ce-color-surface-subtle); --ce-product-text: 64px; }
-.ce-share-card--text .ce-share-card-text, .ce-share-card--brand .ce-share-card-text { left: 300px; width: 600px; align-items: center; gap: 20px; text-align: center; }
-.ce-share-card--text .ce-share-card-logo, .ce-share-card--brand .ce-share-card-logo { position: static; width: auto; height: 80px; margin-bottom: auto; object-position: center; transform: none; }
+.ce-share-card--text .ce-share-card-text, .ce-share-card--brand .ce-share-card-text { top: 48px; bottom: 48px; left: 240px; width: 720px; align-items: center; gap: 20px; text-align: center; }
+.ce-share-card--text .ce-share-card-logo, .ce-share-card--brand .ce-share-card-logo { position: static; width: auto; height: 130px; margin-bottom: auto; object-position: center; transform: none; }
 .ce-share-card--text .ce-share-card-text > :last-child, .ce-share-card--brand .ce-share-card-text > :last-child { margin-bottom: auto; }
 .ce-share-card--text .ce-share-card-title { font-size: 88px; }
+.ce-share-card--text .ce-product-description, .ce-share-card--text .ce-product-specs { text-align: center; }
 
 /* Brand surface for home, campaign or store links that have no suitable photograph. */
 .ce-share-card--brand { background: var(--ce-color-brand-red); color: var(--ce-color-text-inverse); }
-.ce-share-card--brand .ce-share-card-eyebrow { color: var(--ce-color-text-inverse); }
+.ce-share-card--brand .ce-share-card-eyebrow { color: var(--ce-color-text-inverse); font-size: 36px; }
+.ce-share-card--brand .ce-share-card-title { font-size: 76px; }
 /* Casa Elida gondola price label, 80 × 40 mm. Black ink only: print on white paper, or on yellow paper
    for promotions. This is a shelf price label, distinct from 1688toPL's product barcode labels and carton
    marks, whose payloads, geometry and Arial artwork are not changed here. The QR payload is supplied by the

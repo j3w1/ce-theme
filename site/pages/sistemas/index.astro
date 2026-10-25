@@ -132,7 +132,7 @@ const receiving = [
         <div class="ce-record-layout">
           <div>
             <p class="ce-field-note" style="margin-top:0">Vista previa a tamaño real de chat (300 px). Sin precio: el enlace abre la ficha con el precio de la tienda elegida.</p>
-            <div class="share-scale"><article class="ce-share-card"><div class="ce-share-card-media"><img src={rows[0].view.image} alt="" width="900" height="900" /></div><div class="ce-share-card-text"><img class="ce-share-card-logo" src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="840" height="372" /><p class="ce-product-name">{rows[0].view.name}</p><p class="ce-product-description">{rows[0].view.description}</p><p class="ce-product-specs">{rows[0].view.specs.join(', ')}</p></div></article></div>
+            <div class="share-scale"><article class="ce-share-card"><div class="ce-share-card-media"><img src={rows[0].view.image} alt="" width="900" height="900" /></div><div class="ce-share-card-text"><p class="ce-product-name">{rows[0].view.name}</p><p class="ce-product-description">{rows[0].view.description}</p><p class="ce-product-specs">{rows[0].view.specs.join(', ')}</p></div><img class="ce-share-card-logo" src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="840" height="372" /></article></div>
           </div>
           <form class="ce-form-section" style="padding-top:0">
             <div class="ce-field"><label for="s-title">Título del enlace</label><input class="ce-input" id="s-title" value={`${rows[0].view.name} ${rows[0].view.description} · Casa Elida`} /></div>

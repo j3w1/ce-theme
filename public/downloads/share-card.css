@@ -1,39 +1,46 @@
 /* Casa Elida share image: a fixed 1200 × 630 canvas rendered server-side to JPEG for og:image.
-   Load after tokens.css, fonts.css and recipes.css. Product-led and price-free: the photograph leads,
-   a small wordmark identifies the source, and only text that stays legible at chat-preview scale
-   (about a quarter size) is drawn. The receiving app adds its own title, description and crop. */
+   Load after tokens.css, fonts.css and recipes.css. Product-led and price-free, and read like the gondola label:
+   NAME small and heavy, Description loudest (bold), specs semibold, then a foot with the code and the wordmark.
+   The receiving app adds its own title, description and crop. */
 .ce-share-card { position: relative; box-sizing: border-box; width: 1200px; height: 630px; overflow: hidden; background: var(--ce-color-surface-canvas); color: var(--ce-color-text-primary); font-family: var(--ce-font-family); --ce-product-text: 36px; }
 .ce-share-card *, .ce-share-card *::before, .ce-share-card *::after { box-sizing: border-box; }
 /* Three bands sized for the centred square crop (x 285–915) that chat apps use in compact previews:
-   text on the left (x 40–265), the product filling the square, the wordmark on the right. A square crop
-   shows the whole product and no cut-off letters. */
+   text on the left (x 32–272), the product filling the square, the wordmark on the right (x 930–1170).
+   A square crop shows the whole product and no cut-off letters. */
 .ce-share-card-media { position: absolute; top: 0; bottom: 0; left: 285px; display: flex; align-items: center; justify-content: center; width: 630px; padding: 20px; }
 /* The photo is scaled up to the zone; trim uniform background margins from it before composing. */
 .ce-share-card-media img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.ce-share-card-text { position: absolute; top: 48px; bottom: 48px; left: 40px; display: flex; flex-direction: column; justify-content: center; gap: 12px; width: 225px; hyphens: auto; }
-.ce-share-card-logo { position: absolute; top: 50%; left: 914px; display: block; width: 205px; height: 72px; object-fit: contain; transform: translateY(-50%); }
-.ce-share-card-eyebrow { margin: 0; color: var(--ce-color-text-secondary); font-size: 22px; font-weight: var(--ce-font-weight-bold); letter-spacing: .06em; text-transform: uppercase; }
-.ce-share-card-title { margin: 0; font-size: 44px; font-weight: var(--ce-font-weight-bold); line-height: 1.05; letter-spacing: -.03em; overflow-wrap: anywhere; }
-.ce-share-card .ce-product-name { letter-spacing: .01em; }
-.ce-share-card .ce-product-description { color: var(--ce-color-text-primary); line-height: 1.1; letter-spacing: -.02em; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
-.ce-share-card .ce-product-specs { font-size: 26px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ce-share-card-text { position: absolute; top: 56px; bottom: 120px; left: 32px; display: flex; flex-direction: column; justify-content: center; gap: 10px; width: 240px; hyphens: auto; }
+/* Foot, as on the label: the optional code bottom left, the wordmark bottom right. */
+.ce-share-card-foot { position: absolute; bottom: 48px; left: 32px; display: flex; align-items: center; width: 240px; }
+.ce-share-card-logo { position: absolute; top: 50%; left: 930px; display: block; width: 240px; height: 106px; object-fit: contain; object-position: center; transform: translateY(-50%); }
+.ce-share-card-eyebrow { margin: 0; color: var(--ce-color-text-secondary); font-size: 28px; font-weight: var(--ce-font-weight-heavy); letter-spacing: .02em; line-height: 1.1; }
+.ce-share-card-title { margin: 0; font-size: 48px; font-weight: var(--ce-font-weight-bold); line-height: 1.05; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.ce-share-card .ce-product-name { font-weight: var(--ce-font-weight-heavy); letter-spacing: .01em; line-height: 1.1; }
+.ce-share-card .ce-product-description { color: var(--ce-color-text-primary); font-weight: var(--ce-font-weight-bold); line-height: 1.1; letter-spacing: -.01em; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.ce-share-card .ce-product-specs { color: var(--ce-color-text-secondary); font-size: calc(var(--ce-product-text) * .7); font-weight: var(--ce-font-weight-semibold); line-height: 1.15; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 /* Codes are optional and readable in large previews only. */
 .ce-share-card .ce-code { align-self: flex-start; font-size: 26px; }
 
-/* Lifestyle photograph across the whole canvas; the text sits on a white card in the left band. */
+/* Lifestyle photograph across the whole canvas; the text sits on a white card in the left band,
+   with the same label order and the wordmark and code in its foot. */
 .ce-share-card--photo .ce-share-card-media { right: 0; left: 0; width: auto; padding: 0; }
 .ce-share-card--photo .ce-share-card-media img { object-fit: cover; object-position: var(--ce-x, 50%) var(--ce-y, 50%); }
-.ce-share-card--photo .ce-share-card-text { top: auto; bottom: 24px; left: 24px; justify-content: flex-start; gap: 8px; width: 245px; padding: 20px 20px 24px; border-radius: var(--ce-radius-callout); background: var(--ce-color-surface-canvas); --ce-product-text: 30px; }
-.ce-share-card--photo .ce-share-card-logo { position: static; width: auto; height: 36px; margin-bottom: 4px; object-position: left center; transform: none; }
-.ce-share-card--photo .ce-share-card-title { font-size: 36px; }
+.ce-share-card--photo .ce-share-card-text { top: auto; bottom: 24px; left: 20px; justify-content: flex-start; gap: 8px; width: 252px; padding: 20px 20px 16px; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); border-radius: var(--ce-radius-callout); background: var(--ce-color-surface-canvas); --ce-product-text: 30px; }
+.ce-share-card--photo .ce-share-card-logo { position: static; width: auto; height: 56px; margin-top: 8px; object-position: left center; transform: none; order: 9; align-self: flex-start; }
+.ce-share-card--photo .ce-share-card-text .ce-code { order: 8; margin-top: 6px; font-size: 22px; }
+.ce-share-card--photo .ce-share-card-title { font-size: 34px; }
+.ce-share-card--photo .ce-share-card-eyebrow { font-size: 24px; }
 
-/* No approved photograph: text-led identification on the subtle surface. Never a price. */
+/* No approved photo: text-led identification on the subtle surface, wordmark at the top. Never a price. */
 .ce-share-card--text { background: var(--ce-color-surface-subtle); --ce-product-text: 64px; }
-.ce-share-card--text .ce-share-card-text, .ce-share-card--brand .ce-share-card-text { left: 300px; width: 600px; align-items: center; gap: 20px; text-align: center; }
-.ce-share-card--text .ce-share-card-logo, .ce-share-card--brand .ce-share-card-logo { position: static; width: auto; height: 80px; margin-bottom: auto; object-position: center; transform: none; }
+.ce-share-card--text .ce-share-card-text, .ce-share-card--brand .ce-share-card-text { top: 48px; bottom: 48px; left: 240px; width: 720px; align-items: center; gap: 20px; text-align: center; }
+.ce-share-card--text .ce-share-card-logo, .ce-share-card--brand .ce-share-card-logo { position: static; width: auto; height: 130px; margin-bottom: auto; object-position: center; transform: none; }
 .ce-share-card--text .ce-share-card-text > :last-child, .ce-share-card--brand .ce-share-card-text > :last-child { margin-bottom: auto; }
 .ce-share-card--text .ce-share-card-title { font-size: 88px; }
+.ce-share-card--text .ce-product-description, .ce-share-card--text .ce-product-specs { text-align: center; }
 
 /* Brand surface for home, campaign or store links that have no suitable photograph. */
 .ce-share-card--brand { background: var(--ce-color-brand-red); color: var(--ce-color-text-inverse); }
-.ce-share-card--brand .ce-share-card-eyebrow { color: var(--ce-color-text-inverse); }
+.ce-share-card--brand .ce-share-card-eyebrow { color: var(--ce-color-text-inverse); font-size: 36px; }
+.ce-share-card--brand .ce-share-card-title { font-size: 76px; }
