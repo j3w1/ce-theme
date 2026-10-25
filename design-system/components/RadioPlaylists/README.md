@@ -16,4 +16,4 @@ The CE Radio playlist sheet: three columns of ce-theme chips in groups, with the
 
 ## Source
 
-The markup is the CE Radio renderer's own DOM, captured from `j3w1/ce-radio` at `092454c` with sample Spanish data, and the styles are its `chrome.css`, `user.css` and `admin.css`. CE Radio loads ce-theme 0.2.0 (tokens, recipes and Inter) and draws everything else with `--ce-*` tokens: no literal colours, shadows or gradients. Change the app, not this card, then capture again.
+The markup is the CE Radio renderer's own DOM, captured from `j3w1/ce-radio` at `a3671d8` with sample Spanish data, and the styles are its `chrome.css`, `user.css` and `admin.css`. CE Radio loads ce-theme 0.2.0 (tokens, recipes and Inter) and draws everything else with `--ce-*` tokens: no literal colours, shadows or gradients. Change the app, not this card, then capture again.

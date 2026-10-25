@@ -17,7 +17,7 @@
   .radio-frame .ce-admin-prompt { position: absolute; height: calc(358px - var(--ce-chrome-height)); }
   .radio-frame--sidebar { width: 320px; height: 720px; }
   .radio-frame--sidebar .ce-admin { height: calc(718px - var(--ce-chrome-height)); }
-  /* CE Radio's own stylesheets (chrome.css, user.css, admin.css) at j3w1/ce-radio 092454c. They draw only with --ce-* tokens on top of the ce-theme recipes. */
+  /* CE Radio's own stylesheets (chrome.css, user.css, admin.css) at j3w1/ce-radio a3671d8. They draw only with --ce-* tokens on top of the ce-theme recipes. */
 .ce-chrome { position: relative; z-index: 10; box-sizing: border-box; display: flex; align-items: stretch; height: var(--ce-chrome-height);
   background: var(--ce-color-surface-inverse); color: var(--ce-color-text-inverse); font-family: var(--ce-font-family); user-select: none; }
 .ce-chrome__drag { position: relative; flex: 1; min-width: 24px; display: flex; align-items: center; padding-left: var(--ce-space-12); -webkit-app-region: drag; app-region: drag; }
@@ -59,11 +59,11 @@
 .ce-volume-tree { display: none; pointer-events: none; }
 .ce-player.is-christmas .ce-volume-tree { display: block; }
 .ce-player.is-christmas :is(.ce-antenna__body,.ce-antenna__fill,.ce-antenna__lattice,.ce-antenna__outline,.ce-antenna__mast,.ce-antenna__ring,.ce-antenna__ball,.ce-antenna__bolt,.ce-antenna__wave) { display: none; }
-.ce-volume-tree__body { fill: var(--ce-color-surface-canvas); fill-opacity: 0.16; stroke: var(--ce-color-surface-canvas); stroke-width: 1.6; stroke-linejoin: round; }
-.ce-volume-tree__fill { fill: var(--ce-color-surface-canvas); transition: y 180ms, height 180ms; }
-.ce-volume-tree__trunk { fill: var(--ce-color-surface-canvas); }
-.ce-volume-tree__star { fill: var(--ce-color-surface-canvas); stroke: var(--ce-color-brand-red); stroke-width: 1.6; stroke-linejoin: round; transition: opacity 180ms; }
-.ce-antenna.is-max .ce-volume-tree__star { stroke: var(--ce-color-action-primary-bg); stroke-width: 2; }
+.ce-volume-tree__body { fill: var(--ce-campaign-tree, var(--ce-color-status-success-text)); stroke: var(--ce-campaign-tree-lit, var(--ce-color-status-success-bg)); stroke-width: 1.6; stroke-linejoin: round; }
+.ce-volume-tree__fill { fill: var(--ce-campaign-tree-lit, var(--ce-color-status-success-bg)); transition: y 180ms, height 180ms; }
+.ce-volume-tree__trunk { fill: var(--ce-campaign-tree-lit, var(--ce-color-status-success-bg)); }
+.ce-volume-tree__star { fill: var(--ce-color-brand-red); stroke: var(--ce-color-surface-canvas); stroke-width: 1.4; stroke-linejoin: round; transition: opacity 180ms; }
+.ce-antenna.is-max .ce-volume-tree__star { stroke-width: 2.4; }
 .ce-player__deck { display: flex; flex-direction: column; gap: 6px; min-width: 0; min-height: 0; }
 .ce-hero { flex: 1 1 0; min-height: 64px; display: flex; align-items: center; justify-content: center; gap: clamp(12px, 5vw, 30px); }
 .ce-player__top { display: grid; gap: 6px; min-width: 0; flex: none; }
@@ -221,7 +221,7 @@
 .ce-group__flake--0 { right: 10px; }
 .ce-group__flake--1 { right: 27px; transform: scale(0.7); }
 .ce-group__flake--2 { right: 44px; transform: scale(0.5); }
-.ce-player.is-christmas { --ce-campaign-surface: #1f5f45; --ce-campaign-text: var(--ce-color-text-inverse); background: var(--ce-campaign-surface); color: var(--ce-campaign-text); }
+.ce-player.is-christmas { --ce-campaign-surface: #1f5f45; --ce-campaign-tree: #2f7a58; --ce-campaign-tree-lit: #bfe6cf; --ce-campaign-text: var(--ce-color-text-inverse); background: var(--ce-campaign-surface); color: var(--ce-campaign-text); }
 .ce-player.is-christmas .ce-player__artist, .ce-player.is-christmas .ce-player__times { color: var(--ce-campaign-text); opacity: 0.85; }
 .ce-player.is-christmas .ce-track-skip__label, .ce-player.is-christmas .ce-track-skip__title, .ce-player.is-christmas .ce-track-skip__artist { color: var(--ce-campaign-text); }
 .ce-player.is-christmas .ce-track-skip__artist { opacity: 0.8; }
@@ -236,14 +236,16 @@
 .ce-player.is-christmas .ce-stage[data-state="live"] .ce-stage__track { opacity: 0.5; }
 .ce-player.is-christmas .ce-stage[data-state="live"] .ce-stage__wave--1 { border-color: var(--ce-color-brand-red); }
 .ce-player.is-christmas .ce-stage__badge { border-color: var(--ce-color-surface-canvas); }
+.ce-player.is-christmas .ce-antenna__handle rect { fill: var(--ce-color-brand-red); }
+.ce-player.is-christmas .ce-antenna__handle circle { fill: var(--ce-color-surface-canvas); stroke: var(--ce-color-brand-red); }
 .ce-player.is-christmas .ce-stage[data-state="live"] .ce-player__logo { animation: none; }
 .ce-antenna__christmas { display: none; pointer-events: none; }
 .ce-player.is-christmas .ce-antenna__christmas { display: block; }
-.ce-antenna__garland { fill: none; stroke: var(--ce-color-text-primary); stroke-width: 3; stroke-linecap: round; }
-.ce-antenna__bulb { stroke: var(--ce-color-text-primary); stroke-width: 0.6; }
-.ce-antenna__bulb--0 { fill: var(--ce-color-brand-red); }
+.ce-antenna__garland { fill: none; stroke: var(--ce-color-brand-red); stroke-width: 2.4; stroke-linecap: round; }
+.ce-antenna__bulb { stroke: var(--ce-color-surface-canvas); stroke-width: 0.8; }
+.ce-antenna__bulb--0 { fill: var(--ce-color-surface-canvas); }
 .ce-antenna__bulb--1 { fill: var(--ce-color-text-primary); }
-.ce-antenna__bulb--2 { fill: var(--ce-color-surface-canvas); }
+.ce-antenna__bulb--2 { fill: var(--ce-color-brand-red); }
 .ce-antenna__snowcap { fill: none; stroke: var(--ce-color-surface-canvas); stroke-width: 3; stroke-linecap: round; }
 .ce-snow { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .ce-snow[hidden] { display: none; }
