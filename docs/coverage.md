@@ -117,7 +117,7 @@ Examples: storefront `/tienda/` (home, `categoria`, `producto`, `escena`, `carri
 | Gondola label 80 × 40 mm and A4 sheet | `exports/print-label.css` | Tested | Size and containment tested in the browser. **Not verified:** physical printer, paper and QR scanning. |
 | Product barcode label 40 × 20 mm, carton mark | `1688toPL` | Excluded | Owned by `1688toPL`; unchanged. |
 | Social posts and stories | `ce-photo-panel`, `ce-callout` | Implemented | |
-| Vuetify / Vuexy adapter | `exports/adapters/vuetify.mjs` | Implemented | Theme and defaults only; not tested inside a Vuexy application. |
+| Vuetify / Vuexy adapter (legacy) | `exports/adapters/vuetify.mjs` | Implemented | Agent proposal for the retired CE Systems; not for new applications; removal pending owner decision. |
 | Claude Design system | `exports/design-system/` | Implemented | Synced copy for visual exploration. |
 
 ## Accessibility notes from the reference

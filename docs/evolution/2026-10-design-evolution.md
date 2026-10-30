@@ -1,6 +1,6 @@
 # Design evolution, October 2026
 
-Record of the evidence review, assessment and proposals made on 2026-10-23 for the owner's design-evolution brief. **Later the same day the owner's consolidated brief settled P4, P5, P7 and P9 and changed the marker and share-card rules; see the revisions in [decisions.md](../decisions.md), the [source inventory](../sources.md) and the [coverage matrix](../coverage.md). Rows below keep their original wording for traceability.** **Nothing here is an approved standard until the owner reviews it.** Confirmed decisions are copied into [decisions.md](../decisions.md); everything else stays here with its status.
+Record of the evidence review, assessment and proposals made on 2026-10-23 for the owner's design-evolution brief. **Later the same day the owner's consolidated brief settled P4, P5, P7 and P9 and changed the marker and share-card rules; see the revisions in [decisions.md](../decisions.md), the [source inventory](../sources.md) and the [coverage matrix](../coverage.md). Rows below keep their original wording for traceability.** **Nothing here is an approved standard until the owner reviews it.** The [2026-10 reconciliation](2026-10-reconciliation.md) brings these statuses up to date with what was decided and built through 2026-10-30. Confirmed decisions are copied into [decisions.md](../decisions.md); everything else stays here with its status.
 
 Status labels:
 
@@ -81,18 +81,18 @@ Not taken: the reference brand's identity, loyalty pricing colours, product nami
 | ID | Item | Status | Evidence | Repository change |
 | --- | --- | --- | --- | --- |
 | D1 | Inter replaces Noto Sans; supplied files authoritative | **Confirmed**; implemented | S6, S7 | `fonts/inter/*`, `fonts/manifest.json`, `recipes/fonts.css`, `tokens/primitives.tokens.json` (`font.family`), `site/layouts/Layout.astro`, Noto package removed, `docs/usage.md`, `docs/assets.md`, `public/licenses/inter-OFL.txt` |
-| D2 | Tagging on photography is a required pattern | **Confirmed**; recipes implemented, pending review | S7; S2 post 2026-10-22 lettered markers; leader-line tags | `ce-tagged-media`, `ce-hotspot`, `ce-hotspot--promo`, `ce-feature-tag`, `ce-detail-inset`, `ce-tag-list`, `ce-tag-item` in `recipes/recipes.css`; site demo `#etiquetas`; Design System `TaggedMedia`, `TagList` |
+| D2 | Tagging on photography is a required pattern | **Confirmed**; recipes implemented, pending review. 2026-10-25: pins on the web, letters only for static media; the promo marker was removed | S7; S2 post 2026-10-22 lettered markers; leader-line tags | `ce-tagged-media`, `ce-pin`, `ce-hotspot`, `ce-feature-tag`, `ce-detail-inset`, `ce-tag-list`, `ce-tag-item` in `recipes/recipes.css`; site demo `#etiquetas`; Design System `TaggedMedia`, `TagList` |
 | D3 | `ce-theme` is the canonical spec for the whole ecosystem; data owned by CE Systems | **Confirmed** | S7 | `docs/decisions.md` revisions |
 | D4 | Shared product links are first-class | **Confirmed**; spec proposed | S7; S4 metadata gaps | `docs/sharing.md`, `recipes/share-card.css`, Design System `ShareCard` |
 | P1 | Speech-bubble callout tail (`ce-callout--bubble`) | **Implemented, pending review** | S2: ≈62 slides | `recipes/recipes.css`; `Callout` preview |
 | P2 | Product codes use Inter `ss04` (distinct 0/O, 1/l/I without slashed zero) | **Implemented, pending review** | S6 features; codes such as `CE26031111R/12R` | one declaration on `.ce-code` |
 | P3 | Attribute rows with ruler and material icons; store availability line | **Implemented, pending review** | S2 callouts; S4 per-store stock | `ce-specs`, `ce-spec`, `ce-availability`, `material` icon in `site/data/icons.mjs` |
-| P4 | Currency `S/` on the amount's baseline at about 45%, as in all October posts, instead of top-aligned | **Open** | S2 (baseline) vs S3/S1 (top) vs S5 (raised) | None; shown side by side in the Claude Design exploration |
-| P5 | One offer treatment: keep the yellow price block on web; in campaigns allow the red callout as a seasonal “REBAJAS” variant; drop red price text on white | **Open** | S2 three treatments; contrast: ink on yellow 15:1, yellow on action red 3.8:1 (large text only) | None |
+| P4 | Currency `S/` on the amount's baseline at about 45%, as in all October posts, instead of top-aligned | **Resolved** 2026-10-25: baseline is the default (decisions, “Currency style”) | S2 (baseline) vs S3/S1 (top) vs S5 (raised) | None; shown side by side in the Claude Design exploration |
+| P5 | One offer treatment: keep the yellow price block on web; in campaigns allow the red callout as a seasonal “REBAJAS” variant; drop red price text on white | **Resolved** 2026-10-23 (decisions, “P5 promotions”) | S2 three treatments; contrast: ink on yellow 15:1, yellow on action red 3.8:1 (large text only) | None |
 | P6 | Campaign display face and mascot as brand assets | **Open**; owner to supply font files with license and mascot usage rules if they are to become standards | S2 cover slides | None |
 | P7 | Monochrome wordmark (black and white) | **Open**; owner to supply official files | S2 every slide | None; supplied logos remain the only logo assets |
-| P8 | Internal tools (CE Systems, CE Meta, CE Radio) use the same tokens with denser rows (40px controls, 12px cell padding) and no brand red outside primary actions | **Proposed** | S7 scope; S1 table recipe | None yet; shown in the Claude Design exploration |
-| P9 | Per-store price on shared links: omit unless uniform or store-scoped | **Open** (business decision) | S4 “Precio por Sucursal” | Documented in `docs/sharing.md` |
+| P8 | Internal tools (CE Systems, CE Meta, CE Radio) use the same tokens with denser rows (40px controls, 12px cell padding) and no brand red outside primary actions | **Proposed**; implemented as an agent proposal, not confirmed | S7 scope; S1 table recipe | `recipes/workspace.css`, `/sistemas/`; CE Systems is rebuilt in `j3w1/casaelida.com` (2026-10-30) |
+| P9 | Per-store price on shared links: omit unless uniform or store-scoped | **Resolved** 2026-10-23: never in default previews (decisions, “P9 public previews”) | S4 “Precio por Sucursal” | Documented in `docs/sharing.md` |
 
 ## 5. Traceability
 

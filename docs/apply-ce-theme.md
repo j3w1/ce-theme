@@ -16,7 +16,7 @@ Optional outputs:
 | --- | --- |
 | `exports/share-card.css` | Server-side share images. |
 | `exports/print-label.css` | 80 × 40 mm gondola labels. |
-| `exports/adapters/vuetify.mjs` | Vuetify/Vuexy theme and defaults. |
+| `exports/adapters/vuetify.mjs` | Legacy Vuetify/Vuexy theme and defaults for the retired CE Systems; not for new applications. New Vue applications use `@casaelida/vue`. |
 | `recipes/price.mjs`, `recipes/product.mjs`, `recipes/campaign.mjs` | Formatting helpers. |
 | `recipes/behaviors.mjs` | Reference behaviour for the site. |
 

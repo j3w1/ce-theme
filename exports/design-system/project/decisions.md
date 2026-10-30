@@ -13,14 +13,16 @@ These choices were made by the owner in the implementation-planning conversation
 | Theme | Light first; semantic roles allow later themes |
 | Language | Spanish interface and examples; English technical documentation |
 | Price formatting | Compact reference format: `S/550`, `S/16`, `S/20.5` |
-| Implementation | Framework-neutral HTML/CSS recipes rather than a Vue library |
+| Implementation | Framework-neutral HTML/CSS recipes rather than a Vue library. *Superseded on 2026-10-30: see “Component stack”.* |
 | Product emphasis | Product code display, prominent prices, offer blocks, and campaign callouts |
 
-Implementation defaults: Noto Sans weights 400/600/700/800; DTCG 2025.10 token sources; `--ce-` variables; `ce-` classes; static Astro site; Node 24 and pnpm 12.14.0. The foundation uses local generation and CI without automatically deploying or changing a consumer.
+Implementation defaults: Noto Sans weights 400/600/700/800 (*superseded by Inter on 2026-10-23*); DTCG 2025.10 token sources; `--ce-` variables; `ce-` classes; static Astro site; Node 24 and pnpm 12.14.0. The foundation uses local generation and CI without automatically deploying or changing a consumer.
 
 ## Revisions
 
 Later owner instructions supersede the rows above where they conflict. Proposals awaiting approval are tracked in [the design evolution record](evolution.md), not here.
+
+A row records the direction the owner gave. Values an agent chose while implementing that direction are not owner decisions; where they appear in a row they are marked *pending review*, and the [2026-10 reconciliation](https://github.com/j3w1/ce-theme/blob/main/docs/evolution/2026-10-reconciliation.md) lists each one for approval.
 
 | Date | Decision | Direction | Source |
 | --- | --- | --- | --- |
@@ -35,10 +37,10 @@ Later owner instructions supersede the rows above where they conflict. Proposals
 | 2026-10-23 | CE code badge | Black, bold white uppercase CE code, proportional padding (0.3em × 0.35em), slightly rounded corners (0.2em); on-screen underline of the four-digit number only. | Owner consolidated brief; `1688toPL` code display |
 | 2026-10-23 | Image markers | `A`, `B`, `C` without periods; solid black circles with bold white letters; no white ring, no red default; separate focus indicator. | Owner consolidated brief |
 | 2026-10-23 | P4 currency | Superseded on 2026-10-25: see P4b. | Owner consolidated brief |
-| 2026-10-25 | P4b currency | The raised `S/` is the default; `S/` on the baseline is the fallback (`ce-price--baseline`). `ce-price--raised` stays as an alias. Fraction digits stay full size. | Owner review |
+| 2026-10-25 | P4b currency | Superseded the same day: see “Currency style”. | Owner review |
 | 2026-10-25 | Codes | Product codes are always one line and never wrap (`ce-code` is `nowrap`); corners are barely rounded (`radius.code` 2px). | Owner review |
 | 2026-10-25 | Links | Text links are bold. | Owner review |
-| 2026-10-25 | Tags and yellow | Yellow means promotion only (offer prices and promotion surfaces); it is never a ground or a tint behind a product photo. Product tags use the colours of the old casaelida.com: Novedad green `#368500` with white text (the old site's `#47b900` darkened so white passes AA), Promo amber `#ec9e00`, Top en ventas `#e00751`, Edición limitada black `#000000` (`color.tag.*`). The word is “Novedad”, not “Nuevo”. Mosaic layout is unchanged. | Owner review |
+| 2026-10-25 | Tags and yellow | Yellow means promotion only (offer prices and promotion surfaces); it is never a ground or a tint behind a product photo. Product tags use the colours of the old casaelida.com: Novedad green `#47b900` with white text, Promo amber `#ec9e00`, Top en ventas `#e00751`, Edición limitada black `#000000` (`color.tag.*`). *Pending review:* white on `#47b900` fails WCAG AA, so the token ships the darkened `#368500`. The word is “Novedad”, not “Nuevo”. Mosaic layout is unchanged. | Owner review |
 | 2026-10-25 | Feature tags | Feature tags stay inside the photo of the product they describe and never overlap each other, a marker or a neighbouring photo. | Owner review |
 | 2026-10-25 | Standard names | Every pattern has one stable English id and one Spanish name (`recipes/names.mjs`, `docs/names.md`): PricePromo (yellow price), ProductIdentity, ProductStack, CECode and the rest. Say the name, not the look. | Owner review |
 | 2026-10-25 | Product NAME | Every product shown anywhere must have a NAME; `productView()` refuses a product without one. NAMEs are invented, unique, one or two uppercase words. | Owner review |
@@ -54,5 +56,9 @@ Later owner instructions supersede the rows above where they conflict. Proposals
 | 2026-10-23 | P9 public previews | No price in default public link previews, titles or descriptions, even when prices match across stores. | Owner consolidated brief |
 | 2026-10-23 | Logos | Supplied logo files only, unchanged; the black monochrome wordmark is the quiet treatment on light surfaces. | Owner consolidated brief; `decisions.zip` |
 | 2026-10-25 | Native controls | No application interface shows an unstyled browser control where a ce-theme equivalent exists. Native elements are styled first and progressively enhanced (`appearance: base-select` for selects); complex widgets use established accessible primitives; browser- and OS-owned UI stays native. See [controls.md](controls.md). | Owner Native HTML Control Styling Policy, 2026-10-25 |
-| 2026-10-25 | Link previews | The share image follows the gondola label order (NAME small and heavy, Description bold and loudest, specs semibold, code in the foot) with the wordmark at 240 px; every page type has a specified variant. | Owner review of the share previews, 2026-10-25 |
+| 2026-10-25 | Link previews | The share image follows the gondola label order (NAME small and heavy, Description bold and loudest, specs semibold, code in the foot) with a larger wordmark (*pending review:* 240 px); every page type has a specified variant. | Owner review of the share previews, 2026-10-25 |
 | 2026-10-25 | Photo tagging on the web | On the website, products are tagged with pins: a dot on the photo that opens a product card (NAME, Description, price, chevron link) on hover, focus or tap. Lettered A, B, C markers are used only where hovering is not available, such as social posts, print and share images. | Owner review, 2026-10-25 |
+| 2026-10-30 | Component stack | Vue 3 with TypeScript is the primary stack for reusable UI components, published from this repository as one importable package (`packages/vue`, `@casaelida/vue`). The recipes stay the framework-neutral CSS source the components render; components never duplicate or restyle them. Astro is only the documentation and component showcase, and it renders the real components. Vuexy is a reference only, never a dependency. | Owner instruction, 2026-10-30 |
+| 2026-10-30 | CE Systems | CE Systems is rebuilt from scratch in a new `j3w1/casaelida.com` repository; the existing repository is retired as `old2.casaelida.com`. Its Laravel/Vuexy architecture is not inherited automatically. This repository does not migrate either application. | Owner instruction, 2026-10-30 |
+| 2026-10-30 | Workflow | Claude Design → approved Git source → reusable component → optional showcase. Designs are explored in Claude Design; what the owner approves is recorded here and in `tokens/` and `recipes/`; a Vue component implements an approved recipe; the showcase may demonstrate it. Nothing moves to the next step without the owner's approval in a pull request. See [workflow.md](https://github.com/j3w1/ce-theme/blob/main/docs/workflow.md). | Owner instruction, 2026-10-30 |
+| 2026-10-30 | Delivery | Components are added in small batches, each with tests. The showcase is not expanded with new pages for this purpose, nothing is deployed to Vercel, and other repositories are not migrated from here. | Owner instruction, 2026-10-30 |
