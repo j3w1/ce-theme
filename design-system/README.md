@@ -55,7 +55,7 @@ Reference sections bundled with this system: `apply-ce-theme.md` (start here whe
 - **Product text:** set `--ce-product-text` on a container to scale NAME, Description and specs together. The values are 16px in cards, 1.5rem on product pages, 40–52px in share images and 3.9mm on labels.
 - **Price:**
   - The price is the largest type in any product composition: weight 800, tracking −0.045em, line height 1.
-  - `S/` is 46% of the amount and is raised by default; `ce-price--baseline` is the fallback.
+  - `S/` is 46% of the amount and sits on the baseline by default; `ce-price--joined` (S/ unido, the size of the figures) is the second option; `ce-price--raised` stays available.
   - Decimals stay full size.
   - Sizes: `ce-type-price-card` (44px) in cards, `ce-type-price-callout` (48px) in callouts, and up to `ce-type-price-campaign` (96px) on photography.
 - Eyebrows (`ce-type-eyebrow`, `ce-eyebrow`) are 12px bold uppercase with 0.1em tracking.

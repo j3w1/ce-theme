@@ -52,6 +52,7 @@ Review record for the first foundation pull request. It compares the development
 - The 2026-10-30 rows record the component stack, the CE Systems rebuild, the workflow, the delivery limits and the `CE` + PascalCase component naming.
 - The evolution record's status table now matches what was decided and built.
 - The Vuetify adapter is labelled legacy in the adoption and usage guides.
+- The design-system brand book and the coverage matrix still described the superseded raised-S/ default and a `ce-price--baseline` class that does not exist; both now describe the approved default.
 
 ## Approval checklist
 
