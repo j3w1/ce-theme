@@ -8,6 +8,9 @@
 - Component naming convention: `CE` + PascalCase, enforced by `tests/vue-naming.test.mjs`; the names registry gains a `vue` field.
 - Type declarations for `recipes/price.mjs` and `recipes/product.mjs`.
 - `docs/workflow.md` and the branch reconciliation record (`docs/evolution/2026-10-reconciliation.md`).
+- Messaging foundation for CE Meta App: recipes in `recipes/messaging.css` and the public components `CEConversationList`, `CEMessageList` and `CEMessageComposer` (typed `submitReply` and `saveNote` events, separate reply and note drafts, delivery states in words). Standard names group Mensajería.
+- `/mensajeria/`: one interactive example in the showcase, built from the real components on fictional in-memory fixtures. It says "Simulación: ningún mensaje sale de esta página." and sends nothing.
+- Tests for the messaging components, the example (keyboard, focus, 320 to 1440 px, enlarged text, accessibility, no network or storage) and the design-system title.
 
 ### Changed
 
@@ -15,6 +18,9 @@
 - Prices no longer carry the unused `ce-price--regular` class.
 - `pnpm check` also typechecks, tests and builds the Vue package; `pnpm dev` and `pnpm build` build it first.
 - The Vuetify adapter is labelled legacy.
+- The Claude Design System is named “CE Theme — Design System” from one field, `designSystemName` in `ce-theme.json`; the generator no longer reuses the brand name for it.
+- CE Meta is described as the internal administration and control platform and CE Meta App as the messaging app; the design-system README, the `/sistemas/` navigation and the decision records say so.
+- The showcase has its first client-side island (the `/mensajeria/` example); every other page is still static HTML.
 
 ## 0.2.0 — 2026-10-23 (owner review, unreleased)
 

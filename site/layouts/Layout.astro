@@ -5,6 +5,7 @@ import '../../recipes/recipes.css';
 import '../../recipes/interface.css';
 import '../../recipes/retail.css';
 import '../../recipes/workspace.css';
+import '../../recipes/messaging.css';
 import '../../recipes/share-card.css';
 import '../../recipes/print-label.css';
 import '../styles/site.css';
@@ -12,7 +13,7 @@ import Icon from '../components/Icon.astro';
 interface Props { title?: string; description?: string }
 const { title = 'Diseñamos para la vida en casa', description = 'La base visual de Casa Elida: identidad, fundamentos y recetas para crear experiencias claras, cercanas y accesibles.' } = Astro.props;
 const pathname = Astro.url.pathname;
-const nav = [['/', 'Visión general'], ['/fundamentos/', 'Fundamentos'], ['/componentes/', 'Componentes'], ['/patrones/', 'Precios y productos'], ['/aplicaciones/', 'Aplicaciones'], ['/compartir/', 'Compartir'], ['/tienda/', 'Tienda de ejemplo'], ['/sistemas/', 'Sistemas internos']];
+const nav = [['/', 'Visión general'], ['/fundamentos/', 'Fundamentos'], ['/componentes/', 'Componentes'], ['/patrones/', 'Precios y productos'], ['/aplicaciones/', 'Aplicaciones'], ['/compartir/', 'Compartir'], ['/mensajeria/', 'Mensajería'], ['/tienda/', 'Tienda de ejemplo'], ['/sistemas/', 'Sistemas internos']];
 ---
 <!doctype html>
 <html lang="es-PE">

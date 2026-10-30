@@ -30,6 +30,22 @@ Examples: storefront `/tienda/` (home, `categoria`, `producto`, `escena`, `carri
 | `CETextField` | `ce-field`, `ce-input`, `ce-input-group` | Tested | Unit tests; rendered on `/componentes/`. Pass an `id` when several Vue apps share a page. |
 | `CEPrice` | `ce-price` | Tested | Unit tests; every price on the site is rendered by it through `site/components/Price.astro`. |
 | `CEProductCode` | `ce-code` | Tested | Unit tests; rendered in the code specimens on `/patrones/`. Product cards still write the code badge by hand. |
+| `CEConversationList`, `CEMessageList`, `CEMessageComposer` | `ce-conversation-list`, `ce-message-list`, `ce-composer` | Tested | Unit tests and browser tests on `/mensajeria/`, which runs them on fictional in-memory fixtures. See [Messaging](#messaging-ce-meta-app). |
+
+## Messaging (CE Meta App)
+
+Presentation for conversation interfaces. Delivery, assignment, authorization and transport belong to the application; nothing here connects to a messaging provider. The example `/mensajeria/` is fixture-backed and says so on the page.
+
+| Pattern | Recipe | Status | Notes |
+| --- | --- | --- | --- |
+| Conversation list: selected, unread, draft, kind, empty | `ce-conversation-list`, `ce-conversation`, `ce-avatar` | Tested | Native buttons; arrow-key navigation is not provided. |
+| Message list: incoming, outgoing, system, long text and URLs | `ce-message-list`, `ce-message` | Tested | `role="log"`; keeps the reader's scroll position. |
+| Internal note, always "No la ve el cliente" | `ce-message--note`, `ce-composer--note` | Tested | Presentation only; the service must enforce who can read a note. |
+| Message status in words: Enviado, Entregado, Leído, No entregado | `ce-message-status` | Tested | Delivery only; never acceptance or completion of work. |
+| Composer with reply and note drafts | `ce-composer` | Tested | Enter adds a line, Ctrl or ⌘ + Enter submits. |
+| Voice notes, calls, camera and photos, attachments, native notification permission | — | Specified | Need provider and platform decisions; browser tests do not verify native Android or iOS behaviour. |
+| Offline, upload failure and retry, restricted conversations | `ce-notice`, `ce-locked` | Specified | The composer can be disabled with a visible reason; the other states are not built. |
+| Customer assignment, product sharing, AI answers | — | Excluded | Not part of this slice. |
 
 ## Shared elements and forms
 

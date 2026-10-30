@@ -1,0 +1,96 @@
+<script setup lang="ts">
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+
+/** `incoming` and `outgoing` are customer-facing text; `note` is an internal note and is never drawn as outgoing; `system` is a centred notice such as a day separator. */
+export type CEMessageKind = 'incoming' | 'outgoing' | 'note' | 'system';
+/** Message delivery only. Acceptance or completion of operational work is a different thing and is not shown here. */
+export type CEMessageStatus = 'sent' | 'delivered' | 'read' | 'failed';
+
+export interface CEMessage {
+  id: string;
+  kind: CEMessageKind;
+  text: string;
+  /** Display time, already formatted by the application. */
+  time?: string;
+  /** Machine-readable time for the `time` element. */
+  datetime?: string;
+  /** Sender name shown above incoming messages and notes. */
+  author?: string;
+  /** Delivery state of an outgoing message, written as a word: Enviado, Entregado, Leído or No entregado. */
+  status?: CEMessageStatus;
+  /** Marks a fixture or simulated message. The status then reads "Enviado · simulado". */
+  simulated?: boolean;
+  /** Written by the person using this view. Outgoing messages always are; set it on your own notes. */
+  own?: boolean;
+}
+
+/** Renders the `ce-message-list` recipe as a labelled, focusable `role="log"`. Message bubbles are an internal part of this component. */
+export interface CEMessageListProps {
+  messages: CEMessage[];
+  /** Accessible name of the log, for example "Mensajes con Rosa Quispe". */
+  label: string;
+  /** Text shown when there are no messages. */
+  emptyText?: string;
+}
+
+const props = withDefaults(defineProps<CEMessageListProps>(), { emptyText: 'Aún no hay mensajes.' });
+
+const STATUS_LABELS: Record<CEMessageStatus, string> = { sent: 'Enviado', delivered: 'Entregado', read: 'Leído', failed: 'No entregado' };
+const statusText = (message: CEMessage) => (message.kind === 'outgoing' && message.status ? STATUS_LABELS[message.status] + (message.simulated ? ' · simulado' : '') : '');
+const noteText = (message: CEMessage) => (message.kind === 'note' && message.simulated ? 'simulada' : '');
+
+// Scrolling: follow the newest message when the reader is already at the bottom, when the conversation changes, or after
+// their own message. Never move a reader who is looking at earlier history.
+const NEAR_BOTTOM = 48;
+const log = ref<HTMLElement | null>(null);
+const atBottom = () => !log.value || log.value.scrollHeight - log.value.scrollTop - log.value.clientHeight <= NEAR_BOTTOM;
+const scrollToLatest = () => { if (log.value) log.value.scrollTop = log.value.scrollHeight; };
+
+// A reader at the bottom stays there when the log changes size or becomes visible: the composer grows, the window
+// resizes, or a narrow layout reveals a thread that was mounted while hidden (a hidden log has no height to scroll).
+let following = true;
+let observer: ResizeObserver | undefined;
+const onScroll = () => { following = atBottom(); };
+onMounted(() => {
+  scrollToLatest();
+  if (typeof ResizeObserver !== 'undefined' && log.value) {
+    observer = new ResizeObserver(() => { if (following) scrollToLatest(); });
+    observer.observe(log.value);
+  }
+});
+onBeforeUnmount(() => observer?.disconnect());
+watch(
+  () => [props.messages.length, props.messages[0]?.id, props.messages.at(-1)?.id] as const,
+  ([length, first, last], [previousLength, previousFirst, previousLast]) => {
+    const newest = props.messages.at(-1);
+    const switched = first !== previousFirst;
+    const appended = length > previousLength && last !== previousLast;
+    const own = appended && newest !== undefined && (newest.own ?? newest.kind === 'outgoing');
+    // The "pre" flush runs before the DOM changes, so the position is measured before the new message is added.
+    const follow = switched || atBottom() || own;
+    if (follow) void nextTick(scrollToLatest);
+  },
+  { flush: 'pre' },
+);
+</script>
+
+<template>
+  <div ref="log" class="ce-message-list" role="log" tabindex="0" :aria-label="label" @scroll.passive="onScroll">
+    <p v-if="messages.length === 0" class="ce-message-list-empty">{{ emptyText }}</p>
+    <template v-for="message in messages" :key="message.id">
+      <p v-if="message.kind === 'system'" class="ce-message ce-message--system">{{ message.text }}</p>
+      <article v-else :class="['ce-message', `ce-message--${message.kind}`]">
+        <p v-if="message.kind === 'note'" class="ce-message-note-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="11" width="14" height="9" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>Nota interna · No la ve el cliente
+        </p>
+        <p v-if="message.author && message.kind !== 'outgoing'" class="ce-message-author">{{ message.author }}</p>
+        <p class="ce-message-text"><span v-if="message.kind === 'outgoing'" class="ce-sr-only">Tú: </span><span v-else-if="message.kind === 'incoming' && !message.author" class="ce-sr-only">Mensaje recibido: </span>{{ message.text }}</p>
+        <p v-if="message.time || statusText(message) || noteText(message)" class="ce-message-meta">
+          <time v-if="message.time" class="ce-message-time" :datetime="message.datetime">{{ message.time }}</time>
+          <span v-if="statusText(message)" :class="['ce-message-status', message.status === 'failed' && 'ce-message-status--failed']">{{ statusText(message) }}</span>
+          <span v-if="noteText(message)" class="ce-message-status">{{ noteText(message) }}</span>
+        </p>
+      </article>
+    </template>
+  </div>
+</template>

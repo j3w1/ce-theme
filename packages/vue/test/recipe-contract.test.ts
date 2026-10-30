@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 import type { Component } from 'vue';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { CEButton, CEPrice, CEProductCode, CETextField } from '../src/index';
+import { CEButton, CEConversationList, CEMessageComposer, CEMessageList, CEPrice, CEProductCode, CETextField } from '../src/index';
 
 // Components render recipes; they never invent styling. Every ce- class they emit must exist in the generated recipes.
 // Vitest runs from the package directory; the generated recipes live at the repository root.
@@ -23,6 +23,22 @@ const cases: [string, Component, Record<string, unknown>][] = [
   ['presentation', CEPrice, { amount: '48', presentationLabel: 'pack de 12' }],
   ['code', CEProductCode, { code: 'CE26061441', size: 'sm' }],
   ['large code', CEProductCode, { code: 'CE26061441', size: 'lg' }],
+  ['conversation list', CEConversationList, { label: 'Conversaciones', modelValue: 'a', conversations: [
+    { id: 'a', name: 'Rosa Quispe', preview: 'Hola', time: '10:42', unread: 2, kind: 'customer', meta: 'Ejemplo', draft: true },
+    { id: 'b', name: 'Equipo Tienda', preview: 'Listo', time: 'Ayer', kind: 'team' },
+  ] }],
+  ['empty conversation list', CEConversationList, { label: 'Conversaciones', conversations: [] }],
+  ['message list with every kind and status', CEMessageList, { label: 'Mensajes', messages: [
+    { id: '1', kind: 'system', text: 'Hoy' },
+    { id: '2', kind: 'incoming', author: 'Rosa', text: 'Hola', time: '10:38' },
+    { id: '3', kind: 'note', author: 'Paola', text: 'Nota', time: '10:40', simulated: true },
+    ...(['sent', 'delivered', 'read', 'failed'] as const).map((status, index) => ({ id: `s${index}`, kind: 'outgoing' as const, text: status, status, simulated: true })),
+  ] }],
+  ['empty message list', CEMessageList, { label: 'Mensajes', messages: [] }],
+  ['composer', CEMessageComposer, { label: 'Mensaje para Rosa', recipient: 'Rosa' }],
+  ['composer with the note switch', CEMessageComposer, { label: 'Mensaje para Rosa', allowNotes: true, reply: 'borrador' }],
+  ['composer in note mode', CEMessageComposer, { label: 'Mensaje para Rosa', allowNotes: true, mode: 'note', note: 'Nota' }],
+  ['disabled composer', CEMessageComposer, { label: 'Mensaje para Rosa', allowNotes: true, disabled: true, disabledReason: 'Solo lectura.' }],
 ];
 
 describe('recipe contract', () => {

@@ -126,7 +126,7 @@ export async function buildTokens(manifest, tokens) {
     })),
   }));
   return {
-    name: manifest.name,
+    name: manifest.designSystemName,
     version: 1,
     meta: {
       source: 'github', repo: 'j3w1/ce-theme', package: '.', foundation: manifest.version,
@@ -257,7 +257,7 @@ Real products, each with a NAME; supplied prices, discount labels and bases. Not
   // Binary files are published from their repository sources; uploads become the asset library.
   const source = (group, file) => (group.dir ? `${group.dir}${file}` : `${OUT}/project/assets/Icons/${file}`);
   const publish = {
-    title: manifest.name,
+    title: manifest.designSystemName,
     namespace: 'CasaElida',
     libraries: [],
     files: {

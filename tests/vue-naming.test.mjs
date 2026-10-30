@@ -25,7 +25,12 @@ test('public exports are named CE + PascalCase and match their files', async () 
   }
   const files = (await readdir(new URL('packages/vue/src/components/', root))).filter((file) => file.endsWith('.vue')).map((file) => file.replace(/\.vue$/, ''));
   assert.deepEqual(components.map(([, name]) => name).sort(), files.sort(), 'every component file is exported from src/index.ts');
-  for (const [, name] of index.matchAll(/export type \{ (\w+) \}/g)) assert.match(name, /^CE[A-Z][A-Za-z0-9]*Props$/, `type ${name}`);
+  // Every exported type is CE + PascalCase too, and each component has its CE<Name>Props.
+  const types = [...index.matchAll(/export type \{([^}]+)\}/g)].flatMap(([, list]) => list.split(',').map((name) => name.trim()).filter(Boolean));
+  assert.ok(types.length > 0);
+  for (const name of types) assert.match(name, COMPONENT_NAME, `type ${name}`);
+  for (const [, name] of components) assert.ok(types.includes(`${name}Props`), `${name}Props is exported`);
+  for (const name of types.filter((type) => type.endsWith('Props'))) assert.ok(components.some(([, component]) => `${component}Props` === name), `${name} belongs to a component`);
 });
 
 test('the names registry points only at real CE components', async () => {

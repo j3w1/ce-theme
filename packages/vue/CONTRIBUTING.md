@@ -18,6 +18,9 @@ Read [docs/workflow.md](../../docs/workflow.md) first: Claude Design → approve
 - Uses native elements first, follows [docs/controls.md](../../docs/controls.md) and [docs/accessibility.md](../../docs/accessibility.md): visible labels, `aria-describedby` for help and errors, keyboard behaviour of the native element.
 - Has Spanish interface text and English props, comments and documentation.
 - Has tests for its variants, states, accessibility attributes and events.
+- Keeps a part private when only one component uses it (the message bubble inside `CEMessageList`); it becomes a public `CE<Name>` when a second consumer needs it.
+- Emits one typed event per intent (`submitReply`, `saveNote`) instead of one generic event that downstream code could route to the wrong place. Components own presentation; transport, persistence and authorization stay in the application.
+- Exports data types as `CE<Name>` (`CEMessage`, `CEConversationItem`) and props types as `CE<Name>Props`.
 
 ## A pull request
 
