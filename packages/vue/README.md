@@ -12,6 +12,9 @@ Status: `0.1.0`, private. It is built and tested in this repository; how applica
 | `CETextField` | `ce-field`, `ce-input` | TextField | Visible `label`, `v-model`, `note`, `error` (sets `aria-invalid` and `aria-describedby`), optional `prefix` such as `S/`. Native attributes go to the input. |
 | `CEPrice` | `ce-price` | PriceRegular, PricePromo, PriceSale, PricePhoto, PriceOld, PriceUnit, PricePresentation | Formats supplied decimal strings with `recipes/price.mjs`. Never calculates a discount. Invalid input throws. |
 | `CEProductCode` | `ce-code` | CECode | Shows a code exactly as supplied; underlines the four-digit number of a Casa Elida code. `size`: `sm`, `md`, `lg`. |
+| `CEConversationList` | `ce-conversation-list`, `ce-conversation`, `ce-avatar` | ConversationList | `conversations`, `label`, `v-model` for the selected id, and a `select` event on every activation (also of the selected row). One native button per conversation with `aria-current`, a spoken unread count, a "Borrador:" marker and the kind as a word. Never filters, sorts or assigns. |
+| `CEMessageList` | `ce-message-list`, `ce-message` | MessageList, InternalNote, MessageStatus | `messages`, `label`. A focusable `role="log"`. Incoming, outgoing, internal-note and system messages; statuses written as Enviado, Entregado, Leído, No entregado (plus "· simulado"). Follows new messages only at the bottom or after the reader's own message. |
+| `CEMessageComposer` | `ce-composer` | MessageComposer, ComposerNoteMode | `label`, `recipient`, `allowNotes`, `v-model:mode`, `v-model:reply`, `v-model:note`. Emits `submitReply` and `saveNote`, never one generic event. Enter adds a line, Ctrl or ⌘ + Enter submits, blank drafts cannot be submitted. |
 
 ## Use
 
@@ -25,6 +28,10 @@ import { CEButton, CEPrice, CEProductCode, CETextField } from '@casaelida/vue';
 <CETextField v-model="email" label="Correo electrónico" type="email" :error="emailError" />
 <CEButton type="submit" :loading="saving">Guardar</CEButton>
 ```
+
+### Messaging components
+
+They draw conversations and send nothing. The application owns the drafts (`v-model:reply`, `v-model:note`), the selected conversation, delivery states, authorization and transport. `CEMessageComposer` emits `submitReply(text)` or `saveNote(text)`; an internal note can never leave through the reply event. Drawing a note differently is presentation, not a security control: the service must still decide who may read it. The message bubble is part of `CEMessageList` and is not exported. **Mount one `CEMessageList` per conversation and key it** (`<CEMessageList :key="conversation.id" ... />`): the list never infers a conversation change from its messages, so ids may repeat across conversations (each can start with the same day separator) and older messages may be added above. A keyed mount opens at the newest message. See the interactive fixture example on `/mensajeria/` in the showcase.
 
 Load the foundation CSS once in the application: `fonts.css`, `tokens.css` and `recipes.css` from `exports/` (see `docs/apply-ce-theme.md`). Without it the components render unstyled.
 

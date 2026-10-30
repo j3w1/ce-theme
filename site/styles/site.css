@@ -249,3 +249,37 @@ pre { overflow: auto; margin: 0; padding: var(--ce-space-24); font-size: var(--c
 .share-scale--half > .ce-share-card { transform: scale(.5); }
 .share-crop { width: 120px; height: 120px; overflow: hidden; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
 .share-crop > .ce-share-card { transform: translateX(-54.3px) scale(.1905); transform-origin: 0 0; }
+
+/* /mensajeria/: composition of the messaging example (the components are styled by recipes/messaging.css). */
+.messaging-demo { container-type: inline-size; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); background: var(--ce-color-surface-canvas); }
+.messaging-demo-notice { margin: 0; padding: var(--ce-space-12) var(--ce-space-16); background: var(--ce-color-surface-inverse); color: var(--ce-color-text-inverse); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-bold); }
+.messaging-demo-panes { display: grid; grid-template-columns: minmax(0, 1fr); height: clamp(32rem, 85svh, 48rem); }
+.messaging-demo-list { min-height: 0; overflow-y: auto; }
+.messaging-demo-thread { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-width: 0; min-height: 0; }
+.messaging-demo[data-view="list"] .messaging-demo-thread { display: none; }
+.messaging-demo[data-view="thread"] .messaging-demo-list { display: none; }
+.messaging-demo-header { display: flex; align-items: center; gap: var(--ce-space-12); padding: var(--ce-space-12) var(--ce-space-16); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+.messaging-demo-title { min-width: 0; }
+.messaging-demo-title h2 { margin: 0; font-size: var(--ce-font-size-body); line-height: var(--ce-font-line-heading); letter-spacing: normal; overflow-wrap: anywhere; }
+.messaging-demo-title h2:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); }
+.messaging-demo-title p { margin: 0; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); }
+.messaging-demo-tools { display: flex; flex-wrap: wrap; gap: var(--ce-space-8); padding: var(--ce-space-12) var(--ce-space-16); border-top: var(--ce-stroke-thin) solid var(--ce-color-border-default); background: var(--ce-color-surface-subtle); }
+.messaging-demo-events { padding-block: var(--ce-space-32) 0; }
+.messaging-demo-events h2 { font-size: var(--ce-font-size-title); }
+.messaging-demo-events ol { margin: 0; padding-left: var(--ce-space-24); display: grid; gap: var(--ce-space-8); overflow-wrap: anywhere; }
+.messaging-demo-events-empty { color: var(--ce-color-text-secondary); }
+.messaging-scope { display: grid; gap: var(--ce-space-24); margin-top: var(--ce-space-24); }
+.messaging-scope h3 { margin-bottom: var(--ce-space-8); }
+.messaging-scope ul { margin: 0; padding-left: var(--ce-space-24); display: grid; gap: var(--ce-space-8); }
+.messaging-page code { overflow-wrap: anywhere; }
+/* The list and the thread sit side by side only when the example is wide enough for both at the current text size (rem, so
+   enlarged text returns to separate views); otherwise one replaces the other. */
+@container (min-width: 42rem) {
+  .messaging-demo-panes { grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr); }
+  .messaging-demo[data-view] .messaging-demo-list { display: block; border-right: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+  .messaging-demo[data-view] .messaging-demo-thread { display: grid; }
+  .messaging-demo-back { display: none; }
+}
+@media (min-width: 768px) {
+  .messaging-scope { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

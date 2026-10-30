@@ -45,6 +45,7 @@ Optional outputs:
 | Surface | Read | Key classes |
 | --- | --- | --- |
 | Storefront, campaigns | [usage.md](https://github.com/j3w1/ce-theme/blob/main/docs/usage.md), [coverage.md](coverage.md) | `ce-site-header`, `ce-search`, `ce-category-rail`, `ce-filter-bar`, `ce-product-grid`, `ce-product`, `ce-rail`, `ce-editorial`, `ce-tagged-media`, `ce-tag-list`, `ce-store-context`, `ce-gallery` |
+| Messaging apps (CE Meta App) | [coverage.md](coverage.md#messaging-ce-meta-app) | `ce-conversation-list`, `ce-message-list`, `ce-composer` and the `CEConversationList`, `CEMessageList`, `CEMessageComposer` components |
 | Internal tools (CE Systems, CE Meta, CE Radio) | [coverage.md](coverage.md) | `ce-app`, `ce-module-nav`, `data-ce-density`, `ce-data-table`, `ce-bulk-bar`, `ce-record-header`, `ce-form-actions`, `ce-audit`, `ce-pos` |
 | Print | [product-identity.md](product-identity.md) | `ce-label`, `ce-label-sheet` |
 | Overlays and feedback | — | `ce-dialog`, `ce-drawer`, `ce-disclosure`, `ce-tabs`, `ce-notice`, `ce-toast`, `ce-empty`, `ce-skeleton` |

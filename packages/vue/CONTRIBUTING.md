@@ -18,9 +18,12 @@ Read [docs/workflow.md](../../docs/workflow.md) first: Claude Design → approve
 - Uses native elements first, follows [docs/controls.md](../../docs/controls.md) and [docs/accessibility.md](../../docs/accessibility.md): visible labels, `aria-describedby` for help and errors, keyboard behaviour of the native element.
 - Has Spanish interface text and English props, comments and documentation.
 - Has tests for its variants, states, accessibility attributes and events.
+- Keeps a part private when only one component uses it (the message bubble inside `CEMessageList`); it becomes a public `CE<Name>` when a second consumer needs it.
+- Emits one typed event per intent (`submitReply`, `saveNote`) instead of one generic event that downstream code could route to the wrong place. Components own presentation; transport, persistence and authorization stay in the application.
+- Exports data types as `CE<Name>` (`CEMessage`, `CEConversationItem`) and props types as `CE<Name>Props`.
 
 ## A pull request
 
 - Adds a few components, not a library. It names the decisions it implements.
-- Replaces hand-written markup on an existing showcase page with the component where that page already shows the recipe. It does not add showcase pages.
+- Replaces hand-written markup on an existing showcase page with the component where that page already shows the recipe. It does not add showcase pages. The one exception is `/mensajeria/`, the messaging example the owner approved specifically (see `docs/decisions.md`, “Showcase exception”); every other new page needs the owner's explicit request.
 - Passes `pnpm check` and `pnpm test:browser` from the repository root.

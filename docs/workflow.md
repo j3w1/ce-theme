@@ -14,7 +14,7 @@ One path, four steps. Each step starts only from what the previous one approved.
 - **Git is the source.** The Claude Design System is regenerated from this repository (`pnpm generate`, then a sync); an exploration in Claude Design never becomes a standard by itself.
 - **Recipes first, components second.** A component renders recipe classes and reuses the recipe helpers (`recipes/price.mjs`, `recipes/product.mjs`). It does not add its own CSS or restyle a recipe. A test fails if a component emits a class that the recipes do not define.
 - **The showcase renders, it does not copy.** Astro pages import components from `@casaelida/vue`. They do not hand-write a component's markup.
-- **Small batches.** A pull request adds a few components with tests. It does not add showcase pages, deploy, or migrate an application.
+- **Small batches.** A pull request adds a few components with tests. It does not add showcase pages, deploy, or migrate an application. The one exception is `/mensajeria/`, the interactive example of the messaging components, which the owner approved specifically ([decisions.md](decisions.md), “Showcase exception”). Every other new page still needs the owner's explicit request.
 - **Applications adopt by version.** `j3w1/casaelida.com` and other applications install the package and the foundation CSS at a version; this repository does not change them.
 
 ## Adding a component

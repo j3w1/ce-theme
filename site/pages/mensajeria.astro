@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MessagingDemo from '../components/MessagingDemo.vue';
+---
+<Layout title="Mensajería (ejemplo interactivo)" description="Los componentes de mensajería de CE Meta App funcionando con datos ficticios en memoria. Nada se envía.">
+  <div class="container messaging-page">
+    <div class="page-intro">
+      <p class="eyebrow">Aplicaciones · CE Meta App</p>
+      <h1>Conversaciones de ejemplo con los componentes reales.</h1>
+      <p>Tres conversaciones inventadas, escritas con <code>CEConversationList</code>, <code>CEMessageList</code> y <code>CEMessageComposer</code> de <code>@casaelida/vue</code>. Elige una conversación, escribe un borrador, cambia entre responder al cliente y nota interna, y envía: el mensaje solo aparece en la memoria de esta página.</p>
+    </div>
+    <MessagingDemo client:load />
+    <section class="section" aria-labelledby="mensajeria-alcance">
+      <h2 id="mensajeria-alcance" style="font-size:var(--ce-font-size-title)">Qué es real y qué es simulado</h2>
+      <div class="messaging-scope">
+        <div>
+          <h3>Funciona de verdad</h3>
+          <ul>
+            <li>Los tres componentes y las recetas <code>ce-*</code> que dibujan.</li>
+            <li>La selección, los borradores separados por conversación y por modo, y el cambio entre responder y nota interna.</li>
+            <li>Enter agrega una línea; Ctrl o ⌘ + Enter envía; un borrador vacío no se envía.</li>
+            <li>El teclado, el foco visible y los avisos para lectores de pantalla.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Está simulado</h3>
+          <ul>
+            <li>Las personas, los mensajes, las horas y los estados de entrega.</li>
+            <li>El envío: agrega un mensaje en memoria y marca «Enviado · simulado». Nadie lo recibe.</li>
+            <li>Los mensajes entrantes, que salen de una lista fija.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>No existe en este ejemplo</h3>
+          <ul>
+            <li>Conexión con ningún canal de mensajería, servidor, base de datos o inicio de sesión.</li>
+            <li>Asignación de clientes, productos compartidos, fotos, notas de voz, llamadas, notificaciones ni inteligencia artificial.</li>
+            <li>Permisos: que una nota se dibuje distinta no impide que otro sistema la muestre; el servicio debe decidir quién la lee.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="small-note">Estados del mensaje: Enviado, Entregado, Leído y No entregado describen solo la entrega de un mensaje. Que un trabajo sea aceptado o completado es otra cosa y no se muestra aquí. Los componentes no prueban cámara, llamadas ni notificaciones nativas de Android o iOS.</p>
+    </section>
+  </div>
+</Layout>
