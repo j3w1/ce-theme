@@ -5,6 +5,7 @@ Read `/etc/ce-devbox/AGENTS.md` first. Work in a registered CE task worktree.
 - `tokens/` owns literal design values; `docs/` owns their usage rules.
 - `recipes/` owns framework-neutral CSS, the decimal-string price formatter, the product-display helpers and optional reference behaviour.
 - `packages/vue/` (`@casaelida/vue`) owns the reusable Vue 3 + TypeScript components. They render recipe classes and reuse the recipe helpers; they never add CSS. Vuexy is a reference only, never a dependency.
+- Public Vue components are named `CE` + PascalCase (`CEButton`, `CETextField`, `CEDateRangePicker`), never `CeButton`: file `CE<Name>.vue`, export `CE<Name>`, props type `CE<Name>Props`, test `CE<Name>.test.ts`, and the same name in docs, examples and the `vue` field of the names registry. CSS stays `ce-*` and `--ce-*`. `tests/vue-naming.test.mjs` enforces this; see [packages/vue/CONTRIBUTING.md](packages/vue/CONTRIBUTING.md).
 - `site/` is the Astro documentation and showcase only. It renders components from `@casaelida/vue` instead of copying their markup; do not add showcase pages unless asked.
 - Follow [docs/workflow.md](docs/workflow.md): Claude Design → approved Git source → reusable component → optional showcase.
 - `fonts/` holds the owner-supplied Inter files; `fonts/manifest.json` records their provenance.

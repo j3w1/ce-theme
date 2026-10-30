@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased — 2026-10-30 (pending owner review)
+
+### Added
+
+- `@casaelida/vue` (`packages/vue`), the first importable Vue 3 + TypeScript package: `CEButton`, `CETextField`, `CEPrice`, `CEProductCode`, with unit tests and a test that they emit only recipe classes. Built with Vite; types from `vue-tsc`.
+- Component naming convention: `CE` + PascalCase, enforced by `tests/vue-naming.test.mjs`; the names registry gains a `vue` field.
+- Type declarations for `recipes/price.mjs` and `recipes/product.mjs`.
+- `docs/workflow.md` and the branch reconciliation record (`docs/evolution/2026-10-reconciliation.md`).
+
+### Changed
+
+- The Astro site is the documentation and showcase only. It renders the real components: every price through `site/components/Price.astro`, and the button, field and code demonstrations.
+- Prices no longer carry the unused `ce-price--regular` class.
+- `pnpm check` also typechecks, tests and builds the Vue package; `pnpm dev` and `pnpm build` build it first.
+- The Vuetify adapter is labelled legacy.
+
 ## 0.2.0 — 2026-10-23 (owner review, unreleased)
 
 Locked product identity, retail and enterprise recipes, labels, price-free share previews. Decisions are recorded in [docs/decisions.md](docs/decisions.md); status per pattern in [docs/coverage.md](docs/coverage.md).

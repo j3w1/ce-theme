@@ -10,6 +10,8 @@ Pin a release or commit; do not follow a moving branch. Load in this order:
 2. `exports/tokens.css`: `--ce-` custom properties. Use semantic tokens (`--ce-color-text-primary`, `--ce-color-action-primary-bg`…), not palette values.
 3. `exports/recipes.css`: framework-neutral component classes (`ce-`), no global reset. Wrap the application region in `class="ce-scope"`.
 
+In a Vue 3 application, use the components from `@casaelida/vue` (`CEButton`, `CETextField`, `CEPrice`, `CEProductCode`) for the recipes they cover; they render the same classes and still need the three files above. See [packages/vue/README.md](../packages/vue/README.md).
+
 Optional outputs:
 
 | Output | Use |

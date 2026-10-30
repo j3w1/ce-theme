@@ -1,15 +1,7 @@
 ---
-import { preparePrice } from '../../recipes/price.mjs';
-interface Props { amount: string; previousAmount?: string; discountLabel?: string; unitLabel?: string; unitShortLabel?: string; packLabel?: string; presentationLabel?: string; currencyStyle?: 'baseline' | 'joined' | 'raised'; variant?: 'regular' | 'offer' | 'inverse' | 'sale'; class?: string }
-const { class: className = '', ...props } = Astro.props;
-const price = preparePrice(props);
+// The showcase renders the real component from @casaelida/vue; it does not copy its markup.
+import { CEPrice } from '@casaelida/vue';
+import type { CEPriceProps } from '@casaelida/vue';
+interface Props extends CEPriceProps { class?: string }
 ---
-<div class:list={['ce-price-block', className]}>
-  {price.previous !== undefined && <div class="ce-price-history"><span>Antes <del>S/{price.previous}</del></span>{price.discountLabel && <span class="ce-discount"><span class="ce-sr-only">Descuento: </span>−{price.discountLabel}</span>}</div>}
-  <span class:list={['ce-price', `ce-price--${price.variant}`, price.currencyStyle !== 'baseline' && `ce-price--${price.currencyStyle}`]}>
-    <span class="ce-sr-only">{`Precio actual: ${price.current} soles${price.unitLabel ? `, ${price.unitLabel}` : ''}${price.presentationLabel ? ` por ${price.presentationLabel}` : ''}`}</span>
-    <span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">{price.current}</span></span>
-    {price.unitLabel && <span class="ce-price-unit" aria-hidden="true"><span class="ce-price-unit-long">{price.unitLabel}</span>{price.unitShort && <span class="ce-price-unit-short">{price.unitShort}</span>}</span>}
-    {price.presentationLabel && <span class="ce-price-presentation" aria-hidden="true">/{price.presentationLabel}</span>}
-  </span>
-</div>
+<CEPrice {...Astro.props} />

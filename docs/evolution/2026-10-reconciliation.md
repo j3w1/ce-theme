@@ -49,7 +49,7 @@ Review record for the first foundation pull request. It compares the development
 
 - `decisions.md` no longer presents agent-chosen values as owner decisions: the Novedad green records the owner's `#47b900` and marks the darkened `#368500` pending review; the link-preview wordmark size is marked pending review.
 - The superseded rows (Vue-free implementation, Noto Sans, P4b) say so.
-- The 2026-10-30 rows record the component stack, the CE Systems rebuild, the workflow and the delivery limits.
+- The 2026-10-30 rows record the component stack, the CE Systems rebuild, the workflow, the delivery limits and the `CE` + PascalCase component naming.
 - The evolution record's status table now matches what was decided and built.
 - The Vuetify adapter is labelled legacy in the adoption and usage guides.
 
@@ -62,4 +62,4 @@ The pull request repeats this list. For each line the owner answers yes, change,
 3. Internal-tool recipes (`workspace.css`): keep as proposals, or drop until CE Systems needs them.
 4. Vuetify adapter: remove now or in a later pull request.
 5. Add to cart noun: “Bolsa” or “Carrito” throughout.
-6. The `@casaelida/vue` package and its first components (Button, TextField, Price, ProductCode).
+6. The `@casaelida/vue` package and its first components: `CEButton`, `CETextField`, `CEPrice`, `CEProductCode`.

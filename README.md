@@ -1,6 +1,6 @@
 # Casa Elida
 
-The Casa Elida design-system foundation: identity, portable design tokens, HTML/CSS recipes, and a visual reference for retail, internal tools, marketing, and signage.
+The Casa Elida design-system foundation: identity, portable design tokens, HTML/CSS recipes, reusable Vue 3 + TypeScript components (`@casaelida/vue`), and an Astro showcase for retail, internal tools, marketing, and signage.
 
 The visual direction pairs image-led home-retail clarity, space, photography, and hierarchy with Casa Elida's supplied logos, red/yellow palette, product codes, and distinctive pricing. The interface and retail examples are Spanish; technical documentation is English.
 
@@ -17,7 +17,7 @@ pnpm dev
 Open the loopback URL printed by Astro. This is local development, not a CE deployment. Shared previews must use the reviewed CE deployment workflow.
 
 ```sh
-pnpm check          # validate sources, check generated files, test contracts, build
+pnpm check          # validate sources, check generated files, test contracts, test and build the Vue package, build the site
 pnpm test:browser   # responsive layouts, accessibility, interactions, downloads
 ```
 
@@ -44,6 +44,15 @@ People and agents adopting the system start with [docs/apply-ce-theme.md](docs/a
 </main>
 ```
 
+In a Vue 3 application, render the same recipes with the components instead of writing the markup by hand. Public components are always named `CE` + PascalCase:
+
+```vue
+<CEProductCode code="CE26061509" />
+<CEPrice amount="8.50" />
+```
+
+See [packages/vue/README.md](packages/vue/README.md). The components still need the CSS above.
+
 Set the price's font size for its context. `ce-product` sets it to 44px; campaign examples use larger values. Load the optional `exports/fonts.css` (Inter, self-hosted from `fonts/inter/`) before the tokens; the CSS includes Arial and sans-serif fallbacks.
 
 ## Source map
@@ -52,10 +61,11 @@ Set the price's font size for its context. `ce-product` sets it to 44px; campaig
 | --- | --- |
 | `tokens/` | DTCG 2025.10 primitive and semantic token sources |
 | `ce-theme.json` | Version, supported exports, and contrast pairs |
+| `packages/vue/` | `@casaelida/vue`: Vue 3 + TypeScript components (`CEButton`, `CETextField`, `CEPrice`, `CEProductCode`) that render the recipes, with tests |
 | `recipes/` | Framework-neutral styles (base, interface, retail, workspace), font faces, share-card and label templates, and the price, product, campaign and behaviour helpers |
 | `fonts/` | Owner-supplied Inter files with provenance hashes and OFL license |
 | `docs/` | Adoption entry point, usage, product identity, pricing, sharing, accessibility, coverage, sources and decisions |
-| `site/` | Static Astro reference site: recipe pages, a demonstration storefront (`/tienda/`), internal tools (`/sistemas/`), labels and share previews |
+| `site/` | Static Astro documentation and showcase; it renders the real `@casaelida/vue` components: recipe pages, a demonstration storefront (`/tienda/`), internal tools (`/sistemas/`), labels and share previews |
 | `design-system/` | Brand book, component guidelines and previews for the Claude Design System bundle |
 | `exports/`, `public/downloads/` | Generated consumer files, including `exports/design-system/`; never hand-edit |
 | `public/assets/manifest.json` | Production assets (logos, product photos) with original names, provenance and hashes |

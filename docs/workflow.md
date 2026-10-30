@@ -20,7 +20,7 @@ One path, four steps. Each step starts only from what the previous one approved.
 ## Adding a component
 
 1. Confirm the recipe and its behaviour are approved in `decisions.md`. If not, propose them first.
-2. Add `packages/vue/src/components/Ce<Name>.vue`, export it from `src/index.ts`, and add tests in `packages/vue/test/`.
+2. Add `packages/vue/src/components/CE<Name>.vue` (always `CE` + PascalCase), export it from `src/index.ts`, add `test/CE<Name>.test.ts`, and set the `vue` field of its entry in `recipes/names.mjs`. Follow [packages/vue/CONTRIBUTING.md](../packages/vue/CONTRIBUTING.md).
 3. Run `pnpm check` (it builds and tests the package) and `pnpm test:browser`.
 4. If a showcase page already shows that recipe, replace the hand-written markup there with the component.
 5. Open a pull request that names the decision it implements.

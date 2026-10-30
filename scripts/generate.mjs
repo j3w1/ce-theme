@@ -21,7 +21,7 @@ const shareCard = await readFile(new URL('../recipes/share-card.css', import.met
 const printLabel = await readFile(new URL('../recipes/print-label.css', import.meta.url), 'utf8');
 // docs/names.md keeps its prose by hand; the registry tables between the markers come from recipes/names.mjs.
 const namesDoc = await source('docs/names.md');
-const registry = NAME_GROUPS.map((group) => `### ${group.es}\n\n| Id | Nombre CE | Recipe | Rule |\n| --- | --- | --- | --- |\n${NAMES.filter((entry) => entry.group === group.es).map((entry) => `| \`${entry.id}\` | ${entry.es} | ${entry.recipe.map((cls) => `\`${cls}\``).join(', ')} | ${entry.rule}${entry.aliases ? ` Retired name: ${entry.aliases.join(', ')}.` : ''} |`).join('\n')}\n`).join('\n');
+const registry = NAME_GROUPS.map((group) => `### ${group.es}\n\n| Id | Nombre CE | Recipe | Vue | Rule |\n| --- | --- | --- | --- | --- |\n${NAMES.filter((entry) => entry.group === group.es).map((entry) => `| \`${entry.id}\` | ${entry.es} | ${entry.recipe.map((cls) => `\`${cls}\``).join(', ')} | ${entry.vue ? `\`${entry.vue}\`` : '—'} | ${entry.rule}${entry.aliases ? ` Retired name: ${entry.aliases.join(', ')}.` : ''} |`).join('\n')}\n`).join('\n');
 const namesDocFilled = namesDoc.replace(/<!-- registry:start -->[\s\S]*<!-- registry:end -->/, `<!-- registry:start -->\n${registry}<!-- registry:end -->`);
 if (!check) await writeFile(new URL('../docs/names.md', import.meta.url), namesDocFilled);
 const outputs = new Map([

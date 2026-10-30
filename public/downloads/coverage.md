@@ -22,6 +22,15 @@ Examples: storefront `/tienda/` (home, `categoria`, `producto`, `escena`, `carri
 | Focus, reduced motion, larger text | All recipes | Tested | Focus ring is light-on-dark over photography and the black utility bar. |
 | Campaign colours without changing tokens | `--ce-campaign-surface`, `--ce-campaign-text`, `campaignColors()` | Tested | `campaignColors` reports the contrast ratio and the minimum it must meet. |
 
+## Vue components (`@casaelida/vue`)
+
+| Component | Recipe | Status | Notes |
+| --- | --- | --- | --- |
+| `CEButton` | `ce-button` | Tested | Unit tests; rendered on `/componentes/`. |
+| `CETextField` | `ce-field`, `ce-input`, `ce-input-group` | Tested | Unit tests; rendered on `/componentes/`. Pass an `id` when several Vue apps share a page. |
+| `CEPrice` | `ce-price` | Tested | Unit tests; every price on the site is rendered by it through `site/components/Price.astro`. |
+| `CEProductCode` | `ce-code` | Tested | Unit tests; rendered in the code specimens on `/patrones/`. Product cards still write the code badge by hand. |
+
 ## Shared elements and forms
 
 | Pattern | Recipe | Status | Notes |
