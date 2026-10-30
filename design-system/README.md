@@ -68,7 +68,7 @@ Reference sections bundled with this system: `apply-ce-theme.md` (start here whe
   - Rails use 20px gaps and always show part of the next card.
   - Sections are separated by 40px, and by 64px from 640px.
 - **Product grids:** 2 columns below 640px and 3 from 640px. Listings with the filter sidebar show 3 columns from 1024px and 4 from 1300px; without it, 4 from 1024px.
-- Prices align to the bottom of cards. Separate sections with white space, not boxes and shadows.
+- The price follows the specifications at the approved 12px gap (`size.product.gap-price`) and is never pushed to the bottom of the card; prices are not aligned across cards. Separate sections with white space, not boxes and shadows.
 - **Internal tools** use `data-ce-density`:
   - compact: 36px controls, 40px rows;
   - comfortable: the default;
@@ -151,12 +151,12 @@ Instagram campaigns use full-bleed lifestyle photography, the script wordmark, l
 
 ## Standard names
 
-Every pattern has one stable English id for code and designs and one Spanish name for people: **PricePromo** (Precio Promo) is the yellow price, **ProductIdentity** (Identidad) is NAME, Description and specs, **ProductStack** (Pila de producto) is the full vertical order and spacing of a product, **CECode** (Código CE) is the black one-line code badge, **PriceUnit** (Unidad: “cada uno” / “c/u”), **PricePresentation** (Presentación: “/pack de 12”), **PriceOld** (Precio anterior) and **DiscountLabel** (Etiqueta de descuento). Say the name, not the look. Every product shown anywhere must have a NAME. The full registry, with a Muestra for each name, is in the Components view under the group “Standard names” (`StandardNamesProduct`, `StandardNamesPrices`, `StandardNamesSurfaces`, `StandardNamesPhotos`, `StandardNamesStore`, `StandardNamesOutputs`, `StandardNamesInterface`, `StandardNamesFeedback`, `StandardNamesNavigation`) and in `names.md`; the source is `recipes/names.mjs`.
+Every pattern has one stable English id for code and designs and one Spanish name for people: **PricePromo** (Precio Promo) is the yellow price, **ProductIdentity** (Identidad) is NAME, Description and specs, **ProductStack** (Pila de producto) is the full vertical order and spacing of a product, **CECode** (Código CE) is the black one-line code badge, **PriceUnit** (Unidad: “cada uno” / “c/u”), **PricePresentation** (Presentación: “/pack de 12”), **PriceOld** (Precio anterior) and **DiscountLabel** (Etiqueta de descuento). Say the name, not the look. Every product shown anywhere must have a NAME. The full registry, with a Muestra for each name, is in the Components view under the group “Standard names” (`StandardNamesProduct`, `StandardNamesPrices`, `StandardNamesSurfaces`, `StandardNamesPhotos`, `StandardNamesStore`, `StandardNamesOutputs`, `StandardNamesInterface`, `StandardNamesFeedback`, `StandardNamesNavigation`, `StandardNamesMessaging`) and in `names.md`; the source is `recipes/names.mjs`.
 
 ## Components
 
 - **Actions:** `Button`, `IconButton`, `Link`, `Chip`.
-- **Forms:** `Field`, `FormControls`, `Swatch`.
+- **Forms:** `Field`, `FormControls`, `Controls`, `Swatch`.
 - **Feedback and interface:** `Badge`, `Status`, `Overlays`.
 - **Retail navigation:** `SiteHeader`, `CategoryRail`, `Footer`.
 - **Retail discovery:** `Mosaic`, `Rail`, `FilterBar`.
@@ -166,7 +166,7 @@ Every pattern has one stable English id for code and designs and one Spanish nam
 - **Workspace:** `AppShell`, `RecordEditor`, `Table`.
 - **Print:** `Label`.
 - **Sharing:** `ShareCard`.
-- **Standard names:** nine cards, one per group of names, each with a sample.
+- **Standard names:** ten cards, one per group of names (including Messaging), each with a sample.
 - **CE Radio (an application built on ce-theme):** `RadioPlayer`, `RadioStates`, `RadioPlaylists`, `RadioAdmin`. They show the real CE Radio window (DOM and stylesheets captured from the app), not new recipes: CE Radio uses the ce-theme recipes and draws its player-only parts with `--ce-*` tokens.
 - **Cover:** the system cover card.
 
