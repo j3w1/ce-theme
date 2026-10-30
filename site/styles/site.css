@@ -264,6 +264,8 @@ pre { overflow: auto; margin: 0; padding: var(--ce-space-24); font-size: var(--c
 .messaging-demo-title h2:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); }
 .messaging-demo-title p { margin: 0; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); }
 .messaging-demo-tools { display: flex; flex-wrap: wrap; gap: var(--ce-space-8); padding: var(--ce-space-12) var(--ce-space-16); border-top: var(--ce-stroke-thin) solid var(--ce-color-border-default); background: var(--ce-color-surface-subtle); }
+.messaging-demo-warehouse { display: flex; flex: 1 1 100%; flex-wrap: wrap; gap: var(--ce-space-8); min-width: 0; }
+.messaging-demo-warehouse-label { flex: 1 1 100%; margin: 0; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); font-weight: var(--ce-font-weight-bold); }
 .messaging-demo-events { padding-block: var(--ce-space-32) 0; }
 .messaging-demo-events h2 { font-size: var(--ce-font-size-title); }
 .messaging-demo-events ol { margin: 0; padding-left: var(--ce-space-24); display: grid; gap: var(--ce-space-8); overflow-wrap: anywhere; }

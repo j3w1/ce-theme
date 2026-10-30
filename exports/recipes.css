@@ -893,8 +893,8 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-pos-total { display: grid; gap: var(--ce-space-8); padding: var(--ce-space-16); border-top: var(--ce-stroke-thin) solid var(--ce-color-border-default); background: var(--ce-color-surface-canvas); }
 @media (max-width: 1023px) { .ce-pos { grid-template-columns: minmax(0, 1fr); } .ce-pos-ticket { border-left: 0; } }
 
-/* Casa Elida messaging recipes for CE Meta App and other conversation interfaces: the conversation list, the message list
-   and the message composer. They present state that the application supplies. Delivery, assignment, authorization and
+/* Casa Elida messaging recipes for CE Meta App and other conversation interfaces: the conversation list, the message list,
+   the message composer, the attachment group and the work status. They present state that the application supplies. Delivery, assignment, authorization and
    transport belong to the application and its services. Drawing an internal note differently from a customer reply is
    presentation, never a security control. Meaning is always carried by words (sender, status, "No la ve el cliente"),
    never by colour or alignment alone. */
@@ -936,6 +936,56 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-message-time { font-variant-numeric: tabular-nums; }
 .ce-message-status { white-space: nowrap; }
 .ce-message-status--failed { color: var(--ce-color-status-danger-text); font-weight: var(--ce-font-weight-semibold); }
+/* A bubble that carries attachments or contextual content takes the full bubble width instead of the width of its text. */
+.ce-message:has(> .ce-attachment-group, > .ce-message-context) { width: min(85%, 560px); }
+/* Contextual content: what the application draws for one message (for example a work status) after its time and delivery status. */
+.ce-message-context { margin-top: var(--ce-space-8); padding-top: var(--ce-space-8); border-top: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+
+/* Attachment group: images that were already sent, each a native button that only asks the application to open it. Photographic
+   evidence is shown uncropped (contain) unless the group asks for cover. Every tile reserves its box with aspect-ratio, so a late
+   image never shifts the layout or the scroll position of a message list. One item fills the width, two and four make two
+   columns, any other count three; in a narrow container (a group under 21rem wide, or enlarged text) every group of two or more
+   makes two. The group draws its own query container (.ce-attachment-group), so it responds on its own width wherever it is used,
+   inside a message list or not. A query container has no intrinsic width: give the group (or its parent) a definite or
+   block-level width, as every block already has. There is no upload, capture, zoom or viewer here. */
+.ce-attachment-group { container-type: inline-size; margin: 0 0 var(--ce-space-8); }
+.ce-attachments { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ce-space-8); margin: 0; padding: 0; list-style: none; }
+.ce-attachments--1 { grid-template-columns: minmax(0, 1fr); }
+.ce-attachments--2, .ce-attachments--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ce-attachment { position: relative; margin: 0; overflow: hidden; aspect-ratio: 2 / 3; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); background: var(--ce-color-surface-subtle); }
+.ce-attachments--1 .ce-attachment { aspect-ratio: 4 / 3; }
+.ce-attachment-open { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.ce-attachment-open:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: -4px; }
+.ce-attachment-image { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ce-attachments--cover .ce-attachment-image { object-fit: cover; }
+.ce-attachment-caption { position: absolute; inset: auto 0 0 0; padding: var(--ce-space-2) var(--ce-space-8); background: var(--ce-color-overlay); color: var(--ce-color-text-inverse); font-size: var(--ce-font-size-xs); font-weight: var(--ce-font-weight-bold); line-height: 1.2; overflow-wrap: break-word; }
+@container (max-width: 21rem) { .ce-attachments:not(.ce-attachments--1) { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Work status: an ordered list of steps that the application supplies (labels, which one is current, who and when). It does not
+   know what the steps mean and never changes state. State is carried by words and by shape, never by colour alone: done is a
+   solid bar, current a thick bar in bold, pending a dashed bar, stopped a hatched bar in bold warning text. In a narrow container
+   the steps reflow to two columns (a status under 21rem wide, or enlarged text) instead of breaking words. The status is its own
+   query container, so it responds on its own width wherever it is used; like any query container it needs a block-level or
+   definite width and has no intrinsic one. */
+.ce-work-status { container-type: inline-size; display: grid; gap: var(--ce-space-8); font-size: var(--ce-font-size-sm); }
+.ce-work-status-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 var(--ce-space-8); }
+.ce-work-status-title { margin: 0; font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-bold); }
+.ce-work-status-now { color: var(--ce-color-text-primary); font-weight: var(--ce-font-weight-bold); }
+.ce-work-steps { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(min-content, 1fr); gap: var(--ce-space-8); margin: 0; padding: 0; list-style: none; }
+@container (max-width: 21rem) { .ce-work-steps { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ce-work-step { display: grid; align-content: start; gap: var(--ce-space-4); color: var(--ce-color-text-muted); font-size: var(--ce-font-size-xs); line-height: 1.25; overflow-wrap: break-word; }
+.ce-work-step::before { content: ""; height: 8px; background-repeat: no-repeat; background-position: left center; background-size: 100% 3px; background-image: repeating-linear-gradient(90deg, var(--ce-color-border-control) 0 6px, transparent 6px 10px); }
+.ce-work-step-label { min-width: 0; overflow-wrap: break-word; }
+.ce-work-step--pending { color: var(--ce-color-text-muted); }
+.ce-work-step--done { color: var(--ce-color-text-secondary); }
+.ce-work-step--done::before { background-size: 100% 4px; background-image: linear-gradient(var(--ce-color-text-primary), var(--ce-color-text-primary)); }
+.ce-work-step--current { color: var(--ce-color-text-primary); font-weight: var(--ce-font-weight-bold); }
+.ce-work-step--current::before { background-size: 100% 8px; background-image: linear-gradient(var(--ce-color-text-primary), var(--ce-color-text-primary)); }
+.ce-work-step--stopped { color: var(--ce-color-status-warning-text); font-weight: var(--ce-font-weight-bold); }
+.ce-work-step--stopped::before { background-size: 100% 8px; background-image: repeating-linear-gradient(135deg, var(--ce-color-status-warning-text) 0 4px, var(--ce-color-status-warning-bg) 4px 8px); }
+.ce-work-status-summary { margin: 0; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); }
+.ce-work-status-actions { display: flex; flex-wrap: wrap; gap: var(--ce-space-8); }
+.ce-work-status-actions .ce-button { flex: 1 1 8rem; min-height: 44px; padding-block: var(--ce-space-8); }
 
 /* Message composer: reply (default) or internal note. The note mode changes the whole composer to the informational
    palette, states "No la ve el cliente" and swaps the red send action for "Guardar nota". */

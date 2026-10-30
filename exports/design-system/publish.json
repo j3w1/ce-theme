@@ -16,7 +16,8 @@
     "project/media/logo-wordmark-white-yellow.png": "public/assets/logo-wordmark-white-yellow.png",
     "project/media/logo-ce-radio.png": "public/assets/logo-ce-radio.png",
     "project/media/logo-ce-radio-navidad.png": "public/assets/logo-ce-radio-navidad.png",
-    "project/media/brand-tote-bag.png": "public/references/brand-tote-bag.png"
+    "project/media/brand-tote-bag.png": "public/references/brand-tote-bag.png",
+    "project/media/shelf-gap-fictional.svg": "public/references/shelf-gap-fictional.svg"
   },
   "assetGroups": [
     {

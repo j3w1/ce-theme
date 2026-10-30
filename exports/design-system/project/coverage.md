@@ -31,6 +31,7 @@ Examples: storefront `/tienda/` (home, `categoria`, `producto`, `escena`, `carri
 | `CEPrice` | `ce-price` | Tested | Unit tests; every price on the site is rendered by it through `site/components/Price.astro`. |
 | `CEProductCode` | `ce-code` | Tested | Unit tests; rendered in the code specimens on `/patrones/`. Product cards still write the code badge by hand. |
 | `CEConversationList`, `CEMessageList`, `CEMessageComposer` | `ce-conversation-list`, `ce-message-list`, `ce-composer` | Tested | Unit tests and browser tests on `/mensajeria/`, which runs them on fictional in-memory fixtures. See [Messaging](#messaging-ce-meta-app). |
+| `CEAttachmentGroup`, `CEWorkStatus` | `ce-attachments`, `ce-work-status` | Tested | Unit tests and browser tests on `/mensajeria/` (conversation “Reposición · Tacna”). Illustrative states only. See [Messaging](#messaging-ce-meta-app). |
 
 ## Messaging (CE Meta App)
 
@@ -43,7 +44,9 @@ Presentation for conversation interfaces. Delivery, assignment, authorization an
 | Internal note, always "No la ve el cliente" | `ce-message--note`, `ce-composer--note` | Tested | Presentation only; the service must enforce who can read a note. |
 | Message status in words: Enviado, Entregado, Leído, No entregado | `ce-message-status` | Tested | Delivery only; never acceptance or completion of work. |
 | Composer with reply and note drafts | `ce-composer` | Tested | Enter adds a line, Ctrl or ⌘ + Enter submits. |
-| Voice notes, calls, camera and photos, attachments, native notification permission | — | Specified | Need provider and platform decisions; browser tests do not verify native Android or iOS behaviour. |
+| Attachments already sent: one to many images, uncropped, each asking to open | `ce-attachments`, `ce-attachment` | Tested | Presentation only: no upload, camera, storage, verification, zoom or viewer. Tiles reserve their box so images never shift the message list. |
+| Contextual content in a message, and the progress of one piece of work | `ce-message-context`, `ce-work-status` | Tested | States are supplied by the application and are illustrative, not CE Systems rules. Delivery status and work progress are shown separately. |
+| Voice notes, calls, camera, uploads and a photo viewer, native notification permission | — | Specified | Need provider and platform decisions; browser tests do not verify native Android or iOS behaviour. |
 | Offline, upload failure and retry, restricted conversations | `ce-notice`, `ce-locked` | Specified | The composer can be disabled with a visible reason; the other states are not built. |
 | Customer assignment, product sharing, AI answers | — | Excluded | Not part of this slice. |
 

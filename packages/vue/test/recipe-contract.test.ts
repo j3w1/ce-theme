@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 import type { Component } from 'vue';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { CEButton, CEConversationList, CEMessageComposer, CEMessageList, CEPrice, CEProductCode, CETextField } from '../src/index';
+import { CEAttachmentGroup, CEButton, CEConversationList, CEMessageComposer, CEMessageList, CEPrice, CEProductCode, CETextField, CEWorkStatus } from '../src/index';
 
 // Components render recipes; they never invent styling. Every ce- class they emit must exist in the generated recipes.
 // Vitest runs from the package directory; the generated recipes live at the repository root.
@@ -34,6 +34,12 @@ const cases: [string, Component, Record<string, unknown>][] = [
     { id: '3', kind: 'note', author: 'Paola', text: 'Nota', time: '10:40', simulated: true },
     ...(['sent', 'delivered', 'read', 'failed'] as const).map((status, index) => ({ id: `s${index}`, kind: 'outgoing' as const, text: status, status, simulated: true })),
   ] }],
+  ['message list with an attachment', CEMessageList, { label: 'Mensajes', messages: [
+    { id: 'a', kind: 'outgoing', text: 'Con foto', status: 'read', attachments: [{ id: 'f', label: 'Anaquel 3', src: '/a.svg', alt: 'Anaquel' }] },
+  ] }],
+  ['attachment group of one', CEAttachmentGroup, { label: '1 foto', items: [{ id: 'f', label: 'Anaquel 3', src: '/a.svg', alt: 'Anaquel' }] }],
+  ...[2, 3, 4].map((count): [string, typeof CEAttachmentGroup, Record<string, unknown>] => [`attachment group of ${count}, cover`, CEAttachmentGroup, { label: `${count} fotos`, fit: 'cover', items: Array.from({ length: count }, (_, i) => ({ id: `f${i}`, label: `Foto ${i}`, src: '/a.svg', alt: 'Foto' })) }]),
+  ...(['done', 'current', 'pending', 'stopped'] as const).map((state): [string, typeof CEWorkStatus, Record<string, unknown>] => [`work status, ${state} step`, CEWorkStatus, { title: 'Pedido', status: 'Estado', summary: 'Resumen', steps: [{ id: 'a', label: 'Paso', state }] }]),
   ['empty message list', CEMessageList, { label: 'Mensajes', messages: [] }],
   ['composer', CEMessageComposer, { label: 'Mensaje para Rosa', recipient: 'Rosa' }],
   ['composer with the note switch', CEMessageComposer, { label: 'Mensaje para Rosa', allowNotes: true, reply: 'borrador' }],

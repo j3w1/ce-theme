@@ -2,18 +2,21 @@
 // The /mensajeria/ example: the real @casaelida/vue components on fictional, in-memory fixtures. Nothing here reads or
 // writes storage, calls a service or sends a message; "sending" only appends a message to this page's own memory.
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
-import { CEButton, CEConversationList, CEMessageComposer, CEMessageList } from '@casaelida/vue';
+import { CEButton, CEConversationList, CEMessageComposer, CEMessageList, CEWorkStatus } from '@casaelida/vue';
 import type { CEComposerMode, CEConversationItem, CEMessage } from '@casaelida/vue';
-import { FIRST_FREE_MINUTE, SIMULATED_INCOMING, SIMULATION_NOTICE, createThreads } from '../data/messaging';
-import type { DemoThread } from '../data/messaging';
+import { FIRST_FREE_MINUTE, SIMULATED_INCOMING, SIMULATION_NOTICE, UNAVAILABLE_REASON, WAREHOUSE, WORK_ACTIONS, createThreads, workStatusOf } from '../data/messaging';
+import type { DemoRequestState, DemoThread, DemoWorkAction } from '../data/messaging';
 
-interface EmittedEvent { id: number; name: 'submitReply' | 'saveNote'; conversation: string; text: string }
+// Component events are recorded under their own names. A warehouse action is not a component event: the application's own
+// buttons in the CEWorkStatus slot raise it, so it is recorded as the application's simulated action.
+interface EmittedEvent { id: number; name: 'submitReply' | 'saveNote' | 'openAttachment' | 'warehouseAction'; conversation: string; text: string; note?: string }
 
 const threads = reactive<DemoThread[]>(createThreads());
 const selectedId = ref(threads[0]!.id);
 const view = ref<'list' | 'thread'>('list');
 const mode = ref<CEComposerMode>('reply');
 const events = ref<EmittedEvent[]>([]);
+const attachmentAnnouncement = ref('');
 const root = ref<HTMLElement | null>(null);
 const heading = ref<HTMLElement | null>(null);
 const backButton = ref<HTMLElement | null>(null);
@@ -25,7 +28,7 @@ let serial = 0;
 const stamp = () => { const now = minute++; return `${String(Math.floor(now / 60)).padStart(2, '0')}:${String(now % 60).padStart(2, '0')}`; };
 const nextId = () => `sim${++serial}`;
 const flat = (text: string) => text.replace(/\s+/g, ' ').trim();
-const initials = (name: string) => name.split(/\s+/).slice(0, 2).map((word) => word.charAt(0).toUpperCase()).join('');
+const initials = (name: string) => name.split(/\s+/).filter((word) => /\p{L}/u.test(word)).slice(0, 2).map((word) => word.charAt(0).toUpperCase()).join('');
 
 const current = computed(() => threads.find((thread) => thread.id === selectedId.value) ?? threads[0]!);
 const isCustomer = computed(() => current.value.kind === 'customer');
@@ -103,8 +106,8 @@ onMounted(() => {
 });
 onBeforeUnmount(() => observer?.disconnect());
 
-function record(name: EmittedEvent['name'], text: string) {
-  events.value = [{ id: ++serial, name, conversation: current.value.name, text }, ...events.value].slice(0, 5);
+function record(name: EmittedEvent['name'], text: string, note?: string) {
+  events.value = [{ id: ++serial, name, conversation: current.value.name, text, note }, ...events.value].slice(0, 5);
 }
 function onSubmitReply(text: string) {
   const message: CEMessage = { id: nextId(), kind: 'outgoing', text, time: stamp(), status: 'sent', simulated: true };
@@ -118,10 +121,39 @@ function onSaveNote(text: string) {
   record('saveNote', text);
 }
 
+// Opening a photograph only records the event: this demonstration has no viewer, and no modal is drawn.
+function onOpenAttachment(messageId: string, attachmentId: string, index: number) {
+  const message = current.value.messages.find((item) => item.id === messageId);
+  const attachment = message?.attachments?.[index];
+  const total = message?.attachments?.length ?? 0;
+  record('openAttachment', `${attachment?.label ?? attachmentId} · foto ${index + 1} de ${total} · mensaje de las ${message?.time ?? ''}`, 'No hay visor en esta demostración: solo se registra el evento.');
+  // Cleared first so that opening the same photo again is announced again.
+  attachmentAnnouncement.value = '';
+  void nextTick(() => { attachmentAnnouncement.value = `Se abrió la foto ${index + 1} de ${total}: ${attachment?.label ?? attachmentId}. Simulado: no hay visor en esta demostración.`; });
+}
+
+// Simulated warehouse actions. The page, not CEWorkStatus, owns the transition; each conversation keeps its own requests.
+function advance(messageId: string, action: DemoWorkAction, event: Event) {
+  const request = current.value.requests[messageId];
+  if (!request || !WORK_ACTIONS[request.state].some((offered) => offered.to === action.to)) return;
+  // The button that was used is replaced by the next action (or by none), so a keyboard reader would lose their place.
+  const hadFocus = event.currentTarget === document.activeElement;
+  const time = stamp();
+  const to: DemoRequestState = action.to;
+  const before = workStatusOf(request).status;
+  request.state = to;
+  if (to === 'accepted') request.acceptedAt = time;
+  if (to === 'preparing') request.preparingAt = time;
+  if (to === 'resolved') request.closedAt = time;
+  if (to === 'unavailable') current.value.messages.push({ id: nextId(), kind: 'incoming', author: WAREHOUSE, text: UNAVAILABLE_REASON, time: stamp() });
+  record('warehouseAction', `${action.label} · ${before} → ${workStatusOf(request).status}`);
+  if (hadFocus) void nextTick(() => (root.value?.querySelector<HTMLElement>('.messaging-demo-warehouse button') ?? root.value?.querySelector<HTMLElement>('[role="log"]'))?.focus({ preventScroll: true }));
+}
+
 let incomingIndex = 0;
 const incomingFor = (thread: DemoThread): CEMessage => ({
   id: nextId(), kind: 'incoming', text: SIMULATED_INCOMING[incomingIndex++ % SIMULATED_INCOMING.length]!, time: stamp(),
-  author: thread.kind === 'team' ? 'Marco' : undefined,
+  author: thread.kind === 'team' ? (thread.author ?? 'Marco') : undefined,
 });
 function simulateIncoming() { current.value.messages.push(incomingFor(current.value)); }
 function simulateOther() {
@@ -147,10 +179,21 @@ function simulateOther() {
           <span :class="['ce-avatar', current.kind === 'team' && 'ce-avatar--team']" aria-hidden="true">{{ initials(current.name) }}</span>
           <div class="messaging-demo-title">
             <h2 ref="heading" tabindex="-1">{{ current.name }}</h2>
-            <p>{{ isCustomer ? 'Cliente' : 'Equipo' }} · conversación de ejemplo</p>
+            <p>{{ current.description ?? (isCustomer ? 'Cliente' : 'Equipo') }} · conversación de ejemplo</p>
           </div>
         </header>
-        <CEMessageList :key="current.id" :messages="current.messages" :label="`Mensajes con ${current.name}`" />
+        <CEMessageList :key="current.id" :messages="current.messages" :label="`Mensajes con ${current.name}`" @open-attachment="onOpenAttachment">
+          <template #context="{ message }">
+            <CEWorkStatus v-if="current.requests[message.id]" title="Pedido de reposición" v-bind="workStatusOf(current.requests[message.id]!)">
+              <template v-if="WORK_ACTIONS[current.requests[message.id]!.state].length" #actions>
+                <div class="messaging-demo-warehouse" role="group" :aria-labelledby="`warehouse-${message.id}`">
+                  <p :id="`warehouse-${message.id}`" class="messaging-demo-warehouse-label">Acciones simuladas del almacén</p>
+                  <CEButton v-for="action in WORK_ACTIONS[current.requests[message.id]!.state]" :key="action.to" variant="secondary" @click="advance(message.id, action, $event)">{{ action.label }}</CEButton>
+                </div>
+              </template>
+            </CEWorkStatus>
+          </template>
+        </CEMessageList>
         <CEMessageComposer
           v-model:mode="mode" v-model:reply="current.drafts.reply" v-model:note="current.drafts.note"
           :conversation-id="current.id" :label="`Mensaje para ${current.name}`" :recipient="current.recipient" :allow-notes="isCustomer"
@@ -165,10 +208,15 @@ function simulateOther() {
   </section>
   <section class="messaging-demo-events" aria-labelledby="messaging-events">
     <h2 id="messaging-events">Eventos emitidos (simulados)</h2>
-    <p>Los componentes solo emiten eventos. Esta página los recibe y actualiza su propia memoria; ningún evento sale de ella.</p>
-    <ol v-if="events.length">
-      <li v-for="event in events" :key="event.id"><code>{{ event.name }}</code> · {{ event.conversation }} · «{{ event.text }}» · simulado</li>
-    </ol>
-    <p v-else class="messaging-demo-events-empty">Aún no hay eventos. Escribe y envía, o guarda una nota.</p>
+    <p>Los componentes solo emiten eventos. Esta página los recibe y actualiza su propia memoria; ningún evento sale de ella. Las acciones del almacén son botones de esta página, no de los componentes.</p>
+    <!-- The history is visible and not live: replies are already announced by the message log and request progress by CEWorkStatus. -->
+    <div>
+      <ol v-if="events.length">
+        <li v-for="event in events" :key="event.id"><code>{{ event.name }}</code> · {{ event.conversation }} · «{{ event.text }}» · simulado<template v-if="event.note"> · {{ event.note }}</template></li>
+      </ol>
+      <p v-else class="messaging-demo-events-empty">Aún no hay eventos. Escribe y envía, guarda una nota, o abre la foto de Reposición · Tacna.</p>
+    </div>
+    <!-- Opening a photo has no other visible result next to the focused button, so this small region says it once. -->
+    <p class="ce-sr-only" role="status" aria-live="polite" data-testid="attachment-announcement">{{ attachmentAnnouncement }}</p>
   </section>
 </template>

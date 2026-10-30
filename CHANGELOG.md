@@ -10,10 +10,13 @@
 - `docs/workflow.md` and the branch reconciliation record (`docs/evolution/2026-10-reconciliation.md`).
 - Messaging foundation for CE Meta App: recipes in `recipes/messaging.css` and the public components `CEConversationList`, `CEMessageList` and `CEMessageComposer` (typed `submitReply` and `saveNote` events, separate reply and note drafts, delivery states in words). Standard names group Mensajería.
 - `/mensajeria/`: one interactive example in the showcase (a specific owner-approved exception to the rule against new showcase pages), built from the real components on fictional in-memory fixtures. It says "Simulación: ningún mensaje sale de esta página." and sends nothing.
+- Step 4B (ce-theme#3): `CEAttachmentGroup` (already-sent images, uncropped by default, `open(index, id)`) and `CEWorkStatus` (application-supplied steps and state in words and shape, an `actions` slot, a polite announcement when the state changes). `CEMessageList` gains message `attachments`, an `openAttachment` event and a `context` slot; its keyed scrolling contract also holds while attachments or contextual content change height. Recipes `ce-attachments`, `ce-work-status` and `ce-message-context`; standard names AttachmentGroup and WorkStatus. `CEAttachmentGroup` and `CEWorkStatus` are their own query containers (`ce-attachment-group`), so they respond to a narrow width standalone; `ce-message-list` is not a container, so existing message lists keep their intrinsic width.
+- `/mensajeria/`: the fictional conversation “Reposición · Tacna” with a fictional SVG shelf illustration (`public/references/shelf-gap-fictional.svg`, provenance recorded), delivery status shown apart from replenishment progress, simulated warehouse actions (Solicitado → Aceptado → Preparando → Resuelto, or No se puede atender) and a visible simulated attachment-open event. The states are illustrative, not CE Systems rules.
 - Tests for the messaging components, the example (keyboard, focus, 320 to 1440 px, enlarged text, accessibility, no network or storage) and the design-system title.
 
 ### Changed
 
+- `design-system/README.md`: product prices follow the specifications at the approved 12px gap instead of aligning to the bottom of cards; the standard names are ten cards, including Messaging; the Components listing includes the Controls card.
 - The Astro site is the documentation and showcase only. It renders the real components: every price through `site/components/Price.astro`, and the button, field and code demonstrations.
 - Prices no longer carry the unused `ce-price--regular` class.
 - `pnpm check` also typechecks, tests and builds the Vue package; `pnpm dev` and `pnpm build` build it first.
