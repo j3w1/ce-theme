@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "theme": "light",
   "tokens": {
     "color.action.primary.active": {
@@ -12,7 +12,7 @@
           0.16470588235294117
         ]
       },
-      "description": "",
+      "description": "Primary button fill while pressed.",
       "css": "#a61e2a",
       "variable": "--ce-color-action-primary-active"
     },
@@ -26,7 +26,7 @@
           0.22745098039215686
         ]
       },
-      "description": "",
+      "description": "Primary button fill under white labels.",
       "css": "#da2e3a",
       "variable": "--ce-color-action-primary-bg"
     },
@@ -40,7 +40,7 @@
           0.19215686274509805
         ]
       },
-      "description": "",
+      "description": "Primary button fill on hover; also link hover color.",
       "css": "#bd2431",
       "variable": "--ce-color-action-primary-hover"
     },
@@ -54,7 +54,7 @@
           1
         ]
       },
-      "description": "",
+      "description": "Label on primary action fills in every state.",
       "css": "#ffffff",
       "variable": "--ce-color-action-primary-text"
     },
@@ -68,7 +68,7 @@
           0.4627450980392157
         ]
       },
-      "description": "",
+      "description": "Input, select, swatch and secondary-button boundaries (3:1 on canvas).",
       "css": "#767676",
       "variable": "--ce-color-border-control"
     },
@@ -82,7 +82,7 @@
           0.8666666666666667
         ]
       },
-      "description": "",
+      "description": "Decorative dividers and table rules. Not a control boundary.",
       "css": "#dddddd",
       "variable": "--ce-color-border-default"
     },
@@ -96,7 +96,7 @@
           0.23921568627450981
         ]
       },
-      "description": "",
+      "description": "Brand red for large brand surfaces, logo grounds and decorative emphasis. Not a fill for small white text; use color.action.primary.bg.",
       "css": "#e6303d",
       "variable": "--ce-color-brand-red"
     },
@@ -110,7 +110,7 @@
           0.06274509803921569
         ]
       },
-      "description": "",
+      "description": "Promotional yellow for offer blocks and campaign panels. Always pair with color.text.primary.",
       "css": "#f9eb10",
       "variable": "--ce-color-brand-yellow"
     },
@@ -124,7 +124,7 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Product code label background.",
       "css": "#111111",
       "variable": "--ce-color-code-bg"
     },
@@ -138,7 +138,7 @@
           1
         ]
       },
-      "description": "",
+      "description": "Product code label text on color.code.bg.",
       "css": "#ffffff",
       "variable": "--ce-color-code-text"
     },
@@ -152,9 +152,37 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Focus outline: 2px solid with a 3px offset on every interactive recipe.",
       "css": "#111111",
       "variable": "--ce-color-focus"
+    },
+    "color.marker.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.06666666666666667,
+          0.06666666666666667,
+          0.06666666666666667
+        ]
+      },
+      "description": "Lettered image marker circle (A, B, C).",
+      "css": "#111111",
+      "variable": "--ce-color-marker-bg"
+    },
+    "color.marker.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ]
+      },
+      "description": "Marker letter on color.marker.bg.",
+      "css": "#ffffff",
+      "variable": "--ce-color-marker-text"
     },
     "color.overlay": {
       "type": "color",
@@ -167,7 +195,7 @@
         ],
         "alpha": 0.72
       },
-      "description": "",
+      "description": "Gradient scrim behind text on photography. Validate each final crop.",
       "css": "rgb(0 0 0 / 0.72)",
       "variable": "--ce-color-overlay"
     },
@@ -181,7 +209,7 @@
           1
         ]
       },
-      "description": "",
+      "description": "Price on photography protected by color.overlay or a dark area.",
       "css": "#ffffff",
       "variable": "--ce-color-price-inverse"
     },
@@ -195,7 +223,7 @@
           0.06274509803921569
         ]
       },
-      "description": "",
+      "description": "Offer price block background.",
       "css": "#f9eb10",
       "variable": "--ce-color-price-offer-bg"
     },
@@ -209,7 +237,7 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Offer price amount on color.price.offer.bg.",
       "css": "#111111",
       "variable": "--ce-color-price-offer-text"
     },
@@ -223,7 +251,7 @@
           0.4
         ]
       },
-      "description": "",
+      "description": "Struck-through previous price and its “Antes” label.",
       "css": "#666666",
       "variable": "--ce-color-price-previous"
     },
@@ -237,9 +265,51 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Everyday price on white surfaces.",
       "css": "#111111",
       "variable": "--ce-color-price-regular"
+    },
+    "color.sale.accent": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9764705882352941,
+          0.9215686274509803,
+          0.06274509803921569
+        ]
+      },
+      "description": "Large promotional price on color.sale.bg (24px and larger only).",
+      "css": "#f9eb10",
+      "variable": "--ce-color-sale-accent"
+    },
+    "color.sale.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8549019607843137,
+          0.1803921568627451,
+          0.22745098039215686
+        ]
+      },
+      "description": "Supported red promotion block or card (REBAJAS); not the default promotion.",
+      "css": "#da2e3a",
+      "variable": "--ce-color-sale-bg"
+    },
+    "color.sale.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ]
+      },
+      "description": "Text on color.sale.bg.",
+      "css": "#ffffff",
+      "variable": "--ce-color-sale-text"
     },
     "color.status.danger.bg": {
       "type": "color",
@@ -251,7 +321,7 @@
           0.9450980392156862
         ]
       },
-      "description": "",
+      "description": "Error message surface.",
       "css": "#fff0f1",
       "variable": "--ce-color-status-danger-bg"
     },
@@ -265,7 +335,7 @@
           0.16470588235294117
         ]
       },
-      "description": "",
+      "description": "Error text and invalid-field borders on color.status.danger.bg and canvas.",
       "css": "#a61e2a",
       "variable": "--ce-color-status-danger-text"
     },
@@ -279,7 +349,7 @@
           0.984313725490196
         ]
       },
-      "description": "",
+      "description": "Information message surface.",
       "css": "#eaf3fb",
       "variable": "--ce-color-status-info-bg"
     },
@@ -293,7 +363,7 @@
           0.6392156862745098
         ]
       },
-      "description": "",
+      "description": "Information text on color.status.info.bg.",
       "css": "#0058a3",
       "variable": "--ce-color-status-info-text"
     },
@@ -307,7 +377,7 @@
           0.9333333333333333
         ]
       },
-      "description": "",
+      "description": "Success message surface.",
       "css": "#eaf5ee",
       "variable": "--ce-color-status-success-bg"
     },
@@ -321,7 +391,7 @@
           0.23137254901960785
         ]
       },
-      "description": "",
+      "description": "Success text on color.status.success.bg.",
       "css": "#17613b",
       "variable": "--ce-color-status-success-text"
     },
@@ -335,7 +405,7 @@
           0.8627450980392157
         ]
       },
-      "description": "",
+      "description": "Warning message surface.",
       "css": "#fff6dc",
       "variable": "--ce-color-status-warning-bg"
     },
@@ -349,7 +419,7 @@
           0.0392156862745098
         ]
       },
-      "description": "",
+      "description": "Warning text on color.status.warning.bg.",
       "css": "#81590a",
       "variable": "--ce-color-status-warning-text"
     },
@@ -363,7 +433,7 @@
           1
         ]
       },
-      "description": "",
+      "description": "Default page and card background. White surfaces carry product photography.",
       "css": "#ffffff",
       "variable": "--ce-color-surface-canvas"
     },
@@ -377,7 +447,7 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Dark background for ink buttons, badges, utility bars and photo panels.",
       "css": "#111111",
       "variable": "--ce-color-surface-inverse"
     },
@@ -391,9 +461,121 @@
           0.9607843137254902
         ]
       },
-      "description": "",
+      "description": "Quiet neutral background for chips, table headers and grouped regions.",
       "css": "#f5f5f5",
       "variable": "--ce-color-surface-subtle"
+    },
+    "color.tag.limited.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ]
+      },
+      "description": "Edición limitada: limited editions. Tag fill.",
+      "css": "#000000",
+      "variable": "--ce-color-tag-limited-bg"
+    },
+    "color.tag.limited.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ]
+      },
+      "description": "Label on color.tag.limited.bg.",
+      "css": "#ffffff",
+      "variable": "--ce-color-tag-limited-text"
+    },
+    "color.tag.novedad.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.21176470588235294,
+          0.5215686274509804,
+          0
+        ]
+      },
+      "description": "Novedad: new products. Tag fill.",
+      "css": "#368500",
+      "variable": "--ce-color-tag-novedad-bg"
+    },
+    "color.tag.novedad.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ]
+      },
+      "description": "Label on color.tag.novedad.bg.",
+      "css": "#ffffff",
+      "variable": "--ce-color-tag-novedad-text"
+    },
+    "color.tag.promo.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9254901960784314,
+          0.6196078431372549,
+          0
+        ]
+      },
+      "description": "Promo: products on promotion (brand yellow stays for offer prices and promotion surfaces). Tag fill.",
+      "css": "#ec9e00",
+      "variable": "--ce-color-tag-promo-bg"
+    },
+    "color.tag.promo.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.06666666666666667,
+          0.06666666666666667,
+          0.06666666666666667
+        ]
+      },
+      "description": "Label on color.tag.promo.bg.",
+      "css": "#111111",
+      "variable": "--ce-color-tag-promo-text"
+    },
+    "color.tag.top.bg": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8784313725490196,
+          0.027450980392156862,
+          0.3176470588235294
+        ]
+      },
+      "description": "Top en ventas: best sellers. Tag fill.",
+      "css": "#e00751",
+      "variable": "--ce-color-tag-top-bg"
+    },
+    "color.tag.top.text": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ]
+      },
+      "description": "Label on color.tag.top.bg.",
+      "css": "#ffffff",
+      "variable": "--ce-color-tag-top-text"
     },
     "color.text.inverse": {
       "type": "color",
@@ -405,7 +587,7 @@
           1
         ]
       },
-      "description": "",
+      "description": "Text on color.surface.inverse and on photography protected by color.overlay.",
       "css": "#ffffff",
       "variable": "--ce-color-text-inverse"
     },
@@ -419,7 +601,7 @@
           0.4
         ]
       },
-      "description": "",
+      "description": "Product details, field notes and captions on color.surface.canvas and color.surface.subtle.",
       "css": "#666666",
       "variable": "--ce-color-text-muted"
     },
@@ -433,7 +615,7 @@
           0.06666666666666667
         ]
       },
-      "description": "",
+      "description": "Headings, body copy and labels on color.surface.canvas, color.surface.subtle and color.brand.yellow.",
       "css": "#111111",
       "variable": "--ce-color-text-primary"
     },
@@ -447,42 +629,48 @@
           0.2823529411764706
         ]
       },
-      "description": "",
+      "description": "Supporting paragraphs on color.surface.canvas and color.surface.subtle.",
       "css": "#484848",
       "variable": "--ce-color-text-secondary"
     },
     "font.family": {
       "type": "fontFamily",
       "value": [
-        "Noto Sans Variable",
-        "Noto Sans",
+        "Inter",
         "Arial",
         "sans-serif"
       ],
-      "description": "",
-      "css": "\"Noto Sans Variable\", \"Noto Sans\", Arial, sans-serif",
+      "description": "Inter for every interface, retail and campaign surface, with Arial fallback.",
+      "css": "Inter, Arial, sans-serif",
       "variable": "--ce-font-family"
     },
     "font.line.body": {
       "type": "number",
       "value": 1.5,
-      "description": "",
+      "description": "Body copy and product text.",
       "css": "1.5",
       "variable": "--ce-font-line-body"
     },
     "font.line.heading": {
       "type": "number",
       "value": 1.2,
-      "description": "",
+      "description": "Headings, buttons and compact labels.",
       "css": "1.2",
       "variable": "--ce-font-line-heading"
     },
     "font.line.tight": {
       "type": "number",
       "value": 1.1,
-      "description": "",
+      "description": "Display and hero headings.",
       "css": "1.1",
       "variable": "--ce-font-line-tight"
+    },
+    "font.ratio.name": {
+      "type": "number",
+      "value": 0.9375,
+      "description": "Product NAME size relative to its Description (15px against 16px at the reference scale); keeps the optical hierarchy at any size and in print.",
+      "css": "0.9375",
+      "variable": "--ce-font-ratio-name"
     },
     "font.size.body": {
       "type": "dimension",
@@ -490,7 +678,7 @@
         "value": 1,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Body copy and product names.",
       "css": "1rem",
       "variable": "--ce-font-size-body"
     },
@@ -500,7 +688,7 @@
         "value": 3,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Display headings.",
       "css": "3rem",
       "variable": "--ce-font-size-display"
     },
@@ -510,7 +698,7 @@
         "value": 2,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Section headings (h2) and photo-panel titles.",
       "css": "2rem",
       "variable": "--ce-font-size-heading"
     },
@@ -520,7 +708,7 @@
         "value": 4,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Page and campaign heroes.",
       "css": "4rem",
       "variable": "--ce-font-size-hero"
     },
@@ -530,7 +718,7 @@
         "value": 1.125,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Intro paragraphs and small headings.",
       "css": "1.125rem",
       "variable": "--ce-font-size-lead"
     },
@@ -540,7 +728,7 @@
         "value": 8,
         "unit": "rem"
       },
-      "description": "",
+      "description": "In-store signage read at distance.",
       "css": "8rem",
       "variable": "--ce-font-size-signage"
     },
@@ -550,7 +738,7 @@
         "value": 0.875,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Product details, codes, labels, buttons and notes.",
       "css": "0.875rem",
       "variable": "--ce-font-size-sm"
     },
@@ -560,7 +748,7 @@
         "value": 1.5,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Card and section titles (h3).",
       "css": "1.5rem",
       "variable": "--ce-font-size-title"
     },
@@ -570,37 +758,58 @@
         "value": 0.75,
         "unit": "rem"
       },
-      "description": "",
+      "description": "Badges, eyebrows and fine print.",
       "css": "0.75rem",
       "variable": "--ce-font-size-xs"
     },
     "font.weight.bold": {
       "type": "fontWeight",
       "value": 700,
-      "description": "",
+      "description": "Headings, labels, buttons, chips and product models.",
       "css": "700",
       "variable": "--ce-font-weight-bold"
     },
     "font.weight.heavy": {
       "type": "fontWeight",
       "value": 800,
-      "description": "",
+      "description": "Display prices and large campaign type.",
       "css": "800",
       "variable": "--ce-font-weight-heavy"
     },
     "font.weight.regular": {
       "type": "fontWeight",
       "value": 400,
-      "description": "",
+      "description": "Body copy, product names and code labels.",
       "css": "400",
       "variable": "--ce-font-weight-regular"
     },
     "font.weight.semibold": {
       "type": "fontWeight",
       "value": 600,
-      "description": "",
+      "description": "Status text and price unit labels.",
       "css": "600",
       "variable": "--ce-font-weight-semibold"
+    },
+    "layer.overlay": {
+      "type": "number",
+      "value": 100,
+      "description": "Dialogs, drawers, menus and their scrim.",
+      "css": "100",
+      "variable": "--ce-layer-overlay"
+    },
+    "layer.sticky": {
+      "type": "number",
+      "value": 10,
+      "description": "Sticky headers, toolbars and action bars.",
+      "css": "10",
+      "variable": "--ce-layer-sticky"
+    },
+    "layer.toast": {
+      "type": "number",
+      "value": 200,
+      "description": "Notifications above overlays.",
+      "css": "200",
+      "variable": "--ce-layer-toast"
     },
     "layout.breakpoint.desktop": {
       "type": "dimension",
@@ -608,7 +817,7 @@
         "value": 1024,
         "unit": "px"
       },
-      "description": "",
+      "description": "Four product columns from this width.",
       "css": "1024px",
       "variable": "--ce-layout-breakpoint-desktop"
     },
@@ -618,7 +827,7 @@
         "value": 640,
         "unit": "px"
       },
-      "description": "",
+      "description": "Three product columns from this width.",
       "css": "640px",
       "variable": "--ce-layout-breakpoint-tablet"
     },
@@ -628,7 +837,7 @@
         "value": 1440,
         "unit": "px"
       },
-      "description": "",
+      "description": "Maximum content width.",
       "css": "1440px",
       "variable": "--ce-layout-content"
     },
@@ -638,7 +847,7 @@
         "value": 48,
         "unit": "px"
       },
-      "description": "",
+      "description": "Side gutter from 1024px.",
       "css": "48px",
       "variable": "--ce-layout-gutter-desktop"
     },
@@ -648,7 +857,7 @@
         "value": 16,
         "unit": "px"
       },
-      "description": "",
+      "description": "Side gutter below 640px.",
       "css": "16px",
       "variable": "--ce-layout-gutter-mobile"
     },
@@ -658,7 +867,7 @@
         "value": 24,
         "unit": "px"
       },
-      "description": "",
+      "description": "Side gutter from 640px.",
       "css": "24px",
       "variable": "--ce-layout-gutter-tablet"
     },
@@ -668,9 +877,23 @@
         "value": 160,
         "unit": "ms"
       },
-      "description": "",
+      "description": "Color and border transitions on controls; disabled under reduced motion.",
       "css": "160ms",
       "variable": "--ce-motion-quick"
+    },
+    "palette.black": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ]
+      },
+      "description": "Edición limitada tag fill (pure black, as on the old casaelida.com). Carries white text.",
+      "css": "#000000",
+      "variable": "--ce-palette-black"
     },
     "palette.border": {
       "type": "color",
@@ -897,6 +1120,48 @@
       "css": "#eaf5ee",
       "variable": "--ce-palette-success-bg"
     },
+    "palette.tag-amber": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9254901960784314,
+          0.6196078431372549,
+          0
+        ]
+      },
+      "description": "Promo tag fill (the old casaelida.com “Promo” amber). Carries ink text.",
+      "css": "#ec9e00",
+      "variable": "--ce-palette-tag-amber"
+    },
+    "palette.tag-crimson": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8784313725490196,
+          0.027450980392156862,
+          0.3176470588235294
+        ]
+      },
+      "description": "Top en ventas tag fill (the old casaelida.com crimson). Carries white text.",
+      "css": "#e00751",
+      "variable": "--ce-palette-tag-crimson"
+    },
+    "palette.tag-green": {
+      "type": "color",
+      "value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.21176470588235294,
+          0.5215686274509804,
+          0
+        ]
+      },
+      "description": "Novedad tag fill: the old casaelida.com “Nuevo” green (#47b900) darkened to #368500 so white text passes AA (4.7:1). Carries white text.",
+      "css": "#368500",
+      "variable": "--ce-palette-tag-green"
+    },
     "palette.warning": {
       "type": "color",
       "value": {
@@ -959,9 +1224,19 @@
         "value": 20,
         "unit": "px"
       },
-      "description": "",
+      "description": "Floating product callout cards.",
       "css": "20px",
       "variable": "--ce-radius-callout"
+    },
+    "radius.code": {
+      "type": "dimension",
+      "value": {
+        "value": 2,
+        "unit": "px"
+      },
+      "description": "CE code badges: barely rounded corners (2px), just visible.",
+      "css": "2px",
+      "variable": "--ce-radius-code"
     },
     "radius.none": {
       "type": "dimension",
@@ -969,7 +1244,7 @@
         "value": 0,
         "unit": "px"
       },
-      "description": "",
+      "description": "Product code labels, badges and photography: square corners.",
       "css": "0px",
       "variable": "--ce-radius-none"
     },
@@ -979,7 +1254,7 @@
         "value": 999,
         "unit": "px"
       },
-      "description": "",
+      "description": "Buttons, icon buttons, chips and swatches.",
       "css": "999px",
       "variable": "--ce-radius-pill"
     },
@@ -989,7 +1264,7 @@
         "value": 8,
         "unit": "px"
       },
-      "description": "",
+      "description": "Offer price blocks.",
       "css": "8px",
       "variable": "--ce-radius-price"
     },
@@ -999,9 +1274,119 @@
         "value": 4,
         "unit": "px"
       },
-      "description": "",
+      "description": "Inputs and selects.",
       "css": "4px",
       "variable": "--ce-radius-small"
+    },
+    "size.control.comfortable": {
+      "type": "dimension",
+      "value": {
+        "value": 48,
+        "unit": "px"
+      },
+      "description": "Default control height in retail and customer interfaces.",
+      "css": "48px",
+      "variable": "--ce-size-control-comfortable"
+    },
+    "size.control.compact": {
+      "type": "dimension",
+      "value": {
+        "value": 36,
+        "unit": "px"
+      },
+      "description": "Control height in dense internal workspaces; keep 24px minimum targets.",
+      "css": "36px",
+      "variable": "--ce-size-control-compact"
+    },
+    "size.control.touch": {
+      "type": "dimension",
+      "value": {
+        "value": 56,
+        "unit": "px"
+      },
+      "description": "Control height for touch-first stations such as POS and receiving.",
+      "css": "56px",
+      "variable": "--ce-size-control-touch"
+    },
+    "size.product.gap-code": {
+      "type": "dimension",
+      "value": {
+        "value": 8,
+        "unit": "px"
+      },
+      "description": "Product display: CE code to the NAME.",
+      "css": "8px",
+      "variable": "--ce-size-product-gap-code"
+    },
+    "size.product.gap-flag": {
+      "type": "dimension",
+      "value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "description": "Product display: tag (Novedad, Promo…) to the NAME or code below it.",
+      "css": "4px",
+      "variable": "--ce-size-product-gap-flag"
+    },
+    "size.product.gap-identity": {
+      "type": "dimension",
+      "value": {
+        "value": 2,
+        "unit": "px"
+      },
+      "description": "Product display: between NAME, Description and specs.",
+      "css": "2px",
+      "variable": "--ce-size-product-gap-identity"
+    },
+    "size.product.gap-media": {
+      "type": "dimension",
+      "value": {
+        "value": 16,
+        "unit": "px"
+      },
+      "description": "Product display: photo to the first line of text.",
+      "css": "16px",
+      "variable": "--ce-size-product-gap-media"
+    },
+    "size.product.gap-note": {
+      "type": "dimension",
+      "value": {
+        "value": 8,
+        "unit": "px"
+      },
+      "description": "Product display: price to the availability or store note below it.",
+      "css": "8px",
+      "variable": "--ce-size-product-gap-note"
+    },
+    "size.product.gap-price": {
+      "type": "dimension",
+      "value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "description": "Product display: last line of the identity (specs) to the price. Never pushed to the bottom of the card.",
+      "css": "12px",
+      "variable": "--ce-size-product-gap-price"
+    },
+    "size.row.comfortable": {
+      "type": "dimension",
+      "value": {
+        "value": 56,
+        "unit": "px"
+      },
+      "description": "Table row height in comfortable density.",
+      "css": "56px",
+      "variable": "--ce-size-row-comfortable"
+    },
+    "size.row.compact": {
+      "type": "dimension",
+      "value": {
+        "value": 40,
+        "unit": "px"
+      },
+      "description": "Table row height in compact density.",
+      "css": "40px",
+      "variable": "--ce-size-row-compact"
     },
     "space.0": {
       "type": "dimension",
@@ -1009,7 +1394,7 @@
         "value": 0,
         "unit": "px"
       },
-      "description": "",
+      "description": "No space.",
       "css": "0px",
       "variable": "--ce-space-0"
     },
@@ -1019,7 +1404,7 @@
         "value": 12,
         "unit": "px"
       },
-      "description": "",
+      "description": "Button vertical padding; input vertical padding; price block gap.",
       "css": "12px",
       "variable": "--ce-space-12"
     },
@@ -1029,7 +1414,7 @@
         "value": 16,
         "unit": "px"
       },
-      "description": "",
+      "description": "Input horizontal padding; mobile gutter; product grid column gap on mobile.",
       "css": "16px",
       "variable": "--ce-space-16"
     },
@@ -1039,7 +1424,7 @@
         "value": 2,
         "unit": "px"
       },
-      "description": "",
+      "description": "Code label vertical padding; price fragment gap.",
       "css": "2px",
       "variable": "--ce-space-2"
     },
@@ -1049,7 +1434,7 @@
         "value": 20,
         "unit": "px"
       },
-      "description": "",
+      "description": "Chip horizontal padding; callout padding; gap below product media.",
       "css": "20px",
       "variable": "--ce-space-20"
     },
@@ -1059,7 +1444,7 @@
         "value": 24,
         "unit": "px"
       },
-      "description": "",
+      "description": "Button horizontal padding; tablet gutter; grid column gap from 640px.",
       "css": "24px",
       "variable": "--ce-space-24"
     },
@@ -1069,7 +1454,7 @@
         "value": 32,
         "unit": "px"
       },
-      "description": "",
+      "description": "Separation between related blocks.",
       "css": "32px",
       "variable": "--ce-space-32"
     },
@@ -1079,7 +1464,7 @@
         "value": 4,
         "unit": "px"
       },
-      "description": "",
+      "description": "Badge vertical padding; tight stacks.",
       "css": "4px",
       "variable": "--ce-space-4"
     },
@@ -1089,7 +1474,7 @@
         "value": 40,
         "unit": "px"
       },
-      "description": "",
+      "description": "Separation between groups.",
       "css": "40px",
       "variable": "--ce-space-40"
     },
@@ -1099,7 +1484,7 @@
         "value": 48,
         "unit": "px"
       },
-      "description": "",
+      "description": "Product grid row gap; desktop gutter.",
       "css": "48px",
       "variable": "--ce-space-48"
     },
@@ -1109,7 +1494,7 @@
         "value": 64,
         "unit": "px"
       },
-      "description": "",
+      "description": "Section spacing on small screens.",
       "css": "64px",
       "variable": "--ce-space-64"
     },
@@ -1119,7 +1504,7 @@
         "value": 8,
         "unit": "px"
       },
-      "description": "",
+      "description": "Gap inside buttons, fields and product info; badge horizontal padding.",
       "css": "8px",
       "variable": "--ce-space-8"
     },
@@ -1129,7 +1514,7 @@
         "value": 80,
         "unit": "px"
       },
-      "description": "",
+      "description": "Section spacing.",
       "css": "80px",
       "variable": "--ce-space-80"
     },
@@ -1139,7 +1524,7 @@
         "value": 96,
         "unit": "px"
       },
-      "description": "",
+      "description": "Large section and campaign spacing.",
       "css": "96px",
       "variable": "--ce-space-96"
     },
@@ -1149,7 +1534,7 @@
         "value": 2,
         "unit": "px"
       },
-      "description": "",
+      "description": "Focus outline width.",
       "css": "2px",
       "variable": "--ce-stroke-focus"
     },
@@ -1159,7 +1544,7 @@
         "value": 3,
         "unit": "px"
       },
-      "description": "",
+      "description": "Focus outline offset.",
       "css": "3px",
       "variable": "--ce-stroke-offset"
     },
@@ -1169,7 +1554,7 @@
         "value": 1,
         "unit": "px"
       },
-      "description": "",
+      "description": "Borders and dividers.",
       "css": "1px",
       "variable": "--ce-stroke-thin"
     }

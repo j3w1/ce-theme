@@ -1,0 +1,25 @@
+---
+// Web product pin: a dot on the photo that opens a card (NAME, Description, price, chevron link) on hover, focus or tap.
+// Prices follow the store the visitor chose, like the product list below the photo.
+import Price from './Price.astro';
+import { productView } from '../../recipes/product.mjs';
+// `item` is a catalogue entry with per-store `prices`, or a plain product with one `amount`.
+interface Props { item: any; x: string; y: string; id: string; href?: string; open?: boolean; side?: 'start' | 'end'; above?: boolean }
+const { item, x, y, id, href = '/tienda/producto/', open = false, side, above = false } = Astro.props;
+const view = productView(item);
+---
+<div class:list={['ce-pin', side === 'start' && 'ce-pin--start', above && 'ce-pin--above']} style={`--ce-x:${x};--ce-y:${y}`} data-open={open ? '' : undefined}>
+  <button class="ce-pin-dot" type="button" aria-expanded={String(open)} aria-controls={`${id}-card`}><span class="ce-sr-only">{`Ver ${view.accessibleName}`}</span></button>
+  <a class="ce-pin-card" id={`${id}-card`} href={href}>
+    <div class="ce-pin-text">
+      <span class="ce-product-name">{view.name}</span>
+      <span class="ce-product-description">{view.description}</span>
+      {item.prices ? (<>
+        <span data-store-view="tacna"><Price amount={item.prices.tacna} previousAmount={item.previous?.tacna} discountLabel={item.discount?.tacna} /></span>
+        <span data-store-view="arequipa" hidden>{item.prices.arequipa ? <Price amount={item.prices.arequipa} /> : <span class="ce-store-note">Precio no disponible en Arequipa.</span>}</span>
+        <span data-store-view="ninguna" hidden class="ce-store-note">Elige tu tienda para ver el precio.</span>
+      </>) : <Price amount={item.amount} previousAmount={item.previousAmount} discountLabel={item.discountLabel} />}
+    </div>
+    <span class="ce-pin-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m9 5 7 7-7 7"/></svg></span>
+  </a>
+</div>

@@ -1,0 +1,68 @@
+---
+import Store from '../../layouts/Store.astro';
+import Icon from '../../components/Icon.astro';
+import StoreProducts from '../../components/StoreProducts.astro';
+import { catalogue, categories } from '../../data/store.mjs';
+const rooms = [
+  { title: 'Para tu mesa', image: '/assets/product-nome.png' },
+  { title: 'Bebidas calientes', image: '/assets/product-mene.png' },
+  { title: 'Baño seguro', image: '/assets/product-tilen.png' },
+  { title: 'Detalles para regalar', image: '/assets/product-talen.png' },
+];
+---
+<Store title="Tienda" description="Inicio de la tienda de demostración: categorías, ambientes y novedades.">
+  <div class="ce-container">
+    <h1 class="ce-sr-only">Casa Elida: regalos, decoración y hogar</h1>
+    <nav aria-label="Categorías" style="padding-block:var(--ce-space-16) var(--ce-space-12)">
+      <ul class="ce-category-rail">{categories.map((category) => <li><a class="ce-category-link" href={category.href}>{category.image ? <img src={category.image} alt="" width="40" height="40" /> : <Icon name={category.icon} size={24} />}{category.label}</a></li>)}</ul>
+    </nav>
+
+    <section aria-labelledby="destacados" style="padding-top:var(--ce-space-12)">
+      <h2 class="ce-sr-only" id="destacados">Destacados</h2>
+      <div class="ce-mosaic">
+        <a class="ce-tile ce-tile--light" href="/tienda/categoria/"><img src="/assets/product-nome.png" alt="" width="900" height="900" /><span class="ce-badge ce-badge--novedad">Novedad</span><p class="ce-tile-title"><span>Vidrio que aguanta el calor del día a día</span><Icon name="arrow" /></p></a>
+        <a class="ce-tile ce-tile--light" href="/tienda/categoria/"><img src="/assets/product-tilen.png" alt="" width="900" height="900" /><span class="ce-badge ce-badge--promo">Promo</span><span class="ce-tile-offer"><span class="ce-price ce-price--offer"><span class="ce-sr-only">Precio actual: 6 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6</span></span></span></span><p class="ce-tile-title"><span>Un baño más seguro, sin complicarte</span><Icon name="arrow" /></p></a>
+        <a class="ce-tile ce-tile--light" href="/tienda/escena/" style="--ce-campaign-surface:var(--ce-color-border-default)"><img src="/assets/product-mene.png" alt="" width="900" height="900" /><p class="ce-tile-title"><span>Ideas para tu cocina</span><Icon name="arrow" /></p></a>
+        <a class="ce-tile ce-tile--light" href="/tienda/categoria/"><img src="/assets/product-talen.png" alt="" width="900" height="900" /><span class="ce-badge ce-badge--top">Top en ventas</span><p class="ce-tile-title"><span>Regalos útiles</span><Icon name="arrow" /></p></a>
+      </div>
+    </section>
+
+    <section class="ce-section" aria-labelledby="ambientes">
+      <div class="ce-section-head"><div><h2 id="ambientes">Encuentra ideas por ambiente</h2><p>Recorridos cortos por la casa, con los productos que hacen la diferencia.</p></div><a class="ce-button ce-button--secondary" href="/tienda/escena/">Ver ambientes</a></div>
+      <ul class="ce-rail ce-rail--wide" aria-label="Ambientes">
+        <li class="ce-rail-intro"><h3>Pequeños cambios, casa nueva.</h3><a class="ce-arrow-link" href="/tienda/escena/" aria-label="Ver todos los ambientes"><Icon name="arrow" /></a></li>
+        {rooms.map((room) => <li><a class="ce-card-link ce-card-link--contain" href="/tienda/escena/"><img src={room.image} alt="" width="400" height="400" loading="lazy" /><span class="ce-card-link-title"><span>{room.title}</span><Icon name="arrow" /></span></a></li>)}
+      </ul>
+    </section>
+
+    <section class="ce-section" aria-labelledby="novedades" style="padding-top:0">
+      <div class="ce-section-head"><div><h2 id="novedades">Novedades en tu tienda</h2><p>Precio y disponibilidad en <strong data-store-name>Tacna</strong>.</p></div><a class="ce-button ce-button--secondary" href="/tienda/categoria/">Ver todo</a></div>
+      <StoreProducts items={catalogue} layout="rail" id="novedades-lista" label="Novedades" />
+    </section>
+  </div>
+
+  <section class="ce-split-promo" aria-labelledby="regalos">
+    <div class="ce-tile ce-tile--light" style="aspect-ratio:auto;min-height:320px;--ce-campaign-surface:var(--ce-color-surface-subtle)" aria-hidden="true"><img src="/assets/product-mene.png" alt="" width="900" height="900" loading="lazy" style="padding:var(--ce-space-32)" /></div>
+    <div class="ce-split-promo-panel">
+      <p class="ce-eyebrow">Temporada de regalos</p>
+      <h2 id="regalos">Regalos que se usan todos los días.</h2>
+      <p>Elige en línea y retira en tu tienda.</p>
+      <a class="ce-button ce-button--ink" href="/tienda/categoria/">Ver regalos</a>
+    </div>
+  </section>
+
+  <div class="ce-container">
+    <section class="ce-section" aria-labelledby="precios">
+      <div class="ce-section-head"><div><h2 id="precios">Buenos precios, todo el año</h2><p>Montos de ejemplo.</p></div></div>
+      <ul class="ce-price-points">{['5', '10', '20'].map((amount) => <li><a class="ce-price-point" href="/tienda/categoria/#ofertas"><span>Hasta</span><span class="ce-price" aria-hidden="true"><span class="ce-price-amount"><span class="ce-price-currency">S/</span><span class="ce-price-value">{amount}</span></span></span><span class="ce-sr-only">{`Productos de hasta ${amount} soles`}</span></a></li>)}</ul>
+    </section>
+  </div>
+
+  <section class="ce-statement" aria-labelledby="lema">
+    <div class="ce-container" style="display:grid;gap:var(--ce-space-16)">
+      <h2 id="lema">El buen gusto, no cuesta más.</h2>
+      <p>Casa Elida acompaña la vida en casa con productos útiles, bonitos y a buen precio.</p>
+      <a class="ce-arrow-link" href="/tienda/cuenta/#tiendas" aria-label="Conoce nuestras tiendas"><Icon name="arrow" /></a>
+    </div>
+  </section>
+</Store>

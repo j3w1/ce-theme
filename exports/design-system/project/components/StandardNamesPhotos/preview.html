@@ -1,0 +1,35 @@
+<!-- @dsCard group="Standard names" height=620 width=1100 subtitle="Tagged photography: id, nombre CE, muestra and rule" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>StandardNamesPhotos</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .wrap { padding: var(--ce-space-16); }
+  table { width: 100%; border-collapse: collapse; font-size: var(--ce-font-size-sm); }
+  th, td { padding: var(--ce-space-12); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); text-align: left; vertical-align: middle; }
+  thead th { background: var(--ce-color-surface-subtle); }
+  td.sample { min-width: 280px; }
+  .sample-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12); }
+  .rule { color: var(--ce-color-text-secondary); }
+  .sample-mosaic .ce-tile-title { padding: var(--ce-space-8); font-size: var(--ce-font-size-sm); }
+  .sample-mosaic .ce-badge { top: var(--ce-space-8); left: var(--ce-space-8); }
+  code { font-weight: var(--ce-font-weight-bold); }
+</style>
+</head>
+<body>
+<div class="ce-scope wrap">
+  <table>
+    <thead><tr><th scope="col">Id</th><th scope="col">Nombre CE</th><th scope="col">Muestra</th><th scope="col">Rule</th></tr></thead>
+    <tbody>
+    <tr id="TaggedPhoto"><th scope="row"><code>TaggedPhoto</code></th><td>Foto etiquetada</td><td class="sample"><figure class="ce-tagged-media" style="width:200px;margin:0"><img src="../../media/product-mene.png" alt="" width="200" height="200"><a class="ce-hotspot" href="#" style="--ce-x:50%;--ce-y:30%"><span aria-hidden="true">A</span><span class="ce-sr-only">Producto A: MENE</span></a></figure></td><td class="rule">Photo frame with markers and feature tags; clips anything outside it.</td></tr>
+    <tr id="Marker"><th scope="row"><code>Marker</code></th><td>Marcador</td><td class="sample"><span class="sample-row"><span class="ce-hotspot ce-hotspot--inline">A</span><span class="ce-hotspot ce-hotspot--inline">B</span><span class="ce-hotspot ce-hotspot--inline">C</span></span></td><td class="rule">Black circle with a white capital letter A, B, C; only for media that cannot hover (social posts, print, share images).</td></tr>
+    <tr id="ProductPin"><th scope="row"><code>ProductPin</code></th><td>Punto de producto</td><td class="sample"><span class="ce-pin" style="position:relative;display:inline-block;width:28px;height:28px;--ce-x:0;--ce-y:0"><span class="ce-pin-dot" style="left:14px;top:14px"></span></span></td><td class="rule">The web tag: a black dot with a white centre on the photo; hover, focus or tap opens its product card.</td></tr>
+    <tr id="ProductPinCard"><th scope="row"><code>ProductPinCard</code></th><td>Ficha del punto</td><td class="sample"><div class="ce-pin" data-open style="position:relative;width:230px;height:104px;--ce-x:0;--ce-y:0"><div class="ce-pin-card" style="top:0;left:0"><div class="ce-pin-text"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span><div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Precio actual: 6.5 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">6.5</span></span></span></div></div><span class="ce-pin-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m9 5 7 7-7 7"/></svg></span></div></div></td><td class="rule">The card a pin opens: NAME, Description, the store price and a chevron link to the product.</td></tr>
+    <tr id="FeatureTag"><th scope="row"><code>FeatureTag</code></th><td>Rótulo</td><td class="sample"><figure class="ce-tagged-media" style="width:220px;margin:0"><img src="../../media/product-mene.png" alt="" width="220" height="220"><span class="ce-feature-tag ce-feature-tag--light ce-feature-tag--above" style="--ce-x:26%;--ce-y:38%;--ce-line:22px;--ce-tag-width:9em"><span class="ce-feature-tag-label">de <strong>vidrio borosilicato</strong></span></span></figure></td><td class="rule">Dot on the feature, a leader line and a label for it; the label sits in the empty area of the photo, stays inside it and never overlaps.</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

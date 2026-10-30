@@ -1,0 +1,33 @@
+<!-- @dsCard group="Standard names" height=420 width=1100 subtitle="Store: id, nombre CE, muestra and rule" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>StandardNamesStore</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .wrap { padding: var(--ce-space-16); }
+  table { width: 100%; border-collapse: collapse; font-size: var(--ce-font-size-sm); }
+  th, td { padding: var(--ce-space-12); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); text-align: left; vertical-align: middle; }
+  thead th { background: var(--ce-color-surface-subtle); }
+  td.sample { min-width: 280px; }
+  .sample-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12); }
+  .rule { color: var(--ce-color-text-secondary); }
+  .sample-mosaic .ce-tile-title { padding: var(--ce-space-8); font-size: var(--ce-font-size-sm); }
+  .sample-mosaic .ce-badge { top: var(--ce-space-8); left: var(--ce-space-8); }
+  code { font-weight: var(--ce-font-weight-bold); }
+</style>
+</head>
+<body>
+<div class="ce-scope wrap">
+  <table>
+    <thead><tr><th scope="col">Id</th><th scope="col">Nombre CE</th><th scope="col">Muestra</th><th scope="col">Rule</th></tr></thead>
+    <tbody>
+    <tr id="StockLine"><th scope="row"><code>StockLine</code></th><td>Disponibilidad</td><td class="sample"><ul class="ce-stock"><li data-state="available">Disponible en Tacna</li><li data-state="limited">Pocas unidades en Arequipa</li></ul></td><td class="rule">Per-store availability in words, with a state dot.</td></tr>
+    <tr id="StoreNote"><th scope="row"><code>StoreNote</code></th><td>Nota de tienda</td><td class="sample"><p class="ce-store-note">Precio no disponible en Arequipa.</p></td><td class="rule">Short store-specific text that replaces a missing price.</td></tr>
+    <tr id="StoreContext"><th scope="row"><code>StoreContext</code></th><td>Tienda activa</td><td class="sample"><button class="ce-store-context" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9l1.5-5h15L21 9M3 9h18M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M5 12v9h14v-9M10 21v-5h4v5"/></svg><span>Tu tienda: <span class="ce-store-context-name">Tacna</span></span></button></td><td class="rule">The button that shows and changes the chosen store; prices and availability follow it.</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

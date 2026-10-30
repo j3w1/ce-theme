@@ -1,0 +1,37 @@
+<!-- @dsCard group="Standard names" height=820 width=1100 subtitle="Product information: id, nombre CE, muestra and rule" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>StandardNamesProduct</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .wrap { padding: var(--ce-space-16); }
+  table { width: 100%; border-collapse: collapse; font-size: var(--ce-font-size-sm); }
+  th, td { padding: var(--ce-space-12); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); text-align: left; vertical-align: middle; }
+  thead th { background: var(--ce-color-surface-subtle); }
+  td.sample { min-width: 280px; }
+  .sample-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12); }
+  .rule { color: var(--ce-color-text-secondary); }
+  .sample-mosaic .ce-tile-title { padding: var(--ce-space-8); font-size: var(--ce-font-size-sm); }
+  .sample-mosaic .ce-badge { top: var(--ce-space-8); left: var(--ce-space-8); }
+  code { font-weight: var(--ce-font-weight-bold); }
+</style>
+</head>
+<body>
+<div class="ce-scope wrap">
+  <table>
+    <thead><tr><th scope="col">Id</th><th scope="col">Nombre CE</th><th scope="col">Muestra</th><th scope="col">Rule</th></tr></thead>
+    <tbody>
+    <tr id="ProductName"><th scope="row"><code>ProductName</code></th><td>NAME</td><td class="sample"><span class="ce-product-name">TILEN</span></td><td class="rule">Mandatory on every product shown anywhere. Uppercase invented catalogue name, one or two words, unique (MENE, TILEN).</td></tr>
+    <tr id="ProductDescription"><th scope="row"><code>ProductDescription</code></th><td>Descripción</td><td class="sample"><span class="ce-product-description">Tapete de Ducha Antideslizante</span></td><td class="rule">Title Case, Spanish connectors in lowercase. Second line of the identity.</td></tr>
+    <tr id="ProductSpecs"><th scope="row"><code>ProductSpecs</code></th><td>Especificaciones</td><td class="sample"><span class="ce-product-specs">PVC, 64 × 35cm</span></td><td class="rule">Lowercase except units and abbreviations. Third line of the identity.</td></tr>
+    <tr id="ProductIdentity"><th scope="row"><code>ProductIdentity</code></th><td>Identidad</td><td class="sample"><h3 class="ce-product-heading"><span class="ce-product-name">TILEN</span><span class="ce-product-description">Tapete de Ducha Antideslizante</span></h3><p class="ce-product-specs">PVC, 64 × 35cm</p></td><td class="rule">NAME, then Description, then specs, at size.product.gap-identity.</td></tr>
+    <tr id="ProductStack"><th scope="row"><code>ProductStack</code></th><td>Pila de producto</td><td class="sample"><div class="ce-product-info" style="min-width:230px"><p class="ce-product-flag">Novedad</p><span class="ce-code">CE26061441</span><h3 class="ce-product-heading"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></h3><p class="ce-product-specs">vidrio borosilicato, 250ml</p><div class="ce-price-block"><span class="ce-price " style="font-size:40px"><span class="ce-sr-only">Precio actual: 6.5 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6.5</span></span></span></div><ul class="ce-stock"><li data-state="available">Disponible en Tacna</li></ul></div></td><td class="rule">Tag, CE code, identity, price, note, with the size.product gaps. The price follows the specs at 12px and is never pushed to the bottom.</td></tr>
+    <tr id="CECode"><th scope="row"><code>CECode</code></th><td>Código CE</td><td class="sample"><span class="sample-row"><span class="ce-code ce-code--sm">CE26061608</span><span class="ce-code">CE26061608</span><span class="ce-code ce-code--lg">CE26061608</span></span></td><td class="rule">White bold text on ink, 2px corners, tabular figures. Always one line; never wraps.</td></tr>
+    <tr id="ProductTag"><th scope="row"><code>ProductTag</code></th><td>Etiqueta de producto</td><td class="sample"><span class="sample-row"><span class="ce-badge ce-badge--novedad">Novedad</span><span class="ce-badge ce-badge--promo">Promo</span><span class="ce-badge ce-badge--top">Top en ventas</span><span class="ce-badge ce-badge--limited">Edición limitada</span></span></td><td class="rule">Novedad (green), Promo (amber), Top en ventas (crimson), Edición limitada (black).</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!-- @dsCard group="Sharing" height=960 width=1320 subtitle="1200 × 630, price-free: every link-preview type" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>ShareCard</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); font-family: var(--ce-font-family); color: var(--ce-color-text-primary); }
+  .grid { display: grid; grid-template-columns: repeat(3, 400px); gap: 28px 40px; padding: 24px; }
+  .cell { margin: 0; display: grid; gap: 8px; align-content: start; }
+  .pv { position: relative; width: 400px; height: 210px; overflow: hidden; border: 1px solid var(--ce-color-border-default); }
+  .pv > .ce-share-card { position: absolute; top: 0; left: 0; transform: scale(.3333); transform-origin: 0 0; }
+  .pv--chat { width: 300px; height: 158px; }
+  .pv--chat > .ce-share-card { transform: scale(.25); }
+  .pv--crop { width: 210px; height: 210px; }
+  .pv--crop .ce-share-card { left: -95px; }
+  figcaption { font-size: 13px; line-height: 1.35; color: var(--ce-color-text-secondary); display: grid; gap: 2px; }
+  figcaption strong { color: var(--ce-color-text-primary); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="ce-scope">
+  <div class="grid"><figure class="cell"><div class="pv"><article class="ce-share-card"><div class="ce-share-card-media"><img src="../../media/product-mene.png" alt=""></div><div class="ce-share-card-text"><p class="ce-product-name">MENE</p><p class="ce-product-description">Taza de Vidrio Resistente al Calor</p><p class="ce-product-specs">vidrio borosilicato, 250ml</p></div><img class="ce-share-card-logo" src="../../media/logo-wordmark-color.png" alt="Casa Elida"></article></div><figcaption><strong>Product</strong>Catalogue cutout: NAME, Description, specs.</figcaption></figure><figure class="cell"><div class="pv"><article class="ce-share-card"><div class="ce-share-card-media"><img src="../../media/product-tilen.png" alt=""></div><div class="ce-share-card-text"><p class="ce-product-name">TILEN</p><p class="ce-product-description">Tapete de Ducha Antideslizante</p><p class="ce-product-specs">pvc, 68 × 38cm</p></div><div class="ce-share-card-foot"><span class="ce-code">CE26061608</span></div><img class="ce-share-card-logo" src="../../media/logo-wordmark-color.png" alt="Casa Elida"></article></div><figcaption><strong>Product with code</strong>The code is optional and sits in the foot.</figcaption></figure><figure class="cell"><div class="pv"><article class="ce-share-card"><div class="ce-share-card-media"><img src="../../media/product-mene.png" alt=""></div><div class="ce-share-card-text"><p class="ce-share-card-eyebrow">Colección</p><p class="ce-share-card-title">Tazas de vidrio</p></div><img class="ce-share-card-logo" src="../../media/logo-wordmark-color.png" alt="Casa Elida"></article></div><figcaption><strong>Collection or category</strong>Eyebrow and title instead of NAME and Description.</figcaption></figure><figure class="cell"><div class="pv"><article class="ce-share-card ce-share-card--photo" style="--ce-y:64%"><div class="ce-share-card-media"><img src="../../media/brand-tote-bag.png" alt=""></div><div class="ce-share-card-text"><img class="ce-share-card-logo" src="../../media/logo-wordmark-color.png" alt="Casa Elida"><p class="ce-share-card-eyebrow">Tienda online</p><p class="ce-share-card-title">Envíos a todo el Perú</p></div></article></div><figcaption><strong>Photograph (store, campaign, product in use)</strong>Full-bleed photograph; white card with the same order. Illustrative reference photograph.</figcaption></figure><figure class="cell"><div class="pv"><article class="ce-share-card ce-share-card--text"><div class="ce-share-card-text"><img class="ce-share-card-logo" src="../../media/logo-wordmark-color.png" alt="Casa Elida"><p class="ce-product-name">KALEN</p><p class="ce-product-description">Dispensador de Aceite</p><p class="ce-product-specs">vidrio, 350ml</p></div></article></div><figcaption><strong>Text only (no approved photograph)</strong>Centred identification on the subtle surface. Never a price.</figcaption></figure><figure class="cell"><div class="pv"><article class="ce-share-card ce-share-card--brand"><div class="ce-share-card-text"><img class="ce-share-card-logo" src="../../media/logo-wordmark-white-yellow.png" alt="Casa Elida"><p class="ce-share-card-eyebrow">Regalos, decoración y hogar</p><p class="ce-share-card-title">El buen gusto, no cuesta más.</p></div></article></div><figcaption><strong>Home or store</strong>Brand surface with the white-and-yellow wordmark.</figcaption></figure><figure class="cell"><div class="pv"><article class="ce-share-card ce-share-card--brand"><div class="ce-share-card-text"><img class="ce-share-card-logo" src="../../media/logo-wordmark-white-yellow.png" alt="Casa Elida"><p class="ce-share-card-eyebrow">Navidad · hasta el 24 de diciembre</p><p class="ce-share-card-title">Llegó la Navidad a Casa Elida</p></div></article></div><figcaption><strong>Campaign</strong>Campaign title and period as supplied; no monetary promise.</figcaption></figure><figure class="cell"><div class="pv pv--crop"><article class="ce-share-card"><div class="ce-share-card-media"><img src="../../media/product-tilen.png" alt=""></div><div class="ce-share-card-text"><p class="ce-product-name">TILEN</p><p class="ce-product-description">Tapete de Ducha Antideslizante</p><p class="ce-product-specs">pvc, 68 × 38cm</p></div><div class="ce-share-card-foot"><span class="ce-code">CE26061608</span></div><img class="ce-share-card-logo" src="../../media/logo-wordmark-color.png" alt="Casa Elida"></article></div><figcaption><strong>Square crop</strong>Some apps show only x 285–915; text stays left of it and the wordmark right of it.</figcaption></figure><figure class="cell"><div class="pv pv--chat"><article class="ce-share-card"><div class="ce-share-card-media"><img src="../../media/product-mene.png" alt=""></div><div class="ce-share-card-text"><p class="ce-product-name">MENE</p><p class="ce-product-description">Taza de Vidrio Resistente al Calor</p><p class="ce-product-specs">vidrio borosilicato, 250ml</p></div><img class="ce-share-card-logo" src="../../media/logo-wordmark-color.png" alt="Casa Elida"></article></div><figcaption><strong>Chat size, 300px</strong>What a chat shows: the product, NAME and Description read.</figcaption></figure></div>
+</div>
+<script>
+function fitShareCard(card, { min = 0.6, step = 0.04 } = {}) {
+  const block = card.querySelector('.ce-share-card-text');
+  if (!block || card.matches('.ce-share-card--text, .ce-share-card--brand')) return 1;
+  const items = [...block.querySelectorAll('p, .ce-code')];
+  const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) node.data = node.data.replace(/\/(?!​)/g, '/​');
+  const base = items.map((el) => parseFloat(getComputedStyle(el).fontSize));
+  const overflows = () => items.some((el) => {
+    const wrap = el.style.overflowWrap;
+    el.style.overflowWrap = 'normal';
+    const over = el.scrollWidth > el.clientWidth;
+    el.style.overflowWrap = wrap;
+    return over;
+  });
+  let factor = 1;
+  while (overflows() && factor - step >= min) {
+    factor -= step;
+    items.forEach((el, index) => { el.style.fontSize = `${(base[index] * factor).toFixed(1)}px`; });
+  }
+  return factor;
+}
+
+document.fonts.ready.then(() => document.querySelectorAll('.ce-share-card').forEach((card) => fitShareCard(card)));
+</script>
+</body>
+</html>

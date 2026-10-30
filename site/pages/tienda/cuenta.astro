@@ -1,0 +1,55 @@
+---
+import Store from '../../layouts/Store.astro';
+import Icon from '../../components/Icon.astro';
+import { order, stores } from '../../data/store.mjs';
+const help = [
+  ['Seguimiento de pedido', 'Estado de tu compra y retiro', '#seguimiento'],
+  ['Cambios y devoluciones', 'Condiciones y pasos', '#ayuda'],
+  ['Retiro en tienda', 'Cómo y cuándo recoger', '#tiendas'],
+  ['Libro de reclamaciones', 'Registra un reclamo', '#ayuda'],
+];
+---
+<Store title="Cuenta y ayuda" description="Inicio de sesión, seguimiento de pedido, tiendas y ayuda en la tienda de demostración.">
+  <section class="ce-auth" aria-labelledby="ingresar">
+    <div class="ce-auth-aside">
+      <img src="/assets/logo-wordmark-white-yellow.png" alt="" width="140" height="62" />
+      <p>Guarda tus favoritos y sigue tus pedidos en un solo lugar.</p>
+    </div>
+    <div class="ce-auth-main">
+      <h1 id="ingresar">Inicia sesión</h1>
+      <form>
+        <div class="ce-field"><label for="correo">Correo electrónico</label><input class="ce-input" id="correo" type="email" autocomplete="email" required /></div>
+        <div class="ce-field"><label for="clave">Contraseña</label><input class="ce-input" id="clave" type="password" autocomplete="current-password" required /><a class="ce-link ce-field-note" href="#ayuda">¿Olvidaste tu contraseña?</a></div>
+        <button class="ce-button" type="submit">Ingresar</button>
+      </form>
+      <p class="ce-divider">o</p>
+      <a class="ce-button ce-button--secondary" href="#ingresar">Crear una cuenta</a>
+      <p class="ce-fine-print">Al continuar aceptas los términos y la política de privacidad.</p>
+    </div>
+  </section>
+
+  <div class="ce-container">
+    <section class="ce-section" id="seguimiento" aria-labelledby="seguimiento-titulo">
+      <div class="ce-section-head"><div><h2 id="seguimiento-titulo">Pedido {order.number}</h2><p>Retiro en {order.store}. Estado de ejemplo.</p></div><span class="ce-pill ce-pill--info">Listo pronto</span></div>
+      <ol class="ce-timeline">{order.steps.map((step) => <li data-state={step.state === 'done' ? 'done' : undefined} aria-current={step.state === 'current' ? 'step' : undefined}><p class="ce-timeline-title">{step.title}{step.state === 'done' && <span class="ce-sr-only"> (completado)</span>}</p><p class="ce-timeline-meta">{step.meta}</p></li>)}</ol>
+    </section>
+
+    <section class="ce-section" id="tiendas" aria-labelledby="tiendas-titulo" style="padding-top:0">
+      <div class="ce-section-head"><h2 id="tiendas-titulo">Nuestras tiendas</h2></div>
+      <div class="ce-locator">
+        <div>
+          <form class="ce-search" role="search" style="margin-bottom:var(--ce-space-16)"><Icon name="pin" size={20} /><label class="ce-sr-only" for="buscar-tienda">Buscar tienda por ciudad</label><input id="buscar-tienda" type="search" placeholder="Ciudad o distrito" /></form>
+          <p class="ce-result-count" role="status" style="margin-bottom:var(--ce-space-12)">{stores.length} tiendas</p>
+          <ul class="ce-location-list">{stores.map((store, index) => <li class="ce-location" aria-current={index === 0 ? 'true' : undefined}><h3>{store.name}</h3><address>Dirección y horario según el registro de la tienda.</address><p class="ce-store-note"><Icon name="clock" size={18} />Horario pendiente de confirmar</p></li>)}</ul>
+        </div>
+        <div class="ce-map-slot" role="img" aria-label="Espacio reservado para el mapa">Mapa: lo provee la aplicación cuando haya direcciones confirmadas.</div>
+      </div>
+    </section>
+
+    <section class="ce-section" id="ayuda" aria-labelledby="ayuda-titulo" style="padding-top:0">
+      <div class="ce-section-head"><h2 id="ayuda-titulo">¿Cómo podemos ayudarte?</h2></div>
+      <ul class="ce-link-rows">{help.map(([title, note, href]) => <li><a class="ce-link-row" href={href}><span>{title}<small>{note}</small></span><Icon name="arrow" /></a></li>)}</ul>
+      <details class="ce-disclosure" style="margin-top:var(--ce-space-24)"><summary>¿Puedo retirar en otra tienda?</summary><div class="ce-disclosure-body"><p class="ce-store-note">La tienda de retiro es la que eliges al comprar. Cada tienda define sus condiciones.</p></div></details>
+    </section>
+  </div>
+</Store>

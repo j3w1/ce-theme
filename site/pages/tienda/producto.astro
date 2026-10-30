@@ -1,0 +1,64 @@
+---
+import Store from '../../layouts/Store.astro';
+import Icon from '../../components/Icon.astro';
+import Price from '../../components/Price.astro';
+import StoreProducts from '../../components/StoreProducts.astro';
+import { productView } from '../../../recipes/product.mjs';
+import { catalogue, stores, stockText } from '../../data/store.mjs';
+const item = catalogue[0];
+const view = productView(item);
+const related = catalogue.slice(1);
+---
+<Store title={`${view.name} ${view.description}`} current="Productos" description="Ficha de producto de demostración con precio por tienda, variantes y opciones de entrega.">
+  <div class="ce-container">
+    <nav class="ce-breadcrumbs" aria-label="Ruta" style="padding-block:var(--ce-space-16) var(--ce-space-24)"><ol><li><a href="/tienda/">Inicio</a></li><li><a href="/tienda/categoria/">Cocina y baño</a></li><li><span aria-current="page">{view.name}</span></li></ol></nav>
+    <div class="ce-pdp">
+      <div>
+        <ul class="ce-gallery" aria-label="Fotos del producto" tabindex="0">
+          {item.options.map((option) => <li><img src={option.image} alt={productView(option).imageAlt + `, ${option.specs.at(-1)}`} width="900" height="900" /></li>)}
+        </ul>
+        <p class="ce-gallery-status" aria-live="polite"></p>
+      </div>
+      <div class="ce-buy-box">
+        <div style="display:grid;gap:var(--ce-space-8);justify-items:start">
+          {item.flag && <p class="ce-product-flag">{item.flag}</p>}
+          <span class="ce-code">{view.code}</span>
+          <h1 class="ce-product-heading"><span class="ce-product-name">{view.name}</span><span class="ce-product-description">{view.description}</span></h1>
+          <p class="ce-product-specs">{view.specs.join(', ')}</p>
+        </div>
+        {stores.map((store) => <div data-store-view={store.id} hidden={store.id !== 'tacna'} style="display:grid;gap:var(--ce-space-8)">
+          <Price amount={item.prices[store.id]} />
+          <p class="ce-store-note">Precio en <strong>{store.name}</strong></p>
+        </div>)}
+        <div data-store-view="ninguna" hidden class="ce-price-pending"><span>Elige tu tienda para ver precio y disponibilidad.</span><button class="ce-button ce-button--secondary" type="button" data-ce-open="elegir-tienda">Elegir tienda</button></div>
+        <fieldset class="ce-variant-picker">
+          <legend>Capacidad: <span>{item.specs.at(-1)}</span></legend>
+          <div class="ce-variant-options">{item.options.map((option) => <label class="ce-variant-option"><input type="radio" name="capacidad" value={option.code} checked={option.code === item.code} /><img src={option.image} alt="" width="56" height="56" /><span>{option.specs.at(-1)}</span></label>)}</div>
+        </fieldset>
+        <div class="ce-buy-actions">
+          <div class="ce-quantity"><button type="button" aria-label="Quitar uno"><Icon name="minus" size={18} /></button><label class="ce-sr-only" for="cantidad">Cantidad</label><input id="cantidad" type="number" inputmode="numeric" min="1" max="20" value="1" /><button type="button" aria-label="Agregar uno"><Icon name="plus" size={18} /></button></div>
+          <button class="ce-button" type="button"><Icon name="bag-plus" size={20} />Añadir al carrito</button>
+          <button class="ce-icon-button" type="button" aria-pressed="false" data-ce-toggle aria-label={`Guardar ${view.accessibleName} en favoritos`}><Icon name="heart" /></button>
+        </div>
+        <ul class="ce-fulfilment" aria-label="Formas de recibir">
+          <li><Icon name="store" /><p class="ce-fulfilment-title">Retiro en tienda</p>
+            {stores.map((store) => <ul class="ce-stock" data-store-view={store.id} hidden={store.id !== 'tacna'}><li data-state={item.stock[store.id]}>{stockText[item.stock[store.id]](store.name)}</li></ul>)}
+            <ul class="ce-stock" data-store-view="ninguna" hidden><li data-state="unknown">Elige una tienda para ver disponibilidad</li></ul>
+            <button class="ce-link" type="button" data-ce-open="elegir-tienda" style="justify-self:start;font-size:var(--ce-font-size-sm)">Cambiar tienda</button>
+          </li>
+          <li><Icon name="truck" /><p class="ce-fulfilment-title">Envío a domicilio</p><p class="ce-store-note">Revisa cobertura y costo al finalizar tu compra.</p></li>
+        </ul>
+        <div>
+          <details class="ce-disclosure" open><summary>Detalles del producto</summary><div class="ce-disclosure-body"><dl class="ce-facts"><dt>Código</dt><dd><span class="ce-code">{view.code}</span></dd><dt>Material</dt><dd>{view.specs[0]}</dd><dt>Capacidad</dt><dd>{view.specs[1]}</dd></dl></div></details>
+          <details class="ce-disclosure"><summary>Cuidados</summary><div class="ce-disclosure-body"><p class="ce-store-note">Información pendiente en el catálogo. No se muestra hasta que el producto la tenga.</p></div></details>
+          <details class="ce-disclosure"><summary>Retiro, cambios y devoluciones</summary><div class="ce-disclosure-body"><p class="ce-store-note">Las condiciones las define cada tienda. Consulta <a class="ce-link" href="/tienda/cuenta/#ayuda">Ayuda</a>.</p></div></details>
+        </div>
+      </div>
+    </div>
+
+    <section class="ce-section" aria-labelledby="relacionados">
+      <div class="ce-section-head"><h2 id="relacionados">También te puede gustar</h2></div>
+      <StoreProducts items={related} layout="rail" id="relacionados-lista" label="También te puede gustar" />
+    </section>
+  </div>
+</Store>

@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { productView } from '../../recipes/product.mjs';
+import { products } from '../data/products.mjs';
+const mene = productView(products[0]);
+const tilen = productView(products[2]);
+const logo = (name = 'logo-wordmark-color.png') => `<img class="ce-share-card-logo" src="/assets/${name}" alt="Casa Elida" width="840" height="372" />`;
+const media = (src: string) => `<div class="ce-share-card-media"><img src="${src}" alt="" width="900" height="900" /></div>`;
+const identity = (view: typeof mene) => `<div class="ce-share-card-text"><p class="ce-product-name">${view.name}</p><p class="ce-product-description">${view.description}</p>${view.specs.length ? `<p class="ce-product-specs">${view.specs.join(', ')}</p>` : ''}</div>`;
+const foot = (code: string) => `<div class="ce-share-card-foot"><span class="ce-code">${code}</span></div>`;
+const heading = (eyebrow: string, title: string) => `<div class="ce-share-card-text"><p class="ce-share-card-eyebrow">${eyebrow}</p><p class="ce-share-card-title">${title}</p></div>`;
+const cards = [
+  { id: 'producto', title: 'Producto', note: 'Foto de catálogo en la zona central. NAME pequeño y firme, Description en negrita, especificaciones en minúsculas; el logotipo grande a la derecha.', html: `<article class="ce-share-card">${media(mene.image)}${identity(mene)}${logo()}</article>` },
+  { id: 'producto-codigo', title: 'Producto con código', note: 'El código es opcional: va en el pie, abajo a la izquierda, como en la etiqueta de góndola.', html: `<article class="ce-share-card">${media(tilen.image)}${identity(tilen)}${foot(tilen.code)}${logo()}</article>` },
+  { id: 'categoria', title: 'Categoría o colección', note: 'Para listados y colecciones: una línea de contexto y el título.', html: `<article class="ce-share-card">${media(mene.image)}${heading('Colección', 'Tazas de vidrio')}${logo()}</article>` },
+  { id: 'foto', title: 'Foto de tienda, campaña o uso', note: 'Una fotografía sin texto de precio ocupa todo el lienzo; la tarjeta blanca conserva el mismo orden y lleva el logotipo (y el código, si se muestra). Fotografía de referencia, solo ilustrativa.', html: `<article class="ce-share-card ce-share-card--photo" style="--ce-y:64%">${media('/references/brand-tote-bag.png')}<div class="ce-share-card-text">${logo()}<p class="ce-share-card-eyebrow">Tienda online</p><p class="ce-share-card-title">Envíos a todo el Perú</p></div></article>` },
+  { id: 'texto', title: 'Producto sin foto aprobada', note: 'Identificación en texto. Nunca un precio.', html: `<article class="ce-share-card ce-share-card--text"><div class="ce-share-card-text">${logo()}<p class="ce-product-name">KALEN</p><p class="ce-product-description">Dispensador de Aceite</p><p class="ce-product-specs">vidrio, 350ml</p></div></article>` },
+  { id: 'inicio', title: 'Inicio o tienda', note: 'Superficie de marca cuando no hay foto adecuada.', html: `<article class="ce-share-card ce-share-card--brand"><div class="ce-share-card-text">${logo('logo-wordmark-white-yellow.png')}<p class="ce-share-card-eyebrow">Regalos, decoración y hogar</p><p class="ce-share-card-title">El buen gusto, no cuesta más.</p></div></article>` },
+  { id: 'campana', title: 'Campaña', note: 'El periodo tal como se suministra y el título de la campaña. Sin promesa monetaria.', html: `<article class="ce-share-card ce-share-card--brand"><div class="ce-share-card-text">${logo('logo-wordmark-white-yellow.png')}<p class="ce-share-card-eyebrow">Navidad · hasta el 24 de diciembre</p><p class="ce-share-card-title">Llegó la Navidad a Casa Elida</p></div></article>` },
+];
+---
+<Layout title="Vistas previas al compartir" description="Imágenes para enlaces compartidos sin precio, probadas a escala real.">
+  <div class="container">
+    <div class="page-intro"><p class="eyebrow">Aplicaciones · Compartir</p><h1>Un enlace que se reconoce sin mostrar el precio.</h1><p>La imagen de 1200 × 630 se ve en el chat a un cuarto de su tamaño y a veces recortada al centro. El precio depende de la tienda y cambia; vive en la página, no en la vista previa.</p></div>
+    <nav class="page-nav" aria-label="Tipos de vista previa">{cards.map((card) => <a class="ce-link" href={`#c-${card.id}`}>{card.title}</a>)}</nav>
+    {cards.map((card) => (
+      <section class="section" aria-labelledby={`c-${card.id}`}>
+        <h2 id={`c-${card.id}`} style="font-size:var(--ce-font-size-title)">{card.title}</h2>
+        <p class="section-description" style="margin-bottom:var(--ce-space-24)">{card.note}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:var(--ce-space-24);align-items:flex-start;max-width:100%;overflow-x:auto">
+          {[' share-scale--half', '', ' share-crop'].map((size) => (
+            <figure style="margin:0">
+              <div class={`share-scale${size}`} set:html={card.html} />
+              <figcaption class="small-note">{size === ' share-scale--half' ? '600 px · vista grande' : size ? 'Recorte cuadrado' : '300 px · tamaño de chat'}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    ))}
+    <p class="small-note">Las imágenes se generan en el servidor con <code>exports/share-card.css</code>. Ver <a class="ce-link" href="/downloads/sharing.md">el contrato de metadatos</a>.</p>
+  </div>
+  <script>import { fitShareCard } from '../../recipes/behaviors.mjs'; document.fonts.ready.then(() => document.querySelectorAll('.ce-share-card').forEach((card) => fitShareCard(card)));</script>
+</Layout>

@@ -160,6 +160,11 @@ pre { overflow: auto; margin: 0; padding: var(--ce-space-24); font-size: var(--c
 .application-meta { display: flex; flex-wrap: wrap; gap: var(--ce-space-16); justify-content: space-between; font-size: var(--ce-font-size-xs); padding-top: var(--ce-space-16); color: var(--ce-color-text-muted); }
 .callout-stage { padding: var(--ce-space-32); background: var(--ce-color-surface-subtle); }
 .callout-stage .ce-callout { max-width: 440px; margin: auto; }
+.callout-stage--bubble { padding-top: var(--ce-space-64); }
+.tagged-scene { margin: 0; }
+.tagged-scene-art { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; gap: var(--ce-space-16); aspect-ratio: 16 / 9; padding: var(--ce-space-24); background: var(--ce-color-surface-subtle); }
+.tagged-scene-art img { width: 100%; height: auto; object-fit: contain; }
+.tagged-scene figcaption { margin-top: var(--ce-space-12); }
 .download-grid { display: grid; gap: var(--ce-space-24); }
 .download-card { padding: var(--ce-space-32); background: var(--ce-color-surface-subtle); display: flex; flex-direction: column; align-items: flex-start; }
 .download-card > svg { margin-bottom: var(--ce-space-32); }
@@ -227,3 +232,20 @@ pre { overflow: auto; margin: 0; padding: var(--ce-space-24); font-size: var(--c
   .section { padding-block: var(--ce-space-24); }
   .ce-product, .palette-card, .recipe-preview { break-inside: avoid; }
 }
+/* Storefront demonstration frame (site/layouts/Store.astro). */
+.demo-notice { padding-block: var(--ce-space-8); font-size: var(--ce-font-size-xs); }
+.demo-notice-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ce-space-4) var(--ce-space-16); }
+.demo-notice p { margin: 0; }
+.utility-claim { display: none; }
+.store-page-title { margin: var(--ce-space-24) 0 var(--ce-space-32); font-size: clamp(28px, 4vw, 40px); line-height: var(--ce-font-line-heading); }
+@media (min-width: 640px) { .utility-claim { display: block; } }
+/* Internal-tool demonstration (site/pages/sistemas/). */
+.label-stage { display: flex; flex-wrap: wrap; gap: var(--ce-space-24); padding: var(--ce-space-24); background: var(--ce-color-border-default); }
+.label-stage .ce-label { box-shadow: 0 1px 3px var(--ce-color-overlay); }
+.label-qr { display: grid; place-items: center; border: .3mm dashed var(--ce-color-text-primary); font-size: 2.4mm; font-weight: var(--ce-font-weight-bold); }
+.share-scale { width: 300px; height: 158px; overflow: hidden; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+.share-scale > .ce-share-card { transform: scale(.25); transform-origin: 0 0; }
+.share-scale--half { width: 600px; height: 315px; }
+.share-scale--half > .ce-share-card { transform: scale(.5); }
+.share-crop { width: 120px; height: 120px; overflow: hidden; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+.share-crop > .ce-share-card { transform: translateX(-54.3px) scale(.1905); transform-origin: 0 0; }

@@ -1,0 +1,32 @@
+<!-- @dsCard group="Customer journeys" height=620 width=1200 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cart</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .wrap { padding: var(--ce-space-16); }
+  .ce-cart-line .ce-product-heading { --ce-product-text: 1rem; }
+</style>
+</head>
+<body>
+<div class="ce-scope wrap">
+  <ol class="ce-steps" aria-label="Pasos de compra" style="margin-bottom:var(--ce-space-24)"><li aria-current="step"><span class="ce-step-label">Bolsa</span></li><li><span class="ce-step-label">Entrega</span></li><li><span class="ce-step-label">Pago</span></li></ol>
+  <div class="ce-cart">
+    <div>
+      <p class="ce-store-note">Comprando en <strong>Tacna</strong>. Importes de ejemplo.</p>
+      <ul class="ce-cart-lines"><li class="ce-cart-line"><img src="../../media/product-mene.png" alt="" width="128" height="128"><div class="ce-cart-line-body"><h3 class="ce-product-heading"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></h3><p class="ce-product-specs">vidrio borosilicato, 250ml</p><div class="ce-cart-line-actions"><div class="ce-quantity"><button type="button" aria-label="Quitar uno de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button><label class="ce-sr-only" for="q-MENE">Cantidad de MENE</label><input id="q-MENE" type="number" min="1" value="2"><button type="button" aria-label="Agregar uno de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button></div><span class="ce-price ce-price--regular"><span class="ce-sr-only">Precio actual: 13 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">13</span></span></span><button class="ce-link" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg> Quitar</button></div></div></li><li class="ce-cart-line"><img src="../../media/product-nome.png" alt="" width="128" height="128"><div class="ce-cart-line-body"><h3 class="ce-product-heading"><span class="ce-product-name">NOME</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></h3><p class="ce-product-specs">vidrio borosilicato, 350ml</p><div class="ce-cart-line-actions"><div class="ce-quantity"><button type="button" aria-label="Quitar uno de NOME"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button><label class="ce-sr-only" for="q-NOME">Cantidad de NOME</label><input id="q-NOME" type="number" min="1" value="1"><button type="button" aria-label="Agregar uno de NOME"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button></div><span class="ce-price ce-price--regular"><span class="ce-sr-only">Precio actual: 8 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">8</span></span></span><button class="ce-link" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg> Quitar</button></div></div></li></ul>
+      <fieldset class="ce-choice-cards" style="margin-top:var(--ce-space-24)"><legend class="ce-sr-only">Forma de entrega</legend>
+        <label class="ce-choice-card"><input type="radio" name="e" checked><span class="ce-choice-card-title">Retiro en tienda</span><span>En Tacna. Te avisamos cuando esté listo.</span></label>
+        <label class="ce-choice-card"><input type="radio" name="e"><span class="ce-choice-card-title">Envío a domicilio</span><span>Costo y plazo según tu dirección.</span></label>
+      </fieldset>
+    </div>
+    <aside class="ce-order-summary" aria-labelledby="resumen"><h2 id="resumen">Resumen</h2>
+      <dl class="ce-summary"><div><dt>Subtotal (3 productos)</dt><dd>S/21</dd></div><div><dt>Retiro en tienda</dt><dd>Sin costo</dd></div><div class="ce-summary-total"><dt>Total</dt><dd>S/21</dd></div></dl>
+      <a class="ce-button" href="#">Continuar</a>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

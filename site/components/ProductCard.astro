@@ -1,19 +1,54 @@
 ---
 import Price from './Price.astro';
-interface Product { code?: string; model: string; name: string; details: string; image: string; amount: string; previousAmount?: string; discountLabel?: string; badge?: string }
-interface Props { product: Product }
-const { product } = Astro.props;
+import Icon from './Icon.astro';
+import { productView } from '../../recipes/product.mjs';
+interface Option { name?: string; image?: string; href?: string; current?: boolean }
+interface Props {
+  product: { code?: string; name?: string; description?: string; specs?: string[]; image?: string; amount?: string; previousAmount?: string; discountLabel?: string; badge?: string };
+  headingLevel?: 2 | 3;
+  href?: string;
+  flag?: string;
+  /** Overrides the product's own price fields, e.g. the price for the selected store. */
+  price?: { amount: string; previousAmount?: string; discountLabel?: string };
+  /** Shown instead of a price when the selected store has none (never S/0). */
+  priceNote?: string;
+  stock?: { state: 'available' | 'limited' | 'unavailable' | 'unknown'; text: string }[];
+  options?: Option[];
+  actions?: boolean;
+  compare?: boolean;
+  showCode?: boolean;
+}
+const { product, headingLevel = 3, href, flag, price, priceNote, stock = [], options = [], actions = false, compare = false, showCode = true } = Astro.props;
+const view = productView(product);
+const Heading = `h${headingLevel}`;
+const amount = price ?? (!priceNote && product.amount ? { amount: product.amount, previousAmount: product.previousAmount, discountLabel: product.discountLabel } : undefined);
+const label = view.accessibleName;
 ---
 <article class="ce-product">
+  {compare && <label class="ce-check ce-product-select"><input type="checkbox" />Comparar</label>}
   <div class="ce-product-media">
-    <img src={product.image} alt={product.name} width="400" height="400" loading="lazy" />
+    {href
+      ? <a href={href} tabindex="-1" aria-hidden="true">{view.image ? <img src={view.image} alt="" width="400" height="400" loading="lazy" /> : <span class="ce-media-missing">Foto no disponible</span>}</a>
+      : view.image ? <img src={view.image} alt={view.imageAlt} width="400" height="400" loading="lazy" /> : <span class="ce-media-missing">Foto no disponible</span>}
     {product.badge && <span class="ce-badge ce-badge--offer">{product.badge}</span>}
+    {actions && <button class="ce-icon-button ce-icon-button--small" type="button" aria-pressed="false" data-ce-toggle aria-label={`Guardar ${label} en favoritos`}><Icon name="heart" size={20} /></button>}
   </div>
   <div class="ce-product-info">
-    {product.code && <span class="ce-code">{product.code}</span>}
-    <h3 class="ce-product-model">{product.model}</h3>
-    <p class="ce-product-name">{product.name}</p>
-    <p class="ce-product-details">{product.details}</p>
-    <Price amount={product.amount} previousAmount={product.previousAmount} discountLabel={product.discountLabel} />
+    {flag && <p class="ce-product-flag">{flag}</p>}
+    {showCode && view.code && <span class="ce-code">{view.code}</span>}
+    <div class="ce-product-row">
+      <Heading class="ce-product-heading">
+        {href
+          ? <a class="ce-product-link" href={href}>{view.name && <span class="ce-product-name">{view.name}</span>}{view.description && <span class="ce-product-description">{view.description}</span>}</a>
+          : <>{view.name && <span class="ce-product-name">{view.name}</span>}{view.description && <span class="ce-product-description">{view.description}</span>}</>}
+      </Heading>
+      {actions && amount && <button class="ce-icon-button ce-icon-button--action ce-icon-button--small" type="button" aria-label={`Añadir ${label} al carrito`}><Icon name="bag-plus" size={20} /></button>}
+    </div>
+    {view.specs.length > 0 && <p class="ce-product-specs">{view.specs.join(', ')}</p>}
+    {amount && <Price amount={amount.amount} previousAmount={amount.previousAmount} discountLabel={amount.discountLabel} />}
+    {!amount && priceNote && <p class="ce-store-note">{priceNote}</p>}
+    {stock.length > 0 && <ul class="ce-stock">{stock.map((line) => <li data-state={line.state}>{line.text}</li>)}</ul>}
+    {options.length > 1 && <div class="ce-variant-more"><span>Más opciones</span><ul class="ce-variant-thumbs">{options.map((option) => <li><a href={option.href ?? href ?? '#'} aria-current={option.current ? 'true' : undefined}><img src={option.image} alt={option.name ?? ''} width="44" height="44" loading="lazy" /></a></li>)}</ul></div>}
+    {actions && amount && <button class="ce-button ce-button--secondary ce-product-add" type="button" aria-label={`Añadir ${label} al carrito`}>Añadir al carrito</button>}
   </div>
 </article>

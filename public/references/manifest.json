@@ -1,0 +1,65 @@
+[
+  {
+    "file": "campaign-umbrella.jpg",
+    "originalName": "774970189_1781737733951874_3638091802600127085_n.jpg",
+    "role": "reference",
+    "source": "Owner-supplied attachment: 774970189_1781737733951874_3638091802600127085_n.jpg",
+    "description": "Historical campaign composition with baked-in text and prices; not a current offer.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "10939a4d2dcd4b2dd6d3a12e5092d3ddd28b2e1003168fa9f7fe3552aac6c975"
+  },
+  {
+    "file": "campaign-organisers.jpg",
+    "originalName": "766183772_1769590408499940_8738224858989097788_n.jpg",
+    "role": "reference",
+    "source": "Owner-supplied attachment: 766183772_1769590408499940_8738224858989097788_n.jpg",
+    "description": "Historical campaign composition with baked-in text and prices; not a current offer.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "818ccfac9af4ed728e9bfdefbac94584bc43dfeef166197ec378539f083ee969"
+  },
+  {
+    "file": "campaign-kitchen.jpg",
+    "originalName": "762917111_1769590411833273_5629431787051251300_n.jpg",
+    "role": "reference",
+    "source": "Owner-supplied attachment: 762917111_1769590411833273_5629431787051251300_n.jpg",
+    "description": "Historical campaign composition with baked-in text and prices; not a current offer.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "4603c19eeea295735725e19857f5aafcf8c77f4c12779de321c8e68a3b081b07"
+  },
+  {
+    "file": "price-label-yellow-historical.png",
+    "originalName": "98738acc083bad8b6a38d847db9d00ca.png",
+    "role": "reference",
+    "source": "Owner-supplied attachment (decisions.zip, 2026-10-23): 98738acc083bad8b6a38d847db9d00ca.png",
+    "description": "Historical 80 × 40 mm gondola label, yellow (“PRECIOS AMARILLOS”). Evidence for the label recipe; its layout and heading are not mandatory.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "416dc1459910918697f003b38c4a4f0f76a132791cece838bf1d60b5b2dd2787"
+  },
+  {
+    "file": "price-label-white-historical.png",
+    "originalName": "add3b4af9cd48bf20bd069f09b159eb8.png",
+    "role": "reference",
+    "source": "Owner-supplied attachment (decisions.zip, 2026-10-23): add3b4af9cd48bf20bd069f09b159eb8.png",
+    "description": "Historical 80 × 40 mm gondola label, white (“PRECIOS NUEVOS”). Evidence only.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "15c26fc00aa0ff0f48f61f8ab2d22c656cbfda6801dcf11c6e3ad43e304226f1"
+  },
+  {
+    "file": "product-card-wilul.png",
+    "originalName": "744c50ee850f10f861bbcc6776589f5c.png",
+    "role": "reference",
+    "source": "Owner-supplied attachment (decisions.zip, 2026-10-23): 744c50ee850f10f861bbcc6776589f5c.png",
+    "description": "Approved product-card direction: NAME, Description, specs, previous price and yellow promotional price.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "6374a89a43425b103b07eebb766ba0688ba686b7daefb303b04097342414811d"
+  },
+  {
+    "file": "brand-tote-bag.png",
+    "originalName": "bolsatote.png",
+    "role": "reference",
+    "source": "Owner-supplied attachment (decisions.zip, 2026-10-23): bolsatote.png",
+    "description": "Brand application mock-up (tote bag) using Inter and the tagline.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "51601429e07ab0d5ae4afed7b2d00896498f4eeb0b029a0330a14ec1eb831015"
+  }
+]

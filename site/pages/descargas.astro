@@ -9,6 +9,17 @@ const downloads=[
  ['Formato de precios','Utilidad JavaScript para mostrar importes decimales sin perder precisión.','price.mjs'],
  ['Manifiesto','Versión, fuentes de tokens, exportaciones y parejas de contraste.','ce-theme.json'],
  ['Guía técnica','Uso de la base, contratos y ejemplos de integración. English.','usage.md'],
+ ['Guía para aplicar','Punto de entrada para personas y agentes: orden de carga, reglas y patrones. English.','apply-ce-theme.md'],
+ ['Cobertura','Qué está implementado, probado, especificado o pendiente. English.','coverage.md'],
+ ['Controles nativos','Política de estilo, estados e inventario de cada control HTML. English.','controls.md'],
+ ['Identidad de producto','NAME, descripción, especificaciones y códigos. English.','product-identity.md'],
+ ['Precios','Reglas de precio, tiendas y ofertas. English.','pricing.md'],
+ ['Compartir','Contrato de vistas previas sin precio y metadatos. English.','sharing.md'],
+ ['Producto JavaScript','productView, formatName, formatDescription, formatSpec y codeSegments.','product.mjs'],
+ ['Colores de campaña','Comprueba el contraste de una superficie de campaña.','campaign.mjs'],
+ ['Comportamientos','Pestañas, diálogos, cantidades, carruseles y copiar, como mejora progresiva.','behaviors.mjs'],
+ ['Imagen para compartir','Plantilla 1200 × 630 para generar en el servidor.','share-card.css'],
+ ['Etiqueta de góndola','80 × 40 mm y hoja A4.','print-label.css'],
 ];
 const install=`<link rel="stylesheet" href="/styles/tokens.css">
 <link rel="stylesheet" href="/styles/recipes.css">
@@ -20,7 +31,7 @@ const install=`<link rel="stylesheet" href="/styles/tokens.css">
 <Layout title="Recursos y descargas">
   <div class="container"><div class="page-intro"><p class="eyebrow">05 · Recursos</p><h1>Una base lista para usar.</h1><p>Archivos pequeños, nombres claros y recetas que puedes llevar a cualquier proyecto. Sin depender de un framework de interfaz.</p></div>
     <div class="download-grid">{downloads.map(([name,description,file])=><article class="download-card"><Icon name="download" size={28}/><h2>{name}</h2><p>{description}</p><code>{file}</code><a class="ce-button ce-button--secondary" href={`/downloads/${file}`} download>Descargar <Icon name="arrow" size={18}/></a></article>)}</div>
-    <section class="section"><SectionHeading title="Empieza con dos archivos." description="Carga los tokens antes de las recetas y aplica ce-scope al contenedor. Los estilos compartidos no reinician el resto de tu aplicación."/><pre class="install-code"><code>{install}</code></pre><p class="small-note">La fuente se distribuye por separado mediante @fontsource-variable/noto-sans. Las recetas incluyen una alternativa Arial y sans-serif; consulta la guía técnica para cargar la fuente localmente.</p></section>
+    <section class="section"><SectionHeading title="Empieza con dos archivos." description="Carga los tokens antes de las recetas y aplica ce-scope al contenedor. Los estilos compartidos no reinician el resto de tu aplicación."/><pre class="install-code"><code>{install}</code></pre><p class="small-note">La fuente Inter se distribuye por separado en la carpeta fonts/inter del repositorio, con su licencia OFL. Las recetas incluyen una alternativa Arial y sans-serif; consulta la guía técnica para cargar la fuente localmente.</p></section>
     <section class="section"><SectionHeading title="Una fuente compartida."/><div class="rule-grid"><div><h3>Para diseño y desarrollo</h3><p>Los tokens de origen usan el formato DTCG 2025.10. Los archivos descargables se generan junto con el sitio, desde la misma versión.</p></div><div><h3>Para el siguiente proyecto</h3><p>Adopta la base por versión. El repositorio incluye ejemplos, contratos y verificaciones para conservar la identidad al integrarla.</p><p style="margin-top:var(--ce-space-16)"><a class="ce-link" href="https://github.com/j3w1/ce-theme">Abrir ce-theme en GitHub ↗</a></p></div></div></section>
   </div>
 </Layout>

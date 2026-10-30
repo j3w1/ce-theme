@@ -1,0 +1,55 @@
+---
+import Store from '../../layouts/Store.astro';
+import Icon from '../../components/Icon.astro';
+import StoreProducts from '../../components/StoreProducts.astro';
+import { catalogue, categories } from '../../data/store.mjs';
+const filters = [
+  { id: 'filtro-categoria', title: 'Categoría', options: [['Tazas y vasos', 2], ['Tapetes', 2]] },
+  { id: 'filtro-material', title: 'Material', options: [['vidrio borosilicato', 2], ['PVC', 2]] },
+  { id: 'filtro-disponibilidad', title: 'Disponibilidad', options: [['Disponible en tu tienda', 3], ['Retiro en tienda', 4]] },
+];
+const filterGroups = (prefix: string) => filters.map((group, index) => (
+  { ...group, key: `${prefix}-${group.id}`, open: index === 0 }
+));
+---
+<Store title="Cocina y baño" current="Productos" description="Listado de productos de demostración con filtros y precios por tienda.">
+  <div class="ce-container">
+    <nav class="ce-breadcrumbs" aria-label="Ruta" style="padding-top:var(--ce-space-16)"><ol><li><a href="/tienda/">Inicio</a></li><li><a href="/tienda/categoria/">Productos</a></li><li><span aria-current="page">Cocina y baño</span></li></ol></nav>
+    <h1 class="store-page-title">Cocina y baño</h1>
+    <nav aria-label="Subcategorías"><ul class="ce-category-tiles">{categories.slice(0, 4).map((category) => <li><a class="ce-category-tile" href={category.href}>{category.image ? <img src={category.image} alt="" width="120" height="120" loading="lazy" /> : null}{category.label}</a></li>)}</ul></nav>
+
+    <div class="ce-listing" style="margin-top:var(--ce-space-40)">
+      <aside class="ce-listing-aside" aria-label="Filtros">
+        {filterGroups('lateral').map((group) => <details class="ce-disclosure" open={group.open}><summary>{group.title}</summary><div class="ce-disclosure-body"><ul class="ce-option-list">{group.options.map(([label, count]) => <li><label class="ce-check"><input type="checkbox" name={group.id} value={label} />{label}<span class="ce-option-count">{count}</span></label></li>)}</ul></div></details>)}
+      </aside>
+      <div>
+        <div class="ce-filter-bar ce-filter-bar--sticky">
+          <div class="ce-filter-chips" role="group" aria-label="Filtros rápidos">
+            <button class="ce-chip" type="button" data-ce-open="filtros" data-ce-filters><Icon name="filter" size={18} />Filtros<span class="ce-chip-count" aria-label="1 activo">1</span></button>
+            <button class="ce-chip" type="button" data-ce-open="filtros">Ordenar<Icon name="chevron" size={18} /></button>
+            <button class="ce-chip" type="button" aria-pressed="true" data-ce-toggle>Disponible en tu tienda</button>
+            <button class="ce-chip" type="button" aria-pressed="false" data-ce-toggle>Nuevos</button>
+            <button class="ce-chip" type="button" aria-pressed="false" data-ce-toggle>En oferta</button>
+          </div>
+          <p class="ce-result-count" role="status">4 productos</p>
+        </div>
+        <ul class="ce-active-filters" aria-label="Filtros activos"><li class="ce-token">Disponible en tu tienda<button type="button" aria-label="Quitar filtro: disponible en tu tienda"><Icon name="close" size={16} /></button></li></ul>
+        <div id="ofertas">
+          <StoreProducts items={catalogue} id="listado" label="Productos" compare>
+            <aside class="ce-grid-promo" aria-labelledby="promo-regalos"><p class="ce-eyebrow">Regalos</p><h3 id="promo-regalos">Ideas para regalar desde casa</h3><p>Productos útiles para cada ocasión.</p><a class="ce-icon-button ce-icon-button--ink" href="/tienda/escena/" aria-label="Ver ideas para regalar"><Icon name="arrow" /></a></aside>
+          </StoreProducts>
+        </div>
+        <div class="ce-load-more"><p>Mostrando 4 de 4 productos</p><progress class="ce-progress" max="4" value="4" aria-label="Productos mostrados">4 de 4</progress></div>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="ce-drawer" id="filtros" aria-labelledby="filtros-titulo">
+    <div class="ce-dialog-header"><h2 id="filtros-titulo">Filtrar y ordenar</h2><button class="ce-icon-button" type="button" data-ce-close aria-label="Cerrar filtros"><Icon name="close" /></button></div>
+    <div class="ce-dialog-body">
+      <div class="ce-field"><label for="orden">Ordenar por</label><select class="ce-select" id="orden"><option>Relevancia</option><option>Novedades</option><option>Nombre (A–Z)</option></select></div>
+      {filterGroups('cajon').map((group) => <details class="ce-disclosure" open={group.open}><summary>{group.title}</summary><div class="ce-disclosure-body"><ul class="ce-option-list">{group.options.map(([label, count]) => <li><label class="ce-check"><input type="checkbox" name={`cajon-${group.id}`} value={label} />{label}<span class="ce-option-count">{count}</span></label></li>)}</ul></div></details>)}
+    </div>
+    <div class="ce-dialog-footer"><button class="ce-button ce-button--secondary" type="button">Limpiar</button><button class="ce-button" type="button" data-ce-close>Ver 4 productos</button></div>
+  </dialog>
+</Store>

@@ -1,0 +1,31 @@
+<!-- @dsCard group="Forms" height=260 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Field</title>
+<style>
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .stage { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12); padding: var(--ce-space-16); }
+  .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--ce-space-24); padding: var(--ce-space-16); }
+</style>
+</head>
+<body>
+<div class="ce-scope fields">
+  <div class="ce-field">
+    <label for="buscar">Buscar un producto</label>
+    <input class="ce-input" id="buscar" type="search" placeholder="¿Qué estás buscando?" aria-describedby="buscar-nota">
+    <span class="ce-field-note" id="buscar-nota">Nombre o código de producto.</span>
+  </div>
+  <div class="ce-field">
+    <label for="orden">Ordenar por</label>
+    <select class="ce-select" id="orden"><option>Relevancia</option><option>Precio: menor a mayor</option><option>Novedades</option></select>
+  </div>
+  <div class="ce-field">
+    <label for="correo">Correo electrónico</label>
+    <input class="ce-input" id="correo" type="email" value="nombre@" aria-invalid="true" aria-describedby="correo-error">
+    <span class="ce-field-error" id="correo-error">Escribe un correo completo, por ejemplo: nombre@ejemplo.com.</span>
+  </div>
+</div>
+</body>
+</html>

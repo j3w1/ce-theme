@@ -1,69 +1,141 @@
 [
   {
-    "file": "logo.png",
-    "source": "Owner-supplied attachment: casaelida_logo_redy_small.png",
-    "description": "Supplied company logo; original bytes preserved.",
+    "file": "logo-wordmark-color.png",
+    "originalName": "casaelida_logo_redy_small.png",
+    "role": "production",
+    "source": "Owner-supplied attachment: casaelida_logo_redy_small.png; resupplied in decisions.zip with identical bytes",
+    "description": "Transparent wordmark: yellow “Casa”, red “Elida”. Light backgrounds.",
     "rights": "Casa Elida brand asset; not covered by a software license.",
     "sha256": "593ab3018c883630987e92e760daf810e73cfe75ab39154a82e6dbd4aa82629e"
   },
   {
-    "file": "logo-brand.jpg",
+    "file": "logo-wordmark-black.png",
+    "originalName": "2461752396d2293cdb8e32612ff3d60f.png",
+    "role": "production",
+    "source": "Owner-supplied attachment (decisions.zip, 2026-10-23): 2461752396d2293cdb8e32612ff3d60f.png",
+    "description": "Monochrome black wordmark on white. Quiet treatments on white or light surfaces; not transparent.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "1181f50bfc79e3709241f5fa7f5e1137909273a616ba6f59a9f8797be8ec878c"
+  },
+  {
+    "file": "logo-wordmark-white-yellow.png",
+    "originalName": "casaelida_logo_whyellow.png",
+    "role": "production",
+    "source": "Owner-supplied attachment (decisions.zip, 2026-10-23): casaelida_logo_whyellow.png",
+    "description": "Transparent wordmark: white “Casa”, yellow “Elida”. Brand-red and dark backgrounds.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "a29c46064b357d63bdfebcae061ac16d9d14f2b99c40900cb0f55fd64bdb2179"
+  },
+  {
+    "file": "logo-on-white.jpg",
+    "originalName": "FACE 01 BLANCO.jpg",
+    "role": "production",
+    "source": "Owner-supplied attachment (decisions.zip, 2026-10-23): FACE 01 BLANCO.jpg",
+    "description": "Wordmark on white: black “Casa”, red “Elida”.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "f117a1e88b453ff3a4e7ebd3247b6f8f13140a9639e53aa9928ab4bc9d28945f"
+  },
+  {
+    "file": "logo-on-yellow.jpg",
+    "originalName": "FACE 01 AMARILLO.jpg",
+    "role": "production",
+    "source": "Owner-supplied attachment (decisions.zip, 2026-10-23): FACE 01 AMARILLO.jpg",
+    "description": "Wordmark on brand yellow: black “Casa”, red “Elida”.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "5f238a6e2a6ada76f3395ef9a64468aa79a6f78680fa9b90bec7a0bd8d4cf99e"
+  },
+  {
+    "file": "logo-on-red.png",
+    "originalName": "Letras Casa Elida.png",
+    "role": "production",
+    "source": "Owner-supplied attachment (decisions.zip, 2026-10-23): Letras Casa Elida.png",
+    "description": "Wordmark on red: white “Casa”, yellow “Elida”.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "de0b4585e2117916bb4e87712cb672f17a4d184fac5ddbc4f4b5bb779f585ea7"
+  },
+  {
+    "file": "logo-matte-red.jpg",
+    "originalName": "logo-bgblanco-fgrojomate.jpg",
+    "role": "production",
+    "source": "Owner-supplied attachment (decisions.zip, 2026-10-23): logo-bgblanco-fgrojomate.jpg",
+    "description": "Matte-red wordmark on white.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "5e88f27f1bb3d4d158a902bce40204945aea979fb2219a3e718cb8dbb9e99c5f"
+  },
+  {
+    "file": "logo-matte-red-tagline.jpg",
+    "originalName": "logo-bgblanco-fgrojomate-regdechogar.jpg",
+    "role": "production",
+    "source": "Owner-supplied attachment (decisions.zip, 2026-10-23): logo-bgblanco-fgrojomate-regdechogar.jpg",
+    "description": "Matte-red wordmark with “Regalos Decoración y Hogar”.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "5fce56e888bc563e4b1e39f72c27ce13f65cda61321c382e7ac9329f65a46855"
+  },
+  {
+    "file": "logo-square-red.jpg",
+    "originalName": "logo-fb.jpg",
+    "role": "production",
     "source": "Owner-supplied attachment: logo-fb.jpg",
-    "description": "Supplied company social lockup; original bytes preserved.",
+    "description": "Square red-ground lockup with icons; avatars and square brand placements.",
     "rights": "Casa Elida brand asset; not covered by a software license.",
     "sha256": "e14872c6ee38b666a7402b9774f3f078aabbeeb1f513344641c3e1e145855110"
   },
   {
-    "file": "campaign-umbrella.jpg",
-    "source": "Owner-supplied attachment: 774970189_1781737733951874_3638091802600127085_n.jpg",
-    "description": "Supplied company square campaign reference.",
-    "rights": "Casa Elida brand asset; not covered by a software license.",
-    "sha256": "10939a4d2dcd4b2dd6d3a12e5092d3ddd28b2e1003168fa9f7fe3552aac6c975"
-  },
-  {
-    "file": "campaign-organisers.jpg",
-    "source": "Owner-supplied attachment: 766183772_1769590408499940_8738224858989097788_n.jpg",
-    "description": "Supplied company square campaign reference.",
-    "rights": "Casa Elida brand asset; not covered by a software license.",
-    "sha256": "818ccfac9af4ed728e9bfdefbac94584bc43dfeef166197ec378539f083ee969"
-  },
-  {
-    "file": "campaign-kitchen.jpg",
-    "source": "Owner-supplied attachment: 762917111_1769590411833273_5629431787051251300_n.jpg",
-    "description": "Supplied company square campaign reference.",
-    "rights": "Casa Elida brand asset; not covered by a software license.",
-    "sha256": "4603c19eeea295735725e19857f5aafcf8c77f4c12779de321c8e68a3b081b07"
-  },
-  {
     "file": "product-mene.png",
+    "originalName": "1792093937-1792093937.png",
+    "role": "production",
     "source": "https://dl.dropboxusercontent.com/scl/fi/5nbum6o58i2iqtrwxbqhq/1792093937-1792093937.png?rlkey=ytja2st329dvbn68vv9zc5xdp&dl=0",
     "sourcePage": "https://casaelida.com/catalogo/mene",
-    "description": "Public Casa Elida catalogue hero image: MENE",
+    "description": "Public Casa Elida catalogue hero image: MENE (catalogue cutout).",
     "rights": "Casa Elida catalogue asset; used for this company design reference.",
     "sha256": "b06f72d5c8a03de7b40eb67d1c61b7d4f790d229d03d0de9de5b7d92deb8cc91"
   },
   {
     "file": "product-nome.png",
+    "originalName": "1792092788-1792092788.png",
+    "role": "production",
     "source": "https://dl.dropboxusercontent.com/scl/fi/dp2wfq3nit9236ykg4l6i/1792092788-1792092788.png?rlkey=9e5fxdcm7idvqp2eh2onvwqr6&dl=0",
     "sourcePage": "https://casaelida.com/catalogo/nome",
-    "description": "Public Casa Elida catalogue hero image: NOME",
+    "description": "Public Casa Elida catalogue hero image: NOME (catalogue cutout).",
     "rights": "Casa Elida catalogue asset; used for this company design reference.",
     "sha256": "ecac056e1d8f8b8596f41d273225a171fc0fe19a71cc004ba6948fd84de41888"
   },
   {
     "file": "product-tilen.png",
+    "originalName": "1790620019-1790620019.png",
+    "role": "production",
     "source": "https://dl.dropboxusercontent.com/scl/fi/4obbrqy3q3dns2plou069/1790620019-1790620019.png?rlkey=96wje10pm3p93knutuu062tjr&dl=0",
     "sourcePage": "https://casaelida.com/catalogo/tilen",
-    "description": "Public Casa Elida catalogue hero image: TILEN",
+    "description": "Public Casa Elida catalogue hero image: TILEN (catalogue cutout).",
     "rights": "Casa Elida catalogue asset; used for this company design reference.",
     "sha256": "45da0ea1dbfd43360e4212137c85a31178fc1d1770fdc281ac8984059950504d"
   },
   {
     "file": "product-talen.png",
+    "originalName": "1790619822-1790619822.png",
+    "role": "production",
     "source": "https://dl.dropboxusercontent.com/scl/fi/rxc2g42us065ohcgwkpd1/1790619822-1790619822.png?rlkey=o8e07tx0kg20ihgy8mkjwgnu8&dl=0",
     "sourcePage": "https://casaelida.com/catalogo/talen",
-    "description": "Public Casa Elida catalogue hero image: TALEN",
+    "description": "Public Casa Elida catalogue hero image: TALEN (catalogue cutout).",
     "rights": "Casa Elida catalogue asset; used for this company design reference.",
     "sha256": "583e9662eafa126db05fef8252ee231c95c5e90dbd74362060d9db552214698d"
+  },
+  {
+    "file": "logo-ce-radio.png",
+    "originalName": "icon-512.png",
+    "role": "production",
+    "source": "j3w1/ce-radio at 9aba845, assets/brand/icon-512.png: a proportional resize of the owner-provided CE Radio badge (ce-radio-logo-source.png, 2026-10-06). Byte-identical copy.",
+    "description": "CE Radio badge: Casa Elida RADIO with wings, antenna and lightning. CE Radio surfaces only; shown whole, never cropped, recoloured or dragged.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "ab47b269bd5b71fd0db224b0f3fda11ee1169c67cbda6b8e9aea72daf389961a"
+  },
+  {
+    "file": "logo-ce-radio-navidad.png",
+    "originalName": "icon-christmas.png",
+    "role": "production",
+    "source": "j3w1/ce-radio at def1171, assets/brand/icon-christmas.png: the CE Radio badge with the owner-approved Christmas hat (owner decisions of 2026-10-08). Byte-identical copy.",
+    "description": "CE Radio badge in its Navidad version (hat on the emblem). Only while a Navidad playlist is confirmed playing; shown whole, never cropped, recoloured or dragged.",
+    "rights": "Casa Elida brand asset; not covered by a software license.",
+    "sha256": "8225b86a58fbb2eeab8ab8f536b3e5b2d864940db6e7060c0232a4f04e9dec94"
   }
 ]

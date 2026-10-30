@@ -1,0 +1,255 @@
+{
+  "title": "Casa Elida",
+  "namespace": "CasaElida",
+  "libraries": [],
+  "files": {
+    "project/fonts/Inter-Regular.woff2": "fonts/inter/Inter-Regular.woff2",
+    "project/fonts/Inter-SemiBold.woff2": "fonts/inter/Inter-SemiBold.woff2",
+    "project/fonts/Inter-Bold.woff2": "fonts/inter/Inter-Bold.woff2",
+    "project/fonts/Inter-ExtraBold.woff2": "fonts/inter/Inter-ExtraBold.woff2",
+    "project/media/product-mene.png": "public/assets/product-mene.png",
+    "project/media/product-nome.png": "public/assets/product-nome.png",
+    "project/media/product-tilen.png": "public/assets/product-tilen.png",
+    "project/media/logo-square-red.jpg": "public/assets/logo-square-red.jpg",
+    "project/media/logo-wordmark-color.png": "public/assets/logo-wordmark-color.png",
+    "project/media/logo-wordmark-black.png": "public/assets/logo-wordmark-black.png",
+    "project/media/logo-wordmark-white-yellow.png": "public/assets/logo-wordmark-white-yellow.png",
+    "project/media/logo-ce-radio.png": "public/assets/logo-ce-radio.png",
+    "project/media/logo-ce-radio-navidad.png": "public/assets/logo-ce-radio-navidad.png",
+    "project/media/brand-tote-bag.png": "public/references/brand-tote-bag.png"
+  },
+  "assetGroups": [
+    {
+      "name": "Logos",
+      "tile": "l",
+      "files": [
+        {
+          "name": "logo-wordmark-color.png",
+          "source": "public/assets/logo-wordmark-color.png"
+        },
+        {
+          "name": "logo-wordmark-black.png",
+          "source": "public/assets/logo-wordmark-black.png"
+        },
+        {
+          "name": "logo-wordmark-white-yellow.png",
+          "source": "public/assets/logo-wordmark-white-yellow.png"
+        },
+        {
+          "name": "logo-on-white.jpg",
+          "source": "public/assets/logo-on-white.jpg"
+        },
+        {
+          "name": "logo-on-yellow.jpg",
+          "source": "public/assets/logo-on-yellow.jpg"
+        },
+        {
+          "name": "logo-on-red.png",
+          "source": "public/assets/logo-on-red.png"
+        },
+        {
+          "name": "logo-matte-red.jpg",
+          "source": "public/assets/logo-matte-red.jpg"
+        },
+        {
+          "name": "logo-matte-red-tagline.jpg",
+          "source": "public/assets/logo-matte-red-tagline.jpg"
+        },
+        {
+          "name": "logo-square-red.jpg",
+          "source": "public/assets/logo-square-red.jpg"
+        },
+        {
+          "name": "logo-ce-radio.png",
+          "source": "public/assets/logo-ce-radio.png"
+        },
+        {
+          "name": "logo-ce-radio-navidad.png",
+          "source": "public/assets/logo-ce-radio-navidad.png"
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "tile": "m",
+      "files": [
+        {
+          "name": "product-mene.png",
+          "source": "public/assets/product-mene.png"
+        },
+        {
+          "name": "product-nome.png",
+          "source": "public/assets/product-nome.png"
+        },
+        {
+          "name": "product-tilen.png",
+          "source": "public/assets/product-tilen.png"
+        },
+        {
+          "name": "product-talen.png",
+          "source": "public/assets/product-talen.png"
+        }
+      ]
+    },
+    {
+      "name": "References",
+      "tile": "l",
+      "files": [
+        {
+          "name": "product-card-wilul.png",
+          "source": "public/references/product-card-wilul.png"
+        },
+        {
+          "name": "price-label-yellow-historical.png",
+          "source": "public/references/price-label-yellow-historical.png"
+        },
+        {
+          "name": "price-label-white-historical.png",
+          "source": "public/references/price-label-white-historical.png"
+        },
+        {
+          "name": "campaign-umbrella.jpg",
+          "source": "public/references/campaign-umbrella.jpg"
+        },
+        {
+          "name": "campaign-organisers.jpg",
+          "source": "public/references/campaign-organisers.jpg"
+        },
+        {
+          "name": "campaign-kitchen.jpg",
+          "source": "public/references/campaign-kitchen.jpg"
+        },
+        {
+          "name": "brand-tote-bag.png",
+          "source": "public/references/brand-tote-bag.png"
+        }
+      ]
+    },
+    {
+      "name": "Icons",
+      "tile": "xs",
+      "files": [
+        {
+          "name": "arrow.svg",
+          "source": "exports/design-system/project/assets/Icons/arrow.svg"
+        },
+        {
+          "name": "search.svg",
+          "source": "exports/design-system/project/assets/Icons/search.svg"
+        },
+        {
+          "name": "menu.svg",
+          "source": "exports/design-system/project/assets/Icons/menu.svg"
+        },
+        {
+          "name": "bag.svg",
+          "source": "exports/design-system/project/assets/Icons/bag.svg"
+        },
+        {
+          "name": "heart.svg",
+          "source": "exports/design-system/project/assets/Icons/heart.svg"
+        },
+        {
+          "name": "download.svg",
+          "source": "exports/design-system/project/assets/Icons/download.svg"
+        },
+        {
+          "name": "copy.svg",
+          "source": "exports/design-system/project/assets/Icons/copy.svg"
+        },
+        {
+          "name": "check.svg",
+          "source": "exports/design-system/project/assets/Icons/check.svg"
+        },
+        {
+          "name": "sun.svg",
+          "source": "exports/design-system/project/assets/Icons/sun.svg"
+        },
+        {
+          "name": "grid.svg",
+          "source": "exports/design-system/project/assets/Icons/grid.svg"
+        },
+        {
+          "name": "plus.svg",
+          "source": "exports/design-system/project/assets/Icons/plus.svg"
+        },
+        {
+          "name": "close.svg",
+          "source": "exports/design-system/project/assets/Icons/close.svg"
+        },
+        {
+          "name": "ruler.svg",
+          "source": "exports/design-system/project/assets/Icons/ruler.svg"
+        },
+        {
+          "name": "material.svg",
+          "source": "exports/design-system/project/assets/Icons/material.svg"
+        },
+        {
+          "name": "user.svg",
+          "source": "exports/design-system/project/assets/Icons/user.svg"
+        },
+        {
+          "name": "pin.svg",
+          "source": "exports/design-system/project/assets/Icons/pin.svg"
+        },
+        {
+          "name": "store.svg",
+          "source": "exports/design-system/project/assets/Icons/store.svg"
+        },
+        {
+          "name": "truck.svg",
+          "source": "exports/design-system/project/assets/Icons/truck.svg"
+        },
+        {
+          "name": "filter.svg",
+          "source": "exports/design-system/project/assets/Icons/filter.svg"
+        },
+        {
+          "name": "chevron.svg",
+          "source": "exports/design-system/project/assets/Icons/chevron.svg"
+        },
+        {
+          "name": "minus.svg",
+          "source": "exports/design-system/project/assets/Icons/minus.svg"
+        },
+        {
+          "name": "trash.svg",
+          "source": "exports/design-system/project/assets/Icons/trash.svg"
+        },
+        {
+          "name": "clock.svg",
+          "source": "exports/design-system/project/assets/Icons/clock.svg"
+        },
+        {
+          "name": "chat.svg",
+          "source": "exports/design-system/project/assets/Icons/chat.svg"
+        },
+        {
+          "name": "info.svg",
+          "source": "exports/design-system/project/assets/Icons/info.svg"
+        },
+        {
+          "name": "bag-plus.svg",
+          "source": "exports/design-system/project/assets/Icons/bag-plus.svg"
+        },
+        {
+          "name": "share.svg",
+          "source": "exports/design-system/project/assets/Icons/share.svg"
+        },
+        {
+          "name": "gift.svg",
+          "source": "exports/design-system/project/assets/Icons/gift.svg"
+        },
+        {
+          "name": "home.svg",
+          "source": "exports/design-system/project/assets/Icons/home.svg"
+        },
+        {
+          "name": "tag.svg",
+          "source": "exports/design-system/project/assets/Icons/tag.svg"
+        }
+      ]
+    }
+  ]
+}
