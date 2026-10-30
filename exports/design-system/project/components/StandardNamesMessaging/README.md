@@ -1,6 +1,6 @@
 # StandardNamesMessaging
 
-Standard names for messaging: **ConversationList** (Lista de conversaciones), **MessageList** (Lista de mensajes), **InternalNote** (Nota interna), **MessageStatus** (Estado del mensaje), **MessageComposer** (Caja de mensaje), **ComposerNoteMode** (Modo nota interna).
+Standard names for messaging: **ConversationList** (Lista de conversaciones), **MessageList** (Lista de mensajes), **InternalNote** (Nota interna), **MessageStatus** (Estado del mensaje), **MessageComposer** (Caja de mensaje), **ComposerNoteMode** (Modo nota interna), **AttachmentGroup** (Grupo de adjuntos), **WorkStatus** (Estado del trabajo).
 
 ## Classes
 
@@ -10,6 +10,8 @@ Standard names for messaging: **ConversationList** (Lista de conversaciones), **
 - **MessageStatus** · Estado del mensaje: `ce-message-status`, `ce-message-status--failed`. The delivery state of an outgoing message, in words: Enviado, Entregado, Leído, No entregado. A simulated message says so (“Enviado · simulado”). Delivery is not acceptance or completion of work.
 - **MessageComposer** · Caja de mensaje: `ce-composer`, `ce-composer-mode`, `ce-composer-mode-option`, `ce-composer-mode-draft`, `ce-composer-row`, `ce-composer-field`, `ce-composer-send`. A text area and a send action. Enter adds a line; Ctrl or ⌘ + Enter submits; a blank draft cannot be submitted. With notes enabled, “Responder al cliente” and “Nota interna” each keep their own draft.
 - **ComposerNoteMode** · Modo nota interna: `ce-composer--note`, `ce-composer-notice`, `ce-composer-mode-option--note`. In note mode the whole composer takes the informational palette, says “No la ve el cliente” and offers “Guardar nota” instead of the red send action. Switching modes never sends or rewrites a draft.
+- **AttachmentGroup** · Grupo de adjuntos: `ce-attachments`, `ce-attachments--1`, `ce-attachments--2`, `ce-attachments--4`, `ce-attachments--cover`, `ce-attachment`, `ce-attachment-open`, `ce-attachment-image`, `ce-attachment-caption`. Images that were already sent. Each is a native button that only asks the application to open it; its name says the position (“1 de 3”), the caption and the description once. Photographic evidence is shown uncropped (contain) unless the group asks for cover, and every tile reserves its box so a late image never shifts the layout. One item fills the width, two and four make two columns, any other count three, and two in a narrow container. No upload, capture, zoom or viewer.
+- **WorkStatus** · Estado del trabajo: `ce-work-status`, `ce-work-status-head`, `ce-work-status-title`, `ce-work-status-now`, `ce-work-steps`, `ce-work-step`, `ce-work-step--done`, `ce-work-step--current`, `ce-work-step--pending`, `ce-work-step--stopped`, `ce-work-status-summary`, `ce-work-status-actions`, `ce-message-context`. The progress of one piece of work that the application supplies: a title, ordered steps with their state in words (hecho, actual, pendiente, se detuvo), the current state as text, who and when, and the application’s own actions. Shape as well as words carry the state. It never decides or changes a state, and it is never the delivery status of a message: “Leído” is not “Aceptado”, and “Aceptado” is not “Resuelto”.
 
 ## The consumer supplies
 

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { defineComponent, h, nextTick, ref } from 'vue';
+import { defineComponent, h, nextTick, reactive, ref } from 'vue';
 import CEMessageList from '../src/components/CEMessageList.vue';
 import type { CEMessage } from '../src/index';
 
@@ -243,5 +243,155 @@ describe('CEMessageList conversation identity', () => {
       await nextTick();
       expect(scrollPositions.get(log)).toBe(1000);
     } finally { restoreGeometry(); }
+  });
+});
+
+// Attachments and contextual content (Step 4B). Both are drawn inside the bubble; delivery status stays in the meta line.
+const photo = { id: 'foto-1', label: 'Anaquel 3', src: '/ejemplo.svg', alt: 'Anaquel con un espacio vacío' };
+const withPhoto: CEMessage = { id: 'p', kind: 'outgoing', text: 'Se acabaron los frascos.', time: '10:24', status: 'read', simulated: true, attachments: [photo] };
+
+describe('CEMessageList attachments', () => {
+  it('draws the attachment group inside the bubble before the text, and the delivery status stays in the meta line', () => {
+    const wrapper = mountList([withPhoto]);
+    const bubble = wrapper.get('.ce-message');
+    const order = [...bubble.element.children].map((child) => child.className.split(' ')[0]);
+    expect(order).toEqual(['ce-attachments', 'ce-message-text', 'ce-message-meta']);
+    expect(bubble.get('.ce-attachments').attributes('aria-label')).toBe('1 foto');
+    expect(bubble.get('.ce-message-meta').text()).toBe('10:24Leído · simulado');
+    expect(bubble.get('.ce-attachments').text()).not.toMatch(/Leído|Aceptad/);
+  });
+
+  it('labels a group by how many photos it holds', () => {
+    const wrapper = mountList([{ ...withPhoto, attachments: [photo, { ...photo, id: 'foto-2', label: 'Anaquel 4' }] }]);
+    expect(wrapper.get('.ce-attachments').attributes('aria-label')).toBe('2 fotos');
+  });
+
+  it('re-emits one typed event with the message id, the attachment id and the index', async () => {
+    const wrapper = mountList([{ id: 'x', kind: 'incoming', text: 'Otra', time: '10:00' }, { ...withPhoto, attachments: [photo, { ...photo, id: 'foto-2', label: 'Anaquel 4' }] }]);
+    await wrapper.findAll('.ce-attachment-open')[1]!.trigger('click');
+    expect(wrapper.emitted('openAttachment')).toEqual([['p', 'foto-2', 1]]);
+    expect(Object.keys(wrapper.emitted())).not.toContain('open');
+  });
+
+  it('draws no attachment group for a message without attachments, or with an empty list', () => {
+    const wrapper = mountList([{ ...withPhoto, id: 'a', attachments: [] }, { ...withPhoto, id: 'b', attachments: undefined }, ...base]);
+    expect(wrapper.find('.ce-attachments').exists()).toBe(false);
+  });
+
+  it('leaves the existing messages, internal notes and statuses exactly as they were', () => {
+    const wrapper = mountList();
+    expect(wrapper.find('.ce-message-context').exists()).toBe(false);
+    expect(wrapper.find('.ce-attachments').exists()).toBe(false);
+    expect(wrapper.get('.ce-message--note .ce-message-note-label').text()).toBe('Nota interna · No la ve el cliente');
+    expect(wrapper.get('.ce-message--outgoing .ce-message-status').text()).toBe('Leído · simulado');
+  });
+
+  it('draws an internal note with attachments as a note, never as an outgoing message', () => {
+    const wrapper = mountList([{ id: 'n', kind: 'note', author: 'Paola', text: 'Nota con foto', own: true, attachments: [photo] }]);
+    expect(wrapper.find('.ce-message--note .ce-attachments').exists()).toBe(true);
+    expect(wrapper.find('.ce-message--outgoing').exists()).toBe(false);
+  });
+});
+
+describe('CEMessageList contextual content', () => {
+  const contextual = (slot: (message: CEMessage) => unknown, messages: CEMessage[] = [withPhoto, ...base]) =>
+    mount(CEMessageList, { props: { messages, label: 'Mensajes' }, slots: { context: (props: { message: CEMessage }) => slot(props.message) as never }, attachTo: document.body });
+
+  it('draws the context slot inside the bubble after the meta line, with the message', () => {
+    const wrapper = contextual((message) => (message.id === 'p' ? h('p', { class: 'ce-sr-only', 'data-id': message.id }, 'Pedido') : null));
+    const bubble = wrapper.findAll('.ce-message')[0]!;
+    const order = [...bubble.element.children].map((child) => child.className.split(' ')[0]);
+    expect(order).toEqual(['ce-attachments', 'ce-message-text', 'ce-message-meta', 'ce-message-context']);
+    expect(bubble.get('.ce-message-context [data-id]').attributes('data-id')).toBe('p');
+  });
+
+  it('adds no wrapper for a message the application draws nothing for', () => {
+    const wrapper = contextual((message) => (message.id === 'p' ? h('p', 'Pedido') : null));
+    expect(wrapper.findAll('.ce-message-context')).toHaveLength(1);
+    // Without the slot, or with a slot that draws only a comment (a false v-if), no wrapper exists at all.
+    expect(mountList([withPhoto]).find('.ce-message-context').exists()).toBe(false);
+    expect(contextual(() => [h('!')].slice(1)).find('.ce-message-context').exists()).toBe(false);
+    expect(contextual(() => '').find('.ce-message-context').exists()).toBe(false);
+  });
+
+  it('updates the contextual content when the application state changes, without touching the delivery status', async () => {
+    const request = reactive({ state: 'Solicitado' });
+    const wrapper = contextual((message) => (message.id === 'p' ? h('p', { class: 'ce-work-status-now' }, request.state) : null));
+    expect(wrapper.get('.ce-work-status-now').text()).toBe('Solicitado');
+    request.state = 'Aceptado';
+    await nextTick();
+    expect(wrapper.get('.ce-work-status-now').text()).toBe('Aceptado');
+    expect(wrapper.get('.ce-message--outgoing .ce-message-status').text()).toBe('Leído · simulado');
+    expect(wrapper.get('.ce-message-meta').text()).not.toContain('Aceptado');
+  });
+
+  it('draws context for an incoming message and for a note as well', () => {
+    const wrapper = contextual((message) => h('p', { class: 'ctx' }, message.id), [{ id: 'i', kind: 'incoming', text: 'Hola' }, { id: 'n', kind: 'note', text: 'Nota', author: 'Paola' }]);
+    expect(wrapper.findAll('.ce-message-context .ctx').map((node) => node.text())).toEqual(['i', 'n']);
+  });
+
+  it('does not draw context for a system message', () => {
+    const wrapper = contextual(() => h('p', 'x'), [{ id: 's', kind: 'system', text: 'Hoy' }]);
+    expect(wrapper.find('.ce-message-context').exists()).toBe(false);
+  });
+});
+
+// A message that grows (its context or an attachment changes height) must follow the same contract as a new message:
+// a reader at the bottom stays at the newest message, a reader in history is not moved.
+describe('CEMessageList scrolling while a message changes height', () => {
+  afterEach(() => { vi.unstubAllGlobals(); });
+  const observers: { callback: () => void; targets: Element[] }[] = [];
+  const stubObserver = () => {
+    observers.length = 0;
+    vi.stubGlobal('ResizeObserver', class {
+      entry = { callback: () => {}, targets: [] as Element[] };
+      constructor(callback: () => void) { this.entry.callback = callback; observers.push(this.entry); }
+      observe(target: Element) { this.entry.targets.push(target); }
+      unobserve(target: Element) { this.entry.targets = this.entry.targets.filter((item) => item !== target); }
+      disconnect() { this.entry.targets = []; }
+    });
+  };
+  const contextual = (messages: CEMessage[]) => mount(CEMessageList, { props: { messages, label: 'Mensajes' }, slots: { context: () => h('p', 'Contexto') }, attachTo: document.body });
+
+  it('observes every message bubble, including ones added later, and stops observing removed ones', async () => {
+    stubObserver();
+    const wrapper = mountList([...base, withPhoto]);
+    expect(observers).toHaveLength(1);
+    // The log itself and every message element in it.
+    expect(observers[0]!.targets).toContain(wrapper.element);
+    expect(observers[0]!.targets.filter((target) => target.classList.contains('ce-message'))).toHaveLength(wrapper.findAll('.ce-message').length);
+    const before = observers[0]!.targets.length;
+    await wrapper.setProps({ messages: [...base, withPhoto, { id: 'z', kind: 'incoming', text: 'Nuevo' }] });
+    expect(observers[0]!.targets.length).toBe(before + 1);
+    await wrapper.setProps({ messages: [withPhoto] });
+    expect(observers[0]!.targets.filter((target) => target.classList.contains('ce-message'))).toHaveLength(1);
+  });
+
+  it('keeps a reader who follows the newest message at the bottom when the newest message grows', () => {
+    stubObserver();
+    const wrapper = contextual([...base, withPhoto]);
+    const log = geometry(wrapper, 800);
+    wrapper.element.dispatchEvent(new Event('scroll'));
+    observers[0]!.callback();
+    expect(log.top()).toBe(1000);
+  });
+
+  it('does not move a reader who is looking at history when the newest message grows', () => {
+    stubObserver();
+    const wrapper = contextual([...base, withPhoto]);
+    const log = geometry(wrapper, 100);
+    wrapper.element.dispatchEvent(new Event('scroll'));
+    observers[0]!.callback();
+    expect(log.top()).toBe(100);
+  });
+
+  it('keeps a reader in history in place when a message is updated through its context while new content arrives', async () => {
+    stubObserver();
+    const wrapper = contextual([...base, withPhoto]);
+    const log = geometry(wrapper, 100);
+    wrapper.element.dispatchEvent(new Event('scroll'));
+    await wrapper.setProps({ messages: [...base, { ...withPhoto }] });
+    observers[0]!.callback();
+    expect(log.top()).toBe(100);
   });
 });
