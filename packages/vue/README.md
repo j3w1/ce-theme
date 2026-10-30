@@ -31,7 +31,7 @@ import { CEButton, CEPrice, CEProductCode, CETextField } from '@casaelida/vue';
 
 ### Messaging components
 
-They draw conversations and send nothing. The application owns the drafts (`v-model:reply`, `v-model:note`), the selected conversation, delivery states, authorization and transport. `CEMessageComposer` emits `submitReply(text)` or `saveNote(text)`; an internal note can never leave through the reply event. Drawing a note differently is presentation, not a security control: the service must still decide who may read it. The message bubble is part of `CEMessageList` and is not exported. See the interactive fixture example on `/mensajeria/` in the showcase.
+They draw conversations and send nothing. The application owns the drafts (`v-model:reply`, `v-model:note`), the selected conversation, delivery states, authorization and transport. `CEMessageComposer` emits `submitReply(text)` or `saveNote(text)`; an internal note can never leave through the reply event. Drawing a note differently is presentation, not a security control: the service must still decide who may read it. The message bubble is part of `CEMessageList` and is not exported. **Mount one `CEMessageList` per conversation and key it** (`<CEMessageList :key="conversation.id" ... />`): the list never infers a conversation change from its messages, so ids may repeat across conversations (each can start with the same day separator) and older messages may be added above. A keyed mount opens at the newest message. See the interactive fixture example on `/mensajeria/` in the showcase.
 
 Load the foundation CSS once in the application: `fonts.css`, `tokens.css` and `recipes.css` from `exports/` (see `docs/apply-ce-theme.md`). Without it the components render unstyled.
 

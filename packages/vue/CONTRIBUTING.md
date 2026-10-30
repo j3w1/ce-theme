@@ -25,5 +25,5 @@ Read [docs/workflow.md](../../docs/workflow.md) first: Claude Design → approve
 ## A pull request
 
 - Adds a few components, not a library. It names the decisions it implements.
-- Replaces hand-written markup on an existing showcase page with the component where that page already shows the recipe. It does not add showcase pages.
+- Replaces hand-written markup on an existing showcase page with the component where that page already shows the recipe. It does not add showcase pages. The one exception is `/mensajeria/`, the messaging example the owner approved specifically (see `docs/decisions.md`, “Showcase exception”); every other new page needs the owner's explicit request.
 - Passes `pnpm check` and `pnpm test:browser` from the repository root.

@@ -14,7 +14,7 @@ Version: **0.2.0**, light foundation. `ce-theme.json` lists the token sources, g
 | `exports/recipes.css` | Framework-neutral recipes: base, interface, retail and workspace (`recipes/recipes.css`, `interface.css`, `retail.css`, `workspace.css`). |
 | `exports/share-card.css` | 1200 × 630 server-rendered share image. |
 | `exports/print-label.css` | 80 × 40 mm gondola label and A4 sheet. |
-| `exports/adapters/vuetify.mjs` | Legacy Vuetify/Vuexy theme and component defaults for the retired CE Systems; not for new applications. New Vue applications use `@casaelida/vue`. |
+| `exports/adapters/vuetify.mjs` | Legacy Vuetify/Vuexy theme and component defaults for the existing CE Systems, which is planned to be replaced; not for new applications. New Vue applications use `@casaelida/vue`. |
 | `recipes/price.mjs` | `formatAmount`, `amountInCents`, `preparePrice`. |
 | `recipes/product.mjs` | `formatName`, `formatDescription`, `formatSpec`, `codeSegments`, `productView`. |
 | `recipes/campaign.mjs` | `contrastRatio`, `campaignColors`. |

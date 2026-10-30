@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // The /mensajeria/ example: the real @casaelida/vue components on fictional, in-memory fixtures. Nothing here reads or
 // writes storage, calls a service or sends a message; "sending" only appends a message to this page's own memory.
-import { computed, nextTick, reactive, ref } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { CEButton, CEConversationList, CEMessageComposer, CEMessageList } from '@casaelida/vue';
 import type { CEComposerMode, CEConversationItem, CEMessage } from '@casaelida/vue';
 import { FIRST_FREE_MINUTE, SIMULATED_INCOMING, SIMULATION_NOTICE, createThreads } from '../data/messaging';
@@ -17,6 +17,8 @@ const events = ref<EmittedEvent[]>([]);
 const root = ref<HTMLElement | null>(null);
 const heading = ref<HTMLElement | null>(null);
 const backButton = ref<HTMLElement | null>(null);
+const listPane = ref<HTMLElement | null>(null);
+const threadPane = ref<HTMLElement | null>(null);
 
 let minute = FIRST_FREE_MINUTE;
 let serial = 0;
@@ -47,6 +49,7 @@ const items = computed<CEConversationItem[]>(() => threads.map((thread) => ({
 
 // The back button is shown exactly when the thread replaces the list, so it is the single source of that decision.
 const narrow = () => backButton.value !== null && getComputedStyle(backButton.value).display !== 'none';
+const selectedRow = () => root.value?.querySelector<HTMLElement>('.ce-conversation[aria-current="true"]') ?? null;
 function open(id: string) {
   selectedId.value = id;
   const thread = threads.find((item) => item.id === id);
@@ -57,8 +60,48 @@ function open(id: string) {
 }
 function back() {
   view.value = 'list';
-  void nextTick(() => root.value?.querySelector<HTMLElement>('.ce-conversation[aria-current="true"]')?.focus());
+  void nextTick(() => selectedRow()?.focus());
 }
+
+// A layout change must not hide the control the reader is using. The control last focused is remembered; when the layout
+// changes (the window is resized or the text size changes the container query) and that control is no longer shown, the pane
+// it belongs to stays visible and focus returns to it. The Back button, which only exists while the thread replaces the list,
+// hands focus to the selected row when it goes away.
+let lastFocus: HTMLElement | null = null;
+let wasNarrow = false;
+let observer: ResizeObserver | undefined;
+const shown = (element: HTMLElement) => element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden';
+function onFocusIn(event: FocusEvent) { lastFocus = event.target as HTMLElement; }
+function onFocusOut(event: FocusEvent) {
+  // The reader clicked or tabbed away: forget the control. A control that was hidden by the layout is not forgotten.
+  if (shown(event.target as HTMLElement) && !root.value?.contains(event.relatedTarget as Node | null)) lastFocus = null;
+}
+async function keepFocusVisible() {
+  const target = lastFocus;
+  if (!target || !target.isConnected || shown(target)) return;
+  if (target === backButton.value) {
+    view.value = 'list';
+    await nextTick();
+    selectedRow()?.focus();
+    return;
+  }
+  view.value = threadPane.value?.contains(target) ? 'thread' : 'list';
+  await nextTick();
+  target.focus();
+}
+function onLayoutChange() {
+  const isNarrow = narrow();
+  if (isNarrow === wasNarrow) return;
+  wasNarrow = isNarrow;
+  void keepFocusVisible();
+}
+onMounted(() => {
+  wasNarrow = narrow();
+  if (typeof ResizeObserver === 'undefined') return;
+  observer = new ResizeObserver(onLayoutChange);
+  for (const element of [root.value, listPane.value, threadPane.value]) if (element) observer.observe(element);
+});
+onBeforeUnmount(() => observer?.disconnect());
 
 function record(name: EmittedEvent['name'], text: string) {
   events.value = [{ id: ++serial, name, conversation: current.value.name, text }, ...events.value].slice(0, 5);
@@ -90,13 +133,13 @@ function simulateOther() {
 </script>
 
 <template>
-  <section ref="root" class="messaging-demo" :data-view="view" aria-label="Ejemplo de mensajería con datos ficticios">
+  <section ref="root" class="messaging-demo" :data-view="view" aria-label="Ejemplo de mensajería con datos ficticios" @focusin="onFocusIn" @focusout="onFocusOut">
     <p class="messaging-demo-notice" role="note">{{ SIMULATION_NOTICE }}</p>
     <div class="messaging-demo-panes">
-      <div class="messaging-demo-list">
+      <div ref="listPane" class="messaging-demo-list">
         <CEConversationList :model-value="selectedId" :conversations="items" label="Conversaciones" @select="open" />
       </div>
-      <div class="messaging-demo-thread">
+      <div ref="threadPane" class="messaging-demo-thread">
         <header class="messaging-demo-header">
           <button ref="backButton" type="button" class="ce-icon-button messaging-demo-back" aria-label="Volver a conversaciones" @click="back">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5m6-6-6 6 6 6" /></svg>

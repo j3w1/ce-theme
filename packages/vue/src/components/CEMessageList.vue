@@ -24,7 +24,14 @@ export interface CEMessage {
   own?: boolean;
 }
 
-/** Renders the `ce-message-list` recipe as a labelled, focusable `role="log"`. Message bubbles are an internal part of this component. */
+/**
+ * Renders the `ce-message-list` recipe as a labelled, focusable `role="log"`. Message bubbles are an internal part of this component.
+ *
+ * **Mount one list per conversation and key it by the conversation id** (`<CEMessageList :key="conversation.id" ... />`).
+ * The list never infers a conversation change from its messages: message ids may repeat across conversations (every one can
+ * start with the same day separator) and older messages may be prepended to the same conversation. A keyed mount opens at the
+ * newest message; updating `messages` within one conversation never moves a reader who is looking at earlier history.
+ */
 export interface CEMessageListProps {
   messages: CEMessage[];
   /** Accessible name of the log, for example "Mensajes con Rosa Quispe". */
@@ -39,8 +46,9 @@ const STATUS_LABELS: Record<CEMessageStatus, string> = { sent: 'Enviado', delive
 const statusText = (message: CEMessage) => (message.kind === 'outgoing' && message.status ? STATUS_LABELS[message.status] + (message.simulated ? ' · simulado' : '') : '');
 const noteText = (message: CEMessage) => (message.kind === 'note' && message.simulated ? 'simulada' : '');
 
-// Scrolling: follow the newest message when the reader is already at the bottom, when the conversation changes, or after
-// their own message. Never move a reader who is looking at earlier history.
+// Scrolling: a new list opens at the newest message (a keyed mount per conversation, see above). After that, follow a new
+// message only when the reader is already at the bottom or the message is their own. Never move a reader who is looking at
+// earlier history, including when older messages are added above.
 const NEAR_BOTTOM = 48;
 const log = ref<HTMLElement | null>(null);
 const atBottom = () => !log.value || log.value.scrollHeight - log.value.scrollTop - log.value.clientHeight <= NEAR_BOTTOM;
@@ -60,15 +68,13 @@ onMounted(() => {
 });
 onBeforeUnmount(() => observer?.disconnect());
 watch(
-  () => [props.messages.length, props.messages[0]?.id, props.messages.at(-1)?.id] as const,
-  ([length, first, last], [previousLength, previousFirst, previousLast]) => {
+  () => [props.messages.length, props.messages.at(-1)?.id] as const,
+  ([length, last], [previousLength, previousLast]) => {
     const newest = props.messages.at(-1);
-    const switched = first !== previousFirst;
     const appended = length > previousLength && last !== previousLast;
     const own = appended && newest !== undefined && (newest.own ?? newest.kind === 'outgoing');
     // The "pre" flush runs before the DOM changes, so the position is measured before the new message is added.
-    const follow = switched || atBottom() || own;
-    if (follow) void nextTick(scrollToLatest);
+    if (atBottom() || own) void nextTick(scrollToLatest);
   },
   { flush: 'pre' },
 );

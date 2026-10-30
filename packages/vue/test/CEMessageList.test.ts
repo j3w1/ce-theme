@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { nextTick } from 'vue';
+import { defineComponent, h, nextTick, ref } from 'vue';
 import CEMessageList from '../src/components/CEMessageList.vue';
 import type { CEMessage } from '../src/index';
 
@@ -131,14 +131,6 @@ describe('CEMessageList scrolling', () => {
     await nextTick();
     expect(log.top()).toBe(100);
   });
-
-  it('starts at the newest message when the conversation changes', async () => {
-    const wrapper = mountList();
-    const log = geometry(wrapper, 100);
-    await wrapper.setProps({ messages: [{ id: 'z1', kind: 'incoming', text: 'Otra conversación' }, { id: 'z2', kind: 'incoming', text: 'Más' }] });
-    await nextTick();
-    expect(log.top()).toBe(1000);
-  });
 });
 
 describe('CEMessageList keeps a following reader at the bottom when its size changes', () => {
@@ -168,3 +160,88 @@ describe('CEMessageList keeps a following reader at the bottom when its size cha
   });
 });
 
+// Conversation identity: the application mounts one list per conversation and keys it. The list never guesses a change
+// from its messages, because ids can repeat across conversations and older messages can be added above.
+describe('CEMessageList conversation identity', () => {
+  const day = (suffix: string): CEMessage => ({ id: 'today', kind: 'system', text: `Hoy ${suffix}` });
+  const conversation = (name: string): CEMessage[] => [day(name), { id: `${name}-1`, kind: 'incoming', text: `Hola ${name}` }, { id: `${name}-2`, kind: 'outgoing', text: `Respuesta ${name}`, status: 'sent' }];
+
+  it('keeps a reader in history when older messages are added above', async () => {
+    const wrapper = mountList();
+    const log = geometry(wrapper, 100);
+    await wrapper.setProps({ messages: [{ id: 'older', kind: 'incoming', text: 'Un mensaje anterior' }, ...base] });
+    await nextTick();
+    expect(log.top()).toBe(100);
+  });
+
+  it('keeps a reader who is at the bottom at the bottom when older messages are added above', async () => {
+    const wrapper = mountList();
+    const log = geometry(wrapper, 800);
+    await wrapper.setProps({ messages: [{ id: 'older', kind: 'incoming', text: 'Un mensaje anterior' }, ...base] });
+    await nextTick();
+    expect(log.top()).toBe(1000);
+  });
+
+  it('does not treat a new first message in the same conversation as a conversation change', async () => {
+    const wrapper = mountList();
+    const log = geometry(wrapper, 100);
+    await wrapper.setProps({ messages: [{ id: 'new-first', kind: 'system', text: 'Ayer' }, ...base.slice(1)] });
+    await nextTick();
+    expect(log.top()).toBe(100);
+  });
+
+  it('does not guess that another array is another conversation: the application keys the list', async () => {
+    const wrapper = mountList(conversation('rosa'));
+    const log = geometry(wrapper, 100);
+    await wrapper.setProps({ messages: conversation('jorge') });
+    await nextTick();
+    expect(log.top()).toBe(100);
+  });
+
+  // Scroll geometry for lists that are created during the test: 1000 px of messages in a 200 px window.
+  const scrollPositions = new WeakMap<Element, number>();
+  const stubGeometry = () => {
+    Object.defineProperty(HTMLElement.prototype, 'scrollHeight', { configurable: true, get: () => 1000 });
+    Object.defineProperty(HTMLElement.prototype, 'clientHeight', { configurable: true, get: () => 200 });
+    Object.defineProperty(HTMLElement.prototype, 'scrollTop', { configurable: true, get() { return scrollPositions.get(this as Element) ?? 0; }, set(value: number) { scrollPositions.set(this as Element, value); } });
+  };
+  const restoreGeometry = () => { for (const name of ['scrollHeight', 'clientHeight', 'scrollTop']) delete (HTMLElement.prototype as unknown as Record<string, unknown>)[name]; };
+
+  it('opens a keyed conversation at the newest message, even when both conversations start with the same separator id', async () => {
+    stubGeometry();
+    try {
+      const current = ref('rosa');
+      const Host = defineComponent({ setup: () => () => h(CEMessageList, { key: current.value, messages: conversation(current.value), label: `Mensajes con ${current.value}` }) });
+      const wrapper = mount(Host, { attachTo: document.body });
+      const first = wrapper.get('[role="log"]').element;
+      expect(scrollPositions.get(first)).toBe(1000);
+      // The reader scrolls up in the first conversation, then the application switches to another one with the same first id.
+      scrollPositions.set(first, 100);
+      current.value = 'jorge';
+      await nextTick();
+      const second = wrapper.get('[role="log"]').element;
+      expect(second).not.toBe(first);
+      expect(wrapper.get('[role="log"]').attributes('aria-label')).toBe('Mensajes con jorge');
+      expect(scrollPositions.get(second)).toBe(1000);
+      // Going back to the first conversation also opens at its newest message rather than where it was left.
+      current.value = 'rosa';
+      await nextTick();
+      expect(scrollPositions.get(wrapper.get('[role="log"]').element)).toBe(1000);
+    } finally { restoreGeometry(); }
+  });
+
+  it('still follows the reader’s own message inside a keyed conversation', async () => {
+    stubGeometry();
+    try {
+      const messages = ref<CEMessage[]>(conversation('rosa'));
+      const Host = defineComponent({ setup: () => () => h(CEMessageList, { key: 'rosa', messages: messages.value, label: 'Mensajes' }) });
+      const wrapper = mount(Host, { attachTo: document.body });
+      const log = wrapper.get('[role="log"]').element;
+      scrollPositions.set(log, 100);
+      messages.value = [...messages.value, { id: 'mine', kind: 'outgoing', text: 'Otro mensaje', status: 'sent' }];
+      await nextTick();
+      await nextTick();
+      expect(scrollPositions.get(log)).toBe(1000);
+    } finally { restoreGeometry(); }
+  });
+});

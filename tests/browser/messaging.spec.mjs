@@ -432,3 +432,116 @@ test('the page says what is simulated and does not claim to test native features
   expect(main).toContain('No existe en este ejemplo');
   expect(main).toMatch(/no prueban cámara, llamadas ni notificaciones nativas/);
 });
+
+// Responsive transitions. The layout switches between the list and thread side by side (wide) and one at a time (narrow).
+// Resizing, or changing the text size, must never hide the control the reader is using and drop focus to the page.
+const focusedTag = (page) => page.evaluate(() => document.activeElement?.tagName);
+const WIDE = { width: 1280, height: 900 };
+const NARROW = { width: 390, height: 844 };
+
+test('resizing from 1280px to 390px while composing keeps the conversation visible and focus in the composer', async ({ page }) => {
+  const { demo, rows, field } = await openDemo(page, WIDE.width, WIDE.height);
+  await field.click();
+  await page.keyboard.type('Escribiendo cuando la pantalla se angosta');
+  await page.setViewportSize(NARROW);
+  await expect(field).toBeVisible();
+  await expect(field).toBeFocused();
+  await expect(field).toHaveValue('Escribiendo cuando la pantalla se angosta');
+  await expect(rows.first()).toBeHidden();
+  await expect(demo).toHaveAttribute('data-view', 'thread');
+  expect(await fits(page)).toBe(true);
+  // Typing continues exactly where it was, and the next Tab does not jump to an unrelated control.
+  await page.keyboard.type(' y sigo');
+  await expect(field).toHaveValue('Escribiendo cuando la pantalla se angosta y sigo');
+  await page.setViewportSize(WIDE);
+  await expect(field).toBeFocused();
+  await expect(rows.first()).toBeVisible();
+  await expect(field).toHaveValue('Escribiendo cuando la pantalla se angosta y sigo');
+});
+
+test('resizing to 390px while on a conversation row keeps the list visible and the row focused', async ({ page }) => {
+  const { demo, rows, row, field } = await openDemo(page, WIDE.width, WIDE.height);
+  // Moving through the list without opening anything.
+  await row('Jorge Mamani').focus();
+  await page.setViewportSize(NARROW);
+  await expect(row('Jorge Mamani')).toBeVisible();
+  await expect(row('Jorge Mamani')).toBeFocused();
+  await expect(field).toBeHidden();
+  await expect(demo).toHaveAttribute('data-view', 'list');
+  await page.keyboard.press('Tab');
+  await expect(row('Equipo Tienda')).toBeFocused();
+  // After opening a conversation on the wide layout the focus stays on its row; narrowing keeps the list usable.
+  await page.setViewportSize(WIDE);
+  await row('Jorge Mamani').click();
+  await expect(row('Jorge Mamani')).toBeFocused();
+  await page.setViewportSize(NARROW);
+  await expect(rows.first()).toBeVisible();
+  await expect(row('Jorge Mamani')).toBeFocused();
+  await expect(row('Jorge Mamani')).toHaveAttribute('aria-current', 'true');
+  expect(await focusedTag(page)).toBe('BUTTON');
+});
+
+test('widening from 390px while the Back button is focused moves focus to the selected conversation row', async ({ page }) => {
+  const { demo, rows, row } = await openDemo(page, NARROW.width, NARROW.height);
+  const back = demo.getByRole('button', { name: 'Volver a conversaciones' });
+  await row('Jorge Mamani').click();
+  await expect(page.getByRole('heading', { level: 2, name: 'Jorge Mamani' })).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(back).toBeFocused();
+  await page.setViewportSize(WIDE);
+  await expect(back).toBeHidden();
+  await expect(row('Jorge Mamani')).toBeFocused();
+  await expect(rows.first()).toBeVisible();
+  await expect(demo.getByRole('log')).toBeVisible();
+  // Keyboard navigation continues from the row, not from the top of the page or an unrelated control.
+  await page.keyboard.press('Tab');
+  await expect(row('Equipo Tienda')).toBeFocused();
+  expect(await focusedTag(page)).not.toBe('BODY');
+});
+
+test('the layout is read from the real layout: enlarged text moves a composing reader to the thread view', async ({ page }) => {
+  const { demo, rows, field } = await openDemo(page, WIDE.width, WIDE.height);
+  await field.click();
+  await page.keyboard.type('Texto más grande');
+  // The viewport does not change; the text size does, and the example no longer fits two panes.
+  await page.addStyleTag({ content: 'html{font-size:200%}' });
+  await expect(rows.first()).toBeHidden();
+  await expect(field).toBeVisible();
+  await expect(field).toBeFocused();
+  await expect(field).toHaveValue('Texto más grande');
+  await expect(demo).toHaveAttribute('data-view', 'thread');
+});
+
+test('a reader who has not focused anything is not moved by a resize', async ({ page }) => {
+  const { demo, rows, field } = await openDemo(page, WIDE.width, WIDE.height);
+  await page.setViewportSize(NARROW);
+  await expect(rows.first()).toBeVisible();
+  await expect(field).toBeHidden();
+  await expect(demo).toHaveAttribute('data-view', 'list');
+  expect(await focusedTag(page)).toBe('BODY');
+  await page.setViewportSize(WIDE);
+  await expect(field).toBeVisible();
+  expect(await focusedTag(page)).toBe('BODY');
+});
+
+test('opening another conversation always starts at its newest message, though every conversation starts with the same separator id', async ({ page }) => {
+  // A short window makes both conversations taller than their log, so "starts at the newest message" is a real position.
+  const { row, log } = await openDemo(page, 1280, 560);
+  const scrollable = () => log.evaluate((el) => el.scrollHeight > el.clientHeight + 40);
+  expect(await scrollable(), 'Rosa must be scrollable for this test to mean anything').toBe(true);
+  expect(await atBottom(log)).toBe(true);
+  // The reader goes back in Rosa's history, then opens Jorge, whose thread is also taller than its log.
+  await log.evaluate((el) => { el.scrollTop = 0; });
+  await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
+  await row('Jorge Mamani').click();
+  await expect(log).toHaveAttribute('aria-label', 'Mensajes con Jorge Mamani');
+  expect(await scrollable(), 'Jorge must be scrollable for this test to mean anything').toBe(true);
+  await expect.poll(() => atBottom(log)).toBe(true);
+  // Back to Rosa from a Jorge position in history: again the newest message, not the place Jorge was left.
+  await log.evaluate((el) => { el.scrollTop = 0; });
+  await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
+  await row('Rosa Quispe').click();
+  await expect(log).toHaveAttribute('aria-label', 'Mensajes con Rosa Quispe');
+  await expect.poll(() => atBottom(log)).toBe(true);
+  expect(await log.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+});

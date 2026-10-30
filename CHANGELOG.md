@@ -9,7 +9,7 @@
 - Type declarations for `recipes/price.mjs` and `recipes/product.mjs`.
 - `docs/workflow.md` and the branch reconciliation record (`docs/evolution/2026-10-reconciliation.md`).
 - Messaging foundation for CE Meta App: recipes in `recipes/messaging.css` and the public components `CEConversationList`, `CEMessageList` and `CEMessageComposer` (typed `submitReply` and `saveNote` events, separate reply and note drafts, delivery states in words). Standard names group Mensajería.
-- `/mensajeria/`: one interactive example in the showcase, built from the real components on fictional in-memory fixtures. It says "Simulación: ningún mensaje sale de esta página." and sends nothing.
+- `/mensajeria/`: one interactive example in the showcase (a specific owner-approved exception to the rule against new showcase pages), built from the real components on fictional in-memory fixtures. It says "Simulación: ningún mensaje sale de esta página." and sends nothing.
 - Tests for the messaging components, the example (keyboard, focus, 320 to 1440 px, enlarged text, accessibility, no network or storage) and the design-system title.
 
 ### Changed
