@@ -10,8 +10,11 @@ const mountGroup = (count: number, props: Record<string, unknown> = {}) => mount
 describe('CEAttachmentGroup', () => {
   it('is a list with an accessible name and one native button per attachment', () => {
     const wrapper = mountGroup(3, { label: '3 fotos' });
-    expect(wrapper.element.tagName).toBe('UL');
-    expect(wrapper.attributes('aria-label')).toBe('3 fotos');
+    expect(wrapper.element.tagName).toBe('DIV');
+    expect(wrapper.classes()).toEqual(['ce-attachment-group']);
+    const list = wrapper.get('ul.ce-attachments');
+    expect(list.attributes('aria-label')).toBe('3 fotos');
+    expect(wrapper.element.children).toHaveLength(1);
     expect(wrapper.findAll('li.ce-attachment')).toHaveLength(3);
     const buttons = wrapper.findAll('button.ce-attachment-open');
     expect(buttons).toHaveLength(3);
@@ -62,13 +65,13 @@ describe('CEAttachmentGroup', () => {
     [5, ['ce-attachments']],
     [7, ['ce-attachments']],
   ])('lays out %i item(s) with %j', (count, classes) => {
-    expect(mountGroup(count).classes()).toEqual(classes);
+    expect(mountGroup(count).get('ul').classes()).toEqual(classes);
   });
 
   it('shows photographic evidence uncropped by default and crops only when asked', () => {
-    expect(mountGroup(2).classes()).not.toContain('ce-attachments--cover');
-    expect(mountGroup(2, { fit: 'contain' }).classes()).not.toContain('ce-attachments--cover');
-    expect(mountGroup(2, { fit: 'cover' }).classes()).toContain('ce-attachments--cover');
+    expect(mountGroup(2).get('ul').classes()).not.toContain('ce-attachments--cover');
+    expect(mountGroup(2, { fit: 'contain' }).get('ul').classes()).not.toContain('ce-attachments--cover');
+    expect(mountGroup(2, { fit: 'cover' }).get('ul').classes()).toContain('ce-attachments--cover');
   });
 
   it('keeps the order and the ids it is given, and adds no inline style, upload or viewer', () => {

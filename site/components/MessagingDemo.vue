@@ -16,6 +16,7 @@ const selectedId = ref(threads[0]!.id);
 const view = ref<'list' | 'thread'>('list');
 const mode = ref<CEComposerMode>('reply');
 const events = ref<EmittedEvent[]>([]);
+const attachmentAnnouncement = ref('');
 const root = ref<HTMLElement | null>(null);
 const heading = ref<HTMLElement | null>(null);
 const backButton = ref<HTMLElement | null>(null);
@@ -126,6 +127,9 @@ function onOpenAttachment(messageId: string, attachmentId: string, index: number
   const attachment = message?.attachments?.[index];
   const total = message?.attachments?.length ?? 0;
   record('openAttachment', `${attachment?.label ?? attachmentId} · foto ${index + 1} de ${total} · mensaje de las ${message?.time ?? ''}`, 'No hay visor en esta demostración: solo se registra el evento.');
+  // Cleared first so that opening the same photo again is announced again.
+  attachmentAnnouncement.value = '';
+  void nextTick(() => { attachmentAnnouncement.value = `Se abrió la foto ${index + 1} de ${total}: ${attachment?.label ?? attachmentId}. Simulado: no hay visor en esta demostración.`; });
 }
 
 // Simulated warehouse actions. The page, not CEWorkStatus, owns the transition; each conversation keeps its own requests.
@@ -205,11 +209,14 @@ function simulateOther() {
   <section class="messaging-demo-events" aria-labelledby="messaging-events">
     <h2 id="messaging-events">Eventos emitidos (simulados)</h2>
     <p>Los componentes solo emiten eventos. Esta página los recibe y actualiza su propia memoria; ningún evento sale de ella. Las acciones del almacén son botones de esta página, no de los componentes.</p>
-    <div aria-live="polite">
+    <!-- The history is visible and not live: replies are already announced by the message log and request progress by CEWorkStatus. -->
+    <div>
       <ol v-if="events.length">
         <li v-for="event in events" :key="event.id"><code>{{ event.name }}</code> · {{ event.conversation }} · «{{ event.text }}» · simulado<template v-if="event.note"> · {{ event.note }}</template></li>
       </ol>
       <p v-else class="messaging-demo-events-empty">Aún no hay eventos. Escribe y envía, guarda una nota, o abre la foto de Reposición · Tacna.</p>
     </div>
+    <!-- Opening a photo has no other visible result next to the focused button, so this small region says it once. -->
+    <p class="ce-sr-only" role="status" aria-live="polite" data-testid="attachment-announcement">{{ attachmentAnnouncement }}</p>
   </section>
 </template>

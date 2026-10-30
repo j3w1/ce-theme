@@ -109,7 +109,7 @@ test('the attachment group keeps its tile boxes reserved, uncropped by default a
   assert.match(css, /\.ce-attachments--1 \{[^}]*minmax\(0, 1fr\)/);
   assert.match(css, /\.ce-attachments--2, \.ce-attachments--4 \{[^}]*repeat\(2/);
   assert.match(css, /@container \(max-width: 21rem\)/);
-  assert.match(css, /\.ce-message-list \{[^}]*container-type: inline-size/);
+  // Containment is not asserted here: tests/browser/messaging-standalone.spec.mjs checks the real layout in a browser.
   // Done, current, pending and stopped each differ by bar shape, and stopped uses a hatch pattern, not only a colour.
   for (const state of ['done', 'current', 'pending', 'stopped']) assert.match(css, new RegExp(`\\.ce-work-step--${state}\\b`));
   assert.match(css, /\.ce-work-step--stopped::before \{[^}]*repeating-linear-gradient\(135deg/);

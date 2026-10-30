@@ -255,7 +255,7 @@ describe('CEMessageList attachments', () => {
     const wrapper = mountList([withPhoto]);
     const bubble = wrapper.get('.ce-message');
     const order = [...bubble.element.children].map((child) => child.className.split(' ')[0]);
-    expect(order).toEqual(['ce-attachments', 'ce-message-text', 'ce-message-meta']);
+    expect(order).toEqual(['ce-attachment-group', 'ce-message-text', 'ce-message-meta']);
     expect(bubble.get('.ce-attachments').attributes('aria-label')).toBe('1 foto');
     expect(bubble.get('.ce-message-meta').text()).toBe('10:24Leído · simulado');
     expect(bubble.get('.ce-attachments').text()).not.toMatch(/Leído|Aceptad/);
@@ -301,7 +301,7 @@ describe('CEMessageList contextual content', () => {
     const wrapper = contextual((message) => (message.id === 'p' ? h('p', { class: 'ce-sr-only', 'data-id': message.id }, 'Pedido') : null));
     const bubble = wrapper.findAll('.ce-message')[0]!;
     const order = [...bubble.element.children].map((child) => child.className.split(' ')[0]);
-    expect(order).toEqual(['ce-attachments', 'ce-message-text', 'ce-message-meta', 'ce-message-context']);
+    expect(order).toEqual(['ce-attachment-group', 'ce-message-text', 'ce-message-meta', 'ce-message-context']);
     expect(bubble.get('.ce-message-context [data-id]').attributes('data-id')).toBe('p');
   });
 

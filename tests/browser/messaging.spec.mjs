@@ -585,7 +585,7 @@ test('Reposición · Tacna shows the photo, the message, its delivery status and
   await expect(bubble).toHaveClass(/ce-message--outgoing/);
   // Order inside the bubble: photo, text, delivery meta, then the request.
   const parts = await bubble.evaluate((el) => [...el.children].map((child) => child.className.split(' ')[0]));
-  expect(parts).toEqual(['ce-attachments', 'ce-message-text', 'ce-message-meta', 'ce-message-context']);
+  expect(parts).toEqual(['ce-attachment-group', 'ce-message-text', 'ce-message-meta', 'ce-message-context']);
   // Delivery status is a word in the meta line; the progress of the request is a different block, never mixed.
   await expect(bubble.locator('.ce-message-meta')).toHaveText('10:24Leído · simulado');
   await expect(bubble.locator('.ce-message-meta')).not.toContainText(/Solicitado|Aceptado|Preparando|Resuelto/);
@@ -702,8 +702,11 @@ test('opening the photo records a visible simulated event and says there is no v
   await expect(events).toContainText('simulado');
   await expect(events).toContainText('No hay visor en esta demostración');
   await expect(events.locator('li')).toHaveCount(1);
-  // The record is announced politely, nothing opens, the photo keeps focus and the page stays where it is.
-  expect(await events.locator('[aria-live="polite"]').count()).toBe(1);
+  // The history is visible and not live; one small polite region announces the open once (it has no other visible result).
+  expect(await events.locator('ol, ol *').evaluateAll((items) => items.filter((item) => item.closest('[aria-live], [role="status"], [role="log"], [role="alert"]')).length)).toBe(0);
+  const announcement = events.locator('[role="status"][aria-live="polite"]');
+  await expect(announcement).toHaveCount(1);
+  await expect(announcement).toHaveText('Se abrió la foto 1 de 1: Anaquel 3. Simulado: no hay visor en esta demostración.');
   await expect(page.locator('dialog, [role="dialog"]')).toHaveCount(0);
   await expect(photo).toBeFocused();
   expect(new URL(page.url()).pathname).toBe('/mensajeria/');
@@ -840,10 +843,10 @@ for (const width of [320, 390, 768, 1440]) {
     await work.scrollIntoViewIfNeeded();
     const inside = await work.evaluate((el) => { const parent = el.closest('.ce-message').getBoundingClientRect(); return [...el.querySelectorAll('.ce-work-step, .ce-work-status-actions, .ce-button')].every((item) => { const r = item.getBoundingClientRect(); return r.left >= parent.left - 1 && r.right <= parent.right + 1; }); });
     expect(inside).toBe(true);
-    // Four steps sit in one row when the message list is wide and in two columns in a narrow one (a container query).
+    // Four steps sit in one row when the work status is wide and in two columns in a narrow one (its own container query).
     const columns = await steps.evaluateAll((items) => new Set(items.map((item) => Math.round(item.getBoundingClientRect().left))).size);
-    const logWidth = await contentRem(log);
-    expect(columns).toBe(logWidth <= 21 ? 2 : 4);
+    const workWidth = await contentRem(work);
+    expect(columns).toBe(workWidth <= 21 ? 2 : 4);
     await action('Me encargo').click();
     expect(await contentFits(page)).toBe(true);
     await expect(demo.locator('.messaging-demo-warehouse')).toBeVisible();
@@ -858,8 +861,8 @@ test('enlarged text moves the steps to two columns and wraps the labels instead 
   await expect(work).toBeVisible();
   expect(await contentFits(page)).toBe(true);
   const columns = await steps.evaluateAll((items) => new Set(items.map((item) => Math.round(item.getBoundingClientRect().left))).size);
-  const logWidth = await contentRem(log);
-  expect(columns).toBe(logWidth <= 21 ? 2 : 4);
+  const workWidth = await contentRem(work);
+  expect(columns).toBe(workWidth <= 21 ? 2 : 4);
   expect(await work.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
 });
 
@@ -979,4 +982,19 @@ test('every conversation starts at its newest message after the new thread was a
     await expect(log).toHaveAttribute('aria-label', `Mensajes con ${name}`);
     await expect.poll(() => atBottom(log)).toBe(true);
   }
+});
+
+// F3: the event panel is a visible history, not a second live region for what the log or CEWorkStatus already announce.
+test('the event history is not live: replies and request changes are announced once, by the log and by CEWorkStatus', async ({ page }) => {
+  const { events, field, send, log } = await openReposicion(page);
+  await field.fill('Ya voy para allá.');
+  await send.click();
+  await page.locator('.ce-work-status-actions button').filter({ hasText: 'Me encargo' }).click();
+  await expect(events).toContainText('warehouseAction');
+  await expect(events).toContainText('submitReply');
+  // The panel shows both records but is not inside, and does not contain, a live region other than the attachment announcement.
+  const panelLive = await events.evaluate((el) => ({ inside: !!el.closest(`[aria-live]:not([aria-live="off"]), [role="status"], [role="log"], [role="alert"]`), regions: [...el.querySelectorAll('[aria-live]:not([aria-live="off"]), [role="status"], [role="log"], [role="alert"]')].length }));
+  expect(panelLive).toEqual({ inside: false, regions: 1 });
+  await expect(events.locator('[role="status"]')).toHaveText('');
+  await expect(log.locator('.ce-work-status [role="status"]')).toHaveText('Pedido de reposición: Aceptado');
 });

@@ -18,7 +18,8 @@ export type CEAttachmentFit = 'contain' | 'cover';
 /**
  * Renders the `ce-attachments` recipe: a list of already-sent images, each a native button that only asks the application
  * to open it. There is no upload, capture, zoom or viewer here. Each tile reserves its box with `aspect-ratio`, so images
- * loading never shift the layout (and never move a scrolling message list).
+ * loading never shift the layout (and never move a scrolling message list). The wrapper is the group's own query container,
+ * so the columns follow the group's width wherever it is used; give it a block-level or definite width (it has no intrinsic one).
  */
 export interface CEAttachmentGroupProps {
   items: CEAttachment[];
@@ -37,12 +38,14 @@ const nameOf = (item: CEAttachment, index: number) => `Abrir foto ${index + 1} d
 </script>
 
 <template>
-  <ul v-if="items.length > 0" :class="classes" :aria-label="label">
-    <li v-for="(item, index) in items" :key="item.id" class="ce-attachment">
-      <button type="button" class="ce-attachment-open" :aria-label="nameOf(item, index)" @click="emit('open', index, item.id)">
-        <img class="ce-attachment-image" :src="item.src" :alt="item.alt" />
-        <span class="ce-attachment-caption">{{ item.label }}</span>
-      </button>
-    </li>
-  </ul>
+  <div v-if="items.length > 0" class="ce-attachment-group">
+    <ul :class="classes" :aria-label="label">
+      <li v-for="(item, index) in items" :key="item.id" class="ce-attachment">
+        <button type="button" class="ce-attachment-open" :aria-label="nameOf(item, index)" @click="emit('open', index, item.id)">
+          <img class="ce-attachment-image" :src="item.src" :alt="item.alt" />
+          <span class="ce-attachment-caption">{{ item.label }}</span>
+        </button>
+      </li>
+    </ul>
+  </div>
 </template>
