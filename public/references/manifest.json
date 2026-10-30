@@ -61,5 +61,14 @@
     "description": "Brand application mock-up (tote bag) using Inter and the tagline.",
     "rights": "Casa Elida brand asset; not covered by a software license.",
     "sha256": "51601429e07ab0d5ae4afed7b2d00896498f4eeb0b029a0330a14ec1eb831015"
+  },
+  {
+    "file": "shelf-gap-fictional.svg",
+    "originalName": "shelf-gap-fictional.svg",
+    "role": "reference",
+    "source": "Created for ce-theme#3 on 2026-10-30 as hand-written SVG. Not derived from any photograph, the private Claude Design photo or any other design asset.",
+    "description": "Fictional shelf illustration with one empty gap in front of the label «Frasco de vidrio 1 L». Fixture image for the Reposición · Tacna conversation on /mensajeria/. Contains no real brand, catalogue product, price or stock figure.",
+    "rights": "Original illustration created for this repository; not covered by a software license.",
+    "sha256": "d5a1173ea0c88128c317220ca5d36cdde13b9542669af40c71a8235e430b2af3"
   }
 ]

@@ -31,7 +31,7 @@ const ASSET_GROUPS = [
 const PREVIEW_MEDIA = ['product-mene.png', 'product-nome.png', 'product-tilen.png', 'logo-square-red.jpg', 'logo-wordmark-color.png', 'logo-wordmark-black.png', 'logo-wordmark-white-yellow.png', 'logo-ce-radio.png', 'logo-ce-radio-navidad.png'];
 
 // Reference-only photographs that previews show as illustrative examples (never production assets).
-const PREVIEW_REFERENCES = ['brand-tote-bag.png'];
+const PREVIEW_REFERENCES = ['brand-tote-bag.png', 'shelf-gap-fictional.svg'];
 
 // Docs copied into the bundle as [bundle name, repository path].
 const DOCS = [

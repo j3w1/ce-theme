@@ -34,7 +34,7 @@ test('shows the simulation notice, the fixtures and no real channel', async ({ p
   const { demo, rows } = await openDemo(page);
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(demo.locator('.messaging-demo-notice')).toHaveText(NOTICE);
-  await expect(rows).toHaveCount(3);
+  await expect(rows).toHaveCount(4);
   await expect(rows.nth(0)).toHaveAttribute('aria-current', 'true');
   await expect(demo.locator('img')).toHaveCount(0);
 });
@@ -190,6 +190,8 @@ test('keyboard order, activation and visible focus', async ({ page }) => {
   await expect(rows.nth(1)).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(rows.nth(2)).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(rows.nth(3)).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(log).toBeFocused();
   expect(await ring(log)).toEqual({ style: 'solid', width: 2 });
@@ -544,4 +546,437 @@ test('opening another conversation always starts at its newest message, though e
   await expect(log).toHaveAttribute('aria-label', 'Mensajes con Rosa Quispe');
   await expect.poll(() => atBottom(log)).toBe(true);
   expect(await log.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+});
+
+// ---- Reposición · Tacna (Step 4B): attachments, work status, simulated warehouse actions -------------------------------------
+// The photograph is a fictional SVG illustration, the request states are illustrative, and every action is simulated.
+const REPOSICION = 'Reposición · Tacna';
+// The container query measures the content box of the message list, in rem.
+const contentRem = (log) => log.evaluate((el) => { const style = getComputedStyle(el); return (el.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight)) / parseFloat(getComputedStyle(document.documentElement).fontSize); });
+
+async function openReposicion(page, width = 1280, height = 900) {
+  const ctx = await openDemo(page, width, height);
+  const back = ctx.demo.getByRole('button', { name: 'Volver a conversaciones' });
+  if (await back.isVisible()) await back.click();
+  await ctx.row(REPOSICION).click();
+  await expect(ctx.log).toHaveAttribute('aria-label', `Mensajes con ${REPOSICION}`);
+  const work = ctx.log.locator('.ce-work-status');
+  return {
+    ...ctx,
+    work,
+    now: work.locator('.ce-work-status-now'),
+    summary: work.locator('.ce-work-status-summary'),
+    steps: work.locator('.ce-work-step'),
+    announcement: work.locator('[role="status"]'),
+    photo: ctx.log.getByRole('button', { name: /Abrir foto 1 de 1: Anaquel 3/ }),
+    action: (name) => work.getByRole('button', { name }),
+    stepWords: () => work.locator('.ce-work-step').evaluateAll((items) => items.map((item) => `${item.querySelector('.ce-work-step-label').firstChild.textContent}: ${item.querySelector('.ce-sr-only').textContent.trim()}`)),
+  };
+}
+
+test('Reposición · Tacna shows the photo, the message, its delivery status and the request, each in its own place', async ({ page }) => {
+  const { row, log, messages, work, now, summary, photo, demo } = await openReposicion(page);
+  await expect(row(REPOSICION)).toHaveAttribute('aria-current', 'true');
+  await expect(page.getByRole('heading', { level: 2, name: REPOSICION })).toBeVisible();
+  await expect(demo.locator('.messaging-demo-title p')).toHaveText('Tienda Tacna y Almacén · conversación de ejemplo');
+  await expect(row(REPOSICION)).toContainText('Equipo');
+  await expect(messages.filter({ hasText: '¿Algo más para reponer hoy?' })).toContainText('Marco · Almacén');
+  const bubble = messages.filter({ hasText: 'Se acabaron los frascos de 1 L en el anaquel 3.' });
+  await expect(bubble).toHaveClass(/ce-message--outgoing/);
+  // Order inside the bubble: photo, text, delivery meta, then the request.
+  const parts = await bubble.evaluate((el) => [...el.children].map((child) => child.className.split(' ')[0]));
+  expect(parts).toEqual(['ce-attachments', 'ce-message-text', 'ce-message-meta', 'ce-message-context']);
+  // Delivery status is a word in the meta line; the progress of the request is a different block, never mixed.
+  await expect(bubble.locator('.ce-message-meta')).toHaveText('10:24Leído · simulado');
+  await expect(bubble.locator('.ce-message-meta')).not.toContainText(/Solicitado|Aceptado|Preparando|Resuelto/);
+  await expect(work.locator('.ce-work-status-title')).toHaveText('Pedido de reposición');
+  await expect(now).toHaveText('Solicitado');
+  await expect(summary).toHaveText('Nadie se ha encargado todavía.');
+  await expect(work).not.toContainText(/Leído|Entregado|Enviado/);
+  await expect(photo).toBeVisible();
+  await expect(photo.locator('.ce-attachment-caption')).toHaveText('Anaquel 3');
+  const image = photo.locator('img');
+  await expect(image).toHaveAttribute('alt', 'Anaquel con un espacio vacío frente a la etiqueta «Frasco de vidrio 1 L»');
+  expect(await image.evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(true);
+  await expect(log.locator('img')).toHaveCount(1);
+  await expect(photo).toHaveAccessibleName('Abrir foto 1 de 1: Anaquel 3. Anaquel con un espacio vacío frente a la etiqueta «Frasco de vidrio 1 L»');
+  await expect(bubble.getByRole('list', { name: '1 foto' })).toBeVisible();
+});
+
+test('the request steps are an ordered list that says every state in words, and the current step is marked', async ({ page }) => {
+  const { work, steps, stepWords, now } = await openReposicion(page);
+  await expect(work.getByRole('heading', { level: 3, name: 'Pedido de reposición' })).toBeVisible();
+  await expect(work).toHaveAccessibleName('Pedido de reposición');
+  await expect(work.getByRole('list', { name: 'Progreso' })).toBeVisible();
+  expect(await work.locator('ol').evaluate((el) => el.tagName)).toBe('OL');
+  expect(await stepWords()).toEqual(['Solicitado: (actual)', 'Aceptado: (pendiente)', 'Preparando: (pendiente)', 'Resuelto: (pendiente)']);
+  await expect(steps.nth(0)).toHaveAttribute('aria-current', 'step');
+  await expect(work.locator('[aria-current="step"]')).toHaveCount(1);
+  await expect(now).toHaveText('Solicitado');
+});
+
+test('simulated warehouse actions advance the request Solicitado → Aceptado → Preparando → Resuelto, and each one is recorded', async ({ page }) => {
+  const { work, now, summary, steps, stepWords, action, events, demo, announcement, log } = await openReposicion(page);
+  const group = work.getByRole('group', { name: 'Acciones simuladas del almacén' });
+  await expect(group).toBeVisible();
+  await expect(group.getByRole('button')).toHaveText(['Me encargo']);
+  await expect(announcement).toHaveText('');
+  const delivery = demo.locator('.ce-message-status').filter({ hasText: 'Leído · simulado' });
+
+  await action('Me encargo').click();
+  await expect(now).toHaveText('Aceptado');
+  await expect(summary).toHaveText('Marco · Almacén se encargó · 10:46');
+  expect(await stepWords()).toEqual(['Solicitado: (hecho)', 'Aceptado: (actual)', 'Preparando: (pendiente)', 'Resuelto: (pendiente)']);
+  await expect(steps.nth(1)).toHaveAttribute('aria-current', 'step');
+  await expect(group.getByRole('button')).toHaveText(['Empezar a preparar']);
+  await expect(announcement).toHaveText('Pedido de reposición: Aceptado');
+  await expect(events).toContainText('warehouseAction');
+  await expect(events).toContainText('Me encargo · Solicitado → Aceptado');
+
+  await action('Empezar a preparar').click();
+  await expect(now).toHaveText('Preparando');
+  await expect(summary).toHaveText('Marco · Almacén · desde 10:47');
+  expect(await stepWords()).toEqual(['Solicitado: (hecho)', 'Aceptado: (hecho)', 'Preparando: (actual)', 'Resuelto: (pendiente)']);
+  await expect(group.getByRole('button')).toHaveText(['Marcar resuelto', 'No se puede atender']);
+  await expect(announcement).toHaveText('Pedido de reposición: Preparando');
+  await expect(events).toContainText('Empezar a preparar · Aceptado → Preparando');
+
+  await action('Marcar resuelto').click();
+  await expect(now).toHaveText('Resuelto');
+  await expect(summary).toHaveText('Resuelto por Marco · 10:48 · lo informó una persona');
+  expect(await stepWords()).toEqual(['Solicitado: (hecho)', 'Aceptado: (hecho)', 'Preparando: (hecho)', 'Resuelto: (actual)']);
+  await expect(announcement).toHaveText('Pedido de reposición: Resuelto');
+  await expect(events).toContainText('Marcar resuelto · Preparando → Resuelto');
+  // The end of the flow: no actions and no empty wrapper, and delivery status was never touched.
+  await expect(work.locator('.ce-work-status-actions')).toHaveCount(0);
+  await expect(work.getByRole('button')).toHaveCount(0);
+  await expect(delivery).toHaveCount(1);
+  await expect(log.locator('.ce-message-meta').filter({ hasText: /Solicitado|Aceptado|Preparando|Resuelto/ })).toHaveCount(0);
+});
+
+test('the alternative outcome: "No se puede atender" stops the request, says so apart from colour, and explains in the chat', async ({ page }) => {
+  const { work, now, summary, stepWords, action, events, steps, log, messages } = await openReposicion(page);
+  await action('Me encargo').click();
+  await action('Empezar a preparar').click();
+  await action('No se puede atender').click();
+  await expect(now).toHaveText('No se puede atender');
+  await expect(summary).toHaveText('Marco · Almacén · el motivo está escrito en el chat');
+  expect(await stepWords()).toEqual(['Solicitado: (hecho)', 'Aceptado: (hecho)', 'Preparando: (hecho)', 'No se puede atender: (se detuvo)']);
+  await expect(work.locator('[aria-current="step"]')).toHaveCount(0);
+  await expect(events).toContainText('No se puede atender · Preparando → No se puede atender');
+  await expect(work.getByRole('button')).toHaveCount(0);
+  // The reason is written in the chat, as the summary says, and the log follows because the reader is at the bottom.
+  await expect(messages.last()).toContainText('No puedo atender este pedido hoy.');
+  await expect(messages.last()).toContainText('Marco · Almacén');
+  await expect.poll(() => atBottom(log)).toBe(true);
+  // Stopped is a different shape (hatched bar, bold text), not only a different colour.
+  const stopped = steps.nth(3);
+  const style = await stopped.evaluate((el) => ({ weight: getComputedStyle(el).fontWeight, image: getComputedStyle(el, '::before').backgroundImage, height: getComputedStyle(el, '::before').height }));
+  expect(Number(style.weight)).toBeGreaterThanOrEqual(700);
+  expect(style.image).toContain('repeating-linear-gradient');
+  const pending = await (await openReposicionStep(page)).evaluate((el) => getComputedStyle(el, '::before').backgroundImage);
+  expect(pending).not.toBe(style.image);
+});
+const openReposicionStep = async (page) => page.locator('.ce-work-step').first();
+
+test('keyboard users keep their place: activating an action moves focus to the next action, or to the log at the end', async ({ page }) => {
+  const { work, action, log } = await openReposicion(page);
+  await action('Me encargo').focus();
+  await page.keyboard.press('Enter');
+  await expect(action('Empezar a preparar')).toBeFocused();
+  await page.keyboard.press('Space');
+  await expect(action('Marcar resuelto')).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(work.getByRole('button')).toHaveCount(0);
+  await expect(log).toBeFocused();
+  expect(await ring(log)).toEqual({ style: 'solid', width: 2 });
+});
+
+test('opening the photo records a visible simulated event and says there is no viewer', async ({ page }) => {
+  const { photo, events, demo, row } = await openReposicion(page);
+  await expect(events).toContainText('Aún no hay eventos');
+  await photo.click();
+  await expect(events).toContainText('openAttachment');
+  await expect(events).toContainText(REPOSICION);
+  await expect(events).toContainText('Anaquel 3 · foto 1 de 1 · mensaje de las 10:24');
+  await expect(events).toContainText('simulado');
+  await expect(events).toContainText('No hay visor en esta demostración');
+  await expect(events.locator('li')).toHaveCount(1);
+  // The record is announced politely, nothing opens, the photo keeps focus and the page stays where it is.
+  expect(await events.locator('[aria-live="polite"]').count()).toBe(1);
+  await expect(page.locator('dialog, [role="dialog"]')).toHaveCount(0);
+  await expect(photo).toBeFocused();
+  expect(new URL(page.url()).pathname).toBe('/mensajeria/');
+  await photo.click();
+  await expect(events.locator('li')).toHaveCount(2);
+  // The conversation list says nothing new either.
+  await expect(row(REPOSICION)).toContainText('Tú: Se acabaron los frascos de 1 L en el anaquel 3.');
+  await expect(demo.locator('.ce-message-status').filter({ hasText: 'Leído · simulado' })).toHaveCount(1);
+});
+
+test('each conversation keeps its own drafts and its own request state when you switch', async ({ page }) => {
+  const { demo, row, field, work, now, action, summary, modeNote } = await openReposicion(page);
+  await field.fill('borrador-para-almacen');
+  await action('Me encargo').click();
+  await action('Empezar a preparar').click();
+  await expect(now).toHaveText('Preparando');
+  await expect(row(REPOSICION)).toContainText('Borrador: respuesta sin enviar');
+  // Another conversation has its own draft, its own note mode and no request at all.
+  await row('Rosa Quispe').click();
+  await expect(field).toHaveValue('');
+  await expect(demo.locator('.ce-work-status')).toHaveCount(0);
+  await field.fill('borrador-para-rosa');
+  await modeNote.click();
+  await field.fill('nota-para-rosa');
+  await row(REPOSICION).click();
+  await expect(field).toHaveValue('borrador-para-almacen');
+  await expect(now).toHaveText('Preparando');
+  await expect(summary).toHaveText('Marco · Almacén · desde 10:47');
+  await expect(work.getByRole('button')).toHaveText(['Marcar resuelto', 'No se puede atender']);
+  await expect(demo.locator('.ce-composer-mode')).toHaveCount(0);
+  await row('Rosa Quispe').click();
+  await expect(page.getByRole('radio', { name: 'Responder al cliente' })).toBeChecked();
+  await expect(field).toHaveValue('borrador-para-rosa');
+  await modeNote.click();
+  await expect(field).toHaveValue('nota-para-rosa');
+  // A reply in Reposición never lands in the other conversation, and the request never moves because of a message.
+  await row(REPOSICION).click();
+  await field.fill('Gracias, Marco.');
+  await page.keyboard.press('Control+Enter');
+  await expect(demo.locator('.ce-message--outgoing').last()).toContainText('Gracias, Marco.');
+  await expect(now).toHaveText('Preparando');
+});
+
+test('the thread opens at the newest message, with the photo message above it intact', async ({ page }) => {
+  const { log, work, row, photo } = await openReposicion(page, 1280, 900);
+  expect(await log.evaluate((el) => el.scrollHeight > el.clientHeight)).toBe(true);
+  await expect.poll(() => atBottom(log)).toBe(true);
+  await expect(work).toBeInViewport();
+  // The photo is above the fold of the thread; scrolling up reveals it. Opening another thread and coming back starts at the bottom again.
+  await log.evaluate((el) => { el.scrollTop = 0; });
+  await expect(photo).toBeInViewport();
+  await row('Rosa Quispe').click();
+  await row(REPOSICION).click();
+  await expect.poll(() => atBottom(log)).toBe(true);
+});
+
+test('a reader in history is not moved when the request advances; a reader at the bottom stays at the newest message', async ({ page }) => {
+  const { log, now, action, work, messages } = await openReposicion(page, 1280, 700);
+  expect(await log.evaluate((el) => el.scrollHeight > el.clientHeight + 40)).toBe(true);
+  // Reading history: the request advances without the reader touching the thread (events do not scroll the page).
+  await log.evaluate((el) => { el.scrollTop = 0; });
+  await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
+  await action('Me encargo').dispatchEvent('click');
+  await expect(now).toHaveText('Aceptado');
+  await action('Empezar a preparar').dispatchEvent('click');
+  await expect(now).toHaveText('Preparando');
+  await action('No se puede atender').dispatchEvent('click');
+  await expect(now).toHaveText('No se puede atender');
+  await expect(messages.last()).toContainText('No puedo atender este pedido hoy.');
+  expect(await log.evaluate((el) => el.scrollTop)).toBe(0);
+  // A reader who follows the newest message stays there while the block changes height: the actions disappear and a message arrives.
+  await log.evaluate((el) => { el.scrollTop = el.scrollHeight; });
+  await expect.poll(() => atBottom(log)).toBe(true);
+  expect(await work.getByRole('button').count()).toBe(0);
+});
+
+test('a reader at the bottom stays at the newest message while the request block grows and shrinks', async ({ page }) => {
+  const { log, now, action, work } = await openReposicion(page, 390, 700);
+  await expect.poll(() => atBottom(log)).toBe(true);
+  const heights = [];
+  const record = async () => heights.push(await work.evaluate((el) => el.getBoundingClientRect().height));
+  await record();
+  await action('Me encargo').click();
+  await expect(now).toHaveText('Aceptado');
+  await expect.poll(() => atBottom(log)).toBe(true);
+  await record();
+  await action('Empezar a preparar').click();
+  await expect(now).toHaveText('Preparando');
+  await expect.poll(() => atBottom(log)).toBe(true);
+  await record();
+  await action('Marcar resuelto').click();
+  await expect(now).toHaveText('Resuelto');
+  await expect.poll(() => atBottom(log)).toBe(true);
+  await record();
+  // The block really did change height (two buttons wrap on a phone, none at the end), so the test means something.
+  expect(new Set(heights.map(Math.round)).size).toBeGreaterThan(1);
+});
+
+test('a late image never shifts the thread: the tile box is reserved before the image arrives', async ({ page }) => {
+  let release;
+  const gate = new Promise((resolve) => { release = resolve; });
+  await page.route('**/references/shelf-gap-fictional.svg', async (route) => { await gate; await route.continue(); });
+  const { log, photo, now } = await openReposicion(page, 390, 800);
+  const tile = photo.locator('xpath=ancestor::li[1]');
+  const measure = () => tile.evaluate((el) => { const r = el.getBoundingClientRect(); return { width: Math.round(r.width), height: Math.round(r.height), top: Math.round(r.top), scrollHeight: el.closest('[role="log"]').scrollHeight }; });
+  await expect(tile).toBeVisible();
+  const before = await measure();
+  expect(await photo.locator('img').evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(false);
+  expect(Math.abs(before.width / before.height - 4 / 3)).toBeLessThan(0.02);
+  release();
+  await expect.poll(() => photo.locator('img').evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(true);
+  const after = await measure();
+  expect(after).toEqual(before);
+  await expect(now).toHaveText('Solicitado');
+  await expect.poll(() => atBottom(log)).toBe(true);
+});
+
+for (const width of [320, 390, 768, 1440]) {
+  test(`Reposición · Tacna fits at ${width}px: nothing overflows, the tile keeps its 4:3 box and the steps stay inside the bubble`, async ({ page }) => {
+    const { log, work, photo, steps, action, demo } = await openReposicion(page, width, 900);
+    expect(await fits(page)).toBe(true);
+    expect(await contentFits(page)).toBe(true);
+    await log.evaluate((el) => { el.scrollTop = 0; });
+    const tile = photo.locator('xpath=ancestor::li[1]');
+    const box = await tile.boundingBox();
+    expect(Math.abs(box.width / box.height - 4 / 3)).toBeLessThan(0.02);
+    const bubble = log.locator('.ce-message--outgoing').filter({ hasText: 'Se acabaron los frascos' });
+    const bubbleBox = await bubble.boundingBox();
+    // One photo fills the width of the bubble.
+    expect(box.width).toBeGreaterThan(bubbleBox.width - 30);
+    const logBox = await log.boundingBox();
+    expect(bubbleBox.x).toBeGreaterThanOrEqual(logBox.x - 1);
+    expect(bubbleBox.x + bubbleBox.width).toBeLessThanOrEqual(logBox.x + logBox.width + 1);
+    await work.scrollIntoViewIfNeeded();
+    const inside = await work.evaluate((el) => { const parent = el.closest('.ce-message').getBoundingClientRect(); return [...el.querySelectorAll('.ce-work-step, .ce-work-status-actions, .ce-button')].every((item) => { const r = item.getBoundingClientRect(); return r.left >= parent.left - 1 && r.right <= parent.right + 1; }); });
+    expect(inside).toBe(true);
+    // Four steps sit in one row when the message list is wide and in two columns in a narrow one (a container query).
+    const columns = await steps.evaluateAll((items) => new Set(items.map((item) => Math.round(item.getBoundingClientRect().left))).size);
+    const logWidth = await contentRem(log);
+    expect(columns).toBe(logWidth <= 21 ? 2 : 4);
+    await action('Me encargo').click();
+    expect(await contentFits(page)).toBe(true);
+    await expect(demo.locator('.messaging-demo-warehouse')).toBeVisible();
+  });
+}
+
+test('enlarged text moves the steps to two columns and wraps the labels instead of overflowing', async ({ page }) => {
+  const { log, steps, work, field } = await openReposicion(page, 1280, 900);
+  // A reader who is composing stays in the thread view when the text grows (see the layout tests above).
+  await field.click();
+  await page.addStyleTag({ content: 'html{font-size:200%}' });
+  await expect(work).toBeVisible();
+  expect(await contentFits(page)).toBe(true);
+  const columns = await steps.evaluateAll((items) => new Set(items.map((item) => Math.round(item.getBoundingClientRect().left))).size);
+  const logWidth = await contentRem(log);
+  expect(columns).toBe(logWidth <= 21 ? 2 : 4);
+  expect(await work.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
+});
+
+// The demo has one photo; the group's other layouts are checked on the real recipe by adding tiles to the same bubble.
+test('the attachment group lays out 1, 2, 3, 4 and 5 items as designed, and in two columns in a narrow container', async ({ page }) => {
+  const cases = async (width) => {
+    const { log, photo } = await openReposicion(page, width, 900);
+    return photo.locator('xpath=ancestor::ul[1]').evaluate((ul, count) => {
+      const li = ul.querySelector('li');
+      const result = {};
+      for (const n of [1, 2, 3, 4, 5]) {
+        ul.className = `ce-attachments${[1, 2, 4].includes(n) ? ` ce-attachments--${n}` : ''}`;
+        while (ul.children.length < n) ul.append(li.cloneNode(true));
+        while (ul.children.length > n) ul.lastElementChild.remove();
+        const lefts = new Set([...ul.children].map((item) => Math.round(item.getBoundingClientRect().left)));
+        const first = ul.children[0].getBoundingClientRect();
+        result[n] = { columns: lefts.size, ratio: Math.round((first.width / first.height) * 100) / 100, full: Math.round(first.width) >= Math.round(ul.getBoundingClientRect().width) - 2 };
+      }
+      return result;
+    }, 0);
+  };
+  const wide = await cases(1440);
+  expect(wide[1]).toMatchObject({ columns: 1, ratio: 1.33, full: true });
+  expect(wide[2].columns).toBe(2);
+  expect(wide[3].columns).toBe(3);
+  expect(wide[4].columns).toBe(2);
+  expect(wide[5].columns).toBe(3);
+  expect(wide[3].ratio).toBeCloseTo(0.67, 1);
+  const narrow = await cases(320);
+  expect(narrow[1].columns).toBe(1);
+  for (const n of [2, 3, 4, 5]) expect(narrow[n].columns, `${n} items in a narrow container`).toBe(2);
+});
+
+test('photographic evidence is uncropped by default: the image is contained inside its tile', async ({ page }) => {
+  const { photo } = await openReposicion(page);
+  const fit = await photo.locator('img').evaluate((img) => getComputedStyle(img).objectFit);
+  expect(fit).toBe('contain');
+});
+
+test('touch targets in Reposición are at least 44 px on a phone, in every state', async ({ page }) => {
+  const { demo, action, work } = await openReposicion(page, 390, 844);
+  const small = () => demo.evaluate((root) => [...root.querySelectorAll('.messaging-demo-thread button, .messaging-demo-thread textarea, .messaging-demo-thread label.ce-composer-mode-option > span')]
+    .filter((el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; })
+    .map((el) => ({ el: `${el.localName}.${el.className}`, w: Math.round(el.getBoundingClientRect().width), h: Math.round(el.getBoundingClientRect().height) }))
+    .filter(({ w, h }) => w < 44 || h < 44));
+  expect(await small()).toEqual([]);
+  await action('Me encargo').click();
+  await action('Empezar a preparar').click();
+  await expect(work.getByRole('button')).toHaveCount(2);
+  expect(await small()).toEqual([]);
+});
+
+for (const [width, height] of [[320, 700], [390, 844], [768, 1024], [1440, 900]]) {
+  test(`Reposición · Tacna has no accessibility violations at ${width}px, in every request state`, async ({ page }) => {
+    const { action, photo, work, log } = await openReposicion(page, width, height);
+    const scan = async (label) => {
+      const results = await new AxeBuilder({ page }).include('.messaging-demo').withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+      expect(results.violations.map(({ id, nodes }) => ({ id, elements: nodes.map((node) => node.target) })), label).toEqual([]);
+    };
+    await scan('requested');
+    await photo.click();
+    await scan('after opening the photo (event recorded)');
+    await action('Me encargo').click();
+    await scan('accepted');
+    await action('Empezar a preparar').click();
+    await scan('preparing, two actions');
+    await action('Marcar resuelto').click();
+    await expect(work.getByRole('button')).toHaveCount(0);
+    await scan('resolved');
+    await expect(log).toBeFocused();
+  });
+
+  test(`Reposición · Tacna has no accessibility violations at ${width}px when the request cannot be attended`, async ({ page }) => {
+    const { action } = await openReposicion(page, width, height);
+    await action('Me encargo').click();
+    await action('Empezar a preparar').click();
+    await action('No se puede atender').click();
+    const results = await new AxeBuilder({ page }).include('.messaging-demo').withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+    expect(results.violations.map(({ id, nodes }) => ({ id, elements: nodes.map((node) => node.target) }))).toEqual([]);
+  });
+}
+
+test('Reposición uses no network, storage, dialog or viewer once its image has loaded', async ({ page }) => {
+  const { photo, action, demo, now } = await openReposicion(page);
+  await page.waitForLoadState('networkidle');
+  expect(await photo.locator('img').evaluate((img) => img.complete)).toBe(true);
+  const requests = [];
+  page.on('request', (request) => requests.push(request.url()));
+  page.on('dialog', (dialog) => { throw new Error(`unexpected dialog ${dialog.message()}`); });
+  await photo.click();
+  await action('Me encargo').click();
+  await action('Empezar a preparar').click();
+  await action('Marcar resuelto').click();
+  await expect(now).toHaveText('Resuelto');
+  expect(requests).toEqual([]);
+  expect(await page.evaluate(async () => ({ local: localStorage.length, session: sessionStorage.length, cookies: document.cookie, databases: indexedDB.databases ? (await indexedDB.databases()).length : 0 }))).toEqual({ local: 0, session: 0, cookies: '', databases: 0 });
+  const text = await demo.innerText();
+  expect(text).not.toMatch(/whatsapp|instagram|messenger|telegram|sms|facebook/i);
+  expect(text).not.toMatch(/stock|existencias|disponible|verificad|conciliad|vendid|ventas/i);
+  expect(text).not.toMatch(/S\/\s?\d|\bCE\d{8,}\b/);
+});
+
+test('the page says the photo is an illustration, the states are illustrative and no viewer exists', async ({ page }) => {
+  await openDemo(page);
+  const main = await page.locator('main').innerText();
+  expect(main).toContain('ilustración inventada');
+  expect(main).toContain('estados ilustrativos, no reglas de CE Systems');
+  expect(main).toContain('no hay visor');
+  expect(main).toContain('leído no es aceptado');
+  await expect(page.locator('main img')).toHaveCount(0);
+});
+
+test('every conversation starts at its newest message after the new thread was added', async ({ page }) => {
+  const { row, log } = await openDemo(page, 1280, 560);
+  for (const name of [REPOSICION, 'Rosa Quispe', 'Jorge Mamani', REPOSICION]) {
+    await row(name).click();
+    await expect(log).toHaveAttribute('aria-label', `Mensajes con ${name}`);
+    await expect.poll(() => atBottom(log)).toBe(true);
+  }
 });

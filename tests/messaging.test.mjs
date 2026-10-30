@@ -2,9 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { sep, win32 } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { NAMES } from '../recipes/names.mjs';
+import { NAMES, NAME_GROUPS } from '../recipes/names.mjs';
 import { RECIPE_SOURCES } from '../scripts/sources.mjs';
 
 const root = new URL('../', import.meta.url);
@@ -75,6 +76,121 @@ test('the standard names cover the three public components, and the message bubb
   assert.deepEqual((await readdir(new URL('packages/vue/src/components/', root))).filter((file) => /Bubble/.test(file)), []);
 });
 
+test('the attachment group and the work status are public, named components with recipes, and add no CSS of their own', async () => {
+  for (const [id, vue, es] of [['AttachmentGroup', 'CEAttachmentGroup', 'Grupo de adjuntos'], ['WorkStatus', 'CEWorkStatus', 'Estado del trabajo']]) {
+    const entry = NAMES.find((item) => item.id === id);
+    assert.ok(entry, `${id} is registered`);
+    assert.equal(entry.vue, vue);
+    assert.equal(entry.group, 'Mensajería');
+    assert.equal(entry.es, es);
+    assert.ok(entry.sample.length > 0 && entry.rule.length > 0);
+    assert.doesNotMatch(entry.sample, /<script|onclick|javascript:/i);
+    assert.ok((await read('packages/vue/src/index.ts')).includes(`default as ${vue} } from './components/${vue}.vue'`));
+    const component = await read(`packages/vue/src/components/${vue}.vue`);
+    assert.doesNotMatch(component, /<style|\sstyle=|:style=|v-bind\(/, `${vue} adds no CSS or inline style`);
+    assert.match(await read(`packages/vue/test/${vue}.test.ts`), /describe\(/);
+  }
+  // Every class that the registry lists for these names is defined by the recipes, and the samples use only listed classes.
+  const css = await read('exports/recipes.css');
+  for (const id of ['AttachmentGroup', 'WorkStatus']) {
+    const entry = NAMES.find((item) => item.id === id);
+    for (const name of entry.recipe) assert.ok(css.includes(`.${name}`), `${name} is defined in exports/recipes.css`);
+    const used = new Set(entry.sample.match(/\bce-[a-z0-9-]+/g));
+    for (const name of used) assert.ok(entry.recipe.includes(name) || name === 'ce-sr-only', `${id} sample uses unlisted ${name}`);
+  }
+});
+
+test('the attachment group keeps its tile boxes reserved, uncropped by default and responsive; the work status never relies on colour alone', async () => {
+  const css = await read('recipes/messaging.css');
+  assert.match(css, /\.ce-attachment \{[^}]*aspect-ratio: 2 \/ 3/);
+  assert.match(css, /\.ce-attachments--1 \.ce-attachment \{[^}]*aspect-ratio: 4 \/ 3/);
+  assert.match(css, /\.ce-attachment-image \{[^}]*object-fit: contain/);
+  assert.match(css, /\.ce-attachments--cover \.ce-attachment-image \{[^}]*object-fit: cover/);
+  assert.match(css, /\.ce-attachments--1 \{[^}]*minmax\(0, 1fr\)/);
+  assert.match(css, /\.ce-attachments--2, \.ce-attachments--4 \{[^}]*repeat\(2/);
+  assert.match(css, /@container \(max-width: 21rem\)/);
+  assert.match(css, /\.ce-message-list \{[^}]*container-type: inline-size/);
+  // Done, current, pending and stopped each differ by bar shape, and stopped uses a hatch pattern, not only a colour.
+  for (const state of ['done', 'current', 'pending', 'stopped']) assert.match(css, new RegExp(`\\.ce-work-step--${state}\\b`));
+  assert.match(css, /\.ce-work-step--stopped::before \{[^}]*repeating-linear-gradient\(135deg/);
+  assert.match(css, /\.ce-work-step--current::before \{[^}]*background-size: 100% 8px/);
+  assert.match(css, /\.ce-focus|\.ce-attachment-open:focus-visible \{[^}]*var\(--ce-stroke-focus\)[^}]*var\(--ce-color-focus\)/);
+});
+
+test('the generated files carry the new recipes, names and the corrected design-system README', async () => {
+  for (const file of ['exports/recipes.css', 'public/downloads/recipes.css', 'exports/design-system/project/components/bundle.css']) {
+    const css = await read(file);
+    for (const name of ['.ce-attachments', '.ce-attachment-open', '.ce-work-status', '.ce-work-step--stopped', '.ce-message-context']) assert.ok(css.includes(name), `${file} has ${name}`);
+  }
+  for (const file of ['docs/names.md', 'public/downloads/names.md', 'exports/design-system/project/names.md']) {
+    const names = await read(file);
+    assert.match(names, /`AttachmentGroup` \| Grupo de adjuntos \|/, file);
+    assert.match(names, /`WorkStatus` \| Estado del trabajo \|/, file);
+  }
+  assert.ok((await read('public/downloads/names.mjs')).includes("id: 'WorkStatus'"));
+  const card = await read('exports/design-system/project/components/StandardNamesMessaging/preview.html');
+  assert.ok(card.includes('ce-attachments') && card.includes('ce-work-status'));
+  assert.ok((await read('exports/design-system/project/components/StandardNamesMessaging/README.md')).includes('**WorkStatus** · Estado del trabajo'));
+});
+
+test('design-system/README.md matches the approved price rule, the ten standard-name cards and the real card inventory', async () => {
+  const readme = await read('design-system/README.md');
+  assert.doesNotMatch(readme, /Prices align to the bottom/i);
+  assert.match(readme, /The price follows the specifications at the approved 12px gap \(`size\.product\.gap-price`\) and is never pushed to the bottom of the card/);
+  assert.match(await read('docs/names.md'), /Specs and the price \| `size\.product\.gap-price` \| 12px/);
+  assert.ok(NAME_GROUPS.length === 10 && NAME_GROUPS.some((group) => group.es === 'Mensajería'));
+  assert.match(readme, /\*\*Standard names:\*\* ten cards, one per group of names \(including Messaging\)/);
+  assert.doesNotMatch(readme, /nine cards/i);
+  for (const group of NAME_GROUPS) assert.ok(readme.includes(`\`${group.card}\``), `${group.card} is listed`);
+  // The Components listing names every real card folder, including Controls, and Cover stays the system cover card.
+  const listing = readme.slice(readme.indexOf('## Components'));
+  const folders = (await readdir(new URL('design-system/components/', root), { withFileTypes: true })).filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+  for (const folder of folders.filter((name) => name !== 'Cover')) assert.ok(listing.includes(`\`${folder}\``), `Components lists ${folder}`);
+  assert.match(listing, /\*\*Forms:\*\* `Field`, `FormControls`, `Controls`, `Swatch`/);
+  assert.match(listing, /\*\*Cover:\*\* the system cover card\./);
+  assert.ok(folders.includes('Controls') && folders.includes('Cover'));
+});
+
+test('the shelf illustration is a self-contained fictional SVG with recorded provenance', async () => {
+  const svg = await read('public/references/shelf-gap-fictional.svg');
+  assert.match(svg, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" viewBox="0 0 640 480"/);
+  assert.doesNotMatch(svg, /<script|<image|<foreignObject|<style|<link|\bhref=|xlink:|url\(|@import|data:|on\w+=|<use/i);
+  assert.doesNotMatch(svg, /https?:\/\/(?!www\.w3\.org\/2000\/svg)/);
+  assert.match(svg, /<title>.+<\/title>/);
+  assert.match(svg, /Frasco de vidrio 1 L/);
+  const entry = JSON.parse(await read('public/references/manifest.json')).find((item) => item.file === 'shelf-gap-fictional.svg');
+  assert.ok(entry, 'the manifest records the illustration');
+  assert.equal(entry.role, 'reference');
+  assert.equal(entry.originalName, 'shelf-gap-fictional.svg');
+  assert.match(entry.source, /ce-theme#3 on 2026-10-30/);
+  assert.match(entry.source, /not derived from any photograph|Not derived from any photograph/);
+  assert.match(entry.source, /private Claude Design photo/);
+  for (const field of ['description', 'rights', 'sha256']) assert.ok(entry[field], field);
+  assert.equal(entry.sha256, createHash('sha256').update(svg).digest('hex'));
+  // The example uses this file and no other image.
+  const fixtures = await read('site/data/messaging.ts');
+  assert.match(fixtures, /SHELF_PHOTO = '\/references\/shelf-gap-fictional\.svg'/);
+  assert.doesNotMatch(fixtures, /PRIVATE-DESIGN-ASSET|\.(png|jpe?g|webp)\b/i);
+});
+
+test('the Reposición example keeps delivery status and work progress apart, with simulated actions and no viewer', async () => {
+  const demo = await read('site/components/MessagingDemo.vue');
+  const fixtures = await read('site/data/messaging.ts');
+  assert.match(fixtures, /name: 'Reposición · Tacna', kind: 'team'/);
+  assert.match(fixtures, /Se acabaron los frascos de 1 L en el anaquel 3\./);
+  assert.match(fixtures, /'¿Algo más para reponer hoy\?'/);
+  for (const label of ['Me encargo', 'Empezar a preparar', 'Marcar resuelto', 'No se puede atender']) assert.ok(fixtures.includes(label), label);
+  assert.match(demo, /<template #context=/);
+  assert.match(demo, /@open-attachment="onOpenAttachment"/);
+  assert.match(demo, /Acciones simuladas del almacén/);
+  assert.match(demo, /No hay visor en esta demostración/);
+  assert.doesNotMatch(demo, /<dialog|role="dialog"|CEModal|window\.open/);
+  // The delivery status is a field of the message; the request state is a separate structure.
+  assert.match(fixtures, /requests: \{ m03: \{ state: 'requested' \} \}/);
+  assert.match(fixtures, /status: 'read', simulated: true,\s+attachments:/);
+  assert.match(fixtures, /The states are illustrative|Illustrative states|illustrative/i);
+});
+
 test('the composer has separate typed events and no generic send event', async () => {
   const composer = await read('packages/vue/src/components/CEMessageComposer.vue');
   assert.match(composer, /submitReply: \[text: string\]; saveNote: \[text: string\]/);
@@ -135,7 +251,7 @@ test('converting a Windows-style relative path gives the repository path, with n
 
 test('every example conversation starts with the same separator id, so the list must be keyed by conversation', async () => {
   const fixtures = await read('site/data/messaging.ts');
-  assert.equal(fixtures.match(/\{ id: 'day-1', kind: 'system'/g)?.length, 3);
+  assert.equal(fixtures.match(/\{ id: 'day-1', kind: 'system'/g)?.length, 4);
   assert.match(await read('site/components/MessagingDemo.vue'), /<CEMessageList :key="current\.id"/);
   assert.match(await read('packages/vue/src/components/CEMessageList.vue'), /Mount one list per conversation and key it by the conversation id/);
 });
