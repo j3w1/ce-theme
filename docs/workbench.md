@@ -6,7 +6,7 @@ This repository holds documentation about the workbench. It does not hold the bo
 
 ## Where things live
 
-- **Main copy of the boards:** three private published artifacts, named by title only here because their links are private:
+- **Main copy of the boards:** three private published artifacts, named by title only here because their links are private. Together they hold 253 published boards: the 251 source boards plus two generated per-artifact indexes.
   - "CE Systems — Storefront" (160 boards, public pages and the buying prototype);
   - "CE Systems — Workspace" (68 boards, staff pages and the publishing prototype);
   - "CE Systems — Specs, Decisions and Prototypes" (25 boards, index, flows, decisions, contracts and data).
@@ -33,14 +33,19 @@ The product photographs on the boards are edited images from Casa Elida's public
 
 ## Run, build, audit and publish
 
-These commands run from the root of the working `workbench/` folder. They need Python 3 and Node 18 or later with Playwright and Chromium.
+These commands run from the root of the working `workbench/` folder. They need Python 3 and Node 18 or later with Playwright and Chromium. Before auditing, set `CE_WB_SCRATCH` to a writable folder for the audit output; the tools' default is an owner-specific evidence folder that another account or machine cannot write.
 
 ```sh
 # Preview server for the boards (leave it running)
 python3 -I tools/serve.py retail/project blobs runtime.js 8102
 
-# Audit all boards, in sequential chunks of 25 (resumes finished chunks)
-python3 tools/session2/audit_chunks.py 25
+# Audit all boards, in sequential chunks of 25
+export CE_WB_SCRATCH=/path/to/writable/audit-output
+python3 -I tools/session2/audit_chunks.py 25
+
+# After any board changed: rerun every chunk (a plain rerun skips finished chunks
+# without checking whether their boards changed)
+python3 -I tools/session2/audit_chunks.py 25 --redo
 
 # Assemble an artifact folder, or an offline kit, for one scope
 python3 -I tools/build_scope.py <scope> publish --blobmap build/blobmap.<scope>.json
