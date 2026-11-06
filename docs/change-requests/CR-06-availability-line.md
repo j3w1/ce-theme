@@ -11,11 +11,11 @@ Status: Ready for owner review; not submitted anywhere
 
 ## 1. Summary
 
-CE Theme already has an availability line, `ce-stock`: a list whose item carries a coloured dot and words. Its documentation names four states (`available`, `limited`, `unavailable`, `unknown`) but the CSS styles only three of them, no document gives the wording for "we do not know", and the sample cards pair a missing price with a stock claim. The boards use the line 656 times with a fixed wording set built on one rule: unknown availability is never "sold out". The request: add the explicit `unknown` (and `pending`) state, publish the wording contract, and recommend an accessible name.
+CE Theme already has an availability line, `ce-stock`: a list whose item carries a coloured dot and words. Its documentation names four states (`available`, `limited`, `unavailable`, `unknown`) but the CSS styles only three of them, no document gives the wording for "we do not know", and the sample cards pair a missing price with a stock claim. The boards use the line 656 times with a fixed wording set built on one rule: unknown availability is never "sold out". The request: add the explicit `unknown` (and `pending`) state, publish the wording contract, and require an accessible name (X-7).
 
 ## 2. Problem and evidence
 
-**Rules the boards follow** (CANON R-03, R-17; SHARED-02 D04 and D06 [S]): baseline in every listing, card, PDP, bag, campaign, favourites and staff frame is, per product and store, either «Disponible en {tienda}» or «Disponibilidad por confirmar en {tienda}». Unknown, stale, conflicting and no-response readings are all the second wording publicly. «Agotado» and «Pocas unidades» appear only in frames labelled «Escenario». No store means no amount and no stock assertion. Staff counts are never shown for unknown or stale cells.
+**Rules the boards follow** (CANON R-03, R-17; SHARED-02 D04 and D06 [S]): baseline in every listing, card, PDP, cart, campaign, favourites and staff frame is, per product and store, either «Disponible en {tienda}» or «Disponibilidad por confirmar en {tienda}». Unknown, stale, conflicting and no-response readings are all the second wording publicly. «Agotado» and «Pocas unidades» appear only in frames labelled «Escenario». No store means no amount and no stock assertion. Staff counts are never shown for unknown or stale cells.
 
 **Use in the boards** [S]: 656 lists with the exact class attribute `class="ce-stock"` in 108 board files. Item wording, recounted on 5 November 2026 over the 251 boards with this method: every `li` inside one of those 656 lists, its text content read without tags, one count per statement (a list holds one or more statements, so statements outnumber lists; script template strings are outside any list and are not counted): «Disponibilidad por confirmar en Tienda A — demostración» **436**, «Disponibilidad por confirmar en Tienda B — demostración» **37**, «Disponible en Tienda A — demostración» **170**; «Agotado en …» 3, «Pocas unidades en …» 2, «No disponible en …» 1, «Sin stock suficiente en …» 2 (all scenario frames: Adm08Disponibilidad, Pub06Estados, Pub10Excepciones, Pub11Estados, Pub11EstadosMovil); «Consultando disponibilidad…» 2 (Pub06Estados, Pub08Tienda). `data-state` on those items: `available` 174, `unavailable` 7, `limited` 2, `unknown` 1, no attribute 477, two template placeholders (`{{ … }}` in Proto01Compra and Pub06Producto). (The earlier snapshot gave 336 / 36 / 162; it predates the last 16 boards and counted fewer statements per list.)
 
@@ -48,8 +48,8 @@ Recipe: `ce-stock` (existing; `StockLine`). One list, one item per statement.
 | State | `data-state` | Spanish wording (`{tienda}` is the supplied store label) | Dot |
 |---|---|---|---|
 | Known available | `available` | «Disponible en {tienda}» | success |
-| Few units (scenario only) | `limited` | «Pocas unidades en {tienda}» | warning |
-| Confirmed sold out (scenario only) | `unavailable` | «Agotado en {tienda}» | hollow danger ring |
+| Few units (a confirmed reading supplied by the service; X-9) | `limited` | «Pocas unidades en {tienda}» | warning |
+| Confirmed sold out (a confirmed reading supplied by the service; X-9) | `unavailable` | «Agotado en {tienda}» | hollow danger ring |
 | Unknown, stale, conflicting, no response | `unknown` (also the default when no state is set) | «Disponibilidad por confirmar en {tienda}» | neutral |
 | Being read | `pending` with `aria-busy="true"` on the list | «Consultando disponibilidad…» | neutral |
 | No store chosen | no availability line | the price message «Elige tu tienda para ver precio y disponibilidad» takes its place | none |
@@ -64,7 +64,7 @@ CSS: no change of look; make the documented values explicit.
 
 Spacing: the line sits `var(--ce-size-product-gap-note)` under a price or store note in every composition that has one (cart line per CR-08; tag item and PDP: to measure).
 
-Documentation in the same change: the wording table above in the StockLine README; one sample of the unknown state in the ProductCard and StoreContext cards; the rule "`unavailable` is only for a confirmed sold-out reading; a failed or missing reading is `unknown`". The word "scenario" is the boards' label for frames; CE Theme would phrase it as "only when the inventory service supplies a confirmed reading".
+Documentation in the same change: the wording table above in the StockLine README; one sample of the unknown state in the ProductCard and StoreContext cards; the rule "`unavailable` is only for a confirmed sold-out reading; a failed or missing reading is `unknown`". The word "scenario" is the boards' label for frames; CE Theme phrases it as "only when the inventory service supplies a confirmed reading" and documents both states with their samples (X-9, decided 2026-11-06).
 
 No arithmetic, no counts ("Pocas unidades" is a supplied state, never a threshold computed in the interface), no reservation, no eligibility inference.
 
@@ -77,29 +77,29 @@ No arithmetic, no counts ("Pocas unidades" is a supplied state, never a threshol
 | NAME / Description / specs / price spacing | The line sits 8px under the price or note (`size.product.gap-note`); not otherwise changed |
 | One-line CE code, supplied prices | Not touched |
 | Focus ring, 44px targets | Not applicable: the line has no control. A «Reintentar» link inside a line is a separate control and needs its own 44px target |
-| Accessible name | Proposed: `aria-label="Disponibilidad"` on the list (what 93 board lists do), or a visible lead word. See owner decision 3 |
-| Live regions | No `role="status"` by default; a live announcement is the application's choice (`SHARED-01`: "live announcements only for meaningful changes") |
+| Accessible name | Required: `aria-label="Disponibilidad"` on the list (what 93 board lists do; X-7, decided 2026-11-06) |
+| Live regions | No `role="status"` on the list by default. X-7 (decided 2026-11-06) sets the recipe-level live regions (a pending store bar, CR-05; the `role="note"` of the cue, CR-03) and does not list this one; a live announcement for it stays the application's choice (`SHARED-01`: "live announcements only for meaningful changes") |
 
 ## 6. Acceptance checks
 
 To run when the repository work happens (not run here):
 1. Render the five states at 390, 768, 1440 and text x1.5, x2: words wrap, the dot stays aligned with the first line, nothing overflows.
 2. `unknown` and a list with no `data-state` render the same neutral dot; `unavailable` is the only ring.
-3. A fixture-scoped test: for the demonstration fixtures NOME, TILEN and TALEN in Tienda B (CANON R-03), the sample reads «Disponibilidad por confirmar en …». Elsewhere, a sample that shows `unavailable` or `limited` must carry a supplied confirmed inventory reading in its fixture data; it is never rejected for lacking a price (decision 4).
+3. A fixture-scoped test: for the demonstration fixtures NOME, TILEN and TALEN in Tienda B (CANON R-03), the sample reads «Disponibilidad por confirmar en …». Elsewhere, a sample that shows `unavailable` or `limited` must carry a supplied confirmed inventory reading in its fixture data; it is never rejected for lacking a price (X-9).
 4. Forced-colours and greyscale view: states stay distinguishable by their words.
 5. Screen reader reading of the list with and without `aria-label`: **not run, to schedule**.
 
 ## 7. Risks and what it does not change
 
 - Almost no visual change; the risk is in the documents: the wording table becomes the reference for CE Meta and CE Radio as well.
-- The two samples that currently pair a missing price with a stock claim would change; owner decision 4.
+- The two samples that currently pair a missing price with a stock claim stay as confirmed readings (X-9, decided 2026-11-06); the unknown sample of section 4 is added beside them.
 - Not changed: the dot sizes (10px dot, 8px gap), colours, the `ce-availability` recipe, the product card layout, any status-list pattern.
 - The board defect in Pub08Tienda (a failed read drawn with the sold-out ring) is not fixed here (no board edits).
 
 ## 8. Owner decisions needed
 
 1. Approve the wording set, especially «Disponibilidad por confirmar en {tienda}», as the CE Theme default for "unknown".
-2. Keep «Pocas unidades» and «Agotado» as supplied states in CE Theme, or document them as scenario-only as the boards do?
-3. Accessible name: required `aria-label="Disponibilidad"`, or leave it to the consumer?
-4. Replace the two samples (ProductCard 4th card, StoreContext "Sin precio en la tienda") with the unknown wording, so the CE Theme samples match the demonstration fixtures, or keep them as confirmed readings (valid: price and availability are supplied separately; the test in acceptance check 3 accepts them when the fixture names the reading)?
+2. Decided (X-9, 2026-11-06): «Pocas unidades» and «Agotado» stay documented in CE Theme as confirmed states (supplied readings) with their samples, not as scenario-only states; eligibility stays with the application or service.
+3. Decided (X-7, 2026-11-06): `aria-label="Disponibilidad"` is required on the availability list, as a recipe-level rule.
+4. Decided (X-9, 2026-11-06): the two samples (ProductCard 4th card, StoreContext "Sin precio en la tienda") stay as confirmed readings (valid: price and availability are supplied separately; the test in acceptance check 3 accepts them when the fixture names the reading). They are not replaced by the unknown wording.
 5. Future of `ce-availability`: keep, merge into `ce-stock`, or retire (recorded here, not proposed).

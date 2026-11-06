@@ -33,7 +33,7 @@ The same harness measured a product card (the reference): 8 / 2 / 2 / 12 / 8.
 
 **What the boards do** [S]:
 - A patch block marked `/* ce-identity */` is present in 77 board files: `.ce-cart-line-body .ce-product-specs{margin-top:-6px}` (8px - 6px = 2px). Cart-line markup (`class="ce-cart-line-body"`) exists in 23 boards (96 lines); every one is covered by the patch, and the other 54 boards carry the cart-line rule without containing a cart line. The generator of that block is not in `tools/`. The same block also holds the pin-card rule of CR-09.
-- Other local variants: `.ce-cart-line-actions{display:grid;gap:12px;margin-top:4px}` (Pub10Bolsa, Pub10Estados, Pub10EstadosMovil, Pub10EstadosMovilP2, Pub10Tableta, Pub15SeguimientoMovil; a phone variant in Pub20Largos); `.ce-cart-line-actions{margin-top:4px}` (CSS present in the Pub11 boards and in several tablet boards, some of which draw no cart line); a full rewrite with `gap: 0` and explicit margins in Pub08Cambio (its comment reads «Propuesto — aproximación del prototipo») and Proto01Compra (`.shell .ce-cart-line-body{gap:0}`, code margin `var(--ce-size-product-gap-code)`, specs 2px, availability 8px).
+- Other local variants: `.ce-cart-line-actions{display:grid;gap:12px;margin-top:4px}` (Pub10Bolsa, a frozen board whose name is an identifier, not copy: X-3; Pub10Estados, Pub10EstadosMovil, Pub10EstadosMovilP2, Pub10Tableta, Pub15SeguimientoMovil; a phone variant in Pub20Largos); `.ce-cart-line-actions{margin-top:4px}` (CSS present in the Pub11 boards and in several tablet boards, some of which draw no cart line); a full rewrite with `gap: 0` and explicit margins in Pub08Cambio (its comment reads «Propuesto — aproximación del prototipo») and Proto01Compra (`.shell .ce-cart-line-body{gap:0}`, code margin `var(--ce-size-product-gap-code)`, specs 2px, availability 8px).
 
 **Rendered boards** [R]:
 - Pub10Bolsa, first line (MENE): code to heading about 8px (8.5 measured), NAME to Description 2px, heading to specs 2px, specs to price 12px, price to availability **12px** (grid gap of the actions row; the ProductStack says 8px), availability to quantity 12px.
@@ -83,12 +83,12 @@ To run when the repository work happens (not run here, except where marked):
 
 ## 7. Risks and what it does not change
 
-- **Boards keep the local patch.** When the CE Systems artifacts are re-synchronised with a newer design-system copy (a separate, owner-approved task), the `-6px` patch must be removed from the 77 boards in the same task. Cascade: the board rule `.ce-cart-line-body .ce-product-specs{margin-top:-6px}` has the same specificity as the proposed `.ce-cart-line-body > .ce-product-specs` and comes later (board styles follow the bundle), so it **replaces** the 2px margin rather than adding to it; with the grid gap at 0 the heading-to-specs distance would be -6px (the specs overlap the heading). Nothing is applied automatically.
+- **Boards keep the local patch (X-3).** The 251 boards are a frozen snapshot and are not re-synchronised with a newer design-system copy: the `-6px` patch stays in the 77 boards, which keep their own copy, and a new board built on the new recipe must not carry it. Cascade: the board rule `.ce-cart-line-body .ce-product-specs{margin-top:-6px}` has the same specificity as the proposed `.ce-cart-line-body > .ce-product-specs` and comes later (board styles follow the bundle), so it **replaces** the 2px margin rather than adding to it; with the grid gap at 0 the heading-to-specs distance would be -6px (the specs overlap the heading) in a board that combined the new recipe with the patch. Nothing is applied automatically.
 - Not changed: image size, line padding, price size (28px), quantity group, remove link, order summary.
 - Other consumers of `ce-cart-line` (the Cart design-system card and the reference-site cart page listed in `coverage.md`) change by 6px (heading to specs) and, where the price starts the row, 4px (specs to price). Their visual review is **to do**; those pages were not seen.
 
 ## 8. Owner decisions needed
 
 1. Price to availability: 8px (ProductStack; Pub08Cambio, Proto01Compra) or 12px (Pub10 family, 6 boards named above)? Recommended: 8px. And availability to controls: 12px or 8px? Recommended: 12px.
-2. Confirm that the ProductStack spacing applies to cart lines ("lists" in `names.md`), as the boards assume.
+2. Decided (X-5, 2026-11-06): the ProductStack applies to cards, lists, details and tools, which covers cart lines ("lists" in `names.md`).
 3. Submit with CR-04 (recommended) or first, with the compatibility note above.
