@@ -58,7 +58,7 @@ One visual shape is not distinguished by this innermost-wrapper inventory: the q
 
 ## 4. Proposed change
 
-Recipe: `ce-demo-cue`. Standard name proposal: `DemoCue` («Aviso de demostración»). The element is a note, not a status and not a button.
+Recipe: `ce-demo-cue`. Standard name: `DemoCue` («Aviso de demostración»), accepted under X-8. The element is a note, not a status and not a button.
 
 ```html
 <p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>

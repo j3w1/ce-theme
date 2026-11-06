@@ -6,7 +6,7 @@ Status: Ready for owner review; not submitted anywhere
 |---|---|
 | Kind | Documentation-pattern candidate: new small recipe for the frame, marker, label and body that state sheets draw around every state (look only; the text is supplied). Home: a documentation kit beside CE Theme, not the recipe bundle (X-4, decided 2026-11-06; section 4.3) |
 | CE Theme target | A kit stylesheet with `ce-state-frame` and its parts that loads after `components/bundle.css` and uses only `tokens.css` (X-4); the standard name `StateFrame` is accepted (X-8) |
-| Depends on | CR-03 (`ce-demo-cue`): the frame body starts with the cue, and the two requests must land in the same place (section 9) |
+| Depends on | CR-03 (`ce-demo-cue`): the frame body starts with the cue, and the documentation kit's frame depends on CE Theme's cue, never the reverse (X-4; section 9) |
 | Checked against | CE Theme — Design System artifact version 1793881448-c98f (design-system.json: re-synced to `j3w1/ce-theme@e8b8d7a8`; `components/bundle.css` sha256 `de102fad7d927541e3c31c2c30dd770fa0d0fca3b4000a84a9e5bfcb7353ed06`) and the workbench boards of 5 November 2026. Evidence tags **[A] [S] [R] [H]** are explained in CR-08. This request uses only [A] and [S]: nothing was rendered or measured in a browser or harness |
 
 ## 1. Summary
@@ -88,9 +88,9 @@ Standard name: `StateFrame` («Marco de estado»), accepted (X-8) for the docume
 <section class="ce-state-frame" aria-labelledby="st-b">
   <header class="ce-state-frame-label">
     <span class="ce-state-frame-mark" aria-hidden="true">B</span>
-    <div>
-      <h2 class="ce-state-frame-title" id="st-b">Store change pending <span class="ce-badge">Escenario</span></h2>
-      <p class="ce-state-frame-note">Old amounts removed; lines kept; «Actualizando» replaces the link.</p>
+    <div lang="en">                                          <!-- English documentation label on a lang="es" page: X-7 -->
+      <h2 class="ce-state-frame-title" id="st-b">Store change pending <span class="ce-badge" lang="es">Escenario</span></h2>
+      <p class="ce-state-frame-note">Old amounts removed; lines kept; <span lang="es">«Actualizando»</span> replaces the link.</p>
     </div>
   </header>
   <div class="ce-state-frame-body">
@@ -139,7 +139,7 @@ Rules of use (documentation, not CSS):
 
 - One `ce-state-frame` per state. Two separate requirements: (a) structure: the title is a heading (`h2` on a sheet with one `h1`, `h3` inside a group), so Variants B, C, D, F and I, whose labels are a `div`, a `p`, a `span` tag or a `figcaption`, gain a heading; (b) name: every frame has `aria-labelledby` pointing at its title, or `aria-label`. Today only Variant B frames lack a name (their `section` has neither attribute); Variants C and D are already named through `aria-labelledby` on a `p` or a `span`, or through `aria-label`, which is valid naming without being a heading.
 - The marker is a letter (reading order A, B, C) or a number; it is decorative (`aria-hidden="true"`) because the title carries the name. The text inside the marker is one or two characters.
-- «Escenario» is the existing `ce-badge` inside the title (CANON R-03 "in the frame label"), never a colour and never only in the annotation.
+- «Escenario» is the existing `ce-badge` inside the title (CANON R-03 "in the frame label"), never a colour and never only in the annotation. On a `lang="es"` page the English label carries `lang="en"` and the Spanish badge (and any Spanish string quoted in the note) carries `lang="es"` (X-7).
 - The body starts with the demonstration cue when the fragment shows commercial or staff data (CR-03). The frame does not restyle anything inside the body: the page fragment uses the ordinary recipes at their real size.
 - Sheet grid, sheet head, notes block and the board strip are **not** part of this recipe: they stay in the sheet (owner decision 5 records the option of a second kit class for them).
 
@@ -190,7 +190,7 @@ Not taken (X-4): adopting `ce-state-frame` in `recipes/workspace.css` with a `St
 | Focus ring, 44px targets | Not applicable: the frame chrome has no control. Controls inside the fragment keep the ordinary rules |
 | NAME / Description / specs 2px / 2px / 12px, one-line CE code, supplied decimal-string prices | Not touched: the body does not restyle the fragment. A frame must never scale or zoom its fragment (Pub02Estados `.mini-home{zoom:.43}` would be retired) |
 | Text at x1.5 and x2 without overflow | Must hold: the label wraps (`min-width: 0` on the text column), the marker is fixed, the body is a grid with `min-width: 0` |
-| Language | The frame label is English (documentation); the fragment is Spanish UI. The boards write labels in English today; `lang="en"` goes on the label when the page is `lang="es"` (X-7, decided 2026-11-06) |
+| Language | The frame label is English (documentation); the fragment is Spanish UI. The boards write labels in English today; `lang="en"` goes on the label when the page is `lang="es"`, and the «Escenario» badge keeps `lang="es"` (X-7, decided 2026-11-06) |
 | Reduced motion | Not applicable: no motion |
 
 ## 6. Acceptance checks
@@ -228,7 +228,7 @@ To run when the kit or repository work happens:
 ## 9. Dependency on CR-03
 
 - The frame body's first child is `ce-demo-cue` (CR-03). The rule `.ce-state-frame-body > .ce-demo-cue { justify-self: start; max-width: 100% }` repeats what Variant A does locally (`.frame-b>.demo-cue`). If CR-03 is not accepted, that rule and the markup line are removed and the frame has no opinion about the cue.
-- Both requests must land in the same place, or the kit must sit downstream of the bundle: a kit frame may reference a bundle cue, but a bundle frame must not reference a kit cue. X-4 puts the cue in CE Theme and the frame in the kit, so the kit sits downstream of the bundle and the frame references the cue, never the reverse.
+- The kit's frame depends on CE Theme's cue, never the reverse: a kit frame may reference a bundle cue, but a bundle frame must not reference a kit cue. X-4 puts the cue in CE Theme and the frame in the kit, so the kit sits downstream of the bundle and the frame references the cue, never the reverse.
 - CR-03 decision 4 asks the owner to confirm the CANON reading (a cue in every frame with simulated commercial or staff data); the body rule then applies to every such frame. The inventory in section 2.2 (last paragraph) lists the sheets that today carry only a sheet-level cue and therefore need the per-frame cue added when rebuilt.
 - CR-03 decision 3 (compact forms) should also consider the quiet 12px strip (`.cue`, `.lg-cue`) that four variants here use for the sheet-level cue; it is not in CR-03's table.
 - Order of submission: CR-03 first (it defines the element this recipe positions), then CR-02. The README of this folder records the order.

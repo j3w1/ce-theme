@@ -1,4 +1,4 @@
-Status: Index of proposals. The nine cross-cutting decisions X-1 to X-9 were decided by j3w1 on 2026-11-06 ([issue #11](https://github.com/j3w1/ce-theme/issues/11)); the per-request decisions stay open; nothing here is submitted or applied
+Status: Index of proposals. The nine cross-cutting decisions X-1 to X-9 were decided by j3w1 on 2026-11-06 ([issue #11](https://github.com/j3w1/ce-theme/issues/11)); per-request questions not answered by X-1 to X-9 stay open; nothing here is submitted or applied
 
 # CE Theme change requests from the CE Systems design workbench
 

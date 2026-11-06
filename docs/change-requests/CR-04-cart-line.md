@@ -76,7 +76,7 @@ Recipe: `ce-cart-line` (existing name). New anatomy (one skeleton, all parts opt
 </li>
 ```
 
-CSS declarations (existing tokens only):
+CSS declarations (existing tokens plus `--ce-size-target-public`, X-1):
 
 ```css
 /* spacing: CR-08 */
@@ -84,11 +84,12 @@ CSS declarations (existing tokens only):
 .ce-cart-line-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12); }   /* no space-between: the price is no longer in this row */
 .ce-cart-line-actions .ce-quantity input { min-height: var(--ce-size-target-public); width: 4ch; }   /* 44px: size.target.public, X-1; 4ch: content-relative width, no token (see below) */
 .ce-cart-line .ce-product-link { position: relative; }
-.ce-cart-line .ce-product-link::after { content: ""; position: absolute; inset: -3px 0; }   /* raw 3px: brings the link to 44px or more; to measure per font size */
+.ce-cart-line .ce-product-link::after { content: ""; position: absolute; inset-inline: 0; top: 50%;
+  min-height: var(--ce-size-target-public); transform: translateY(-50%); }   /* hit area at least the public target (X-1), centred on the link; to measure per font size */
 .ce-cart-line-body [aria-busy="true"] { cursor: progress; }
 ```
 
-- The 3px inset is the one raw design size; it is what the boards already use (the link rule in Pub10Bolsa and, for its `position`, 38 boards). The 44px input height is the `--ce-size-target-public` token (X-1, decided 2026-11-06); the boards' input rule in 36 boards writes it raw. A second literal, `width: 4ch`, is a content-relative width (room for four digits) with no token in the system; it is intentional and flagged here rather than hidden. Structural zeros (`inset: … 0`, `margin: 0`) are not counted as design values. The inset is "to measure": 44px is reached only because NAME (15px line, 1.2) + 2px + Description (16px line, 1.2) is about 39px plus 6px; a one-line Description or a smaller `--ce-product-text` needs a re-check.
+- The hit area of the product link is at least `--ce-size-target-public` high (X-1, decided 2026-11-06), centred on the link. The boards reach 44px only through a fixed `inset: -3px 0` (the link rule in Pub10Bolsa and, for its `position`, 38 boards), which works because NAME (15px line, 1.2) + 2px + Description (16px line, 1.2) is about 39px plus 6px and would not hold for a one-line Description or a smaller `--ce-product-text`; the token makes 44px a minimum instead. The measurement stays "to measure": at each font size and at text x1.5 and x2. The 44px input height is the same token; the boards' input rule in 36 boards writes it raw. The one literal left is `width: 4ch`, a content-relative width (room for four digits) with no token in the system; it is intentional and flagged here rather than hidden. Structural zeros (`inset-inline: 0`, `margin: 0`) are not counted as design values.
 - No JavaScript and no Vue component is proposed. Whether a `CECartLine` ever exists is a later step in the repository workflow, after the recipe is approved.
 - The line amount, quantity limits, availability, eligibility and totals are supplied by the commerce service; the recipe adds no arithmetic and no default.
 - Copy (X-6, decided 2026-11-06): the remove control's hidden label reads " MENE del carrito" («Quitar … del carrito»), not the boards' "de la bolsa".
@@ -103,7 +104,7 @@ CSS declarations (existing tokens only):
 | Supplied decimal-string prices | Line amount is the supplied string; screen-reader text names it («Importe de la línea: 6.5 soles cada uno»); no S/0 for a missing amount: `ce-store-note` or `ce-price-pending` takes its place |
 | Unknown availability is never sold out | The availability row uses the CR-06 states; unknown reads «Disponibilidad por confirmar en {tienda} — demostración» |
 | Focus ring | 2px outline, 3px offset on the link, quantity buttons and remove (existing global rule) |
-| 44px public targets | Quantity buttons 44px (recipe), input `--ce-size-target-public` (44px), remove 44px (same token), product link 44px or more by the `::after` area |
+| 44px public targets | Quantity buttons 44px (recipe), input `--ce-size-target-public` (44px), remove 44px (same token), product link at least `--ce-size-target-public` by the `::after` area |
 | Status never by colour alone | Pending and failure are words («Actualizando…», «No se pudo cambiar…») plus the notice or save-state |
 | Disabled control explains why | The disabled «Reducir cantidad» at quantity 1 is explained by a note under the list (Pub10Bolsa `aria-describedby="nota-min"`) |
 | Last acknowledged value stays while pending | The control keeps the last acknowledged quantity and amount until the response arrives; this is presentation of state the application supplies |
