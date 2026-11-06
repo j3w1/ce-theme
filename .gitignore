@@ -7,3 +7,6 @@ playwright-report/
 .env
 .env.*
 *.log
+
+# Design workbench working files (boards, tools, photos, builds): local only, never committed. See docs/workbench.md.
+/workbench/

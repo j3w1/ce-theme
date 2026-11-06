@@ -74,7 +74,7 @@ Set the price's font size for its context. `ce-product` sets it to 44px; campaig
 
 Run `pnpm generate` after changing token, recipe, manifest, or doc sources. Generated files are committed and checked for drift. Version 0.2.0 has 113 tokens and a light theme; the separate `j3w1/theme` project is not a dependency.
 
-Read [the adoption guide](docs/apply-ce-theme.md), [the consumer guide](docs/usage.md), [product identity](docs/product-identity.md), [pricing contract](docs/pricing.md), [shared-link specification](docs/sharing.md), [accessibility rules](docs/accessibility.md), [coverage and status](docs/coverage.md), [native control policy](docs/controls.md), [foundation decisions](docs/decisions.md), [source inventory](docs/sources.md), [the October 2026 design evolution record](docs/evolution/2026-10-design-evolution.md), [the Claude Design System bundle](docs/design-system.md) and [the changelog](CHANGELOG.md).
+Read [the adoption guide](docs/apply-ce-theme.md), [the consumer guide](docs/usage.md), [product identity](docs/product-identity.md), [pricing contract](docs/pricing.md), [shared-link specification](docs/sharing.md), [accessibility rules](docs/accessibility.md), [coverage and status](docs/coverage.md), [native control policy](docs/controls.md), [foundation decisions](docs/decisions.md), [source inventory](docs/sources.md), [the October 2026 design evolution record](docs/evolution/2026-10-design-evolution.md), [the Claude Design System bundle](docs/design-system.md), [the CE Systems design workbench](docs/workbench.md) (with its [design canon](docs/design-canon.md) and [change requests](docs/change-requests/README.md)) and [the changelog](CHANGELOG.md).
 
 ## Status and rights
 
