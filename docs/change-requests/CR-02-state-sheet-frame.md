@@ -4,14 +4,14 @@ Status: Ready for owner review; not submitted anywhere
 
 | | |
 |---|---|
-| Kind | Documentation-pattern candidate: new small recipe for the frame, marker, label and body that state sheets draw around every state (look only; the text is supplied). Recommended home: a documentation kit beside CE Theme, not the recipe bundle (section 4.3) |
-| CE Theme target | New recipe `ce-state-frame` with its parts; a standard name only if the owner keeps it in CE Theme; otherwise a kit stylesheet that loads after `components/bundle.css` and uses only `tokens.css` |
+| Kind | Documentation-pattern candidate: new small recipe for the frame, marker, label and body that state sheets draw around every state (look only; the text is supplied). Home: a documentation kit beside CE Theme, not the recipe bundle (X-4, decided 2026-11-06; section 4.3) |
+| CE Theme target | A kit stylesheet with `ce-state-frame` and its parts that loads after `components/bundle.css` and uses only `tokens.css` (X-4); the standard name `StateFrame` is accepted (X-8) |
 | Depends on | CR-03 (`ce-demo-cue`): the frame body starts with the cue, and the two requests must land in the same place (section 9) |
 | Checked against | CE Theme — Design System artifact version 1793881448-c98f (design-system.json: re-synced to `j3w1/ce-theme@e8b8d7a8`; `components/bundle.css` sha256 `de102fad7d927541e3c31c2c30dd770fa0d0fca3b4000a84a9e5bfcb7353ed06`) and the workbench boards of 5 November 2026. Evidence tags **[A] [S] [R] [H]** are explained in CR-08. This request uses only [A] and [S]: nothing was rendered or measured in a browser or harness |
 
 ## 1. Summary
 
-Thirty-six boards named `*Estados*` and the long-string stress board `Pub20Largos` are state sheets: documentation boards that stack several states of one page, each inside a frame with a label (a letter, a number or a tag, a title and a one-line note). The canon records the sheet as documentation (CANON R-16). The frame and label are not a CE Theme pattern, so every family drew its own: **twelve markup and style variants** across the 37 boards (261 frames), with two raw colours, no shared marker, and labels that are a `p`, a `div`, a `strong`, an `h2`, an `h3` or a `figcaption` depending on the board. The request: one frame recipe written from tokens, a decision on where it lives, and the rule that ties it to the demonstration cue of CR-03.
+Thirty-six boards named `*Estados*` and the long-string stress board `Pub20Largos` are state sheets: documentation boards that stack several states of one page, each inside a frame with a label (a letter, a number or a tag, a title and a one-line note). The canon records the sheet as documentation (CANON R-16). The frame and label are not a CE Theme pattern, so every family drew its own: **twelve markup and style variants** across the 37 boards (261 frames), with two raw colours, no shared marker, and labels that are a `p`, a `div`, a `strong`, an `h2`, an `h3` or a `figcaption` depending on the board. The request: one frame recipe written from tokens, living in a documentation kit (X-4), and the rule that ties it to the demonstration cue of CR-03.
 
 ## 2. Problem and evidence
 
@@ -36,7 +36,7 @@ Thirty-six boards named `*Estados*` and the long-string stress board `Pub20Largo
 | J | **Long-string case**: `div.lg-case-h` (`span.lg-step[aria-hidden]` a, b, c + `h2.t` + `p`) ; `p.lg-tag` ("Rule drawn", "1440 · real width of the region", "390 · phone width", "What this case proves"); `div.lg-frame[data-frame]` > `p.lg-cue[role="note"]` + content; `div.lg-row` > `div.ph` (390px frame); one `div.an-label` | Pub20Largos: 4 `lg-frame` + 4 `.ph` · **1 board, 8 frames**, 13 labels, 8 cues | the border is drawn as a box shadow; every frame has its own cue (`.lg-frame > .lg-cue{margin:-24px -24px 24px}`) | `.lg-frame{padding:24px;box-shadow:0 0 0 1px var(--ce-color-border-default);background:var(--ce-color-surface-canvas)}` · `.ph{width:390px;padding:16px;box-shadow:0 0 0 1px var(--ce-color-border-default)}` · `.lg-step{min-width:28px;min-height:28px;padding:0 6px;border-radius:999px;background:var(--ce-color-surface-inverse);color:var(--ce-color-text-inverse);font-size:13px;font-weight:700}` · `.lg-tag{margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ce-color-text-secondary)}` · `.lg-case-h{grid-template-columns:28px minmax(0,1fr);gap:2px 12px}`, `.lg-case-h .t{font-size:18px;line-height:1.3}` · `.lg-cue{padding:8px 16px;background:var(--ce-color-surface-subtle);border-bottom:1px solid var(--ce-color-border-default);font-size:12px;line-height:1.4;font-weight:700}` |
 | K | **Scenario card**: `article.sc[aria-labelledby]`; board label `p.board-tag`; notes `.annot` (tablet style) | Adm06Estados (8) · **1 board, 8 frames** | the only sheet whose board label is a dashed outline tag; the tag uses token font sizes | `.sc{display:grid;gap:12px;align-content:start;padding:16px;border:1px solid var(--ce-color-border-default);background:var(--ce-color-surface-canvas)}` · `.board-tag{display:inline-block;padding:2px 8px;border:1px dashed var(--ce-color-border-control);color:var(--ce-color-text-secondary);font-size:var(--ce-font-size-xs);font-weight:var(--ce-font-weight-bold);letter-spacing:.06em;text-transform:uppercase}` |
 
-Totals [S]: 37 boards, 261 frames, 12 variants (A, B, B-m, C, D, E, F, G, H, I, J, K). Variant D alone holds 73 frames on 8 staff sheets; Variant A holds the bag and checkout families. Boards that define a variant's rules without using them: Pub14EstadosMovil, Pub15EstadosMovil and Pub17EstadosMovil (Variant B rules), Adm02Estados (`.frame`), Adm02TabletaEstados (`.frame-label`), Pub02Estados, Pub09Estados, Pub18Estados and Pub20Estados (inverse `.an-label`).
+Totals [S]: 37 boards, 261 frames, 12 variants (A, B, B-m, C, D, E, F, G, H, I, J, K). Variant D alone holds 73 frames on 8 staff sheets; Variant A holds the cart and checkout families. Boards that define a variant's rules without using them: Pub14EstadosMovil, Pub15EstadosMovil and Pub17EstadosMovil (Variant B rules), Adm02Estados (`.frame`), Adm02TabletaEstados (`.frame-label`), Pub02Estados, Pub09Estados, Pub18Estados and Pub20Estados (inverse `.an-label`).
 
 ### 2.2 What differs, in one place
 
@@ -82,7 +82,7 @@ Where the design system keeps its own documentation chrome [A, and the repositor
 
 ### 4.1 One recipe: `ce-state-frame`
 
-Standard name proposal, only if it stays in CE Theme: `StateFrame` («Marco de estado»): "The documentation frame around one state of a page: a marker, a title, a one-line note and the page fragment." The frame is documentation chrome. No consumer application renders it, so it never carries a product, a price or a control of its own.
+Standard name: `StateFrame` («Marco de estado»), accepted (X-8) for the documentation kit's frame (X-4): "The documentation frame around one state of a page: a marker, a title, a one-line note and the page fragment." The frame is documentation chrome. No consumer application renders it, so it never carries a product, a price or a control of its own.
 
 ```html
 <section class="ce-state-frame" aria-labelledby="st-b">
@@ -105,7 +105,8 @@ Standard name proposal, only if it stays in CE Theme: `StateFrame` («Marco de e
   border: var(--ce-stroke-thin) solid var(--ce-color-border-default);
   background: var(--ce-color-surface-canvas); }
 .ce-state-frame--wide { grid-column: 1 / -1; }
-.ce-state-frame--band { border: 0; }                      /* label band over a full-width page replica (Variants F, I) */
+.ce-state-frame--band { border: 0; }                      /* label band over a full-width page replica (Variants F, I) or a phone section without a box (B-m) */
+.ce-state-frame--band > .ce-state-frame-label { border-top: var(--ce-stroke-heavy) solid var(--ce-color-surface-inverse); }   /* the 4px rule of B-m and F stays: stroke.heavy, X-2 */
 
 .ce-state-frame-label { display: flex; align-items: flex-start; gap: var(--ce-space-12);
   padding: var(--ce-space-12) var(--ce-space-16);
@@ -114,7 +115,7 @@ Standard name proposal, only if it stays in CE Theme: `StateFrame` («Marco de e
 .ce-state-frame-label > div { min-width: 0; }
 
 .ce-state-frame-mark { flex: none; display: grid; place-items: center;
-  width: 28px; height: 28px;                               /* no token: see 4.2 */
+  width: var(--ce-size-marker); height: var(--ce-size-marker);   /* 28px: size.marker, X-2; see 4.2 */
   border-radius: var(--ce-radius-pill);
   background: var(--ce-color-surface-inverse); color: var(--ce-color-text-inverse);
   font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-bold); }
@@ -148,11 +149,12 @@ Rules of use (documentation, not CSS):
 |---|---|---|
 | Frame border 1px solid, `border-default` or `border-control` or dashed or shadow | `--ce-stroke-thin` solid `--ce-color-border-default` | Token; the `border-control` boxes (B, I) become 1px lighter, the dashed boxes (D) become solid |
 | Frame ground `#fff` (A) | `--ce-color-surface-canvas` | Token; raw colour removed |
-| Marker 28px, `#fff` text (A) | 28px; `--ce-color-text-inverse` | **28px has no size token.** Options: accept the raw 28px that `ce-steps` and `ce-pin` already use, or add a `size.marker` token (owner decision 3). Raw colour removed |
+| Marker 28px, `#fff` text (A) | `--ce-size-marker` (28px); `--ce-color-text-inverse` | Token: `size.marker` is added (X-2, decided 2026-11-06). Raw colour removed. The raw 28px that `ce-steps` and `ce-pin` already use is not changed by this request |
 | Marker text 13px | `--ce-font-size-sm` (14px) | Token; 1px larger |
 | Label padding 16px 24px / 12px 16px / 10px 16px | `--ce-space-12` `--ce-space-16` | Token; the A desktop header loses 4px top and 8px side padding |
 | Label ground, bottom border | `--ce-color-surface-subtle`, `--ce-stroke-thin` `--ce-color-border-default` | Token |
-| 4px top rule (B-m, F) and 2px top rule (E) | dropped | **No 4px stroke token** (only `--ce-stroke-thin` 1px and `--ce-stroke-focus` 2px). The band variant keeps only the bottom border; if the owner wants the heavy rule, it needs a token or `--ce-stroke-focus` (cross-cutting decision X-2 in the README) |
+| 4px top rule (B-m, F) | `--ce-stroke-heavy` top rule on the band label (`ce-state-frame--band`) | Token: `stroke.heavy` is added (X-2, decided 2026-11-06); the 4px rule stays |
+| 2px top rule (E) | dropped | Not part of the recipe; X-2 adds no 2px stroke token for it |
 | Title 16px / 1.3 / letter-spacing -.01em | `--ce-font-size-body`, `--ce-font-line-heading` (1.2) | Token; **letter-spacing has no token** and is dropped (the bundle's own `-.02em` values are raw too) |
 | Note 13px / 1.4 secondary | `--ce-font-size-sm` (14px), `--ce-font-line-body` (1.5) | Token; 1px larger, slightly taller; **there is no 13px token** |
 | Note offset 2px | `--ce-space-2` | Token |
@@ -162,19 +164,19 @@ Rules of use (documentation, not CSS):
 | Inverse rectangular tag (D `vt`, C-tablet `tag`) | not proposed; the marker replaces it | The 73 D frames change from a tag to a marker plus a title (owner decision 4) |
 | `ce-pill--info` "State n" (H) | not proposed; the marker replaces it | Removes the borrowed status meaning |
 
-No new raw value enters except the 28px marker, which is flagged. The breakpoint `639.98px` is the bundle's own literal.
+No new raw value enters: the 28px marker and the 4px rule are tokens (X-2). The breakpoint `639.98px` is the bundle's own literal.
 
 ### 4.3 Recommendation: where state sheets belong
 
-**Recommended: a documentation kit beside CE Theme, not the recipe bundle.** Concretely: one stylesheet (`ce-state-frame` and, if the owner wants, the sheet grid and notes classes) that loads after `components/bundle.css`, uses only `tokens.css`, and is distributed with the design-system bundle or with the workbench templates. Reasons:
+**Decided (X-4, 2026-11-06): a documentation kit beside CE Theme, not the recipe bundle.** Concretely: one stylesheet (`ce-state-frame` and, if j3w1 wants, the sheet grid and notes classes) that loads after `components/bundle.css`, uses only `tokens.css`, and is distributed with the design-system bundle or with the workbench templates. Reasons:
 
 1. No consumer renders a frame. `decisions.md` (2026-10-23 "Scope") makes CE Theme "the canonical specification for the Casa Elida ecosystem" that "defines presentation of verified data"; `workflow.md` moves recipes to Vue components that applications install by version. A state frame would be a recipe nobody imports.
 2. The repository already keeps documentation chrome out of the recipes (`site/styles/site.css` `.demo-*`, section 3). Putting the frame in `bundle.css` would break that separation; putting it in a kit follows it.
-3. The names rule would force a card. `names.md`: "New pattern, new name. Add the entry to `recipes/names.mjs` and this page in the same change as its recipe, and give it a card in the design system." A card for the frame that frames cards adds noise to the registry that CE Meta and CE Radio read.
+3. The names rule would force a card in CE Theme. `names.md`: "New pattern, new name. Add the entry to `recipes/names.mjs` and this page in the same change as its recipe, and give it a card in the design system." A card for the frame that frames cards adds noise to the registry that CE Meta and CE Radio read. The accepted name `StateFrame` (X-8) therefore belongs to the kit's own documentation; where the registry mentions it is settled in the implementation pull request.
 4. The need is real and shared: 12 variants on 37 boards, and the next sheet author will invent a thirteenth. A kit gives one source without widening the shared system.
-5. It keeps CR-03 coherent: CR-03 decision 1 already names "a documentation kit" as the alternative home for the cue. If the cue stays in CE Theme and the frame goes to the kit, the kit depends on the bundle in one direction only (section 9).
+5. It keeps CR-03 coherent: X-4 puts the cue in CE Theme and the frame in the kit, so the kit depends on the bundle in one direction only (section 9).
 
-**Alternative (not recommended):** adopt `ce-state-frame` in `recipes/workspace.css` with a `StateFrame` name and a design-system card, status "Implemented" in `coverage.md` under a new "Documentation" heading. The CSS in 4.1 is written so that either home works unchanged.
+Not taken (X-4): adopting `ce-state-frame` in `recipes/workspace.css` with a `StateFrame` registry entry and a design-system card.
 
 ## 5. Accessibility and invariants it must keep
 
@@ -188,7 +190,7 @@ No new raw value enters except the 28px marker, which is flagged. The breakpoint
 | Focus ring, 44px targets | Not applicable: the frame chrome has no control. Controls inside the fragment keep the ordinary rules |
 | NAME / Description / specs 2px / 2px / 12px, one-line CE code, supplied decimal-string prices | Not touched: the body does not restyle the fragment. A frame must never scale or zoom its fragment (Pub02Estados `.mini-home{zoom:.43}` would be retired) |
 | Text at x1.5 and x2 without overflow | Must hold: the label wraps (`min-width: 0` on the text column), the marker is fixed, the body is a grid with `min-width: 0` |
-| Language | The frame label is English (documentation); the fragment is Spanish UI. The boards write labels in English today; whether `lang="en"` belongs on the label when the page is `lang="es"` is owner decision 6 |
+| Language | The frame label is English (documentation); the fragment is Spanish UI. The boards write labels in English today; `lang="en"` goes on the label when the page is `lang="es"` (X-7, decided 2026-11-06) |
 | Reduced motion | Not applicable: no motion |
 
 ## 6. Acceptance checks
@@ -196,37 +198,37 @@ No new raw value enters except the 28px marker, which is flagged. The breakpoint
 Run here [S]: the inventory of sections 2.1 and 2.2 (static scan of the 37 files; class tokens, selectors, inline styles, cue and «Escenario» occurrences); `bundle.css`, `names.md`, `coverage.md`, `decisions.md`, `tokens.css` searched for existing pieces.
 Not run here: no board was rendered, no distance was measured, no contrast was recomputed.
 To run when the kit or repository work happens:
-1. Render one sheet per variant family (Pub10Estados, Pub13Estados, Pub14EstadosMovil, Adm01Estados, Adm15Estados, Pub09Estados, Pub03Estados, Pub06Estados, Pub02Estados, Pub20Estados, Pub20Largos, Adm06Estados) rebuilt on the recipe at 390, 768, 1440 and text x1.5, x2: no overflow, the label wraps, the marker stays 28px, the fragment inside is pixel-identical to its standalone board.
+1. Render, in a scratch harness (the frozen boards are not rebuilt: X-3), one sheet per variant family (Pub10Estados, Pub13Estados, Pub14EstadosMovil, Adm01Estados, Adm15Estados, Pub09Estados, Pub03Estados, Pub06Estados, Pub02Estados, Pub20Estados, Pub20Largos, Adm06Estados) rebuilt on the recipe at 390, 768, 1440 and text x1.5, x2: no overflow, the label wraps, the marker stays 28px, the fragment inside is pixel-identical to its standalone board.
 2. Axe on a rebuilt sheet: every `section.ce-state-frame` has an accessible name; heading order is one `h1` then frame headings; no empty `style=""` attributes remain (Variant B has 51).
 2b. Cue presence (static, per frame): every `ce-state-frame` whose body shows simulated commercial or staff data (a price, an amount, an availability line, an order, a case, a store or staff record) contains the exact string «Demostración — datos y operaciones simulados» inside its own `ce-state-frame-body`. A cue outside the frame (a sheet-level strip or block) does not satisfy the check for that frame. Frames with no simulated data (route shells, documentation fragments) are listed by name in the sheet's notes as exempt; any other frame without the string fails.
-3. A test that the kit stylesheet contains no raw colour and no raw size in a declaration except the flagged 28px (or none, if a token is added); media-query constants are layout queries, not declarations, and the bundle's own `639.98px` breakpoint is the one permitted query value.
+3. A test that the kit stylesheet contains no raw colour and no raw size in a declaration (the 28px marker and the 4px rule are tokens: X-2); media-query constants are layout queries, not declarations, and the bundle's own `639.98px` breakpoint is the one permitted query value.
 4. A test that the kit loads after `bundle.css` and overrides nothing in it (no selector in the kit targets a `ce-` class other than its own and `.ce-demo-cue`, `.ce-badge`).
-5. Measured heights of rebuilt boards against their `$preview` values (the label is 4 to 8px shorter than Variant A and 1 to 2px taller than Variants B and C; the sum per sheet is **to measure**).
+5. Measured heights of the scratch-rebuilt sheets against the frozen boards' `$preview` values (a comparison only; no board is changed; the label is 4 to 8px shorter than Variant A and 1 to 2px taller than Variants B and C; the sum per sheet is **to measure**).
 6. Screen-reader reading of a sheet (marker skipped, title read, badge read as a word): **not run, to schedule**.
 
 ## 7. Risks and what it does not change
 
-- **Scope creep into the shared system.** If the owner chooses CE Theme over the kit, a documentation-only recipe, name and card enter the registry that applications read. Section 4.3 recommends the kit for that reason.
-- **Boards keep their twelve variants** until the owner approves a re-synchronisation; nothing is applied automatically. Rebuilding 37 sheets changes their heights and needs the re-measure and re-audit routine of the handoff. Variant D (73 frames, 8 staff sheets) changes most visibly: a tag becomes a marker plus a title.
-- **Lost detail.** Three things the variants express are not in the recipe: the heavy 4px top rule (B-m, F), the dashed "variant" border (D, meaning "one of several variants of the same screen"), and the number-versus-letter distinction (G numbers "steps", A letters "states"). If any of these carries meaning the owner wants kept, it needs a modifier and a decision.
+- **Scope creep into the shared system.** Avoided by X-4: the frame lives in the kit, so no documentation-only recipe or card enters the registry that applications read. The kit must stay downstream of the bundle (section 9).
+- **Boards keep their twelve variants** as part of the frozen snapshot (X-3): the 37 sheets are not rebuilt, and new sheets use the kit frame. A rebuild would change heights and need the re-measure and re-audit routine of the handoff; Variant D (73 frames, 8 staff sheets) would change most visibly: a tag becomes a marker plus a title.
+- **Lost detail.** Two things the variants express are not in the recipe: the dashed "variant" border (D, meaning "one of several variants of the same screen") and the number-versus-letter distinction (G numbers "steps", A letters "states"). The heavy 4px top rule (B-m, F) is kept (X-2). If either of the two carries meaning j3w1 wants kept, it needs a modifier and a decision.
 - **The quiet cue strip** (Variants E, F, H, I) is neither this recipe nor CR-03's block cue. It is recorded here and left to CR-03 decision 3 (compact forms).
 - **Not changed:** any recipe in `bundle.css`, `ce-badge`, `ce-pill`, `ce-steps`, `ce-eyebrow`, the sheet grid, sheet heads, notes blocks and board strips (they stay local), the executable prototypes (`Proto01Compra`, `Proto02Publicacion` are not state sheets), any board.
 - **Not verified:** rendering of any variant; whether the 48px band padding of Variant F overflows at 390px; whether the inline `style=""` attributes of Variant B are generator artefacts (the generator is not in `tools/`).
 
 ## 8. Owner decisions needed
 
-1. **Home:** documentation kit beside CE Theme (recommended) or the recipe bundle with a `StateFrame` name and card?
+1. **Home:** Decided (X-4, 2026-11-06): the frame goes in a documentation kit beside CE Theme, not the recipe bundle; the name `StateFrame` is accepted (X-8).
 2. Approve the anatomy: marker, title with optional `ce-badge` «Escenario», one-line note, body; frame named by its title.
-3. Marker size: accept the raw 28px that `ce-steps` and `ce-pin` already use, or add a size token? (Cross-cutting with X-2 in the README: the system has no 4px stroke and no 28px size.)
+3. Marker size: Decided (X-2, 2026-11-06): the `size.marker` token (28px, `--ce-size-marker`) is added and the marker uses it; the 4px rule stays through the `stroke.heavy` token.
 4. Retire the inverse rectangular tag of the staff sheets (Variant D, 73 frames) in favour of the marker and title, or keep it as a modifier (`ce-state-frame-mark--tag`)?
 5. Should the kit also carry the sheet grid, sheet head and notes block (one more class each), or do those stay per board?
-6. Mark English frame labels with `lang="en"` on Spanish pages, or keep the boards' practice (no `lang` on the label)?
-7. Confirm that a rebuilt sheet puts the cue in every frame with simulated commercial or staff data (CANON section B; CR-03 decision 4). The sheets that today carry one cue for the whole sheet (Variants B, C, D, G, K; section 2.2) are corrected in the re-synchronisation, not accepted as equivalent.
+6. Decided (X-7, 2026-11-06): English frame labels carry `lang="en"` on Spanish pages.
+7. Confirm that a sheet built on the frame puts the cue in every frame with simulated commercial or staff data (CANON section B; CR-03 decision 4). The sheets that today carry one cue for the whole sheet (Variants B, C, D, G, K; section 2.2) stay as they are in the frozen snapshot (X-3) and are not accepted as equivalent; new sheets carry the cue in every such frame.
 
 ## 9. Dependency on CR-03
 
 - The frame body's first child is `ce-demo-cue` (CR-03). The rule `.ce-state-frame-body > .ce-demo-cue { justify-self: start; max-width: 100% }` repeats what Variant A does locally (`.frame-b>.demo-cue`). If CR-03 is not accepted, that rule and the markup line are removed and the frame has no opinion about the cue.
-- Both requests must land in the same place, or the kit must sit downstream of the bundle: a kit frame may reference a bundle cue, but a bundle frame must not reference a kit cue. If CR-03 decision 1 sends the cue to the documentation kit, this request's recommended home (section 4.3) is the same kit and the two ship together.
+- Both requests must land in the same place, or the kit must sit downstream of the bundle: a kit frame may reference a bundle cue, but a bundle frame must not reference a kit cue. X-4 puts the cue in CE Theme and the frame in the kit, so the kit sits downstream of the bundle and the frame references the cue, never the reverse.
 - CR-03 decision 4 asks the owner to confirm the CANON reading (a cue in every frame with simulated commercial or staff data); the body rule then applies to every such frame. The inventory in section 2.2 (last paragraph) lists the sheets that today carry only a sheet-level cue and therefore need the per-frame cue added when rebuilt.
 - CR-03 decision 3 (compact forms) should also consider the quiet 12px strip (`.cue`, `.lg-cue`) that four variants here use for the sheet-level cue; it is not in CR-03's table.
 - Order of submission: CR-03 first (it defines the element this recipe positions), then CR-02. The README of this folder records the order.

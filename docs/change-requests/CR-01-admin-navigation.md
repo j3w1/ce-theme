@@ -44,7 +44,7 @@ Composition (`<nav class="ce-module-nav" aria-label="Módulos">`, group headings
 
 **Current-page selector** [A]: `.ce-module-nav a[aria-current]` (line 818) matches any value, including `aria-current="false"`, which the ARIA vocabulary means "not current". The boards only ever set `"page"`.
 
-**Icons** [A][S]: five of the seventeen icons are path-identical to CE Theme icons (Productos = `grid`, Precios por tienda = `tag`, Pedidos = `bag`, Tiendas y etiquetas = `store`, Etiquetado = `ruler`). Resumen and Clientes differ from the nearest CE Theme icons (`home`, `user`). Ten (Categorías, Medios, Promociones, Disponibilidad, Contenido, Publicaciones, Preparación, Atención, Informes, Acceso y auditoría) have no counterpart by name in the 30-icon list of `assets/Icons/README.md`.
+**Icons** [A][S]: five of the seventeen icons are path-identical to CE Theme icons (Productos = `grid`, Precios por tienda = `tag`, Pedidos = `bag`, the identifier of the existing icon (used here for orders; it is an icon name, not a cart name, and X-8 keeps "bag" out of the cart naming, so a cart is drawn with a cart icon), Tiendas y etiquetas = `store`, Etiquetado = `ruler`). Resumen and Clientes differ from the nearest CE Theme icons (`home`, `user`). Ten (Categorías, Medios, Promociones, Disponibilidad, Contenido, Publicaciones, Preparación, Atención, Informes, Acceso y auditoría) have no counterpart by name in the 30-icon list of `assets/Icons/README.md`.
 
 **Below 1024px** [A] (line 821): the nav becomes a horizontally scrolling row and the group headings are hidden (`.ce-module-nav h2 { display: none }`), so the grouping is lost on tablets and phones. Observed, not part of this request.
 
@@ -59,14 +59,14 @@ Recipe: `ce-module-nav` (existing). Three changes and one rule.
 **4.1 Link height follows density** (choose one; owner decision 1):
 
 ```css
-/* F1, recommended: density can raise, 44px floor. Compact 44, default 44, touch 56 (--ce-control). */
-.ce-module-nav a, .ce-app-brand { min-height: max(44px, var(--ce-control, 0px)); }
+/* F1, recommended: density can raise, public-target floor (44px, X-1). Compact 44, default 44, touch 56 (--ce-control). */
+.ce-module-nav a, .ce-app-brand { min-height: max(var(--ce-size-target-public), var(--ce-control, 0px)); }
 /* F2, token only: floor is the existing compact row, 40px. Compact 40, default 40, touch 56. */
 .ce-module-nav a, .ce-app-brand { min-height: max(var(--ce-size-row-compact), var(--ce-control, 0px)); }
 /* F0: no change; the override stays in every consumer. */
 ```
 
-Effect on the 66 boards if re-synchronised, computed from the table above and from the boards' inline custom properties (not re-rendered). Two sources set the height today: the local nav rule (`min-height: 44px | 48px | var(--ce-control)`) and, in fourteen boards, an inline `--ce-control` on the shell that overrides the density value itself: `--ce-control: 44px` in twelve 1440 boards (Adm07Estados, Adm07Promociones, Adm13Clientes, Adm13Estados, Adm14Casos, Adm14Estados, Adm15Estados, Adm15Tiendas, Adm16Estados, Adm16Informes, Adm17Acceso, Adm17Estados) and `--ce-control: 48px` in Adm11Tableta and Adm11TabletaP2. Removing only the nav rule: **F1**: at 1440 the nine 40px boards become 44px and the 31 at 44px stay (the twelve with the inline value stay through `max(44px, 44px)`); at 768, seven of the nine 48px boards move to 56px, Adm11Tableta and Adm11TabletaP2 stay at 48px because of their inline `--ce-control`, and the two already at 56px stay; at 390 five move from 44px to 56px, three from 48px to 56px and seven stay. **F2**: at 1440, nineteen of the 31 boards at 44px become 40px, the twelve with inline `--ce-control: 44px` stay at 44px, and the nine at 40px stay; 768 and 390 as F1. (Fourteen other boards set `--ce-control: 44px` in a stylesheet rule scoped to `.ce-app-main` or `.ce-app-main .ce-table-wrap`; the nav is outside `.ce-app-main`, so those do not reach it.) Removing the inline `--ce-control` values as well is an additional markup change in those fourteen boards; it would take the twelve to 40px under F2 and the two tablets to 56px under either formula. The raw `44px` in F1 is justified by the 31 desktop boards and by the recipe's own literal 44px values (cross-cutting decision X-1 in the README). `--ce-control` has no default value in the recipe (it is only set by the density attribute), hence the `0px` fallback.
+Effect on the 66 boards if they were re-synchronised (they are not: the boards are a frozen snapshot, X-3; the effect is kept to size the change for new boards and other consumers), computed from the table above and from the boards' inline custom properties (not re-rendered). Two sources set the height today: the local nav rule (`min-height: 44px | 48px | var(--ce-control)`) and, in fourteen boards, an inline `--ce-control` on the shell that overrides the density value itself: `--ce-control: 44px` in twelve 1440 boards (Adm07Estados, Adm07Promociones, Adm13Clientes, Adm13Estados, Adm14Casos, Adm14Estados, Adm15Estados, Adm15Tiendas, Adm16Estados, Adm16Informes, Adm17Acceso, Adm17Estados) and `--ce-control: 48px` in Adm11Tableta and Adm11TabletaP2. Removing only the nav rule: **F1**: at 1440 the nine 40px boards become 44px and the 31 at 44px stay (the twelve with the inline value stay through `max(44px, 44px)`); at 768, seven of the nine 48px boards move to 56px, Adm11Tableta and Adm11TabletaP2 stay at 48px because of their inline `--ce-control`, and the two already at 56px stay; at 390 five move from 44px to 56px, three from 48px to 56px and seven stay. **F2**: at 1440, nineteen of the 31 boards at 44px become 40px, the twelve with inline `--ce-control: 44px` stay at 44px, and the nine at 40px stay; 768 and 390 as F1. (Fourteen other boards set `--ce-control: 44px` in a stylesheet rule scoped to `.ce-app-main` or `.ce-app-main .ce-table-wrap`; the nav is outside `.ce-app-main`, so those do not reach it.) Removing the inline `--ce-control` values as well is an additional markup change in those fourteen boards; it would take the twelve to 40px under F2 and the two tablets to 56px under either formula. F1 writes its 44px floor with the new `--ce-size-target-public` token (cross-cutting decision X-1, decided 2026-11-06), the same token every 44px target uses; no raw `44px` is added. The 31 desktop boards already draw 44px. `--ce-control` has no default value in the recipe (it is only set by the density attribute), hence the `0px` fallback.
 
 **4.2 Current page:** `.ce-module-nav a[aria-current="page"]` (replaces `a[aria-current]` at line 818); same declarations. The page sets `aria-current="page"` on exactly one link.
 
@@ -92,7 +92,7 @@ Effect on the 66 boards if re-synchronised, computed from the table above and fr
 | Landmark | One `nav` with `aria-label="Módulos"`; labels are Spanish UI strings |
 | Current page | One link with `aria-current="page"`; not colour alone (bold text and a 3px inset bar in the recipe) |
 | Focus ring | `a:focus-visible` 2px outline at `outline-offset: -2px` inside the link (existing; differs from the global 3px offset because links are flush; unchanged) |
-| Targets | Staff navigation: 44px (F1) or 40px (F2); the staff floor recorded by the workbench audit is 32px. The 44px public-target rule (R-10) is public-only |
+| Targets | Staff navigation: 44px (F1, `--ce-size-target-public`) or 40px (F2); the staff floor recorded by the workbench audit is 32px. The 44px public-target rule (R-10) is public-only |
 | Text and icons | Visible label on every link; icons `aria-hidden` |
 | NAME / Description / specs, CE codes, prices | Not applicable (no product identity in the navigation) |
 | Text x1.5 and x2 | Long labels («Tiendas y etiquetas», «Acceso y auditoría») wrap inside the 240px column; heights are `min-height`, so wrapping cannot clip |
@@ -111,13 +111,13 @@ To run when the repository work happens (not run here):
 ## 7. Risks and what it does not change
 
 - Every consumer of `ce-module-nav` is affected, not only CE Systems. Other consumers (the CE Radio admin card, CE Meta, CE Meta App) were **not inspected**. Under F1 a default-density consumer's links grow from 40px to 44px; under F2 nothing changes at default or compact density, touch shells grow to 56px.
-- The 9 boards at 40px and the 31 at 44px at 1440 would no longer be identical to the new recipe; they keep their local overrides, and fourteen boards their inline `--ce-control`, until the owner approves a re-synchronisation (section 4.1 gives the per-formula effect of removing each).
+- The 9 boards at 40px and the 31 at 44px at 1440 would no longer be identical to the new recipe; they keep their local overrides, and fourteen boards their inline `--ce-control`, as part of the frozen snapshot (X-3); new boards use the new recipe and carry no override (section 4.1 gives the per-formula effect of removing each).
 - Not changed: the 240px column, colours, the inset current bar, `ce-app-bar`, search, store select, role pill, page header, data table.
 - Observed, not requested: the `h2` group headings sit before the page `h1` in document order and disappear below 1024px.
 
 ## 8. Owner decisions needed
 
-1. Link height rule: F1 (44px floor), F2 (40px, token only) or F0 (no change). Recommended: F1.
+1. Link height rule: F1 (44px floor), F2 (40px, existing token) or F0 (no change). Recommended: F1. Still open. X-1 (decided 2026-11-06) settles only how a 44px floor is written: F1 uses `--ce-size-target-public`, never a literal 44px.
 2. Touch shells: 56px for every touch board? Twelve touch boards use 48px today (nine tablet, three phone); two of the tablets (Adm11Tableta, Adm11TabletaP2) reach 48px through an inline `--ce-control: 48px` that only a markup change removes.
 3. Icons: add twelve to CE Theme or leave them to the application?
 4. Is the module list itself a CE Theme example only (recommended), or a rule for every CE Systems build? CE Systems is planned to be rebuilt in `j3w1/casaelida.com`; its module list is its own decision.

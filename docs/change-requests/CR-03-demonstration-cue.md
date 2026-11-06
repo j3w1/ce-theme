@@ -5,7 +5,7 @@ Status: Ready for owner review; not submitted anywhere
 | | |
 |---|---|
 | Kind | Shared-pattern candidate: new small recipe (look only; the text is supplied) |
-| CE Theme target | New recipe `ce-demo-cue`; new standard name; a design-system card |
+| CE Theme target | New recipe `ce-demo-cue` in CE Theme (X-4); standard name `DemoCue` (accepted, X-8); a design-system card |
 | Depends on | Nothing |
 | Checked against | CE Theme — Design System artifact version 1793881448-c98f (design-system.json: re-synced to `j3w1/ce-theme@e8b8d7a8`; `bundle.css` sha256 `de102fad7d927541e3c31c2c30dd770fa0d0fca3b4000a84a9e5bfcb7353ed06`) and the workbench boards of 5 November 2026. Evidence tags **[A] [S] [R] [H]** are explained in CR-08. |
 
@@ -19,8 +19,8 @@ Every commercial and staff board must say, in words, that the data and the opera
 
 **Placement in the boards** [S][R]:
 - Staff pages: first child of `.ce-app-main`, before the page header (Adm01Resumen: `<p class="demo-cue" role="note">` then `.ce-page-header`).
-- Public pages: under the breadcrumbs and above the `h1` (Pub10Bolsa), and again in the footer fine print with a longer sentence («Demostración — datos y operaciones simulados. Importes y disponibilidad de demostración; no son precios ni stock vigentes.»).
-- State sheets: inside every frame in Pub10Estados, Pub11Estados, Pub20Largos and the phone sheets of Pub14/15/17 (CR-02 section 2.2 gives the per-sheet counts); "once per sheet instead of per frame where the frames are plain route states" in some boards (`IndiceP3`, State sheets note). CR-02's inventory shows that several sheets whose frames do show simulated prices or operations (for example the Variant B, C, D, G and K sheets) carry only one cue for the whole sheet. Those frames do not meet CANON section B today; the re-synchronisation (README decision X-3) must add the cue to each of them.
+- Public pages: under the breadcrumbs and above the `h1` (Pub10Bolsa, a frozen board; its name is an identifier, not copy: X-3), and again in the footer fine print with a longer sentence («Demostración — datos y operaciones simulados. Importes y disponibilidad de demostración; no son precios ni stock vigentes.»).
+- State sheets: inside every frame in Pub10Estados, Pub11Estados, Pub20Largos and the phone sheets of Pub14/15/17 (CR-02 section 2.2 gives the per-sheet counts); "once per sheet instead of per frame where the frames are plain route states" in some boards (`IndiceP3`, State sheets note). CR-02's inventory shows that several sheets whose frames do show simulated prices or operations (for example the Variant B, C, D, G and K sheets) carry only one cue for the whole sheet. Those frames do not meet CANON section B today; they stay as they are in the frozen snapshot (README decision X-3), and new sheets carry the cue in each such frame.
 - Split boards (parts 2 and 3 of a long board) carry a banner with the cue (README-HANDOFF section 4).
 
 **Local definitions** [S]: 119 boards define `.demo-cue`. Common to all of them: `padding: 8px 12px; border: 2px solid var(--ce-color-text-primary); font-weight: 700`. They differ in font size (`14px` in 73 boards, `var(--ce-font-size-sm)` in 15, `13px` in 31), margin (`0` or `0 0 16px`), display (`flex` with `width: fit-content; max-width: 100%; gap: 8px` in 25 definitions, `inline-flex` in 29, plain block in the rest, `flex: 1 0 100%` in one), `line-height: 1.3` in some, and one definition adds `background: #fff` (a raw colour). The counts of definitions are per file; whether each rule is used on its board was not checked for the 31 boards at 13px.
@@ -69,14 +69,14 @@ Recipe: `ce-demo-cue`. Standard name proposal: `DemoCue` («Aviso de demostraci�
   display: flex; width: fit-content; max-width: 100%; align-items: center;
   gap: var(--ce-space-8); margin: 0;
   padding: var(--ce-space-8) var(--ce-space-12);
-  border: var(--ce-stroke-focus) solid var(--ce-color-text-primary);   /* 2px: cross-cutting decision X-2 */
+  border: var(--ce-stroke-focus) solid var(--ce-color-text-primary);   /* 2px: reuses the focus stroke; X-2 adds no 2px token */
   color: var(--ce-color-text-primary);
   font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-bold);
   line-height: var(--ce-font-line-heading);
 }
 ```
 
-- Tokens only. The 2px border reuses `--ce-stroke-focus` (value 2px), which is semantically the focus stroke; a dedicated token would be a new token (decision X-2). `line-height` uses the heading line (1.2); the boards use 1.3 in some definitions, so the box is slightly shorter (about 1.4px per line at 14px, **to measure**).
+- Tokens only. The 2px border reuses `--ce-stroke-focus` (value 2px), which is semantically the focus stroke; X-2 (decided 2026-11-06) adds no dedicated 2px token. `line-height` uses the heading line (1.2); the boards use 1.3 in some definitions, so the box is slightly shorter (about 1.4px per line at 14px, **to measure**).
 - The string is **not** part of the recipe: the consumer supplies it, so CE Meta App can say «simulado» in its own words.
 - Compact forms (the info pill in a page header, the badge on the share-link boards) are not proposed; owner decision 3.
 - Placement rule for the documentation: once at the top of the main content of a page that shows simulated data. In a state sheet, **inside every frame that shows simulated commercial or staff data**: CANON section B requires the exact cue "visible on every commercial page/frame", and a frame is viewed and cropped on its own. A sheet-level cue may be added above the frames but never replaces the per-frame cue; only frames with no simulated data (a route shell, a documentation-only fragment) need none. Owner decision 4 asks the owner to confirm this reading, not to choose a weaker one. In production the element is not rendered; hiding it with CSS is not enough.
@@ -90,7 +90,7 @@ Recipe: `ce-demo-cue`. Standard name proposal: `DemoCue` («Aviso de demostraci�
 | Contrast | Ink on the page ground, the same pair as body text (`--ce-color-text-primary` on `--ce-color-surface-canvas`), which CE Theme validates in `ce-theme.json`; not recomputed here |
 | Focus ring | Not applicable: the cue is not interactive and takes no focus |
 | 44px targets | Not applicable |
-| `role="note"` | Kept as the boards use it; whether `note` suits a page-level notice better than a plain paragraph is an owner/a11y decision (decision 6) |
+| `role="note"` | Required on the cue, as the boards use it (X-7, decided 2026-11-06) |
 | Language | The Spanish string carries `lang="es"` where the surrounding page language differs (Shared01Inventory does; the product pages are `lang="es"`) |
 | NAME / Description / specs, CE codes, prices | Not applicable; the cue carries no product, code or amount |
 | Share images and metadata | CE Theme's README says the share card "never carries a price"; `sharing.md` was not read. Whether the cue may appear inside a 1200 x 630 image was **not checked** (the Compartir boards place a badge on the board next to the image) |
@@ -106,16 +106,16 @@ To run when the repository work happens (not run here):
 
 ## 7. Risks and what it does not change
 
-- A demonstration-only element enters the shared system. If the owner prefers CE Theme to hold only production patterns, this belongs in a documentation kit instead (decision 1).
+- A demonstration-only element enters the shared system, as decided (X-4, 2026-11-06): the cue goes in CE Theme and the state frame (CR-02) in a documentation kit.
 - If a build forgets to remove the cue in production, simulated-data wording appears on real data; the recipe cannot prevent that.
-- The 119 local rules stay until a re-synchronisation. 31 of them (13px) would change to 14px; the other definitions differ by margin, display and line height.
+- The 119 local rules stay in the frozen snapshot (X-3); new boards use the recipe. 31 of them (13px) would change to 14px if re-synchronised; the other definitions differ by margin, display and line height.
 - Not changed: `ce-notice`, `ce-pill`, the footer fine-print sentence, any board.
 
 ## 8. Owner decisions needed
 
-1. Is the cue a shared recipe at all? Recommended: yes, as `ce-demo-cue`, because CE Meta App also shows simulated data and `decisions.md` already has «· simulado».
+1. Decided (X-4, X-8, 2026-11-06): the cue is a shared recipe in CE Theme, `ce-demo-cue`, with the standard name `DemoCue` accepted with its changes (CE Meta App also shows simulated data and `decisions.md` already has «· simulado»).
 2. Confirm the text stays in the consumer.
 3. Keep the compact pill and badge forms as modifiers, or retire them in favour of the block cue?
 4. State sheets: confirm that every frame showing simulated commercial or staff data carries the cue (the CANON reading; the sheet-only form is not an equivalent), and say whether a sheet-level cue is wanted in addition.
-5. Border: reuse `--ce-stroke-focus` (2px) or add a token (cross-cutting decision X-2)?
-6. Keep `role="note"`?
+5. Border: Decided (X-2, 2026-11-06): the cue reuses `--ce-stroke-focus` (2px); no dedicated token is added.
+6. Decided (X-7, 2026-11-06): `role="note"` stays on the cue, as a recipe-level rule.

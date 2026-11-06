@@ -15,7 +15,7 @@ The card that opens from a web pin shows NAME, Description and the store price (
 
 ## 2. Problem and evidence
 
-**Approved rule.** `decisions.md` [A], 2026-10-25 "Product stack spacing": NAME, Description and specs are 2px apart and the price follows the specs at 12px. CANON R-21: NAME on its own line above Description, 2px gap, in every card or preview that shows a product. `names.md` [A]: ProductPinCard = "The card a pin opens: NAME, Description, the store price and a chevron link to the product."
+**Approved rule.** `decisions.md` [A], 2026-10-25 "Product stack spacing": NAME, Description and specs are 2px apart and the price follows the specs at 12px. CANON R-21: NAME on its own line above Description, 2px gap, in every card or preview that shows a product. `names.md` [A]: ProductPinCard = "The card a pin opens: NAME, Description, the store price and a chevron link to the product." X-5 (decided 2026-11-06) confirms that the ProductStack applies to pin cards.
 
 **Recipe defaults** [A][H]:
 - `.ce-pin-text { display: grid; gap: var(--ce-space-4); min-width: 0; padding: var(--ce-space-12) var(--ce-space-16) }`
@@ -87,7 +87,7 @@ To run when the repository work happens (not run here, except where marked):
 ## 7. Risks and what it does not change
 
 - Pin cards become about 2px shorter (and about 2px more where a note takes the price offset): the "flip above" placement in `enhancePins()` depends on card height; to verify in the repository tests (not seen).
-- The 77 boards keep their local patches until the owner approves a re-synchronisation. After it, `.ce-pin-card .ce-pin-text{gap:2px}` is harmless (same value); the 17 boards' `margin-top: 6px` equals the new computed value.
+- The 77 boards keep their local patches as part of the frozen snapshot (X-3); there is no re-synchronisation pass. A board that combined the new recipe with its patches would find `.ce-pin-card .ce-pin-text{gap:2px}` harmless (same value) and the 17 boards' `margin-top: 6px` equal to the new computed value.
 - Not changed: card width limits, padding (12px 16px), price size (32px in the pin), chevron cell, hover and focus behaviour.
 - Related, not proposed here: boards add `.ce-pin-card .ce-store-note { font-size: 13px }` and `.ce-pin-card .ce-skeleton { width: 72px; height: 24px }` (7 boards each). These are raw values for pin states.
 
