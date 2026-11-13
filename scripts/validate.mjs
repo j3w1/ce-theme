@@ -15,11 +15,13 @@ const recipes = await Promise.all(RECIPE_SOURCES.map((path) => readFile(new URL(
 const site = await readFile(new URL('site/styles/site.css', root), 'utf8');
 const shareCard = await readFile(new URL('recipes/share-card.css', root), 'utf8');
 const printLabel = await readFile(new URL('recipes/print-label.css', root), 'utf8');
+// The StateFrame documentation kit (CR-02) is not a recipe, but it reads the same tokens.
+const docKit = await readFile(new URL('design-system/doc-kit/state-frame.css', root), 'utf8');
 const variables = new Set(Object.values(tokens).map((token) => token.variable));
 // Component inputs set by consumers on an element; documented with each component.
 const componentInputs = ['--ce-x', '--ce-y', '--ce-line', '--ce-tag-width', '--ce-size', '--ce-product-text', '--ce-campaign-surface', '--ce-campaign-text', '--ce-columns', '--ce-control', '--ce-row', '--ce-cell-pad'];
 componentInputs.forEach((name) => variables.add(name));
-for (const css of [...recipes, site, shareCard, printLabel]) {
+for (const css of [...recipes, site, shareCard, printLabel, docKit]) {
   for (const [, variable] of css.matchAll(/var\((--ce-[\w-]+)/g)) {
     if (!variables.has(variable)) throw new Error(`Unresolved CSS variable: ${variable}`);
   }

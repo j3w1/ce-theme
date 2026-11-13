@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Implemented in CE Theme by pull request [#29](https://github.com/j3w1/ce-theme/pull/29) as the StateFrame documentation kit: `design-system/doc-kit/state-frame.css` and its `README.md`, shipped in the design-system bundle as `doc-kit/`. It is not a recipe, a component, a registry entry or a design-system card; the name `StateFrame` appears only in the kit's documentation. Decisions 2, 4, 5 and 7 were decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)). Two corrections to the section 4.1 rule, found by the acceptance checks of section 6 (“Implemented with the kit”), were accepted by the repository lead under the same standing delegation, not j3w1-typed; j3w1 may veto them.
 
 # CR-02 · State-sheet frame (`ce-state-frame`): one frame and label for documentation sheets
 
@@ -81,6 +81,8 @@ Where the design system keeps its own documentation chrome [A, and the repositor
 ## 4. Proposed change
 
 ### 4.1 One recipe: `ce-state-frame`
+
+As implemented, the rule lives in `design-system/doc-kit/state-frame.css`, which is the source to copy. It differs from the block below in the marker's sizing and in the body's layout (section 6, “Implemented with the kit”).
 
 Standard name: `StateFrame` («Marco de estado»), accepted (X-8) for the documentation kit's frame (X-4): "The documentation frame around one state of a page: a marker, a title, a one-line note and the page fragment." The frame is documentation chrome. No consumer application renders it, so it never carries a product, a price or a control of its own.
 
@@ -206,6 +208,84 @@ To run when the kit or repository work happens:
 5. Measured heights of the scratch-rebuilt sheets against the frozen boards' `$preview` values (a comparison only; no board is changed; the label is 4 to 8px shorter than Variant A and 1 to 2px taller than Variants B and C; the sum per sheet is **to measure**).
 6. Screen-reader reading of a sheet (marker skipped, title read, badge read as a word): **not run, to schedule**.
 
+Implemented with the kit:
+
+- **Checks 2b, 3 and 4** are `tests/state-frame.test.mjs`:
+  - every declaration holds only `--ce-` tokens and CSS keywords, and the one media query is the bundle's `639.98px`;
+  - every selector starts from a kit class and reaches only kit classes, `.ce-demo-cue` and `.ce-badge`;
+  - the kit is absent from the recipe sources, `exports/recipes.css`, `bundle.css`, the `@casaelida/vue` styles, the registry and the Components view;
+  - every shipped frame is named by a heading title, with a decorative marker of one or two characters, an English label, no inline style on the kit's own elements and no empty `style` attribute anywhere in a frame (a fragment keeps the consumer inputs its recipes document);
+  - every frame starts its body with the canon cue, unless the sheet's notes name it as exempt;
+  - sheets link the kit after the bundle.
+- **Checks 1 and 2** are `tests/browser/state-frame.spec.mjs`, run on a synthetic sheet, `tests/fixtures/state-frame-sheet.html`. Its eight frames cover a lettered card, the «Escenario» badge, a route shell exempt from the cue, a staff record, a two-character marker on a wide frame, the band, and frames inside a group. The sheet is tested at 390, 768 and 1440 px with text at 100%, 150% and 200%. Text is enlarged the way a reader's text-size setting does it: every font size grows, including px sizes such as the 28px cart price, and so does the root size. The test checks:
+  - no overflow, and the label wraps;
+  - the marker stays `size.marker` tall, is `size.marker` wide unless its characters and inline padding need more, and keeps its characters' ink inside it horizontally and vertically. This is checked with the sheet's own markers (A to E, 1, 2, 10), which are 28px circles at 100% text, and with wider valid markers on the same frames (W, M, WW, MW, 88, H, A1, 20; for example WW is 38px wide at 100% text and 66px at 200%);
+  - each fragment, copied into a page that loads only the tokens and the bundle at the same place and width, draws the same pixels and keeps every element box (to 0.02px) as in the frame;
+  - axe finds no violations, the sheet has one `h1`, frames are named by their titles in heading order, and labels and badges carry their `lang`;
+  - every frame with simulated data carries its own cue.
+
+  A further test loads every design-system component card with and without the kit after the bundle and finds every computed style and box unchanged.
+- **Check 5 and the private part of check 1** were measured in a scratch harness on the twelve frozen boards of check 1.
+  - **Method.** The boards were read-only, in Chromium with `--font-render-hinting=none`. The evidence, kept outside the repository, holds the harness, every number and the mapping of each variant onto the kit.
+  - **Bundle.** The boards' copy of the bundle predates `size.marker`, `stroke.heavy` and `ce-demo-cue`, so the harness added those two tokens and the cue rule before the kit.
+  - **Frozen heights.** The frozen boards measure 2 to 7px under their stored `$preview` heights. The workbench stores the rounded natural height plus 2, and eleven stored values equal that; Adm06Estados is 4px above it.
+  - **Rebuilt heights.** Rebuilt on the kit, with a first-body cue in every one of the 100 frames, the sheets change against the frozen measurement by:
+
+    | Sheet (variant) | Height change |
+    | --- | --- |
+    | Pub10Estados (A) | −202px |
+    | Pub13Estados (B) | +293px |
+    | Pub14EstadosMovil (B-m) | +14px |
+    | Adm01Estados (C) | +199px |
+    | Adm15Estados (D) | +496px |
+    | Pub09Estados (E) | +280px |
+    | Pub03Estados (F) | +559px |
+    | Pub06Estados (G) | +349px |
+    | Pub02Estados (H) | +377px |
+    | Pub20Estados (I) | +590px |
+    | Pub20Largos (J) | +565px |
+    | Adm06Estados (K) | +80px |
+
+  - **Labels.** The label estimate in check 5 does not hold:
+    - Variant A labels change by −4.0 to +17.0px; a note that wraps to a second line adds the gain.
+    - Variant B labels grow by 28.2px each: their title and note shared one row, and the anatomy puts the note on its own line.
+    - Variant C labels grow by 8.2 to 35.4px: 12px text becomes the 16px title and the 14px note.
+    - Variant D labels grow by 31 to 129px: a 22px tag becomes a marker, a title and a note.
+
+    The per-frame cues and the separate title and note account for most of the growth. This is a comparison only; the frozen boards stay as they are (X-3).
+  - **At each board's stored width.** All twelve rebuilt sheets have no horizontal overflow, every marker is 28px tall, every frame is a named region, and axe reports no violations.
+  - **Across 390, 768 and 1440 px with text at 100%, 150% and 200%** (108 cases, 900 fragment comparisons):
+    - Text grows by the factor in every case.
+    - No label, title or note overflows, and every marker is 28px tall with its characters inside it.
+    - The selection box of a title's first line, at the heading line height of 1.2, starts up to 1px above the label's text column. That is Chromium's selection rectangle, not painted ink.
+  - **Where check 1 does not hold, the boards behave the same with and without the kit.** These cases stay unmet for those frozen boards; the kit's own label, title, note and marker stay inside in every case.
+    - **Page overflow, 55 of 108 cases.** Nine 1440px boards keep their 1440px page at 390 and 768 px, with 1050px and 672px of overflow, frozen and rebuilt alike. Pub06Estados at 390px with 200% text overflows by 5px frozen and 3px rebuilt.
+    - **Frame overflow, 11 of 108 cases.** In each, the fragment is wider than the frame body and overflows a plain block of the same width by the same amount:
+      - Pub06Estados at 390 and 768 px: its grid gives frame 1 a zero-width cell, with a body 124.7px wide at 390px and 100% text, 108.7px at 768px and 100% text, and 193.4px at 768px and 200% text.
+      - The long-string phone replica of Pub20Largos (frame 4), at 150% and 200% text.
+  - **Fragment preservation, compared in the same rebuilt page.** Each fragment is measured in its frame. It is then moved into a plain `section` that takes the frame's place, with the frame's width, the body's insets and the same board ancestors, and measured again. Boxes are compared to 0.02px, every standard computed property of every element and pseudo-element is compared (custom properties are not), and so are the pixels of the same clip, each taken once two screenshots agree.
+    - 836 of the 900 comparisons are identical in boxes, styles and pixels.
+    - 32 (Pub03Estados, Pub06Estados, Pub09Estados, Pub14EstadosMovil, Pub20Estados) differ only in the last captured pixel row, where the frame body's padding paints the canvas and the plain block has ended. With 1px of bottom padding on the plain block they are byte-identical.
+    - 30 (Pub06Estados at 390 and 768 px) cannot be matched with padding, because the board's grid gives the frame a zero-width cell that its body overflows. Given the body's content width, the plain block matches them in boxes, styles and pixels.
+    - 2 (Adm15Estados frame 6 at 390 and 768 px, 100% text) differ between two screenshots of the same framed state, and are identical on a fresh reload.
+    - The Chrome DevTools Protocol finds no rule of the kit's stylesheet matching any of the 36,630 fragment elements audited.
+
+    These are observations under matched conditions, and no kit cause was found. The 64 comparisons that were not identical at first are explained by the comparison itself (the plain block's last row and width) or by a screenshot that differed from itself. An earlier comparison against a separate page without the board's ancestors differed in 253 of the 900 comparisons, and is superseded by this one.
+
+The acceptance checks found two corrections to the rule in section 4.1. The repository lead accepted both under the same standing delegation, not j3w1-typed, and j3w1 may veto them. Measured in Chromium with the supplied Inter files:
+
+- **The marker.** As proposed (`width` and `height` 28px, with the inherited 1.5 line height), characters at 200% text leave the marker. Two characters measure 33.0 to 33.7px across the 28px circle. Every marker's ink also sits 3px below the circle, because a line box taller than the marker is start-aligned instead of centred. The kit uses `min-width: var(--ce-size-marker)`, `padding-inline: var(--ce-space-4)` and `line-height: var(--ce-font-line-tight)`. Every marker stays 28px tall. It is 28px wide while its characters and inline padding fit, which holds for single letters and numbers and for `10` at 100% text, and it widens into a pill whenever they need more, at any text size: `WW` is 38px wide at 100% text. Variant J's marker already behaved this way.
+- **The body.** As proposed (`display: grid` with a 16px gap), a fragment does not lay out as it does on its own. A grid item shrink-wraps when its margins are `auto`: the `ce-empty` route shell is 370px wide in the frame and 420px on its own at 768 and 1440 px. A grid item also keeps its children's margins inside it: a staff record header fragment is 316.97px tall in the frame and 292.97px on its own. The kit's body is ordinary block flow (`display: flow-root`), and the cue keeps its 16px gap through `margin-block-end`.
+
+Registry: `StateFrame` is named only in the kit's documentation (`design-system/doc-kit/README.md`); `recipes/names.mjs` and `names.md` do not list it.
+
+Not run:
+
+- check 6 (no screen reader was used): to schedule;
+- WebKit locally (hosted CI runs it);
+- real devices;
+- forced colours.
+
 ## 7. Risks and what it does not change
 
 - **Scope creep into the shared system.** Avoided by X-4: the frame lives in the kit, so no documentation-only recipe or card enters the registry that applications read. The kit must stay downstream of the bundle (section 9).
@@ -218,12 +298,12 @@ To run when the kit or repository work happens:
 ## 8. Owner decisions needed
 
 1. **Home:** Decided (X-4, 2026-11-06): the frame goes in a documentation kit beside CE Theme, not the recipe bundle; the name `StateFrame` is accepted (X-8).
-2. Approve the anatomy: marker, title with optional `ce-badge` «Escenario», one-line note, body; frame named by its title.
+2. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the anatomy is approved: a decorative marker, a heading title with the optional `ce-badge` «Escenario», a one-line note and the body; the frame is named by its title.
 3. Marker size: Decided (X-2, 2026-11-06): the `size.marker` token (28px, `--ce-size-marker`) is added and the marker uses it; the 4px rule stays through the `stroke.heavy` token.
-4. Retire the inverse rectangular tag of the staff sheets (Variant D, 73 frames) in favour of the marker and title, or keep it as a modifier (`ce-state-frame-mark--tag`)?
-5. Should the kit also carry the sheet grid, sheet head and notes block (one more class each), or do those stay per board?
+4. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): new kit sheets retire the inverse rectangular tag in favour of the marker and title; no tag modifier is added. The frozen Variant D boards stay as they are.
+5. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the sheet grid, sheet head and notes block stay with each sheet; the kit adds no class for them.
 6. Decided (X-7, 2026-11-06): English frame labels carry `lang="en"` on Spanish pages.
-7. Confirm that a sheet built on the frame puts the cue in every frame with simulated commercial or staff data (CANON section B; CR-03 decision 4). The sheets that today carry one cue for the whole sheet (Variants B, C, D, G, K; section 2.2) stay as they are in the frozen snapshot (X-3) and are not accepted as equivalent; new sheets carry the cue in every such frame.
+7. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): every frame showing simulated commercial or staff data carries its own cue, first in its body. A sheet-level cue is optional and never replaces it. A frame with no simulated data may omit it only when the sheet's notes name it as exempt, in the form `doc-kit/README.md` documents. The sheets that today carry one cue for the whole sheet (Variants B, C, D, G, K; section 2.2) stay as they are in the frozen snapshot (X-3).
 
 ## 9. Dependency on CR-03
 
@@ -232,3 +312,4 @@ To run when the kit or repository work happens:
 - CR-03 decision 4 asks the owner to confirm the CANON reading (a cue in every frame with simulated commercial or staff data); the body rule then applies to every such frame. The inventory in section 2.2 (last paragraph) lists the sheets that today carry only a sheet-level cue and therefore need the per-frame cue added when rebuilt.
 - CR-03 decision 3 (compact forms) should also consider the quiet 12px strip (`.cue`, `.lg-cue`) that four variants here use for the sheet-level cue; it is not in CR-03's table.
 - Order of submission: CR-03 first (it defines the element this recipe positions), then CR-02. The README of this folder records the order.
+- CR-03 is implemented (pull request [#17](https://github.com/j3w1/ce-theme/pull/17)), so the kit's body places the bundle's `ce-demo-cue` as its first child; the kit never defines a cue of its own.

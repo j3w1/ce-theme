@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StateFrame synthetic sheet</title>
+<!-- Synthetic state sheet for the StateFrame documentation kit tests (CR-02). Every product, price, store, code and record is
+     simulated demonstration data. Served from the design-system bundle layout: tokens, then the bundle, then the kit. -->
+<link rel="stylesheet" href="project/tokens.css">
+<link rel="stylesheet" href="project/components/bundle.css">
+<link rel="stylesheet" href="project/doc-kit/state-frame.css">
+<style>
+  /* The sheet's own layout: the sheet grid, sheet head and notes stay with each sheet, outside the kit. */
+  body { margin: 0; background: var(--ce-color-surface-canvas); }
+  .sheet { display: grid; gap: var(--ce-space-32); padding: var(--ce-space-24) var(--ce-space-16) var(--ce-space-48); }
+  .sheet-head { display: grid; gap: var(--ce-space-12); justify-items: start; }
+  .sheet-head h1 { margin: 0; font-size: var(--ce-font-size-title); line-height: var(--ce-font-line-heading); }
+  .sheet-head p { margin: 0; color: var(--ce-color-text-secondary); }
+  .frames { display: grid; gap: var(--ce-space-32); grid-template-columns: minmax(0, 1fr); }
+  .group { display: grid; gap: var(--ce-space-16); align-content: start; }
+  .group > h2 { margin: 0; font-size: var(--ce-font-size-lead); line-height: var(--ce-font-line-heading); }
+  .notes { padding: var(--ce-space-24); background: var(--ce-color-surface-subtle); }
+  .notes h2 { margin: 0 0 var(--ce-space-8); font-size: var(--ce-font-size-lead); }
+  .notes p, .notes ul { margin: 0; }
+  @media (min-width: 1024px) {
+    .sheet { padding-inline: var(--ce-space-48); }
+    .frames { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+</head>
+<body>
+<div class="ce-scope sheet">
+  <header class="sheet-head">
+    <h1 lang="en">Cart and staff record: states (synthetic sheet)</h1>
+    <p lang="en">One frame per state. The cue above the frames is optional and never counts as a frame's cue.</p>
+    <p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>
+  </header>
+
+  <div class="frames">
+    <section class="ce-state-frame" aria-labelledby="st-a">
+      <header class="ce-state-frame-label">
+        <span class="ce-state-frame-mark" aria-hidden="true">A</span>
+        <div lang="en">
+          <h2 class="ce-state-frame-title" id="st-a">Store selected</h2>
+          <p class="ce-state-frame-note">Amounts for the chosen store; the line keeps its identity, price and quantity.</p>
+        </div>
+      </header>
+      <div class="ce-state-frame-body">
+        <p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>
+        <div>
+          <p class="ce-store-note">Importes en <strong>Tienda A — demostración</strong>.</p>
+          <ul class="ce-cart-lines"><li class="ce-cart-line"><img src="project/media/product-mene.png" alt="" width="128" height="128"><div class="ce-cart-line-body"><h3 class="ce-product-heading"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></h3><p class="ce-product-specs">vidrio borosilicato, 250ml</p><div class="ce-cart-line-actions"><div class="ce-quantity"><button type="button" aria-label="Quitar uno de MENE">−</button><label class="ce-sr-only" for="q-mene">Cantidad de MENE</label><input id="q-mene" type="number" min="1" value="2"><button type="button" aria-label="Agregar uno de MENE">+</button></div><span class="ce-price ce-price--regular"><span class="ce-sr-only">Precio actual: 13 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">13</span></span></span></div></div></li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="ce-state-frame" aria-labelledby="st-b">
+      <header class="ce-state-frame-label">
+        <span class="ce-state-frame-mark" aria-hidden="true">B</span>
+        <div lang="en">
+          <h2 class="ce-state-frame-title" id="st-b">Store change pending <span class="ce-badge" lang="es">Escenario</span></h2>
+          <p class="ce-state-frame-note">Old amounts removed; lines kept; <span lang="es">«Actualizando»</span> replaces the link.</p>
+        </div>
+      </header>
+      <div class="ce-state-frame-body">
+        <p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>
+        <div>
+          <p class="ce-store-note" role="status">Importes en <strong>Tienda B — demostración</strong>. <span class="ce-price-pending">Actualizando importes…</span></p>
+          <h3 class="ce-product-heading"><span class="ce-product-name">NOME</span><span class="ce-product-description">Frasco con Cucharita</span></h3>
+          <p class="ce-product-specs">vidrio/bambú, 450ml</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="ce-state-frame" aria-labelledby="st-c">
+      <header class="ce-state-frame-label">
+        <span class="ce-state-frame-mark" aria-hidden="true">C</span>
+        <div lang="en">
+          <h2 class="ce-state-frame-title" id="st-c">Unknown route</h2>
+          <p class="ce-state-frame-note">A route shell: no product, price, store or record, so the frame is exempt from the cue.</p>
+        </div>
+      </header>
+      <div class="ce-state-frame-body">
+        <div class="ce-empty">
+          <h3>No encontramos esta página</h3>
+          <p>Revisa la dirección o vuelve al inicio.</p>
+          <a class="ce-button" href="#inicio">Ir al inicio</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="ce-state-frame" aria-labelledby="st-d">
+      <header class="ce-state-frame-label">
+        <span class="ce-state-frame-mark" aria-hidden="true">D</span>
+        <div lang="en">
+          <h2 class="ce-state-frame-title" id="st-d">Locked fields <span class="ce-badge" lang="es">Escenario</span></h2>
+          <p class="ce-state-frame-note">Staff record whose code cannot be edited; the inverse tag of earlier sheets is retired.</p>
+        </div>
+      </header>
+      <div class="ce-state-frame-body">
+        <p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>
+        <div>
+          <div class="ce-record-header"><img src="project/media/product-mene.png" alt="" width="64" height="64"><div class="ce-record-title"><span class="ce-code">CE2606<span class="ce-code-number">1441</span></span><h3>MENE · Taza de Vidrio Resistente al Calor</h3><div class="ce-record-meta"><span>Familia: tazas</span></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ce-state-frame ce-state-frame--wide" aria-labelledby="st-10">
+      <header class="ce-state-frame-label">
+        <span class="ce-state-frame-mark" aria-hidden="true">10</span>
+        <div lang="en">
+          <h2 class="ce-state-frame-title" id="st-10">Listing at full width <span class="ce-badge" lang="es">Escenario</span></h2>
+          <p class="ce-state-frame-note">A two-character marker; the frame spans the sheet grid.</p>
+        </div>
+      </header>
+      <div class="ce-state-frame-body">
+        <p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>
+        <div class="ce-table-wrap" role="region" aria-label="Productos de ejemplo" tabindex="0">
+          <table class="ce-table">
+            <caption class="ce-sr-only">Productos de ejemplo</caption>
+            <thead><tr><th scope="col">Código</th><th scope="col">Producto</th><th scope="col">Estado</th></tr></thead>
+            <tbody>
+              <tr><td><span class="ce-code">CE26061509</span></td><td>Dispensador aceite</td><td><span class="ce-status ce-status--success">✓ Disponible</span></td></tr>
+              <tr><td><span class="ce-code">CE26018821</span></td><td>Portabocadito Corazón</td><td><span class="ce-status ce-status--warning">! Pocas unidades</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="ce-state-frame ce-state-frame--band ce-state-frame--wide" aria-labelledby="st-e">
+      <header class="ce-state-frame-label">
+        <span class="ce-state-frame-mark" aria-hidden="true">E</span>
+        <div lang="en">
+          <h2 class="ce-state-frame-title" id="st-e">Label band over a page section</h2>
+          <p class="ce-state-frame-note">No box: the heavy top rule marks the frame.</p>
+        </div>
+      </header>
+      <div class="ce-state-frame-body">
+        <p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>
+        <div>
+          <h3 class="ce-product-heading"><span class="ce-product-name">TILEN</span><span class="ce-product-description">Organizador de Cocina</span></h3>
+          <p class="ce-product-specs">plástico, 3 niveles</p>
+          <p class="ce-store-note">Precios y disponibilidad de <strong>Tienda A — demostración</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="group" aria-labelledby="grp-long">
+      <h2 id="grp-long" lang="en">Long strings</h2>
+      <section class="ce-state-frame" aria-labelledby="st-1">
+        <header class="ce-state-frame-label">
+          <span class="ce-state-frame-mark" aria-hidden="true">1</span>
+          <div lang="en">
+            <h3 class="ce-state-frame-title" id="st-1">Long NAME, Description and code inside a group</h3>
+            <p class="ce-state-frame-note">The label wraps; the code stays on one line.</p>
+          </div>
+        </header>
+        <div class="ce-state-frame-body">
+          <p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>
+          <div>
+            <span class="ce-code">CE26031111R12R</span>
+            <h4 class="ce-product-heading"><span class="ce-product-name">TALEN</span><span class="ce-product-description">Juego de Recipientes Herméticos de Vidrio con Tapa de Bambú</span></h4>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="group" aria-labelledby="grp-store">
+      <h2 id="grp-store" lang="en">Store names</h2>
+      <section class="ce-state-frame" aria-labelledby="st-2">
+        <header class="ce-state-frame-label">
+          <span class="ce-state-frame-mark" aria-hidden="true">2</span>
+          <div lang="en">
+            <h3 class="ce-state-frame-title" id="st-2">No store chosen <span class="ce-badge" lang="es">Escenario</span></h3>
+            <p class="ce-state-frame-note">No store means no amount: the line shows a note instead of a price.</p>
+          </div>
+        </header>
+        <div class="ce-state-frame-body">
+          <p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>
+          <div>
+            <p class="ce-store-note">Tienda: sin elegir. Elige una tienda para ver precios y disponibilidad.</p>
+          </div>
+        </div>
+      </section>
+    </section>
+  </div>
+
+  <section class="notes" aria-labelledby="notes-h" lang="en">
+    <h2 id="notes-h">Notes</h2>
+    <p>Exempt from the demonstration cue (no simulated data):</p>
+    <ul>
+      <li>Unknown route</li>
+    </ul>
+  </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+/* StateFrame (ce-state-frame): the documentation frame around one state of a page on a state sheet (CR-02).
+   Casa Elida documentation kit, not a recipe: no application renders it. Load it after tokens.css and
+   components/bundle.css. It reads only --ce- tokens, styles only its own classes, and places the bundle's
+   .ce-demo-cue and .ce-badge inside them without restyling either. The frame never scales its fragment. */
+.ce-state-frame { display: grid; align-content: start; min-width: 0; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); background: var(--ce-color-surface-canvas); }
+.ce-state-frame--wide { grid-column: 1 / -1; }
+/* A label band over a full-width page replica or a phone section without a box keeps the heavy top rule. */
+.ce-state-frame--band { border: 0; }
+.ce-state-frame--band > .ce-state-frame-label { border-top: var(--ce-stroke-heavy) solid var(--ce-color-surface-inverse); }
+
+.ce-state-frame-label { display: flex; align-items: flex-start; gap: var(--ce-space-12); padding: var(--ce-space-12) var(--ce-space-16); background: var(--ce-color-surface-subtle); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+.ce-state-frame-label > div { min-width: 0; }
+/* size.marker tall, and at least size.marker wide: enlarged characters widen the marker into a pill instead of leaving it. */
+.ce-state-frame-mark { flex: none; display: grid; place-items: center; min-width: var(--ce-size-marker); height: var(--ce-size-marker); padding-inline: var(--ce-space-4); border-radius: var(--ce-radius-pill); background: var(--ce-color-surface-inverse); color: var(--ce-color-text-inverse); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-bold); line-height: var(--ce-font-line-tight); }
+.ce-state-frame-title { margin: 0; font-size: var(--ce-font-size-body); line-height: var(--ce-font-line-heading); font-weight: var(--ce-font-weight-bold); }
+.ce-state-frame-title .ce-badge { vertical-align: middle; margin-inline-start: var(--ce-space-8); }
+.ce-state-frame-note { margin: var(--ce-space-2) 0 0; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); line-height: var(--ce-font-line-body); }
+
+/* Ordinary block flow, so the fragment lays out exactly as it does on its own; the cue keeps 16px above it. */
+.ce-state-frame-body { display: flow-root; min-width: 0; padding: var(--ce-space-24); }
+.ce-state-frame-body > .ce-demo-cue { margin-block-end: var(--ce-space-16); }
+/* The bundle's own phone breakpoint; a media query cannot read a token. */
+@media (max-width: 639.98px) {
+  .ce-state-frame { border-inline: 0; }
+  .ce-state-frame-body { padding: var(--ce-space-16); }
+}
