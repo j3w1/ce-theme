@@ -9,6 +9,13 @@ test('semantic roles resolve to selected brand colors and accessible pairs', asy
   assert.equal(tokens['color.brand.yellow'].css,'#f9eb10');
   for (const [fg,bg,minimum] of manifest.contrastPairs) assert.ok(contrast(tokens[fg].value,tokens[bg].value)>=minimum,`${fg} / ${bg}`);
 });
+test('the target, rule and marker tokens keep the values j3w1 chose (ce-theme#11 X-1, X-2)', async () => {
+  const {tokens}=await readSources();
+  for (const [name,variable,css] of [['size.target.public','--ce-size-target-public','44px'],['stroke.heavy','--ce-stroke-heavy','4px'],['size.marker','--ce-size-marker','28px']]) {
+    assert.equal(tokens[name].variable,variable);
+    assert.equal(tokens[name].css,css,name);
+  }
+});
 test('aliases resolve across files independent of file order', () => {
   const alias={a:{$type:'dimension',$value:'{b}'}};
   const base={b:{$type:'dimension',$value:{value:16,unit:'px'}}};

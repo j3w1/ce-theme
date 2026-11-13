@@ -12,7 +12,7 @@ Photo overlays need visual validation at the final crop. Use the dark scrim or a
 
 ## Navigation and controls
 
-Use native interactive elements, visible labels, and native keyboard behavior. The reference navigation has an explicit mobile menu toggle, an expanded state, Escape recovery, and a skip link. Controls have 44–48px targets. Focus uses a 2px outline with a 3px offset. Disabled controls remain native disabled elements.
+Use native interactive elements, visible labels, and native keyboard behavior. The reference navigation has an explicit mobile menu toggle, an expanded state, Escape recovery, and a skip link. Controls have 44–48px targets; the 44px minimum is `--ce-size-target-public`. Focus uses a 2px outline with a 3px offset. Disabled controls remain native disabled elements.
 
 Code labels are selectable text. Keep identifiers intact; wrap long values. Product names, details, and prices are text, with a complete screen-reader name for prices whose visual fragments would otherwise read awkwardly. Images have purpose-specific alternative text; decorative icons use `aria-hidden`.
 

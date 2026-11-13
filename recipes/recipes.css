@@ -22,7 +22,7 @@
 .ce-link:hover { color: var(--ce-color-action-primary-hover); }
 button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor: pointer; }
 .ce-button:focus-visible, .ce-icon-button:focus-visible, .ce-chip:focus-visible, .ce-link:focus-visible, .ce-input:focus-visible, .ce-select:focus-visible, .ce-swatch:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); }
-.ce-chip { min-height: 44px; padding: var(--ce-space-12) var(--ce-space-20); border-radius: var(--ce-radius-pill); background: var(--ce-color-surface-subtle); color: var(--ce-color-text-primary); white-space: nowrap; }
+.ce-chip { min-height: var(--ce-size-target-public); padding: var(--ce-space-12) var(--ce-space-20); border-radius: var(--ce-radius-pill); background: var(--ce-color-surface-subtle); color: var(--ce-color-text-primary); white-space: nowrap; }
 .ce-chip:hover { border-color: var(--ce-color-border-control); }
 .ce-chip[aria-pressed="true"], .ce-chip[aria-current="page"] { border-color: var(--ce-color-text-primary); box-shadow: inset 0 0 0 1px var(--ce-color-text-primary); }
 .ce-field { display: grid; gap: var(--ce-space-8); }
@@ -145,7 +145,7 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
    variant for media that cannot hover (social posts, print, share images); the TagList below repeats every product. */
 /* The pin has no stacking context of its own, so every dot stays above every card and a neighbouring dot is never covered. */
 .ce-pin { position: absolute; left: var(--ce-x, 50%); top: var(--ce-y, 50%); width: 0; height: 0; }
-.ce-pin-dot { position: absolute; z-index: 3; top: 0; left: 0; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; transform: translate(-50%, -50%); border: 0; border-radius: var(--ce-radius-pill); background: var(--ce-color-marker-bg); box-shadow: 0 0 0 2px var(--ce-color-surface-canvas); cursor: pointer; transition: transform var(--ce-motion-quick); }
+.ce-pin-dot { position: absolute; z-index: 3; top: 0; left: 0; display: grid; place-items: center; width: var(--ce-size-marker); height: var(--ce-size-marker); padding: 0; transform: translate(-50%, -50%); border: 0; border-radius: var(--ce-radius-pill); background: var(--ce-color-marker-bg); box-shadow: 0 0 0 2px var(--ce-color-surface-canvas); cursor: pointer; transition: transform var(--ce-motion-quick); }
 .ce-pin-dot::before { width: 8px; height: 8px; content: ''; border-radius: var(--ce-radius-pill); background: var(--ce-color-marker-text); }
 .ce-pin-dot::after { position: absolute; inset: -8px; content: ''; border-radius: inherit; }
 .ce-pin:hover .ce-pin-dot, .ce-pin[data-open] .ce-pin-dot { transform: translate(-50%, -50%) scale(1.12); }
@@ -193,7 +193,7 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-tag-item:target { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-space-8); }
 @media (min-width: 640px) { .ce-product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ce-space-48) var(--ce-space-24); } .ce-tag-list { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); } .ce-tag-item + .ce-tag-item { border-left: var(--ce-stroke-thin) solid var(--ce-color-border-default); padding-left: var(--ce-space-24); } }
 @media (min-width: 1024px) { .ce-product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@container (max-width: 480px) { .ce-hotspot { width: 28px; height: 28px; font-size: var(--ce-font-size-xs); } .ce-feature-tag { font-size: var(--ce-font-size-xs); } .ce-detail-inset { font-size: var(--ce-font-size-xs); } }
+@container (max-width: 480px) { .ce-hotspot { width: var(--ce-size-marker); height: var(--ce-size-marker); font-size: var(--ce-font-size-xs); } .ce-feature-tag { font-size: var(--ce-font-size-xs); } .ce-detail-inset { font-size: var(--ce-font-size-xs); } }
 @media (prefers-reduced-motion: reduce) { .ce-button, .ce-chip, .ce-icon-button { transition: none; } }
 .ce-product, .ce-tag-item { container-type: inline-size; }
 @container (max-width: 13.5rem) { .ce-price-unit-long { display: none; } .ce-price-unit-short { display: inline; } }

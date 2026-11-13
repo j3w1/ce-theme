@@ -1308,6 +1308,16 @@
       "css": "56px",
       "variable": "--ce-size-control-touch"
     },
+    "size.marker": {
+      "type": "dimension",
+      "value": {
+        "value": 28,
+        "unit": "px"
+      },
+      "description": "Marker circle: the web pin dot and the numbered step.",
+      "css": "28px",
+      "variable": "--ce-size-marker"
+    },
     "size.product.gap-code": {
       "type": "dimension",
       "value": {
@@ -1387,6 +1397,16 @@
       "description": "Table row height in compact density.",
       "css": "40px",
       "variable": "--ce-size-row-compact"
+    },
+    "size.target.public": {
+      "type": "dimension",
+      "value": {
+        "value": 44,
+        "unit": "px"
+      },
+      "description": "Minimum 44px target: the least height, and the width of square actions, for chips, menu and select options, checks, radios, switches, quantity buttons and the site header's links and actions.",
+      "css": "44px",
+      "variable": "--ce-size-target-public"
     },
     "space.0": {
       "type": "dimension",
@@ -1537,6 +1557,16 @@
       "description": "Focus outline width.",
       "css": "2px",
       "variable": "--ce-stroke-focus"
+    },
+    "stroke.heavy": {
+      "type": "dimension",
+      "value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "description": "Heavy rule, such as the left rule of a notice or an internal note.",
+      "css": "4px",
+      "variable": "--ce-stroke-heavy"
     },
     "stroke.offset": {
       "type": "dimension",

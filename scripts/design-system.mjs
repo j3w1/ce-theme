@@ -147,7 +147,7 @@ export async function buildTokens(manifest, tokens) {
     stroke: { tokens: families.stroke },
     layout: { note: 'Content width, breakpoints and side gutters.', tokens: families.layout },
     duration: { tokens: families.duration },
-    size: { note: 'Control and row heights for touch, comfortable and compact density.', tokens: families.size },
+    size: { note: 'Control and row heights for touch, comfortable and compact density, the 44px minimum target and the marker circle.', tokens: families.size },
     zIndex: { tokens: families.zIndex },
     ratio: { tokens: families.ratio },
   };
