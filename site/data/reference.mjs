@@ -81,7 +81,7 @@ export const VUE_REFERENCE = [
   },
   {
     name: 'CEMessageList', recipe: 'ce-message-list',
-    summary: 'Un role="log" con nombre y enfocable; las burbujas son parte interna del componente. Monta una lista por conversación con :key igual al id de la conversación: abre en el mensaje más reciente y nunca mueve a quien lee el historial.',
+    summary: 'Un role="log" con nombre y enfocable; las burbujas son parte interna del componente. Monta una lista por conversación con :key igual al id de la conversación: abre en el mensaje más reciente. Un mensaje nuevo baja la vista solo si quien lee ya estaba al final o si el mensaje es suyo; agregar mensajes antiguos arriba no mueve a quien lee el historial.',
     props: [
       ['messages', 'CEMessage[]', REQUIRED, 'Los mensajes de una conversación, del más antiguo al más reciente.'],
       ['label', 'string', REQUIRED, 'Nombre accesible del registro, por ejemplo «Mensajes con Rosa Quispe».'],
@@ -89,7 +89,7 @@ export const VUE_REFERENCE = [
     ],
     events: [['openAttachment', '(messageId: string, attachmentId: string, index: number)', 'Al abrir una foto de un mensaje (@open-attachment). La aplicación decide qué hacer; aquí no hay visor.']],
     slots: [['context', 'Recibe { message }. Contenido de la aplicación para un mensaje, como un CEWorkStatus, dentro de la burbuja después de la hora y el estado de entrega. Sin contenido, no hay contenedor.']],
-    types: "type CEMessageKind = 'incoming' | 'outgoing' | 'note' | 'system';\ntype CEMessageStatus = 'sent' | 'delivered' | 'read' | 'failed'; // solo entrega\ninterface CEMessage {\n  id: string;\n  kind: CEMessageKind;   // note es interna y nunca se dibuja como enviada; system es un aviso centrado\n  text: string;\n  time?: string;         // hora ya formateada\n  datetime?: string;     // para el elemento time\n  author?: string;       // sobre los mensajes recibidos y las notas\n  status?: CEMessageStatus;\n  simulated?: boolean;   // el estado dice «Enviado · simulado»\n  own?: boolean;         // escrito por quien usa la vista; los enviados siempre lo son\n  attachments?: CEAttachment[];\n}",
+    types: "type CEMessageKind = 'incoming' | 'outgoing' | 'note' | 'system';\ntype CEMessageStatus = 'sent' | 'delivered' | 'read' | 'failed'; // solo entrega\ninterface CEMessage {\n  id: string;\n  kind: CEMessageKind;   // note es interna y nunca se dibuja como enviada; system es un aviso centrado\n  text: string;\n  time?: string;         // hora ya formateada\n  datetime?: string;     // para el elemento time\n  author?: string;       // sobre los mensajes recibidos y las notas\n  status?: CEMessageStatus;\n  simulated?: boolean;   // simulado: un outgoing con status añade « · simulado» a su estado; una nota dice «simulada»\n  own?: boolean;         // escrito por quien usa la vista; si falta, vale para los outgoing (ponlo en tus notas)\n  attachments?: CEAttachment[];\n}",
     example: '<CEMessageList :key="conversacion.id" :messages="conversacion.mensajes" label="Mensajes con Rosa Quispe" @open-attachment="abrirFoto">\n  <template #context="{ message }">\n    <CEWorkStatus v-if="pedidos[message.id]" v-bind="pedidos[message.id]" />\n  </template>\n</CEMessageList>',
   },
   {

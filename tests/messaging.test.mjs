@@ -174,21 +174,24 @@ test('the shelf illustration is a self-contained fictional SVG with recorded pro
   assert.doesNotMatch(fixtures, /PRIVATE-DESIGN-ASSET|\.(png|jpe?g|webp)\b/i);
 });
 
-// Island data is bundled into JavaScript, which the post-build base-path test does not read. Every URL in the fixture goes
-// through site/url.mjs, evaluated here with the configured base, and names a file the site publishes.
+// Island data is bundled into JavaScript, which the post-build base-path test does not read. The real fixture is evaluated
+// here, with site/url.mjs given the configured base, and every attachment URL it returns must be under the base and name a
+// file the site publishes.
 test('the /mensajeria/ fixture builds its URLs under the site base', async () => {
+  const { stripTypeScriptTypes } = await import('node:module');
   const { default: config } = await import('../astro.config.mjs');
-  const helper = (await read('site/url.mjs')).replace('import.meta.env.BASE_URL', JSON.stringify(config.base));
-  const { url } = await import(`data:text/javascript,${encodeURIComponent(helper)}`);
-  const fixtures = await read('site/data/messaging.ts');
-  const paths = [...fixtures.matchAll(/\burl\('([^']*)'\)/g)].map((match) => match[1]);
-  assert.deepEqual(paths, ['/references/shelf-gap-fictional.svg']);
-  for (const path of paths) {
-    assert.equal(url(path), `/ce-theme${path}`);
-    await readFile(new URL(`public${path}`, root));
+  const module = (source) => `data:text/javascript,${encodeURIComponent(source)}`;
+  const helper = module((await read('site/url.mjs')).replace('import.meta.env.BASE_URL', JSON.stringify(config.base)));
+  const source = stripTypeScriptTypes(await read('site/data/messaging.ts'));
+  assert.ok(source.includes("from '../url.mjs'"), 'the fixture builds its URLs with site/url.mjs');
+  const { createThreads } = await import(module(source.replace("from '../url.mjs'", `from ${JSON.stringify(helper)}`)));
+  const urls = createThreads().flatMap((thread) => thread.messages.flatMap((message) => (message.attachments ?? []).map((attachment) => attachment.src)));
+  assert.deepEqual(urls, [`${config.base}references/shelf-gap-fictional.svg`]);
+  for (const url of urls) {
+    assert.ok(url.startsWith(config.base), `${url} is under ${config.base}`);
+    await readFile(new URL(`public/${url.slice(config.base.length)}`, root));
   }
-  assert.doesNotMatch(fixtures.replace(/\burl\('[^']*'\)/g, ''), /['"`]\/(?!\/)/, 'no other root-absolute string');
-  assert.doesNotMatch(await read('site/components/MessagingDemo.vue'), /['"`]\/(?!\/)/, 'the island adds none');
+  assert.doesNotMatch(await read('site/components/MessagingDemo.vue'), /['"`]\/(?!\/)/, 'the island adds no root-absolute URL');
 });
 
 test('the Reposición example keeps delivery status and work progress apart, with simulated actions and no viewer', async () => {
