@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { ROUTES } from './routes.mjs';
+import { pauseBeforeRetry } from './retry.mjs';
+
+test.beforeEach(pauseBeforeRetry);
 
 // What only the published site can show (issue #9 R6). playwright.live.config.mjs runs these beside foundation.spec.mjs's
 // route checks and the messaging spec's conversation selection, against CE_SITE_URL.

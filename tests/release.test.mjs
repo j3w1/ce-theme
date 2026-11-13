@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { notes, release } from '../scripts/release.mjs';
+import { notes, release, verifyOnlyGh } from '../scripts/release.mjs';
 
 // The four release states of scripts/release.mjs against a stand-in for `gh`: GitHub's releases, the tag and the published file.
 const COMMIT = 'a'.repeat(40), OLDER = 'b'.repeat(40), WORKFLOW = 'Foundation checks and release', TAG = 'vue-v0.2.0', RUN = 'https://github.com/j3w1/ce-theme/actions/runs/1';
@@ -209,11 +209,14 @@ test('verify-only: no release, a recoverable draft or a failed read writes nothi
   }
 });
 
-test('verify-only refuses every release write at the gh boundary, and is chosen by the event of the run', async () => {
-  const calls = [];
-  const gh = (args) => { calls.push(args); if (args.join(' ').includes('/releases?')) return JSON.stringify([[]]); return JSON.stringify([]); };
-  assert.throws(() => release({ gh, file, repo: 'j3w1/ce-theme', commit: COMMIT, workflow: WORKFLOW, run: RUN, verifyOnly: true }), /verify-only/);
-  assert.ok(!calls.some(([command, sub]) => command === 'release' && ['create', 'upload', 'edit', 'delete'].includes(sub)));
+test('the verify-only gh boundary refuses each release write before running it, and the event of the run chooses the mode', () => {
+  const ran = [];
+  const gh = verifyOnlyGh((args) => { ran.push(args); return ''; });
+  for (const verb of ['create', 'upload', 'edit', 'delete']) assert.throws(() => gh(['release', verb, TAG]), /never writes a release/, verb);
+  assert.deepEqual(ran, []);
+  for (const read of [['release', 'download', TAG], ['release', 'verify', TAG], ['release', 'verify-asset', TAG, 'file'], ['api', 'repos/j3w1/ce-theme/releases']]) gh(read);
+  assert.equal(ran.length, 4);
   const source = readFileSync(new URL('../scripts/release.mjs', import.meta.url), 'utf8');
+  assert.match(source, /const gh = verifyOnly \? verifyOnlyGh\(command\) : command;/);
   assert.match(source, /verifyOnly: need\('GITHUB_EVENT_NAME'\) !== 'push'/);
 });

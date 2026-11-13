@@ -34,10 +34,14 @@ export function contents(file) {
   } finally { rmSync(dir, { recursive: true, force: true }); }
 }
 
+// The gh boundary of a verify-only run: every release write is refused before the command runs; reads pass through.
+export const verifyOnlyGh = (command) => (args) => (args[0] === 'release' && ['create', 'upload', 'edit', 'delete'].includes(args[1])
+  ? fail(`A verify-only run never writes a release (refused: gh ${args.slice(0, 3).join(' ')}).`)
+  : command(args));
+
 export function release({ gh: command, file, repo, commit, workflow, run, server = 'https://github.com',
   delay = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms), verifyOnly = false }) {
-  const writes = (args) => args[0] === 'release' && ['create', 'upload', 'edit', 'delete'].includes(args[1]);
-  const gh = (args) => (verifyOnly && writes(args) ? fail(`A verify-only run never writes a release (refused: gh ${args.slice(0, 3).join(' ')}).`) : command(args));
+  const gh = verifyOnly ? verifyOnlyGh(command) : command;
   const [asset, version] = basename(file).match(/^casaelida-vue-(\d+\.\d+\.\d+)\.tgz$/) ?? fail(`${file} is not a casaelida-vue-X.Y.Z.tgz package file.`);
   const tag = `vue-v${version}`, url = `${server}/${repo}/releases/download/${tag}/${asset}`, validated = sha256(readFileSync(file));
   const api = (path) => JSON.parse(gh(['api', ...path]));

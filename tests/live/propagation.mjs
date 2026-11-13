@@ -14,11 +14,15 @@ export default async function waitForDeploy() {
   const commit = process.env.CE_EXPECT_COMMIT;
   const version = process.env.CE_EXPECT_VERSION;
   const deadline = Date.now() + BUDGET;
+  // The same budget bounds the retries of the tests (tests/live/retry.mjs); workers inherit it.
+  process.env.CE_LIVE_DEADLINE = String(deadline);
   const get = async (url) => {
     const left = deadline - Date.now();
     if (left <= 0) throw new Error(SPENT);
     const response = await fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(left) });
-    return { status: response.status, text: await response.text() };
+    const text = await response.text();
+    if (Date.now() >= deadline) throw new Error(SPENT); // an answer that completes after the deadline is not accepted
+    return { status: response.status, text };
   };
   const ours = (url) => url.origin === site.origin && url.pathname.startsWith(site.pathname);
 
@@ -56,7 +60,8 @@ export default async function waitForDeploy() {
   for (;;) {
     try {
       const waiting = await pass();
-      if (waiting === undefined) return;
+      if (waiting === undefined && Date.now() < deadline) return;
+      if (waiting === undefined) throw new Error(SPENT);
       last = waiting;
     } catch (error) {
       // The last reason that says what was not served yet is kept; running out of time is not one.
