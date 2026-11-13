@@ -57,6 +57,9 @@ export function resolveTokens(sources) {
   }));
 }
 
+// exports/tokens.css, also the token part of @casaelida/vue/styles.css.
+export const tokensCss = (manifest, tokens) => `/* Casa Elida ${manifest.version} — generated from tokens/. Do not edit. */\n:root {\n${Object.values(tokens).map((t) => `  ${t.variable}: ${t.css};`).join('\n')}\n}\n`;
+
 export const cssName = (name) => `--ce-${name.replaceAll('.', '-')}`;
 
 function validateValue(name, { type, value }) {

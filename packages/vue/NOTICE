@@ -1,0 +1,10 @@
+@casaelida/vue
+Source: https://github.com/j3w1/ce-theme (packages/vue)
+
+The Casa Elida name, logo and brand assets are not licensed by this package. Installing or
+using it grants no right to them. The package contains no logo or photograph files.
+
+The package's own code and styles are UNLICENSED (see package.json).
+
+Third-party font: Inter 3.015 (dist/fonts/*.woff2), copyright 2020 The Inter Project Authors,
+licensed under the SIL Open Font License 1.1. The licence text is dist/fonts/OFL.txt.

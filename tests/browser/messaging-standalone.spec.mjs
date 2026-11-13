@@ -5,7 +5,7 @@ import { renderToString } from 'vue/server-renderer';
 import { CEAttachmentGroup, CEMessageList, CEWorkStatus } from '../../packages/vue/dist/index.js';
 
 // The messaging components rendered on their own, outside the /mensajeria/ example: the real built components, the generated
-// tokens and recipes, and Chromium. Nothing here adds application CSS beyond the width of the parent.
+// tokens and recipes, and a real browser. Nothing here adds application CSS beyond the width of the parent.
 const css = readFileSync('exports/tokens.css', 'utf8') + readFileSync('exports/recipes.css', 'utf8');
 const render = (component, props) => renderToString(createSSRApp({ render: () => h(component, props) }));
 const photo = (n) => ({ id: `foto-${n}`, label: `Anaquel ${n}`, src: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='150'/%3E`, alt: `Estante ${n}` });
@@ -77,6 +77,27 @@ test.describe('standalone attachment group and work status', () => {
     await mount(page, '', await both(), { width: 320 });
     expect(await columns(page, '.ce-attachment')).toBe(2);
     expect(await columns(page, '.ce-work-step')).toBe(2);
+  });
+
+  // #5: a query container has no width of its own. A parent that sizes its children to their content collapses it to zero
+  // width; the documented fixes give it a definite width: flex: 1 on the component in a flex row, a width on any other
+  // shrink-to-fit parent.
+  test('a shrink-to-fit parent collapses each component, and a definite width restores its layout', async ({ page }) => {
+    const components = [
+      [CEAttachmentGroup, { items: [1, 2, 3].map(photo), label: '3 fotos' }, '.ce-attachment'],
+      [CEWorkStatus, { title: 'Pedido de reposición', steps: STEPS, status: 'Aceptado' }, '.ce-work-step'],
+    ];
+    const width = () => page.evaluate(() => document.querySelector('#host > *').getBoundingClientRect().width);
+    for (const [component, props, item] of components) {
+      for (const [parent, fixed, attrs] of [['display:flex;width:300px', 'display:flex;width:300px', { style: 'flex:1' }], ['display:inline-block', 'display:inline-block;width:300px', {}]]) {
+        await mount(page, parent, await render(component, props));
+        expect(await width(), `${parent} collapses ${item}`).toBe(0);
+        await mount(page, fixed, await render(component, { ...props, ...attrs }));
+        expect(await width()).toBe(300);
+        expect(await columns(page, item)).toBe(2);
+        expect(await overflows(page)).toBe(0);
+      }
+    }
   });
 
   test('inside a message list the same container is the bubble-sized group, not the list', async ({ page }) => {

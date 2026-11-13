@@ -10,7 +10,7 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -22,11 +22,35 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
-      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec playwright install --with-deps chromium webkit
+      # CI is set, so both the chromium and the webkit projects run; neither may fail.
       - run: pnpm test:browser
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: browser-results
+          path: test-results/
+          retention-days: 7
+
+  # The clean install proof: the packed @casaelida/vue installed into an empty app outside the checkout.
+  consumer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.14.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium webkit
+      - run: pnpm test:consumer
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: consumer-results
           path: test-results/
           retention-days: 7
