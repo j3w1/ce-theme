@@ -7,10 +7,13 @@ import { productView } from '../../../recipes/product.mjs';
 import { catalogue, stores, stockLine, stockListAttributes } from '../../data/store.mjs';
 // Line and order amounts are supplied by the commerce service as decimal strings; the page never computes them.
 const lines = [
-  { item: catalogue[0], quantity: '2', lineAmount: '13.00' },
-  { item: catalogue[3], quantity: '1', lineAmount: '8.50' },
+  { item: catalogue[0], quantity: '2', lineAmount: { tacna: '13.00', arequipa: '13.80' } },
+  { item: catalogue[3], quantity: '1', lineAmount: { tacna: '8.50', arequipa: '8.50' } },
 ];
-const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
+const summaries = [
+  { store: 'tacna', subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' },
+  { store: 'arequipa', subtotal: 'S/22.30', pickup: 'Sin costo', total: 'S/22.30' },
+];
 ---
 <Store title="Tu carrito" description="Carrito y pago de demostración con retiro en tienda o envío.">
   <div class="ce-container">
@@ -31,7 +34,8 @@ const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
                 <span class="ce-code">{view.code}</span>
                 <h2 class="ce-product-heading" style="--ce-product-text:1rem"><a class="ce-product-link" href="/tienda/producto/"><span class="ce-product-name">{view.name}</span><span class="ce-product-description">{view.description}</span></a></h2>
                 <p class="ce-product-specs">{view.specs.join(', ')}</p>
-                <div class="ce-price-block" role="group" aria-label="Importe de la línea"><Price amount={lineAmount} /></div>
+                {stores.map((store) => <div class="ce-price-block" data-store-view={store.id} role="group" aria-label="Importe de la línea"><Price amount={lineAmount[store.id]} /></div>)}
+                <p class="ce-store-note" data-store-view="ninguna">Elige tu tienda para ver el precio.</p>
                 {stores.map((store) => { const line = stockLine(item, store); return <ul class="ce-stock" data-store-view={store.id} {...stockListAttributes([line])}><li data-state={line.state}>{line.text}</li></ul>; })}
                 <div class="ce-cart-line-actions">
                   <div class="ce-quantity" role="group" aria-label={`Cantidad de ${view.name}`}><button type="button" aria-label={`Reducir cantidad de ${view.name}`} disabled={quantity === '1'} aria-describedby={quantity === '1' ? 'nota-min' : undefined}><Icon name="minus" size={18} /></button><label class="ce-sr-only" for={`cantidad-${index}`}>{`Cantidad de ${view.name}`}</label><input id={`cantidad-${index}`} type="number" inputmode="numeric" min="1" max="20" value={quantity} /><button type="button" aria-label={`Aumentar cantidad de ${view.name}`}><Icon name="plus" size={18} /></button></div>
@@ -54,12 +58,13 @@ const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
       </div>
       <aside class="ce-order-summary" aria-labelledby="resumen">
         <h2 id="resumen">Resumen</h2>
-        <dl class="ce-summary">
+        {summaries.map((summary) => <dl class="ce-summary" data-store-view={summary.store}>
           <div><dt>Subtotal (3 productos)</dt><dd>{summary.subtotal}</dd></div>
           <div><dt>Retiro en tienda</dt><dd>{summary.pickup}</dd></div>
           <div class="ce-summary-total"><dt>Total</dt><dd>{summary.total}</dd></div>
-        </dl>
-        <a class="ce-button" href="/tienda/cuenta/">Continuar</a>
+        </dl>)}
+        {stores.map((store) => <a class="ce-button" data-store-view={store.id} href="/tienda/cuenta/">Continuar</a>)}
+        <p class="ce-price-pending" data-store-view="ninguna">Elige tu tienda para ver el resumen.</p>
         <p class="ce-fine-print">Importes de ejemplo calculados por el servicio de comercio, no por la interfaz.</p>
       </aside>
     </div>
