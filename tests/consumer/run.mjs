@@ -7,9 +7,11 @@
 //   node tests/consumer/run.mjs                          builds and packs packages/vue
 //   node tests/consumer/run.mjs --package FILE.tgz       a package file
 //   node tests/consumer/run.mjs --package https://…/casaelida-vue-X.Y.Z.tgz   a published release asset
+//   --sha256 HEX                                         fails unless the package file has this sha256
+// In GitHub Actions it adds the file's sha256 and the lockfile integrity to the run summary.
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { cp, mkdir, mkdtemp, readFile, readdir, realpath, rm, writeFile } from 'node:fs/promises';
+import { appendFile, cp, mkdir, mkdtemp, readFile, readdir, realpath, rm, writeFile } from 'node:fs/promises';
 import { homedir, tmpdir } from 'node:os';
 import { basename, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -25,8 +27,9 @@ const EXPECTED = [
 ].sort();
 
 const fail = (message) => { throw new Error(message); };
-const argument = process.argv.indexOf('--package');
-const given = argument > 0 ? process.argv[argument + 1] ?? fail('--package needs a file or URL') : null;
+const option = (name) => { const at = process.argv.indexOf(name); return at > 0 ? process.argv[at + 1] ?? fail(`${name} needs a value`) : null; };
+const given = option('--package');
+const expected = option('--sha256');
 const work = await mkdtemp(join(await realpath(tmpdir()), 'ce-vue-consumer-'));
 const app = join(work, 'app');
 // Only what pnpm and Node need; everything user-level points into the empty work directory.
@@ -57,6 +60,8 @@ try {
   }
   const bytes = await readFile(tarball);
   const integrity = `sha512-${createHash('sha512').update(bytes).digest('base64')}`;
+  const sha256 = createHash('sha256').update(bytes).digest('hex');
+  if (expected && sha256 !== expected) fail(`${basename(tarball)} has sha256 ${sha256}, not the expected ${expected}.`);
 
   // 2. What the file contains: the expected list, the foundation exactly as its sources build it, the manifest, no local paths.
   await mkdir(join(work, 'packed'));
@@ -111,7 +116,9 @@ try {
 
   // 6. The browser test of the built output.
   run('pnpm', ['exec', 'playwright', 'test', '--config', 'tests/consumer/playwright.config.mjs'], { cwd: repo, env: { ...process.env, CE_CONSUMER_DIR: app } });
-  console.log('Clean install proof passed.');
+  console.log(`Clean install proof passed: ${basename(tarball)}, sha256 ${sha256}, lockfile integrity ${integrity}.`);
+  if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY, `### Clean install proof passed: ${basename(tarball)}\n\n`
+    + `- Installed as: \`${spec}\`\n- sha256: \`${sha256}\`\n- Lockfile integrity: \`${integrity}\`\n`);
 } finally {
   if (process.env.CE_CONSUMER_KEEP) console.log(`Kept ${work}`);
   else await rm(work, { recursive: true, force: true });

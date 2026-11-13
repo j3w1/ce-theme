@@ -5,7 +5,10 @@ import { projects } from '../browsers.mjs';
 // tests/consumer/run.mjs builds the consumer and sets CE_CONSUMER_DIR.
 const dir = process.env.CE_CONSUMER_DIR;
 if (!dir) throw new Error('Run the consumer proof with `pnpm test:consumer`.');
-const PORT = 4392;
+// CE_CONSUMER_PORT gives a parallel local run another port; the default, and CI's, is 4392.
+const port = process.env.CE_CONSUMER_PORT ?? '4392';
+if (!/^\d{4,5}$/.test(port) || port < 1024 || port > 65535) throw new Error(`CE_CONSUMER_PORT must be an integer from 1024 to 65535, not "${port}".`);
+const PORT = Number(port);
 
 export default defineConfig({
   testDir: '.',
