@@ -18,14 +18,14 @@ export default defineConfig({
   grep: [new RegExp(` (?:${ROUTES.map(escape).join('|')}): renders without errors`), /selecting a conversation opens its history/, /live\.spec\.mjs/],
   // One five-minute propagation budget for the whole smoke. tests/live/propagation.mjs waits until every route, version line,
   // link and resource the tests read comes from the expected deploy. A test that still fails is then retried after a pause
-  // (tests/live/retry.mjs) until the same budget is spent; then the failure counts, and a retry that ends after it is
-  // never a pass. 20 retries of 15 s cover five minutes.
+  // (tests/live/retry.mjs) while the same budget allows another attempt; then the failure counts. A retry's pass counts only
+  // if its result arrives within the budget (tests/live/budget.mjs). 20 retries of 15 s cover five minutes.
   globalSetup: './tests/live/propagation.mjs',
   fullyParallel: true,
   workers: 2,
   retries: 20,
   timeout: 60_000,
-  reporter: [['list']],
+  reporter: [['list'], ['./tests/live/budget.mjs']],
   outputDir: './test-results/live',
   use: { baseURL: process.env.CE_SITE_URL.replace(/\/?$/, '/'), trace: 'retain-on-failure' },
   projects,
