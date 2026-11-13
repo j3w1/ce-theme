@@ -104,7 +104,7 @@ function measure() {
 }
 
 // The sheet's own markers (A to E, 1, 2, 10) and, on the same frames, wider valid one- and two-character markers.
-const WIDE = ['W', 'M', 'WW', 'MW', '88', 'H', 'A1', '20'];
+const WIDE = ['W', 'M', 'WW', 'MW', '88', 'H', 'A1', '20', 'MM'];
 for (const width of WIDTHS) {
   for (const factor of FACTORS) {
     for (const marks of [null, WIDE]) {
@@ -114,7 +114,7 @@ for (const width of WIDTHS) {
       if (factor !== 1) await enlarge(page, factor);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth), 'no sideways page scroll').toBeLessThanOrEqual(0);
       const frames = await page.evaluate(measure);
-      expect(frames).toHaveLength(8);
+      expect(frames).toHaveLength(9);
       for (const m of frames) {
         const at = `${m.title} at ${width}px x${factor}`;
         expect(m.frame.l, `${at}: frame inside the page`).toBeGreaterThanOrEqual(-0.5);
@@ -199,6 +199,10 @@ for (const width of WIDTHS) {
             ...own, kids: kids.map((kid) => kid.className), title: body.parentElement.querySelector('.ce-state-frame-title').textContent.trim(),
             html: fragment.outerHTML, x: left + scrollX, width: right - left, y: own.at.y - parseFloat(getComputedStyle(fragment).marginTop),
             inside: own.at.x >= left + scrollX - 0.5 && own.at.x + own.at.width <= right + scrollX + 0.5, overflow: body.scrollWidth - body.clientWidth,
+            frameOverflow: body.parentElement.scrollWidth - body.parentElement.clientWidth,
+            // The scrollport: the body's padding box, in page coordinates.
+            port: { x: outer.left + body.clientLeft + scrollX, y: outer.top + body.clientTop + scrollY, width: body.clientWidth, height: body.clientHeight },
+            focusable: [body.getAttribute('tabindex'), body.getAttribute('role'), body.getAttribute('aria-labelledby') === body.parentElement.querySelector('.ce-state-frame-title').id],
             sizes: { html: document.documentElement.getAttribute('style') ?? '', body: document.body.getAttribute('style') ?? '', scope: document.querySelector('.ce-scope').getAttribute('style') ?? '' },
           };
         }, [index, boxesOf.toString()]);
@@ -206,10 +210,28 @@ for (const width of WIDTHS) {
         expect(framed.kids.length, `${at}: the body holds the cue, then one fragment`).toBeLessThanOrEqual(2);
         if (framed.kids.length === 2) expect(framed.kids[0]).toBe('ce-demo-cue');
         expect(framed.kids.at(-1)).not.toBe('ce-demo-cue');
-        expect(framed.inside, `${at}: the fragment stays inside the body`).toBe(true);
-        expect(framed.overflow, `${at}: nothing overflows the body`).toBeLessThanOrEqual(0);
+        expect(framed.frameOverflow, `${at}: nothing leaves the frame`).toBeLessThanOrEqual(0);
+        const scrolls = framed.overflow > 0;
+        if (scrolls) {
+          // A fragment wider than its body keeps its size and scrolls inside it; the body is focusable and named.
+          expect(framed.focusable, `${at}: a scrolling body is a focusable group named by the title`).toEqual(['0', 'group', true]);
+        } else {
+          expect(framed.inside, `${at}: the fragment stays inside the body`).toBe(true);
+        }
         const clip = framed.at;
-        const inFrame = await page.screenshot({ fullPage: true, clip, animations: 'disabled', caret: 'hide' });
+        // What the frame shows: the fragment inside the scrollport, at the start and, when it scrolls, at the end.
+        const windows = [];
+        for (const left of scrolls ? [0, framed.overflow] : [0]) {
+          const shown = await page.evaluate(([i, x]) => { const body = document.querySelectorAll('.ce-state-frame-body')[i]; body.scrollLeft = x; return body.scrollLeft; }, [index, left]);
+          expect(shown, `${at}: scrolled to ${left}`).toBe(left);
+          // A body that does not scroll shows the fragment's own box. A scrolling body shows its whole scrollport across the
+          // fragment's height: padding and content scroll together, so position p in the port is x + left + p on its own.
+          const y0 = Math.max(clip.y, framed.port.y);
+          const y1 = Math.min(clip.y + clip.height, framed.port.y + framed.port.height);
+          const view = scrolls ? { x: framed.port.x, y: y0, width: framed.port.width, height: y1 - y0 } : clip;
+          windows.push({ left, view, shot: await page.screenshot({ fullPage: true, clip: view, animations: 'disabled', caret: 'hide' }) });
+        }
+        await page.evaluate((i) => { document.querySelectorAll('.ce-state-frame-body')[i].scrollLeft = 0; }, index);
         await solo.route(`${ORIGIN}/alone-${index}.html`, (route) => route.fulfill({ contentType: 'text/html; charset=utf-8', body: alone({ fragment: framed.html, x: framed.x, y: framed.y, width: framed.width, sizes: framed.sizes }) }));
         await solo.goto(`${ORIGIN}/alone-${index}.html`);
         await ready(solo);
@@ -217,8 +239,10 @@ for (const width of WIDTHS) {
         for (const key of ['x', 'y', 'width', 'height']) expect(Math.abs(own.at[key] - clip[key]), `${at}: fragment ${key} ${own.at[key]} on its own, ${clip[key]} in the frame`).toBeLessThan(0.02);
         expect(own.boxes.length).toBe(framed.boxes.length);
         own.boxes.forEach((box, i) => box.forEach((value, j) => expect(Math.abs(value - framed.boxes[i][j]), `${at}: element ${i} box ${j}`).toBeLessThan(0.02)));
-        const onItsOwn = await solo.screenshot({ fullPage: true, clip, animations: 'disabled', caret: 'hide' });
-        expect(onItsOwn.equals(inFrame), `${at}: the fragment draws the same pixels on its own`).toBe(true);
+        for (const { left, view, shot } of windows) {
+          const onItsOwn = await solo.screenshot({ fullPage: true, clip: { ...view, x: view.x + left }, animations: 'disabled', caret: 'hide' });
+          expect(onItsOwn.equals(shot), `${at}: the fragment draws the same pixels on its own${left ? `, scrolled ${left}px` : ''}`).toBe(true);
+        }
       }
       await solo.close();
     });
@@ -262,13 +286,110 @@ for (const width of [390, 1440]) {
       }
       // The accessibility tree: each frame is a region named by its title (the badge read as a word); the marker is not read.
       const tree = await page.locator('.ce-scope').ariaSnapshot();
-      for (const name of ['Store selected', 'Store change pending Escenario', 'Unknown route', 'Locked fields Escenario', 'Listing at full width Escenario', 'Label band over a page section', 'Long NAME, Description and code inside a group', 'No store chosen Escenario']) {
+      for (const name of ['Store selected', 'Store change pending Escenario', 'Unknown route', 'Locked fields Escenario', 'Listing at full width Escenario', 'Codes that stay on one line', 'Label band over a page section', 'Long NAME, Description and code inside a group', 'No store chosen Escenario']) {
         expect(tree).toContain(`- region "${name}"`);
       }
-      for (const mark of ['A', 'B', 'C', 'D', '10', 'E', '1', '2']) expect(tree).not.toMatch(new RegExp(`^\\s*- text: ${mark}$`, 'm'));
+      expect(tree).toContain('- group "Codes that stay on one line"');
+      for (const mark of ['A', 'B', 'C', 'D', '10', 'F', 'E', '1', '2']) expect(tree).not.toMatch(new RegExp(`^\\s*- text: ${mark}$`, 'm'));
     });
   }
 }
+
+// A fragment wider than its body (codes that stay on one line) scrolls inside the body: nothing leaves the frame or the page,
+// and keyboard, wheel and touch users reach all of it. The body is reached with Tab, shows the focus ring inside its edge,
+// scrolls with the arrow keys, lets Tab continue into the fragment's own link at the far end (whose ring stays visible) and out.
+for (const [width, factor] of [[390, 1], [390, 2], [768, 2]]) {
+  test(`StateFrame at ${width}px, text x${factor}: a wide fragment scrolls inside its body and stays reachable by keyboard and wheel`, async ({ page }) => {
+    await open(page, width, factor);
+    const body = page.locator('.ce-state-frame-body[role="group"]');
+    await expect(body).toHaveCount(1);
+    const state = () => body.evaluate((el) => ({ left: el.scrollLeft, max: el.scrollWidth - el.clientWidth, frame: el.parentElement.scrollWidth - el.parentElement.clientWidth, page: document.documentElement.scrollWidth - innerWidth }));
+    const start = await state();
+    expect(start.max, 'the table is wider than the body').toBeGreaterThan(0);
+    expect(start.frame, 'nothing leaves the frame').toBeLessThanOrEqual(0);
+    expect(start.page, 'nothing leaves the page').toBeLessThanOrEqual(0);
+    // Tab from the focusable before it reaches the body, which shows the 2px focus ring inside its edge.
+    await page.locator('.ce-table-wrap').focus();
+    await page.keyboard.press('Tab');
+    expect(await body.evaluate((el) => document.activeElement === el)).toBe(true);
+    const ring = await body.evaluate((el) => {
+      const probe = document.createElement('span');
+      probe.style.color = 'var(--ce-color-focus)';
+      el.append(probe);
+      const focus = getComputedStyle(probe).color;
+      probe.remove();
+      const s = getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+      return { style: s.outlineStyle, width: s.outlineWidth, offset: s.outlineOffset, color: s.outlineColor === focus, left: r.left, right: r.right };
+    });
+    expect(ring).toMatchObject({ style: 'solid', width: '2px', offset: '-2px', color: true });
+    expect(ring.left).toBeGreaterThanOrEqual(-0.5);
+    expect(ring.right).toBeLessThanOrEqual(width + 0.5);
+    // The arrow keys scroll it to the end, where the last cell is fully inside the scrollport.
+    for (let press = 0; press < 80; press += 1) {
+      const now = await state();
+      if (now.left >= now.max - 0.5) break;
+      await page.keyboard.press('ArrowRight');
+    }
+    await expect.poll(async () => (await state()).left, { message: 'ArrowRight reaches the end' }).toBeGreaterThanOrEqual(start.max - 0.5);
+    const port = () => body.evaluate((el) => { const r = el.getBoundingClientRect(); return { l: r.left + el.clientLeft, r: r.left + el.clientLeft + el.clientWidth }; });
+    const lastCell = await body.locator('tbody td:last-child').evaluate((el) => { const r = el.getBoundingClientRect(); return { l: r.left, r: r.right }; });
+    expect(lastCell.r).toBeLessThanOrEqual((await port()).r + 0.5);
+    // Tab continues into the link at the far end; its focus ring (outline and offset) stays inside the scrollport.
+    await page.keyboard.press('Tab');
+    const link = body.locator('a.ce-link');
+    expect(await link.evaluate((el) => document.activeElement === el)).toBe(true);
+    const linkRing = await link.evaluate((el) => { const s = getComputedStyle(el); const r = el.getBoundingClientRect(); const out = parseFloat(s.outlineWidth) + parseFloat(s.outlineOffset); return { l: r.left - out, r: r.right + out, style: s.outlineStyle }; });
+    expect(linkRing.style).toBe('solid');
+    const end = await port();
+    expect(linkRing.l).toBeGreaterThanOrEqual(end.l - 0.5);
+    expect(linkRing.r).toBeLessThanOrEqual(end.r + 0.5);
+    // Tab leaves the body; Shift+Tab comes back to the link, then to the body; the arrow keys return to the start.
+    await page.keyboard.press('Tab');
+    expect(await body.evaluate((el) => el.contains(document.activeElement))).toBe(false);
+    await page.keyboard.press('Shift+Tab');
+    expect(await link.evaluate((el) => document.activeElement === el)).toBe(true);
+    await page.keyboard.press('Shift+Tab');
+    expect(await body.evaluate((el) => document.activeElement === el)).toBe(true);
+    for (let press = 0; press < 80 && (await state()).left > 0.5; press += 1) await page.keyboard.press('ArrowLeft');
+    await expect.poll(async () => (await state()).left, { message: 'ArrowLeft returns to the start' }).toBeLessThanOrEqual(0.5);
+    // A horizontal wheel scrolls it.
+    const box = await body.boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.wheel(160, 0);
+    await expect.poll(async () => (await state()).left, { message: 'the wheel scrolls the body' }).toBeGreaterThan(0);
+    await body.evaluate((el) => { el.scrollLeft = 0; });
+    const after = await state();
+    expect(after.frame).toBeLessThanOrEqual(0);
+    expect(after.page).toBeLessThanOrEqual(0);
+  });
+}
+
+// A touch pan scrolls a wide body, on a touch screen at phone width. The finger is driven by raw touch events through the
+// Chromium DevTools Protocol, which reach native scrolling as a real touch does; WebKit offers no touch input to a test, so this
+// one runs in Chromium only.
+test('StateFrame at 390px on a touch screen: a touch pan scrolls a wide body and nothing leaves the frame or the page', async ({ browser, browserName }) => {
+  test.skip(browserName !== 'chromium', 'touch input is driven through the Chromium DevTools Protocol only');
+  const context = await browser.newContext({ hasTouch: true, viewport: { width: 390, height: 900 } });
+  const page = await context.newPage();
+  await open(page, 390, 1);
+  const body = page.locator('.ce-state-frame-body[role="group"]');
+  await body.scrollIntoViewIfNeeded();
+  const box = await body.boundingBox();
+  const state = () => body.evaluate((el) => ({ left: el.scrollLeft, max: el.scrollWidth - el.clientWidth, frame: el.parentElement.scrollWidth - el.parentElement.clientWidth, page: document.documentElement.scrollWidth - innerWidth }));
+  expect((await state()).max).toBeGreaterThan(0);
+  const cdp = await context.newCDPSession(page);
+  const x = Math.round(box.x + box.width / 2);
+  const y = Math.round(box.y + Math.min(box.height / 2, 60));
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+  for (let step = 1; step <= 10; step += 1) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x - step * 12, y }] });
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await expect.poll(async () => (await state()).left, { message: 'a touch pan scrolls the body' }).toBeGreaterThan(0);
+  const after = await state();
+  expect(after.frame).toBeLessThanOrEqual(0);
+  expect(after.page).toBeLessThanOrEqual(0);
+  await context.close();
+});
 
 test('StateFrame sheet: every frame with simulated data carries its own cue first in its body; only the named frame is exempt', async ({ page }) => {
   await open(page, 1440);
@@ -301,7 +422,7 @@ test('StateFrame sheet: every frame with simulated data carries its own cue firs
     }
   }
   const notes = page.getByRole('note');
-  await expect(notes).toHaveCount(8);
+  await expect(notes).toHaveCount(9);
   for (const text of await notes.allTextContents()) expect(text).toBe(CANON);
 });
 

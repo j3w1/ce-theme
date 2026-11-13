@@ -42,7 +42,7 @@ The kit needs a bundle that has the `size.marker` and `stroke.heavy` tokens and 
 | `ce-state-frame-mark` | The decorative ink marker: one or two characters, letters A, B, C in reading order or numbers. It is `size.marker` (28px) tall and at least as wide; text enlarged by the reader widens it into a pill instead of spilling out of it. |
 | `ce-state-frame-title` | The frame's heading; it names the frame. |
 | `ce-state-frame-note` | One line of secondary text under the title. |
-| `ce-state-frame-body` | The cue, then the page fragment, in ordinary block flow. |
+| `ce-state-frame-body` | The cue, then the page fragment, in ordinary block flow. A fragment wider than the body scrolls inside it. |
 
 ## Rules
 
@@ -51,6 +51,9 @@ The kit needs a bundle that has the `size.marker` and `stroke.heavy` tokens and 
 - **«Escenario»** is the existing `ce-badge` inside the title, as a word, never a colour and never only in the notes.
 - **Language.** The label is English documentation on a Spanish page: `lang="en"` on the label's text column, `lang="es"` on the badge and on any Spanish string quoted in the note. The fragment is Spanish interface.
 - **The body never scales its fragment.** No `zoom`, no `transform`, no reduced copy: the fragment uses the ordinary recipes at their real size. The body is ordinary block flow, so the fragment lays out exactly as it does on its own in a block of the same width; the cue keeps 16px above it. Put the fragment in one element after the cue. The sheet's own grid gives a fixed-width fragment room: a 390px phone replica on a desktop sheet needs a frame 440px wide (24px of body padding on each side and the 1px borders), because the body padding follows the page width, not the frame's.
+- **A fragment wider than its body scrolls inside the body.** Some fragments cannot fit the body at a given page width and text size: a code that stays on one line, a wide table, a rail, a fixed-width phone replica. Such a fragment keeps its real size and scrolls horizontally inside `ce-state-frame-body`, so the frame and the page never overflow and the whole fragment stays reachable. It is never shrunk, clipped, wrapped or scaled to fit.
+  - Give such a body `tabindex="0"`, `role="group"` and `aria-labelledby` pointing at the frame title. Keyboard users can then focus it, scroll it with the arrow keys and leave it with Tab. The kit draws its focus ring inside the body, where the edge of the page cannot hide it.
+  - A scrolling body is a scroll container, so a sticky element in the fragment sticks within the body, not the page.
 - **The demonstration cue in every frame with simulated data.** When the fragment shows simulated commercial or staff data (a price, an amount, an availability line, an order, a case, a store or a staff record), the first child of its `ce-state-frame-body` is `<p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>`, in those exact words. A cue above the frames may be added for the whole sheet, but it never counts as a frame's cue.
 - **The named exemption.** A frame with no simulated data (a route shell, a documentation-only fragment) may leave the cue out only when the sheet's notes name it. Write the exemption in the notes as a list after the sentence “Exempt from the demonstration cue (no simulated data):”, one item per frame, each the frame's title without its badge:
 
@@ -65,11 +68,11 @@ The kit needs a bundle that has the `size.marker` and `stroke.heavy` tokens and 
 
 ## Tokens it uses
 
-`--ce-stroke-thin`, `--ce-stroke-heavy`, `--ce-size-marker`, `--ce-radius-pill`, `--ce-space-2`, `--ce-space-4`, `--ce-space-8`, `--ce-space-12`, `--ce-space-16`, `--ce-space-24`, `--ce-font-size-sm`, `--ce-font-size-body`, `--ce-font-line-tight`, `--ce-font-line-heading`, `--ce-font-line-body`, `--ce-font-weight-bold` and the colours `--ce-color-border-default`, `--ce-color-surface-canvas`, `--ce-color-surface-subtle`, `--ce-color-surface-inverse`, `--ce-color-text-inverse`, `--ce-color-text-secondary`. The only literal is the bundle's own `639.98px` phone breakpoint in a media query, where a token cannot be read. Below it the frame drops its side borders and the body padding falls from 24px to 16px.
+`--ce-stroke-thin`, `--ce-stroke-heavy`, `--ce-stroke-focus`, `--ce-size-marker`, `--ce-radius-pill`, `--ce-space-2`, `--ce-space-4`, `--ce-space-8`, `--ce-space-12`, `--ce-space-16`, `--ce-space-24`, `--ce-font-size-sm`, `--ce-font-size-body`, `--ce-font-line-tight`, `--ce-font-line-heading`, `--ce-font-line-body`, `--ce-font-weight-bold` and the colours `--ce-color-border-default`, `--ce-color-surface-canvas`, `--ce-color-surface-subtle`, `--ce-color-surface-inverse`, `--ce-color-text-inverse`, `--ce-color-text-secondary`, `--ce-color-focus`. The only literal is the bundle's own `639.98px` phone breakpoint in a media query, where a token cannot be read. Below it the frame drops its side borders and the body padding falls from 24px to 16px.
 
 ## Accessibility
 
-The marker is skipped, the title is read and names the frame, and the badge is read as the word «Escenario». The frame chrome has no control, no motion and no state of its own; controls inside the fragment keep their own focus and target rules. The kit's text pairs, computed from the tokens, are 18.88:1 for the marker (`--ce-color-text-inverse` on `--ce-color-surface-inverse`), 8.39:1 for the note (`--ce-color-text-secondary` on `--ce-color-surface-subtle`) and 17.32:1 for the title on the label strip; the kit test keeps each at 4.5:1 or more.
+The marker is skipped, the title is read and names the frame, and the badge is read as the word «Escenario». The frame chrome has no control, no motion and no state of its own. The one exception is a body that scrolls: it takes keyboard focus, shows the 2px focus ring inside its edge, and is named by the frame title. Controls inside the fragment keep their own focus and target rules. The kit's text pairs, computed from the tokens, are 18.88:1 for the marker (`--ce-color-text-inverse` on `--ce-color-surface-inverse`), 8.39:1 for the note (`--ce-color-text-secondary` on `--ce-color-surface-subtle`) and 17.32:1 for the title on the label strip; the kit test keeps each at 4.5:1 or more.
 
 ## The frozen boards
 

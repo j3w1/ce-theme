@@ -61,8 +61,8 @@ test('the kit holds no raw colour and no raw size in a declaration: tokens and k
       const rest = value.replace(/var\(--ce-[\w-]+\)/g, ' ').replace(/\s+/g, ' ').trim();
       assert.doesNotMatch(rest, /#[\da-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/i, `${where}: no raw colour`);
       assert.doesNotMatch(rest, /\d(?:px|r?em|%|v[hw]|vmin|vmax|ch|ex|pt|pc|cm|mm|in|q|fr)(?![\w-])/i, `${where}: no raw size`);
-      // What is left is a CSS keyword, a zero, or the grid lines of the wide frame.
-      assert.match(rest, /^(?:(?:grid|flow-root|start|flex|flex-start|none|center|solid|middle|0)(?: |$))*$|^1 \/ -1$/, where);
+      // What is left is a CSS keyword, a zero, the grid lines of the wide frame, or the inward focus offset.
+      assert.match(rest, /^(?:(?:grid|flow-root|start|flex|flex-start|none|center|solid|middle|auto|0)(?: |$))*$|^1 \/ -1$|^calc\( \* -1\)$/, where);
     }
   }
   const bundle = await read('exports/design-system/project/components/bundle.css');
@@ -70,6 +70,14 @@ test('the kit holds no raw colour and no raw size in a declaration: tokens and k
   const marker = all.find((rule) => rule.selector === '.ce-state-frame-mark').declarations;
   assert.ok(marker.some(({ property, value }) => /width$/.test(property) && value === 'var(--ce-size-marker)'), 'the marker width uses size.marker');
   assert.ok(marker.some(({ property, value }) => property === 'height' && value === 'var(--ce-size-marker)'), 'the marker height is size.marker');
+  // A wide fragment scrolls inside the body (overflow-x: auto); a focused body shows the focus stroke inside its edge.
+  const body = all.find((rule) => rule.selector === '.ce-state-frame-body' && rule.media === null).declarations;
+  assert.ok(body.some(({ property, value }) => property === 'display' && value === 'flow-root'), 'the body is block flow');
+  assert.ok(body.some(({ property, value }) => property === 'overflow-x' && value === 'auto'), 'a wide fragment scrolls inside the body');
+  assert.deepEqual(all.find((rule) => rule.selector === '.ce-state-frame-body:focus-visible').declarations, [
+    { property: 'outline', value: 'var(--ce-stroke-focus) solid var(--ce-color-focus)' },
+    { property: 'outline-offset', value: 'calc(var(--ce-stroke-focus) * -1)' },
+  ]);
   const band = all.find((rule) => rule.selector === '.ce-state-frame--band > .ce-state-frame-label').declarations;
   assert.deepEqual(band, [{ property: 'border-top', value: 'var(--ce-stroke-heavy) solid var(--ce-color-surface-inverse)' }], 'the band rule is stroke.heavy');
 });
@@ -86,7 +94,9 @@ test('every kit selector starts from a kit class and reaches only kit classes, .
       const classes = [...part.matchAll(/\.([\w-]+)/g)].map(([, name]) => name);
       assert.ok(OWN.test(classes[0] ?? '') && part.startsWith(`.${classes[0]}`), `${part}: starts from a kit class`);
       for (const name of classes) assert.ok(OWN.test(name) || PLACED.includes(name), `${part}: .${name} is not the kit's`);
-      assert.doesNotMatch(part, /[#*:[]|^(?:html|body)\b/, `${part}: no id, universal, pseudo-class or attribute selector`);
+      // The one pseudo-class is the focus ring of a scrolling body.
+      const plain = part === '.ce-state-frame-body:focus-visible' ? '.ce-state-frame-body' : part;
+      assert.doesNotMatch(plain, /[#*:[]|^(?:html|body)\b/, `${part}: no id, universal, pseudo-class or attribute selector`);
     }
   }
 });
@@ -148,6 +158,9 @@ test('every frame is named by its heading title, has a decorative one- or two-ch
       for (const [tag] of frame.matchAll(/<\w+\b[^>]*\bclass="[^"]*\bce-state-frame[\w-]*[^"]*"[^>]*>/g)) assert.doesNotMatch(tag, /\bstyle=/, `${where}: no inline style on ${tag}`);
       assert.doesNotMatch(frame, /\bstyle=""/, `${where}: no empty style attribute`);
       assert.doesNotMatch(frame, /ce-state-frame-(?:tag|mark--)/, `${where}: no tag modifier`);
+      // A body made focusable for scrolling is a group named by the frame title, as the readme teaches.
+      const body = frame.match(/<div class="ce-state-frame-body"([^>]*)>/)[1];
+      if (body) assert.equal(body, ` tabindex="0" role="group" aria-labelledby="${id}"`, `${where}: a scrolling body is focusable and named by the title`);
     });
   }
   assert.ok(frames >= 10, `frames seen: ${frames}`);
@@ -165,7 +178,7 @@ test('every frame with simulated data has its own cue, first in its body, in the
     let cues = 0;
     starts.forEach(({ frame }) => {
       const title = frame.match(/class="ce-state-frame-title"[^>]*>([^<]+)/)[1].trim();
-      const first = frame.split('<div class="ce-state-frame-body">')[1];
+      const first = frame.split(/<div class="ce-state-frame-body"[^>]*>/)[1];
       assert.ok(first, `${file} ${title}: body`);
       const cue = first.match(/^\s*<p class=\"ce-demo-cue\" role="note">([^<]*)<\/p>/);
       if (cue) {
@@ -180,7 +193,7 @@ test('every frame with simulated data has its own cue, first in its body, in the
     if (file.endsWith('.html')) for (const title of exempt) assert.ok(starts.some(({ frame }) => frame.includes(`>${title}`)), `${file}: exemption ${title} names a frame`);
     seen.set(file, { frames: starts.length, cues, exempt: file.endsWith('.html') ? exempt.size : 0 });
   }
-  assert.deepEqual(seen.get('tests/fixtures/state-frame-sheet.html'), { frames: 8, cues: 7, exempt: 1 });
+  assert.deepEqual(seen.get('tests/fixtures/state-frame-sheet.html'), { frames: 9, cues: 8, exempt: 1 });
   assert.deepEqual(seen.get('design-system/doc-kit/README.md'), { frames: 1, cues: 1, exempt: 0 });
 });
 
