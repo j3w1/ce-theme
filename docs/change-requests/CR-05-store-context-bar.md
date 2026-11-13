@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Approved; implemented in CE Theme source by the CR-05 pull request. X-1, X-7 and X-8 are j3w1's decisions of 2026-11-06; decisions 1, 2 and 4 are the ce-theme lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([#11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)). The evidence below still describes the frozen boards of 5 November 2026 (X-3)
 
 # CR-05 · Store-context bar: the in-page line "prices are for this store · change store"
 
@@ -116,8 +116,8 @@ To run when the repository work happens (not run here, except where marked):
 
 ## 8. Owner decisions needed
 
-1. Confirm that "store-context bar" means this in-page line.
-2. One lead phrase or two (money-bearing and browsing)? The boards use four in-page leads («Importes en», «Precios y disponibilidad de», «Tienda:», «Tu tienda:») plus «Tienda actual:» in the store drawer. The proposal keeps «Importes en» and «Precios y disponibilidad de», reuses «Tienda:» only for the empty state («Tienda: sin elegir»), retires «Tu tienda:», and leaves the drawer outside this request.
+1. Decided (lead's CR-05 selection, 2026-11-13; decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed): "store-context bar" means this in-page line, distinct from the store drawer.
+2. Decided (lead's CR-05 selection, 2026-11-13; decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed): two leads, «Importes en {tienda}» on money-bearing surfaces and «Precios y disponibilidad de {tienda}» when browsing; «Tienda:» only in the empty state («Tienda: sin elegir»); «Tu tienda:» is retired from the in-page line (the utility-bar button keeps it); the drawer, with «Tienda actual:», stays outside this request.
 3. Decided (X-7, 2026-11-06): the pending bar carries `role="status"`, as a recipe-level rule.
-4. Show the in-page line on every store-dependent page, or only where amounts are shown (cart, checkout, favourites)?
+4. Decided (lead's CR-05 selection, 2026-11-13; decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed): on every store-dependent page, including browsing pages that show only availability, not only where amounts are shown.
 5. Decided (X-8, 2026-11-06): option A. `StoreBar` is accepted as the name of the composition `ce-store-note` + `ce-link`, with no new class.
