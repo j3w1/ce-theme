@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readSources, contrast } from './tokens.mjs';
 import { RECIPE_SOURCES } from './sources.mjs';
+import { WITHHELD as withheld } from './withheld.mjs';
 
 const root = new URL('../', import.meta.url);
 const { manifest, tokens } = await readSources();
@@ -52,7 +53,6 @@ for (const file of await readdir(new URL('fonts/inter/', root))) {
   if (file.endsWith('.woff2') && !fonts.some((font) => font.file === `inter/${file}`)) throw new Error(`Unrecorded font: ${file}`);
 }
 // The retail reference used for design research is kept out of this public repository by name.
-const withheld = new RegExp(String.fromCharCode(105, 107, 101, 97), 'i');
 for (const file of execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' }).split('\n')) {
   if (!file || /\.(png|jpe?g|webp|woff2?|ttf|otf|eot|ico|zip)$/i.test(file) || file === 'pnpm-lock.yaml') continue;
   const text = await readFile(new URL(file, root), 'utf8').catch(() => '');

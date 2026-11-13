@@ -1,0 +1,5 @@
+---
+// The foundation and package versions and the source commit of this build (site/version.mjs).
+import { commit, commitUrl, foundationVersion, vueVersion } from '../version.mjs';
+---
+<span class="build-info">Base {foundationVersion} · @casaelida/vue {vueVersion} · commit <a href={commitUrl}><code>{commit.slice(0, 7)}</code></a></span>

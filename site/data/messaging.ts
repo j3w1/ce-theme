@@ -2,6 +2,7 @@
 // demonstration. There are no catalogue products, prices, stock figures, customer data or provider names here, and nothing
 // in this file is read from or sent to a service.
 import type { CEConversationKind, CEMessage, CEWorkStep } from '@casaelida/vue';
+import { url } from '../url.mjs';
 
 export const SIMULATION_NOTICE = 'Simulación: ningún mensaje sale de esta página.';
 
@@ -74,8 +75,9 @@ export const WORK_ACTIONS: Record<DemoRequestState, DemoWorkAction[]> = {
 /** Written in the chat when the warehouse cannot attend the request; the summary points the reader to it. */
 export const UNAVAILABLE_REASON = 'No puedo atender este pedido hoy. Les aviso mañana a primera hora.';
 
-/** A fictional shelf illustration (public/references/shelf-gap-fictional.svg, provenance in its manifest), not a photograph. */
-export const SHELF_PHOTO = '/references/shelf-gap-fictional.svg';
+/** A fictional shelf illustration (public/references/shelf-gap-fictional.svg, provenance in its manifest), not a photograph.
+ * Island data never reaches the built HTML, so its URL goes through the base-path helper here (tests/messaging.test.mjs). */
+export const SHELF_PHOTO = url('/references/shelf-gap-fictional.svg');
 
 /** The first simulated message gets this time (10:46); each later one is a minute after the previous. */
 export const FIRST_FREE_MINUTE = 10 * 60 + 46;

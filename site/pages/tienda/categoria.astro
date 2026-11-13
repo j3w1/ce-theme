@@ -3,6 +3,7 @@ import Store from '../../layouts/Store.astro';
 import Icon from '../../components/Icon.astro';
 import StoreProducts from '../../components/StoreProducts.astro';
 import { catalogue, categories } from '../../data/store.mjs';
+import { url } from '../../url.mjs';
 const filters = [
   { id: 'filtro-categoria', title: 'Categoría', options: [['Tazas y vasos', 2], ['Tapetes', 2]] },
   { id: 'filtro-material', title: 'Material', options: [['vidrio borosilicato', 2], ['PVC', 2]] },
@@ -14,7 +15,7 @@ const filterGroups = (prefix: string) => filters.map((group, index) => (
 ---
 <Store title="Cocina y baño" current="Productos" description="Listado de productos de demostración con filtros y precios por tienda.">
   <div class="ce-container">
-    <nav class="ce-breadcrumbs" aria-label="Ruta" style="padding-top:var(--ce-space-16)"><ol><li><a href="/tienda/">Inicio</a></li><li><a href="/tienda/categoria/">Productos</a></li><li><span aria-current="page">Cocina y baño</span></li></ol></nav>
+    <nav class="ce-breadcrumbs" aria-label="Ruta" style="padding-top:var(--ce-space-16)"><ol><li><a href={url('/tienda/')}>Inicio</a></li><li><a href={url('/tienda/categoria/')}>Productos</a></li><li><span aria-current="page">Cocina y baño</span></li></ol></nav>
     <h1 class="store-page-title">Cocina y baño</h1>
     <nav aria-label="Subcategorías"><ul class="ce-category-tiles">{categories.slice(0, 4).map((category) => <li><a class="ce-category-tile" href={category.href}>{category.image ? <img src={category.image} alt="" width="120" height="120" loading="lazy" /> : null}{category.label}</a></li>)}</ul></nav>
 
@@ -36,7 +37,7 @@ const filterGroups = (prefix: string) => filters.map((group, index) => (
         <ul class="ce-active-filters" aria-label="Filtros activos"><li class="ce-token">Disponible en tu tienda<button type="button" aria-label="Quitar filtro: disponible en tu tienda"><Icon name="close" size={16} /></button></li></ul>
         <div id="ofertas">
           <StoreProducts items={catalogue} id="listado" label="Productos" compare>
-            <aside class="ce-grid-promo" aria-labelledby="promo-regalos"><p class="ce-eyebrow">Regalos</p><h3 id="promo-regalos">Ideas para regalar desde casa</h3><p>Productos útiles para cada ocasión.</p><a class="ce-icon-button ce-icon-button--ink" href="/tienda/escena/" aria-label="Ver ideas para regalar"><Icon name="arrow" /></a></aside>
+            <aside class="ce-grid-promo" aria-labelledby="promo-regalos"><p class="ce-eyebrow">Regalos</p><h3 id="promo-regalos">Ideas para regalar desde casa</h3><p>Productos útiles para cada ocasión.</p><a class="ce-icon-button ce-icon-button--ink" href={url('/tienda/escena/')} aria-label="Ver ideas para regalar"><Icon name="arrow" /></a></aside>
           </StoreProducts>
         </div>
         <div class="ce-load-more"><p>Mostrando 4 de 4 productos</p><progress class="ce-progress" max="4" value="4" aria-label="Productos mostrados">4 de 4</progress></div>

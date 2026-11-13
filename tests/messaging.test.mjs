@@ -169,8 +169,25 @@ test('the shelf illustration is a self-contained fictional SVG with recorded pro
   assert.equal(entry.sha256, createHash('sha256').update(svg).digest('hex'));
   // The example uses this file and no other image.
   const fixtures = await read('site/data/messaging.ts');
-  assert.match(fixtures, /SHELF_PHOTO = '\/references\/shelf-gap-fictional\.svg'/);
+  assert.match(fixtures, /SHELF_PHOTO = url\('\/references\/shelf-gap-fictional\.svg'\)/);
   assert.doesNotMatch(fixtures, /PRIVATE-DESIGN-ASSET|\.(png|jpe?g|webp)\b/i);
+});
+
+// Island data is bundled into JavaScript, which the post-build base-path test does not read. Every URL in the fixture goes
+// through site/url.mjs, evaluated here with the configured base, and names a file the site publishes.
+test('the /mensajeria/ fixture builds its URLs under the site base', async () => {
+  const { default: config } = await import('../astro.config.mjs');
+  const helper = (await read('site/url.mjs')).replace('import.meta.env.BASE_URL', JSON.stringify(config.base));
+  const { url } = await import(`data:text/javascript,${encodeURIComponent(helper)}`);
+  const fixtures = await read('site/data/messaging.ts');
+  const paths = [...fixtures.matchAll(/\burl\('([^']*)'\)/g)].map((match) => match[1]);
+  assert.deepEqual(paths, ['/references/shelf-gap-fictional.svg']);
+  for (const path of paths) {
+    assert.equal(url(path), `/ce-theme${path}`);
+    await readFile(new URL(`public${path}`, root));
+  }
+  assert.doesNotMatch(fixtures.replace(/\burl\('[^']*'\)/g, ''), /['"`]\/(?!\/)/, 'no other root-absolute string');
+  assert.doesNotMatch(await read('site/components/MessagingDemo.vue'), /['"`]\/(?!\/)/, 'the island adds none');
 });
 
 test('the Reposición example keeps delivery status and work progress apart, with simulated actions and no viewer', async () => {

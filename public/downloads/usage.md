@@ -4,7 +4,7 @@ Start with [apply-ce-theme.md](apply-ce-theme.md) for the load order and the rul
 
 ## Stable entry points
 
-Version: **0.2.0**, light foundation. `ce-theme.json` lists the token sources, generated exports and tested contrast pairs. Pin a release or commit; do not silently follow a changing branch. Breaking changes from 0.1.0 are in [CHANGELOG.md](../CHANGELOG.md).
+Version: **0.2.0**, light foundation. `ce-theme.json` lists the token sources, generated exports and tested contrast pairs. Pin a release or commit; do not silently follow a changing branch. Breaking changes from 0.1.0 are in [CHANGELOG.md](https://github.com/j3w1/ce-theme/blob/main/CHANGELOG.md).
 
 | File | Contents |
 | --- | --- |

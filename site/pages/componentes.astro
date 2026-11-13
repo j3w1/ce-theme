@@ -3,6 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import { CEButton, CETextField } from '@casaelida/vue';
 import Recipe from '../components/Recipe.astro';
 import Icon from '../components/Icon.astro';
+import { url } from '../url.mjs';
+import { NONE, REQUIRED, VUE_REFERENCE } from '../data/reference.mjs';
+import { vueVersion } from '../version.mjs';
+const WIDTH_RULE = 'https://github.com/j3w1/ce-theme/blob/main/packages/vue/README.md#messaging-components';
+const slug = (name: string) => name.toLowerCase();
 const buttonCode=`<button class="ce-button">Ver productos</button>
 <button class="ce-button ce-button--secondary">Conocer más</button>
 <button class="ce-button ce-button--ink">Explorar</button>
@@ -61,7 +66,7 @@ const nativeCode=`<textarea class="ce-textarea"></textarea>
   <div class="container">
     <div class="page-intro"><p class="eyebrow">02 · Componentes</p><h1>Pequeñas piezas.<br/>Una misma intención.</h1><p>Recetas HTML y CSS que se adaptan a tu proyecto. Cada pieza usa la misma base de color, espacio y tipografía.</p></div>
     <Recipe title="Botones y acciones" description="Una acción principal por contexto. Las acciones secundarias mantienen una presencia más discreta." code={buttonCode}><div class="demo-row"><CEButton>Ver productos</CEButton><CEButton variant="secondary">Conocer más</CEButton><CEButton variant="ink">Explorar</CEButton><CEButton disabled>No disponible</CEButton></div><p class="small-note">Muestras de estado y estilo. Los botones de esta sección no ejecutan operaciones de tienda.</p></Recipe>
-    <Recipe title="Iconos y enlaces" description="Acciones compactas con un nombre accesible. Los iconos decorativos se ocultan a lectores de pantalla." code={'<button class="ce-icon-button" aria-label="Guardar producto">\n  <!-- Inline SVG: aria-hidden="true", focusable="false" -->\n</button>\n<a class="ce-link" href="/catalogo/">Explorar el catálogo</a>'}><div class="demo-row"><button class="ce-icon-button" aria-label="Ejemplo: guardar producto"><Icon name="heart"/></button><button class="ce-icon-button" aria-label="Ejemplo: bolsa de compra"><Icon name="bag"/></button><a class="ce-icon-button ce-icon-button--ink" href="/descargas/" aria-label="Ir a los recursos descargables"><Icon name="arrow"/></a><a class="ce-link" href="/patrones/">Explorar las recetas de producto</a></div></Recipe>
+    <Recipe title="Iconos y enlaces" description="Acciones compactas con un nombre accesible. Los iconos decorativos se ocultan a lectores de pantalla." code={'<button class="ce-icon-button" aria-label="Guardar producto">\n  <!-- Inline SVG: aria-hidden="true", focusable="false" -->\n</button>\n<a class="ce-link" href="/catalogo/">Explorar el catálogo</a>'}><div class="demo-row"><button class="ce-icon-button" aria-label="Ejemplo: guardar producto"><Icon name="heart"/></button><button class="ce-icon-button" aria-label="Ejemplo: bolsa de compra"><Icon name="bag"/></button><a class="ce-icon-button ce-icon-button--ink" href={url('/descargas/')} aria-label="Ir a los recursos descargables"><Icon name="arrow"/></a><a class="ce-link" href={url('/patrones/')}>Explorar las recetas de producto</a></div></Recipe>
     <Recipe title="Búsqueda y formularios" description="Etiquetas visibles, instrucciones breves y errores que explican cómo continuar." code={fieldCode}><div class="demo-fields"><CETextField id="sample-search" type="search" label="Buscar un producto" placeholder="¿Qué estás buscando?" note="Nombre o código de producto. Campo de muestra." /><div class="ce-field"><label for="sample-sort">Ordenar por</label><select class="ce-select" id="sample-sort"><option>Relevancia</option><option>Precio: menor a mayor</option><option>Novedades</option></select></div></div></Recipe>
     <Recipe title="Validación que ayuda" description="El borde y el mensaje trabajan juntos. El texto explica el problema sin depender solo del color." code={errorCode}><div class="demo-fields"><CETextField id="sample-email" type="email" label="Correo electrónico" modelValue="nombre@" error="Escribe un correo completo, por ejemplo: nombre@ejemplo.com." /><CETextField id="sample-code" label="Código de producto" modelValue="CE26061509" readonly note="Los códigos conservan sus caracteres originales." /></div></Recipe>
     <Recipe title="Categorías y filtros" description="Controles agrupados con un estado de selección visible. Esta muestra permite cambiar la categoría activa." code={'<div role="group" aria-label="Categorías">\n  <button class="ce-chip" aria-pressed="true">Todos</button>\n  <button class="ce-chip" aria-pressed="false">Cocina</button>\n</div>'}><div class="demo-row" data-choice-group role="group" aria-label="Ejemplo de selección de categoría">{['Todos','Cocina','Organización','Iluminación','Decoración'].map((name,i)=><button class="ce-chip" aria-pressed={String(i===0)}>{name}</button>)}</div></Recipe>
@@ -93,8 +98,8 @@ const nativeCode=`<textarea class="ce-textarea"></textarea>
         <div class="demo-row"><span class="ce-spinner" role="status" aria-label="Cargando"></span><span class="ce-save-state" data-state="saved">Guardado</span><span class="ce-save-state" data-state="dirty">Cambios sin guardar</span><span class="ce-save-state" data-state="error">Error al guardar</span></div>
         <div style="display:grid;gap:8px;max-width:320px" aria-hidden="true"><span class="ce-skeleton" style="aspect-ratio:1"></span><span class="ce-skeleton"></span><span class="ce-skeleton" style="width:60%"></span></div>
         <progress class="ce-progress" max="100" value="60" aria-label="Carga de fotos">60%</progress>
-        <div class="ce-toast" style="justify-self:start">Agregado a tu bolsa <a class="ce-link" href="/tienda/carrito/">Ver bolsa</a></div>
-        <div class="ce-empty"><h3>Tu bolsa está vacía</h3><p>Guarda productos o explora las novedades.</p><a class="ce-button" href="/tienda/">Ir a la tienda</a></div>
+        <div class="ce-toast" style="justify-self:start">Agregado a tu bolsa <a class="ce-link" href={url('/tienda/carrito/')}>Ver bolsa</a></div>
+        <div class="ce-empty"><h3>Tu bolsa está vacía</h3><p>Guarda productos o explora las novedades.</p><a class="ce-button" href={url('/tienda/')}>Ir a la tienda</a></div>
       </div>
     </Recipe>
     <Recipe title="Formularios más completos" description="Interruptores, importes con prefijo, carga de archivos y fichas seleccionadas. Cada control tiene etiqueta visible." code={formsCode}>
@@ -117,6 +122,29 @@ const nativeCode=`<textarea class="ce-textarea"></textarea>
         <div class="ce-field"><label for="nat-meter">Stock disponible</label><meter class="ce-meter" id="nat-meter" min="0" max="100" low="25" high="60" optimum="90" value="72">72</meter></div>
       </div>
     </Recipe>
+    <section class="section vue-reference" aria-labelledby="referencia-vue">
+      <h2 id="referencia-vue">Referencia de @casaelida/vue</h2>
+      <p class="section-description">Los nueve componentes públicos de @casaelida/vue {vueVersion}, escritos desde sus fuentes. Cada uno dibuja una receta <code>ce-</code> de esta página y se importa por su nombre: <code>{"import { CEButton } from '@casaelida/vue'"}</code>.</p>
+      <nav class="page-nav" aria-label="Componentes Vue">{VUE_REFERENCE.map(({ name }) => <a class="ce-link" href={`#${slug(name)}`}>{name}</a>)}</nav>
+      {VUE_REFERENCE.map(({ name, recipe, summary, props, models = [], events = [], slots = [], types, width, example }) => (
+        <section class="reference-item" id={slug(name)} aria-labelledby={`${slug(name)}-titulo`}>
+          <h3 id={`${slug(name)}-titulo`}>{name}</h3>
+          <p>Dibuja la receta <code>{recipe}</code>. {summary}</p>
+          {width && <p class="small-note">Dale un ancho definido: consulta <a class="ce-link" href={WIDTH_RULE}>la regla de ancho definido en la guía del paquete</a>.</p>}
+          <h4>Propiedades</h4>
+          <dl class="reference-api">{props.map(([prop, type, fallback, description]) => <><dt><code>{prop}</code></dt><dd><code>{type}</code> · {fallback === REQUIRED ? 'obligatoria' : fallback === NONE ? 'opcional' : <>predeterminado <code>{fallback}</code></>}. {description}</dd></>)}</dl>
+          <h4>v-model</h4>
+          {models.length ? <dl class="reference-api">{models.map(([binding, prop, fallback, event]) => <><dt><code>{binding}</code></dt><dd><code>{prop}</code> · predeterminado <code>{fallback}</code> · evento <code>{event}</code>.</dd></>)}</dl> : <p>Ninguno.</p>}
+          <h4>Eventos</h4>
+          {events.length ? <dl class="reference-api">{events.map(([event, payload, description]) => <><dt><code>{event}</code></dt><dd>{payload && <><code>{payload}</code>. </>}{description}</dd></>)}</dl> : <p>Ninguno, aparte de los de v-model.</p>}
+          <h4>Ranuras</h4>
+          {slots.length ? <dl class="reference-api">{slots.map(([slot, description]) => <><dt><code>{slot}</code></dt><dd>{description}</dd></>)}</dl> : <p>Ninguna.</p>}
+          {types && <><h4>Tipos</h4><pre class="install-code"><code>{types}</code></pre></>}
+          <h4>Ejemplo</h4>
+          <pre class="install-code"><code>{example}</code></pre>
+        </section>
+      ))}
+    </section>
   </div>
   <script>import { enhanceAll } from '../../recipes/behaviors.mjs'; enhanceAll();</script>
   <script>document.querySelectorAll('[data-choice-group]').forEach(group=>group.querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>{group.querySelectorAll('button').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));})));</script>

@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 // The /mensajeria/ example: the real @casaelida/vue components on fictional, in-memory fixtures.
 // Browser tests verify this web page only. They do not verify native Android or iOS notifications, camera access or calls.
-const ROUTE = '/mensajeria/';
+const ROUTE = 'mensajeria/';
 const NOTICE = 'Simulación: ningún mensaje sale de esta página.';
 
 async function openDemo(page, width = 1280, height = 900) {
@@ -692,7 +692,7 @@ test('keyboard users keep their place: activating an action moves focus to the n
   expect(await ring(log)).toEqual({ style: 'solid', width: 2 });
 });
 
-test('opening the photo records a visible simulated event and says there is no viewer', async ({ page }) => {
+test('opening the photo records a visible simulated event and says there is no viewer', async ({ page, baseURL }) => {
   const { photo, events, demo, row } = await openReposicion(page);
   await expect(events).toContainText('Aún no hay eventos');
   await photo.click();
@@ -709,7 +709,7 @@ test('opening the photo records a visible simulated event and says there is no v
   await expect(announcement).toHaveText('Se abrió la foto 1 de 1: Anaquel 3. Simulado: no hay visor en esta demostración.');
   await expect(page.locator('dialog, [role="dialog"]')).toHaveCount(0);
   await expect(photo).toBeFocused();
-  expect(new URL(page.url()).pathname).toBe('/mensajeria/');
+  expect(new URL(page.url()).pathname).toBe(new URL(ROUTE, baseURL).pathname);
   await photo.click();
   await expect(events.locator('li')).toHaveCount(2);
   // The conversation list says nothing new either.
