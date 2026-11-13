@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Implemented in CE Theme by pull request [#17](https://github.com/j3w1/ce-theme/pull/17): recipe `ce-demo-cue`, standard name `DemoCue`, the `DemoCue` design-system card and the rules in `docs/names.md` (“Demonstration cue”). Decisions 2 to 4 were decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)).
 
 # CR-03 · Demonstration cue (`ce-demo-cue`)
 
@@ -104,6 +104,8 @@ To run when the repository work happens (not run here):
 3. A test that the recipe contains no literal text and no raw colour.
 4. A check that the consumer's string equals «Demostración — datos y operaciones simulados» where the owner wants that exact wording.
 
+Implemented with the recipe: checks 1 and 2 are `tests/browser/demo-cue.spec.mjs` (the `DemoCue` card at 390, 768 and 1440 px with text at 100%, 150% and 200%, a consumer word longer than the container inside and outside `.ce-scope`, axe, and the ARIA order of the main region); checks 3 and 4 are `tests/demo-cue.test.mjs` (the rule holds only tokens and keywords, no `content` and no raw colour; every shipped `ce-demo-cue` example is a `role="note"` element whose text is exactly the canon wording). Measured once in Chromium on the same card with the generated `tokens.css` and `recipes.css` and the Inter files (the tests themselves assert geometry, not these numbers): at 14px the line is 16.8px and the box 36.8px tall and 380px wide; at 390px it wraps to two lines (three at 200% text). The recipe adds `overflow-wrap: anywhere` to the section 4 rule so that a word longer than its container wraps (*pending review*). Not run: WebKit locally (hosted CI runs it), screen readers, real devices, forced colours.
+
 ## 7. Risks and what it does not change
 
 - A demonstration-only element enters the shared system, as decided (X-4, 2026-11-06): the cue goes in CE Theme and the state frame (CR-02) in a documentation kit.
@@ -114,8 +116,8 @@ To run when the repository work happens (not run here):
 ## 8. Owner decisions needed
 
 1. Decided (X-4, X-8, 2026-11-06): the cue is a shared recipe in CE Theme, `ce-demo-cue`, with the standard name `DemoCue` accepted with its changes (CE Meta App also shows simulated data and `decisions.md` already has «· simulado»).
-2. Confirm the text stays in the consumer.
-3. Keep the compact pill and badge forms as modifiers, or retire them in favour of the block cue?
-4. State sheets: confirm that every frame showing simulated commercial or staff data carries the cue (the CANON reading; the sheet-only form is not an equivalent), and say whether a sheet-level cue is wanted in addition.
+2. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the text stays in the consumer. The recipe is appearance only; examples that need the canon wording use «Demostración — datos y operaciones simulados».
+3. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the block cue is the only form of the shared recipe. The compact pill, badge and quiet-strip forms are retired in new examples and get no modifier; the frozen snapshot is preserved.
+4. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): every frame showing simulated commercial or staff data carries the cue. An additional sheet-level cue is optional and never counts as a frame's cue. The cue is left out of production output, not merely hidden.
 5. Border: Decided (X-2, 2026-11-06): the cue reuses `--ce-stroke-focus` (2px); no dedicated token is added.
 6. Decided (X-7, 2026-11-06): `role="note"` stays on the cue, as a recipe-level rule.

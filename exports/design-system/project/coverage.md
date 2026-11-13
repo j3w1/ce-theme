@@ -61,6 +61,7 @@ Presentation for conversation interfaces. Delivery, assignment, authorization an
 | Breadcrumbs, tabs, disclosure | `ce-breadcrumbs`, `ce-tabs`, `ce-disclosure` | Tested | Tabs follow the arrow-key pattern in `behaviors.mjs`. |
 | Dialog, drawer, menu, tooltip | `<dialog>`, `popover` | Tested | Dialogs return focus to the control that opened them. Menu and tooltip positioning is left to the application. |
 | Notices, toast, spinner, skeleton, empty state, progress, save state | `interface.css` | Implemented | |
+| Demonstration cue (DemoCue) | `ce-demo-cue` | Tested | The words come from the consumer, with `role="note"`; production output leaves the element out. Example: the `DemoCue` design-system card. Browser tests render the card at 390, 768 and 1440 px with text at 100%, 150% and 200% (wraps, stays inside its container, never overlaps the page header), run axe and check that the cue comes first in the main content; a unit test checks the recipe holds no text and no raw colour and that every example uses the canon wording. See [names.md](names.md#demonstration-cue). |
 | Status pills and availability | `ce-pill`, `ce-status`, `ce-stock` | Implemented | Always text plus colour. |
 | Icons | `site/data/icons.mjs` (30 outlined icons) | Implemented | Social platforms are text links, not their marks. |
 

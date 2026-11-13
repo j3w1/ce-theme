@@ -252,6 +252,10 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-notice--success { background: var(--ce-color-status-success-bg); color: var(--ce-color-status-success-text); }
 .ce-notice--warning { background: var(--ce-color-status-warning-bg); color: var(--ce-color-status-warning-text); }
 .ce-notice--danger { background: var(--ce-color-status-danger-bg); color: var(--ce-color-status-danger-text); }
+/* DemoCue (Aviso de demostración): a bordered note saying that the data and operations are simulated. Appearance only: the
+   consumer supplies the words and role="note", and leaves the element out of production output (hiding it is not enough).
+   One block form, no modifiers. The 2px border reuses the focus stroke; a word longer than the container breaks inside it. */
+.ce-demo-cue { display: flex; width: fit-content; max-width: 100%; align-items: center; gap: var(--ce-space-8); margin: 0; padding: var(--ce-space-8) var(--ce-space-12); border: var(--ce-stroke-focus) solid var(--ce-color-text-primary); color: var(--ce-color-text-primary); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-bold); line-height: var(--ce-font-line-heading); overflow-wrap: anywhere; }
 .ce-toast-region { position: fixed; z-index: var(--ce-layer-toast); right: var(--ce-space-16); bottom: var(--ce-space-16); left: var(--ce-space-16); display: grid; justify-items: center; gap: var(--ce-space-8); pointer-events: none; }
 .ce-toast { display: flex; align-items: center; gap: var(--ce-space-16); max-width: 560px; padding: var(--ce-space-12) var(--ce-space-16) var(--ce-space-12) var(--ce-space-20); border-radius: var(--ce-radius-small); background: var(--ce-color-surface-inverse); color: var(--ce-color-text-inverse); font-size: var(--ce-font-size-sm); pointer-events: auto; }
 .ce-toast .ce-link { color: var(--ce-color-text-inverse); font-weight: var(--ce-font-weight-bold); }

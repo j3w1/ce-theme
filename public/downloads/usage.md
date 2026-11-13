@@ -45,7 +45,7 @@ Use native elements: buttons, links, inputs, selects, `<details>`, `<dialog>` an
 - **Codes:** `ce-code`, optionally segmented with `codeSegments` and `ce-code-number`. Render the original string as text, never as a number.
 - **Prices:** the price recipe below; `ce-price--joined` for S/ at the size of the figures (the S/ on the baseline is the default), `ce-price--raised` for the raised S/, `ce-price--offer` (yellow, default promotion), `ce-price--sale` (red).
 - **Retail:** `ce-site-header`, `ce-store-context`, `ce-category-rail`, `ce-mosaic`, `ce-tile`, `ce-rail`, `ce-filter-bar`, `ce-listing`, `ce-product-grid--divided`, `ce-pdp`, `ce-buy-box`, `ce-scene`, `ce-cart`, `ce-auth`, `ce-timeline`, `ce-site-footer`.
-- **Interface:** `ce-tabs`, `ce-disclosure`, `ce-dialog`, `ce-drawer`, `ce-menu`, `ce-tooltip`, `ce-notice`, `ce-toast`, `ce-empty`, `ce-skeleton`, form controls.
+- **Interface:** `ce-tabs`, `ce-disclosure`, `ce-dialog`, `ce-drawer`, `ce-menu`, `ce-tooltip`, `ce-notice`, `ce-demo-cue` (the demonstration cue; the consumer supplies its words), `ce-toast`, `ce-empty`, `ce-skeleton`, form controls.
 - **Workspace:** `data-ce-density`, `ce-app`, `ce-data-table`, `ce-bulk-bar`, `ce-record-header`, `ce-form-section`, `ce-locked`, `ce-audit`.
 - **Photography:** `ce-photo-panel`, `ce-tagged-media` with `ce-pin` hover pins on the website and `ce-hotspot` markers (`A`, `B`, `C`) on static media, `ce-feature-tag`, `ce-tag-list`. Position with `--ce-x` and `--ce-y`.
 

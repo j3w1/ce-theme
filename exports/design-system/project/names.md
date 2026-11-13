@@ -46,6 +46,25 @@ The **CECode** (Código CE) is white bold text on ink with tabular figures, padd
 
 **AddToCart** (Añadir al carrito) is an icon button that appears only when a product card is hovered or focused. On touch and narrow screens it is replaced by a full-width “Añadir al carrito” button at the bottom of the card.
 
+## Demonstration cue
+
+**DemoCue** (Aviso de demostración, `ce-demo-cue`) says in words that what a page or frame shows is simulated: its data and its operations. It is a note, not a status and not a button.
+
+```html
+<p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>
+```
+
+- **The consumer supplies the words.** The recipe is appearance only and holds no text. Wherever the design canon's wording is required, as in CE Theme's own examples and the design workbench, the text is exactly «Demostración — datos y operaciones simulados», with an em dash (U+2014). An application's demonstration mode may say that its data is simulated in its own words.
+- **`role="note"` is required** on the element. Add `lang="es"` when the surrounding page is in another language.
+- **One form.** The bordered block is the only demonstration cue. The compact forms seen in earlier designs (an information pill in a page header, a badge, a quiet strip) are not used in new work and have no modifier.
+- **Placement on a page.** Once, at the top of the main content of a page that shows simulated data: the first element of the main region, before the page header or the `h1` (breadcrumbs, which are navigation, may come first). The recipe has no margin; the page sets the space around it.
+- **Frames.** In a state sheet, every frame that shows simulated commercial or staff data carries its own cue inside the frame, because a frame is viewed and cropped on its own. A cue for the whole sheet may be added above the frames; it never counts as the cue of any frame. Only a frame with no simulated data, such as a route shell or a documentation-only fragment, carries none.
+- **Scenarios.** The cue never replaces the «Escenario» label of a scenario frame.
+- **Production.** Production output does not contain the element at all. Hiding it with CSS, the `hidden` attribute or `aria-hidden` is not enough. The recipe cannot tell a forgotten cue on real data; leaving it out is the application's job.
+- **Look.** Words and a 2px ink border that reuses the focus stroke (`stroke.focus`); no colour carries the meaning. Small bold text at the heading line height, as wide as its words and never wider than its container, inside which it wraps.
+
+The boards of the frozen design-workbench snapshot keep their own local drawings of the cue; new boards and examples use this recipe. The decisions behind these rules are in [decisions.md](decisions.md) (“Demonstration cue”).
+
 ## Registry
 
 Generated from `recipes/names.mjs` by `pnpm generate`; do not edit between the markers.
@@ -156,6 +175,7 @@ Generated from `recipes/names.mjs` by `pnpm generate`; do not edit between the m
 | `StatusPill` | Estado | `ce-status`, `ce-status--success`, `ce-status--warning`, `ce-status--danger`, `ce-status--info` | — | A status with colour and a word, never colour alone. |
 | `Pill` | Píldora | `ce-pill` | — | A compact neutral label for roles and densities in tools. |
 | `Notice` | Aviso | `ce-notice` | — | An inline message with an icon, a title and a sentence. |
+| `DemoCue` | Aviso de demostración | `ce-demo-cue` | — | A bordered note (role note) saying that the data and operations are simulated, in the words the consumer supplies. One at the top of the main content and one inside every frame that shows simulated commercial or staff data. Left out of production output, never just hidden. |
 | `Toast` | Notificación | `ce-toast` | — | A short confirmation that disappears. |
 | `Progress` | Barra de progreso | `ce-progress` | — | A thin determinate progress bar. |
 | `Dialog` | Diálogo | `ce-dialog` | — | A modal window that asks for a decision. |
