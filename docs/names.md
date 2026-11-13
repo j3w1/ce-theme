@@ -29,6 +29,8 @@ The **ProductStack** (Pila de producto) is the one vertical order and spacing fo
 
 The price follows the specs at the same gap on every card. Never push it to the bottom of a tall card, and never add space to line prices up across cards.
 
+A ProductPinCard has no specs: NAME and Description keep the 2px identity gap, and the price, or the StoreNote or pending-price message that takes its place, starts 8px under the Description (`size.product.gap-note`).
+
 ## CECode
 
 The **CECode** (Código CE) is white bold text on ink with tabular figures, padding 0.3em × 0.35em and a 2px corner (`radius.code`). It is always one line: `white-space: nowrap`, no hyphenation, no wrapping, in every context; the container gives it room, never the other way round. Sizes: `ce-code--sm` 12px for dense tables, default 14px for cards, lists and tools, `ce-code--lg` 16px for product pages, 3mm on the gondola label and 26px on the share card. The code is a string, never a number.

@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Decided on 2026-11-13 by the repository lead's selection, “decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed” ([issue #11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)); implemented in CE Theme source by the CR-09 pull request; the frozen boards are unchanged (X-3)
 
 # CR-09 · Pin-card text uses the 2px identity gap
 
@@ -94,4 +94,8 @@ To run when the repository work happens (not run here, except where marked):
 ## 8. Owner decisions needed
 
 1. Should the store note and the pending-price message in a pin card start at the price's offset (8px, proposed) or stay tight (2px as drawn in the boards)? Recommended: 8px, so a missing price does not read as part of the identity.
+   **Decided (2026-11-13, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed):** 8px. The store note and the pending-price message start at the price's offset, so they do not read as part of the identity.
 2. Keep the pin card's price at 8px under the Description (current recipe and boards) or move it to 12px like a card with specs? Recommended: keep 8px (no specs in the pin).
+   **Decided (2026-11-13, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed):** keep 8px, for a pin without specifications; NAME to Description becomes the existing 2px identity gap.
+
+These are the repository lead's selections in [issue #11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160), using this request's recommendations; j3w1 can veto either. The section 6 checks are `tests/browser/pin-card.spec.mjs` in the repository.
