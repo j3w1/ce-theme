@@ -63,7 +63,7 @@ async function pointAt(page, locator, { tap = false, x, y } = {}) {
 const trackClicks = (page) => page.evaluate(() => {
   window.clicks = [];
   const name = (el) => (el.matches('.ce-product-link') ? 'product' : el.matches('.ce-product-media > a') ? 'photo' : el.matches('.ce-variant-thumbs a') ? 'variant' : el.type === 'checkbox' ? 'compare' : el.id);
-  for (const el of document.querySelectorAll('.ce-product :is(a, button, input)')) el.addEventListener('click', () => window.clicks.push(name(el)));
+  for (const el of document.querySelectorAll('.ce-product :is(a, button, input, select, textarea, summary)')) el.addEventListener('click', () => window.clicks.push(name(el)));
 });
 const takeClicks = (page) => page.evaluate(() => window.clicks.splice(0));
 // Every button in a card that a person can see: rendered, not transparent.
@@ -157,6 +157,64 @@ test('acceptance 1: on touch and narrow screens the card is one link, and its ot
   await expect(page).toHaveURL(/card\.html$/);
 });
 
+// Every native control type the whole-card link keeps separate (a[href], button, input with its label, select, textarea, summary),
+// in one card: each takes its own pointer or touch press and keeps its place in the keyboard order. Custom role="button" elements
+// and controls inside an ancestor with its own stacking context are outside what the recipe keeps separate (see the guideline).
+const controlsCard = `<article class="ce-product" style="width:300px">
+  <label class="ce-check ce-product-select"><input type="checkbox" />Comparar</label>
+  <div class="ce-product-media"><button class="ce-icon-button ce-icon-button--small" type="button" id="marca" aria-label="Marcar MENE">${ICON}</button><a href="#producto" tabindex="-1" aria-hidden="true"><span class="ce-media-missing">Foto no disponible</span></a></div>
+  <div class="ce-product-info">
+    <div class="ce-product-row"><h3 class="ce-product-heading"><a class="ce-product-link" href="#producto"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio</span></a></h3></div>
+    <p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+    ${priceHtml('12.5')}
+    <div class="ce-variant-more"><span>Más opciones</span><ul class="ce-variant-thumbs"><li><a href="#variante"><span class="ce-media-missing">NOME</span></a></li></ul></div>
+    <select class="ce-select" id="cantidad" aria-label="Cantidad"><option>1</option><option>2</option></select>
+    <textarea class="ce-textarea" id="nota" aria-label="Nota" rows="2"></textarea>
+    <details class="ce-disclosure"><summary id="detalles">Detalles</summary><p>Vidrio borosilicato.</p></details>
+    <button class="ce-link" type="button" id="tarea">Quitar de favoritos</button>
+  </div>
+</article>`;
+async function checkControls(page, tap) {
+  await trackClicks(page);
+  // Keyboard: the document order, with the photo's own link out of it.
+  await page.locator('#antes').focus();
+  const order = [];
+  for (let step = 0; step < 8; step += 1) { await page.keyboard.press('Tab'); order.push(await page.evaluate(() => { const el = document.activeElement; return el.matches('.ce-product-link') ? 'product' : el.matches('.ce-variant-thumbs a') ? 'variant' : el.type === 'checkbox' ? 'compare' : el.id; })); }
+  expect(order).toEqual(['compare', 'marca', 'product', 'variant', 'cantidad', 'nota', 'detalles', 'tarea']);
+  await page.locator('#antes').focus();
+  // Pointer or touch: each control takes its own press, the product link takes none of them.
+  await pointAt(page, page.locator('.ce-product-select'), { tap });
+  expect(await takeClicks(page)).toEqual(['compare']);
+  await expect(page.getByRole('checkbox', { name: 'Comparar' })).toBeChecked();
+  await pointAt(page, page.locator('#marca'), { tap });
+  expect(await takeClicks(page)).toEqual(['marca']);
+  // The select opens its own picker (the select recipe uses the customizable base-select where supported); Escape closes it and
+  // leaves the select focused.
+  await pointAt(page, page.locator('#cantidad'), { tap });
+  expect(await takeClicks(page)).toEqual(['cantidad']);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#cantidad')).toBeFocused();
+  await pointAt(page, page.locator('#nota'), { tap });
+  expect(await takeClicks(page)).toEqual(['nota']);
+  await expect(page.locator('#nota')).toBeFocused();
+  await pointAt(page, page.locator('#detalles'), { tap });
+  expect(await takeClicks(page)).toEqual(['detalles']);
+  await expect(page.locator('details')).toHaveAttribute('open', '');
+  await pointAt(page, page.locator('#tarea'), { tap });
+  expect(await takeClicks(page)).toEqual(['tarea']);
+  await expect(page).toHaveURL(/card\.html$/);
+  await pointAt(page, page.locator('.ce-variant-thumbs a'), { tap });
+  expect(await takeClicks(page)).toEqual(['variant']);
+  await expect(page).toHaveURL(/#variante$/);
+  await pointAt(page, page.locator('.ce-product-specs'), { tap });
+  expect(await takeClicks(page)).toEqual(['product']);
+  await expect(page).toHaveURL(/#producto$/);
+}
+test('acceptance 1: at 390 every native control type in a card keeps its own pointer target and keyboard place', async ({ page }) => {
+  await open(page, controlsCard, { width: 390 });
+  await checkControls(page, false);
+});
+
 test.describe('on a touch screen', () => {
   test.use({ hasTouch: true, viewport: { width: 1440, height: 900 } });
   test('acceptance 1: at 1440 under (hover: none) no add of any kind is shown, and a tap on the specs opens the product page', async ({ page }) => {
@@ -182,6 +240,11 @@ test.describe('on a touch screen', () => {
     await pointAt(page, page.locator('.ce-price-block'), { tap: true });
     expect(await takeClicks(page)).toEqual(['product']);
     await expect(page).toHaveURL(/#producto$/);
+  });
+  test('acceptance 1: under (hover: none) every native control type in a card keeps its own tap target and keyboard place', async ({ page }) => {
+    await open(page, controlsCard);
+    test.skip(!(await page.evaluate(() => matchMedia('(hover: none)').matches)), 'This browser does not emulate (hover: none) for a touch context.');
+    await checkControls(page, true);
   });
   test('acceptance 2b: under (hover: none) a leftover ce-product-add stays hidden', async ({ page }) => {
     await open(page, card({ legacy: true }));
