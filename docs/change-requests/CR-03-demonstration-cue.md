@@ -1,4 +1,4 @@
-Status: Implemented in CE Theme by the CR-03 pull request: recipe `ce-demo-cue`, standard name `DemoCue`, the `DemoCue` design-system card and the rules in `docs/names.md` (“Demonstration cue”). Decisions 2 to 4 were decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)).
+Status: Implemented in CE Theme by pull request [#17](https://github.com/j3w1/ce-theme/pull/17): recipe `ce-demo-cue`, standard name `DemoCue`, the `DemoCue` design-system card and the rules in `docs/names.md` (“Demonstration cue”). Decisions 2 to 4 were decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)).
 
 # CR-03 · Demonstration cue (`ce-demo-cue`)
 
