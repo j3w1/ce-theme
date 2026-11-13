@@ -117,32 +117,45 @@ test('a nested identity is unchanged by the recipe; normalised to direct childre
 const LONG = identity('h1', { name: 'BALTELON SORMIKAN', description: 'Organizador de Cocina Extensible con Dos Niveles, Bandeja Antideslizante, Ganchos Laterales para Utensilios de Uso Diario y Soporte Desmontable para Tablas de Cortar y Tapas' });
 const IMAGE = `<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'/%3E" alt="" width="64" height="64">`;
 const LONG_TITLE = title('long', CODE + LONG + SPECS + META, '--ce-product-text:var(--ce-font-size-title)');
-const wrapping = (page) => page.evaluate(() => {
+const TEXT = ['code', 'name', 'description', 'specs', 'meta', 'pill'];
+const wrapping = (page) => page.evaluate((text) => {
   const q = (name) => document.querySelector(`[data-m="${name}"]`);
   const lines = (el) => { const range = document.createRange(); range.selectNodeContents(el); return new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size; };
   // The width a line of text would take without wrapping.
   const natural = (el) => { el.style.whiteSpace = 'nowrap'; const width = el.scrollWidth; el.style.whiteSpace = ''; return width; };
-  const column = document.querySelector('.ce-record-title').getBoundingClientRect();
-  const pill = document.querySelector('.ce-record-header > .ce-pill')?.getBoundingClientRect();
-  const parts = ['code', 'heading', 'name', 'description', 'specs', 'meta'];
   const box = (name) => q(name).getBoundingClientRect();
+  const column = document.querySelector('.ce-record-title').getBoundingClientRect();
+  const header = document.querySelector('.ce-record-header');
+  const parts = ['code', 'heading', 'name', 'description', 'specs', 'meta'];
+  const overlaps = (a, b) => Math.min(a.right, b.right) - Math.max(a.left, b.left) > 0.5 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 0.5;
+  let layout = null;
+  if (header) {
+    const inner = header.getBoundingClientRect(), pad = parseFloat(getComputedStyle(header).paddingLeft), image = header.querySelector('img').getBoundingClientRect(), pill = box('pill');
+    layout = {
+      pillWrapped: pill.top >= column.bottom - 0.5,
+      overPill: [...parts, 'image'].filter((name) => overlaps(name === 'image' ? image : box(name), pill)),
+      outsideHeader: ['image', 'title', 'pill'].filter((name) => { const r = name === 'image' ? image : name === 'title' ? column : pill; return r.left < inner.left + pad - 0.5 || r.right > inner.right - pad + 0.5; }),
+      imageToTitle: Math.round((column.left - image.right) * 100) / 100,
+      pillStart: Math.round((pill.left - inner.left - pad) * 100) / 100,
+      pillEnd: Math.round((inner.right - pad - pill.right) * 100) / 100,
+    };
+  }
   return {
     pageFits: document.documentElement.scrollWidth <= innerWidth,
-    column: column.width, code: box('code').width,
     codeLines: lines(q('code')), codeWrap: getComputedStyle(q('code')).whiteSpace,
     name: { lines: lines(q('name')), wider: natural(q('name')) > column.width + 0.5 },
     description: { lines: lines(q('description')), wider: natural(q('description')) > column.width + 0.5 },
     outsideColumn: parts.filter((name) => box(name).left < column.left - 0.5 || box(name).right > column.right + 0.5 || q(name).scrollWidth > q(name).clientWidth + 1),
-    underPill: pill ? parts.filter((name) => box(name).right > pill.left + 0.5) : [],
+    fontSizes: Object.fromEntries(text.filter((name) => q(name)).map((name) => [name, parseFloat(getComputedStyle(q(name)).fontSize)])),
+    layout,
   };
-});
+}, TEXT);
 const expectWrapping = async (page) => {
   const result = await wrapping(page);
   expect(result.pageFits).toBe(true);
   expect(result.codeWrap).toBe('nowrap');
   expect(result.codeLines).toBe(1);
   expect(result.outsideColumn).toEqual([]);
-  expect(result.underPill).toEqual([]);
   // The Description is longer than every title here, so it always wraps; the NAME wraps exactly when it is wider than the title.
   expect(result.description).toMatchObject({ wider: true });
   expect(result.description.lines).toBeGreaterThan(1);
@@ -150,20 +163,41 @@ const expectWrapping = async (page) => {
   await expectDistances(page, [['long', 'code', 'heading', 8], ['long', 'name', 'description', 2], ['long', 'heading', 'specs', 2], ['long', 'specs', 'meta', 4]]);
   return result;
 };
+// Enlarged text must enlarge every text line measured here: a size in px would stay put and make the case meaningless.
+const expectEnlarged = (sizes, base, factor) => {
+  expect(Object.keys(sizes)).toEqual(Object.keys(base));
+  for (const [name, size] of Object.entries(sizes)) expect(Math.abs(size - base[name] * factor), `${name}: ${size}px at ${factor}x of ${base[name]}px`).toBeLessThan(0.05);
+};
+const SIZES = [['100%', 1], ['150%', 1.5], ['200%', 2]];
 for (const width of [390, 768, 1440]) {
-  for (const [label, rootSize] of [['100%', ''], ['150%', 'html{font-size:150%}'], ['200%', 'html{font-size:200%}']]) {
+  for (const [label, factor] of SIZES) {
+    const rootSize = factor === 1 ? '' : `html{font-size:${label}}`;
     test(`long identity at ${width}px, text ${label}: wraps in the title, the code stays on one line`, async ({ page }) => {
+      await mount(page, `<div style="padding:var(--ce-space-16)">${LONG_TITLE}</div>`, { width });
+      const base = (await wrapping(page)).fontSizes;
       await mount(page, `<div style="padding:var(--ce-space-16)">${LONG_TITLE}</div>`, { width, rootSize });
       const result = await expectWrapping(page);
+      expectEnlarged(result.fontSizes, base, factor);
       // At 390px with enlarged text the NAME is wider than the title and wraps too.
-      if (width === 390 && rootSize) expect(result.name.lines).toBeGreaterThan(1);
+      if (width === 390 && factor > 1) expect(result.name.lines).toBeGreaterThan(1);
     });
 
-    // The same title in a record header, beside the 64px image and the status pill.
+    // The same title in a record header, beside the 64px image and the status pill: the title keeps its column and the pill
+    // never covers it. Where the line has room, the header is unchanged: image, title 16px after it, pill at the end.
     test(`long identity in a record header at ${width}px, text ${label}: stays in the title column, clear of the status pill`, async ({ page }) => {
-      test.fixme(width === 390 && rootSize.includes('200%'), 'Outside CR-10: at 390px and 200% text the record header leaves the title about 119px while the one-line code needs about 189px, so the title\'s grid track overflows its column under the status pill. CR-10 leaves ce-record-header unchanged (section 7); reported to the repository lead.');
-      await mount(page, `<div class="ce-record-header" style="padding:var(--ce-space-16)">${IMAGE}${LONG_TITLE}<span class="ce-pill ce-pill--success">Publicado</span></div>`, { width, rootSize });
-      await expectWrapping(page);
+      const header = `<div class="ce-record-header" style="padding:var(--ce-space-16)">${IMAGE}${LONG_TITLE}<span class="ce-pill ce-pill--success" data-m="pill">Publicado</span></div>`;
+      await mount(page, header, { width });
+      const base = (await wrapping(page)).fontSizes;
+      await mount(page, header, { width, rootSize });
+      const result = await expectWrapping(page);
+      expectEnlarged(result.fontSizes, base, factor);
+      expect(result.layout.overPill).toEqual([]);
+      expect(result.layout.outsideHeader).toEqual([]);
+      expect(result.layout.imageToTitle).toBe(16);
+      // The narrowest, largest case has no room for the code beside the image and the pill, so the pill takes the next line;
+      // at 768px and wider it stays at the end of the title's line. (390px at 150% depends on the font's width.)
+      if (width === 390 && factor === 2) expect(result.layout).toMatchObject({ pillWrapped: true, pillStart: 0 });
+      if (width >= 768 || factor === 1) expect(result.layout).toMatchObject({ pillWrapped: false, pillEnd: 0 });
     });
   }
 }

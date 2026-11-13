@@ -834,8 +834,11 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-page-header { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12) var(--ce-space-24); margin-bottom: var(--ce-space-24); }
 .ce-page-header :is(h1, h2) { margin: 0; font-size: var(--ce-font-size-title); line-height: var(--ce-font-line-heading); letter-spacing: -.02em; }
 .ce-page-actions { display: flex; flex-wrap: wrap; gap: var(--ce-space-8); margin-left: auto; }
-.ce-record-header { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--ce-space-8) var(--ce-space-16); padding-bottom: var(--ce-space-16); margin-bottom: var(--ce-space-24); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
-.ce-record-header > img { width: 64px; height: 64px; object-fit: contain; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+/* Thumbnail, title and status share one line. The title is never narrower than its widest unbreakable line (the one-line
+   code); where the line has no room for that, the status moves to the next line instead of covering the title. */
+.ce-record-header { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-8) var(--ce-space-16); padding-bottom: var(--ce-space-16); margin-bottom: var(--ce-space-24); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+.ce-record-header > img { flex: none; width: 64px; height: 64px; object-fit: contain; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+.ce-record-header > .ce-record-title { flex: 1 1 0; min-width: min-content; }
 .ce-record-title { display: grid; gap: var(--ce-space-4); min-width: 0; }
 .ce-record-title :is(h1, h2) { margin: 0; font-size: var(--ce-font-size-title); line-height: var(--ce-font-line-heading); }
 /* A title with product identity follows the ProductStack: the identity heading and its specs are direct children of the title;
