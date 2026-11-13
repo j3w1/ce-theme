@@ -17,6 +17,9 @@ const FACTORS = [1, 1.5, 2];
 const near = (actual, expected, label) => expect(Math.abs(actual - expected), `${label}: ${actual}px, expected ${expected}px`).toBeLessThan(0.5);
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'];
 const behaviours = readFileSync('recipes/behaviors.mjs', 'utf8');
+// The scene at 390px with x2 text checks nine cards limited to the photo, each within KEYBOARD_BUDGET (8s) at worst, besides
+// its other checks; the file's tests get the room for that instead of the 30s default.
+test.describe.configure({ timeout: 90_000 });
 
 const next = '.ce-price-block, .ce-store-note, .ce-price-pending';
 function measure(card) {
@@ -118,19 +121,24 @@ async function focusRingPainted(page, card) {
 }
 const PAINTED = { left: true, right: true, top: true, bottom: true };
 // A card limited to the photo's height is reachable to its end from the keyboard: the card is the focused link.
-// The keyboard reaches the end of a card limited to its photo: ArrowDown on the focused card, up to a generous number
-// of presses. Each press may take a moment to register on a loaded machine, so the check waits briefly for progress after
-// each one and then requires the end; a card the keyboard cannot scroll never gets there and fails with its state.
+// The keyboard reaches the end of a card limited to its photo: ArrowDown on the focused card. Each press may take a moment
+// to register on a loaded machine, so the check waits up to 1s for progress after each press, within 8s in all; three
+// presses in a row that do not scroll the card fail at once, as does not reaching the end.
+const KEYBOARD_BUDGET = 8000;
 async function keyboardReachesEnd(page, card) {
   await keyboardFocus(page, card);
   const read = () => card.evaluate((el) => ({ top: el.scrollTop, max: el.scrollHeight - el.clientHeight }));
+  const deadline = Date.now() + KEYBOARD_BUDGET;
   let state = await read();
-  for (let press = 0; press < 60 && state.top < state.max - 1; press += 1) {
+  let stalled = 0;
+  while (state.top < state.max - 1 && stalled < 3 && Date.now() < deadline) {
     const before = state.top;
     await page.keyboard.press('ArrowDown');
-    for (let wait = 0; wait < 20; wait += 1) { state = await read(); if (state.top > before + 0.5 || state.top >= state.max - 1) break; await page.waitForTimeout(50); }
+    const until = Math.min(Date.now() + 1000, deadline);
+    do { state = await read(); if (state.top > before + 0.5 || state.top >= state.max - 1) break; await page.waitForTimeout(50); } while (Date.now() < until);
+    stalled = state.top > before + 0.5 ? 0 : stalled + 1;
   }
-  await expect.poll(async () => { state = await read(); return state.top >= state.max - 1; }, { message: 'the keyboard reaches the end of the card', timeout: 10000 }).toBe(true);
+  expect(state.top, `the keyboard reaches the end of the card (scrollTop ${state.top} of ${state.max}${stalled >= 3 ? '; three presses in a row did not scroll it' : ''})`).toBeGreaterThanOrEqual(state.max - 1);
   return true;
 }
 async function checkCard(page, card, label, kind) {
