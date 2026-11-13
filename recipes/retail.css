@@ -26,7 +26,7 @@
 .ce-utility-bar-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--ce-space-16); min-height: 44px; }
 .ce-utility-bar p { margin: 0; }
 .ce-utility-bar a { color: inherit; }
-.ce-store-context { display: inline-flex; align-items: center; gap: var(--ce-space-8); min-height: 44px; padding: 0 var(--ce-space-4); border: 0; background: transparent; color: inherit; font: inherit; font-weight: var(--ce-font-weight-semibold); text-align: left; text-decoration: none; cursor: pointer; }
+.ce-store-context { display: inline-flex; align-items: center; gap: var(--ce-space-8); min-height: var(--ce-size-target-public); padding: 0 var(--ce-space-4); border: 0; background: transparent; color: inherit; font: inherit; font-weight: var(--ce-font-weight-semibold); text-align: left; text-decoration: none; cursor: pointer; }
 .ce-store-context svg { flex: 0 0 auto; width: 20px; height: 20px; }
 .ce-store-context:hover .ce-store-context-name { text-decoration: underline; text-underline-offset: .2em; }
 .ce-store-context[aria-busy="true"] { cursor: progress; }
@@ -43,7 +43,7 @@
 .ce-site-brand img { display: block; width: auto; height: 36px; }
 .ce-site-nav { grid-area: nav; display: none; }
 .ce-site-nav ul { display: flex; gap: var(--ce-space-4); margin: 0; padding: 0; list-style: none; }
-.ce-site-nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--ce-space-12); border-radius: var(--ce-radius-pill); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-bold); text-decoration: none; white-space: nowrap; }
+.ce-site-nav a { display: inline-flex; align-items: center; min-height: var(--ce-size-target-public); padding: 0 var(--ce-space-12); border-radius: var(--ce-radius-pill); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-bold); text-decoration: none; white-space: nowrap; }
 .ce-site-nav a:hover, .ce-site-nav a[aria-current] { color: var(--ce-color-text-primary); text-decoration: underline; text-underline-offset: .35em; }
 .ce-search { grid-area: search; position: relative; display: flex; align-items: center; min-width: 0; margin: 0; }
 .ce-search > svg { position: absolute; left: var(--ce-space-16); width: 20px; height: 20px; pointer-events: none; }
@@ -52,7 +52,7 @@
 .ce-search input:hover { border-color: var(--ce-color-border-control); }
 .ce-search input:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); background: var(--ce-color-surface-canvas); }
 .ce-site-actions { grid-area: actions; display: flex; align-items: center; gap: var(--ce-space-4); }
-.ce-site-action { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--ce-space-8); min-width: 44px; min-height: 44px; padding: 0 var(--ce-space-8); border: 0; border-radius: var(--ce-radius-pill); background: transparent; color: inherit; font: inherit; font-size: var(--ce-font-size-sm); text-decoration: none; cursor: pointer; }
+.ce-site-action { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--ce-space-8); min-width: var(--ce-size-target-public); min-height: var(--ce-size-target-public); padding: 0 var(--ce-space-8); border: 0; border-radius: var(--ce-radius-pill); background: transparent; color: inherit; font: inherit; font-size: var(--ce-font-size-sm); text-decoration: none; cursor: pointer; }
 .ce-site-action:hover { background: var(--ce-color-surface-subtle); }
 .ce-site-action svg { width: 24px; height: 24px; }
 .ce-site-action-label { display: none; white-space: nowrap; }
@@ -144,7 +144,7 @@
 .ce-filter-bar--sticky { position: sticky; top: 0; z-index: var(--ce-layer-sticky); }
 .ce-filter-chips { display: flex; flex: 1; gap: var(--ce-space-8); min-width: 0; margin: calc(var(--ce-space-4) * -1); padding: var(--ce-space-4); overflow-x: auto; scrollbar-width: none; }
 .ce-filter-chips::-webkit-scrollbar { display: none; }
-.ce-filter-chips .ce-chip { flex: 0 0 auto; min-height: 44px; padding-inline: var(--ce-space-16); }
+.ce-filter-chips .ce-chip { flex: 0 0 auto; min-height: var(--ce-size-target-public); padding-inline: var(--ce-space-16); }
 .ce-chip svg { width: 18px; height: 18px; }
 .ce-chip-count { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 var(--ce-space-4); border-radius: var(--ce-radius-pill); background: var(--ce-color-surface-inverse); color: var(--ce-color-text-inverse); font-size: var(--ce-font-size-xs); }
 .ce-result-count { margin: 0; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); white-space: nowrap; }
@@ -256,7 +256,7 @@
 .ce-choice-card:has(input:disabled) { background: var(--ce-color-surface-subtle); color: var(--ce-color-text-muted); cursor: not-allowed; }
 .ce-steps { display: flex; gap: var(--ce-space-8); margin: 0; padding: 0; list-style: none; counter-reset: ce-step; font-size: var(--ce-font-size-sm); }
 .ce-steps > li { display: flex; flex: 1; align-items: center; gap: var(--ce-space-8); min-width: 0; color: var(--ce-color-text-secondary); counter-increment: ce-step; }
-.ce-steps > li::before { display: grid; flex: 0 0 auto; place-items: center; width: 28px; height: 28px; content: counter(ce-step); border: var(--ce-stroke-thin) solid var(--ce-color-border-control); border-radius: var(--ce-radius-pill); font-weight: var(--ce-font-weight-bold); }
+.ce-steps > li::before { display: grid; flex: 0 0 auto; place-items: center; width: var(--ce-size-marker); height: var(--ce-size-marker); content: counter(ce-step); border: var(--ce-stroke-thin) solid var(--ce-color-border-control); border-radius: var(--ce-radius-pill); font-weight: var(--ce-font-weight-bold); }
 .ce-steps > li + li { padding-left: var(--ce-space-8); border-left: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
 .ce-steps > [data-state="done"]::before { background: var(--ce-color-surface-subtle); }
 .ce-steps > [aria-current="step"] { color: var(--ce-color-text-primary); font-weight: var(--ce-font-weight-bold); }

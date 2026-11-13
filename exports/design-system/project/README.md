@@ -99,13 +99,13 @@ Reference sections bundled with this system: `apply-ce-theme.md` (start here whe
 - Focus is a 2px solid outline (`ce-stroke-focus`, `ce-color-focus`) with a 3px offset on every interactive element. On photography and the black utility bar, the outline turns white with an ink halo.
 - Hover darkens fills or adds the subtle surface. Selected chips, category links, variants and choice cards gain an ink ring (`aria-pressed`, `aria-current`, `:checked`). Pressed favourites fill the heart.
 - Motion is limited to quick colour and transform transitions (`ce-motion-quick`, 160ms), removed under reduced motion. No autoplay; rails never auto-advance.
-- Targets are 44–48px tall, 40px for card actions, never under 24px.
+- Targets are 44–48px tall (`ce-size-target-public` is the 44px minimum), 40px for card actions, never under 24px.
 
 ## Tagging products on photography
 
 Customers must be able to tell which product is priced and what is being described. On any photo that shows more than one product, or a feature worth naming:
 
-- **On the website, use pins:** mark each product with a `ce-pin`, a 28px black dot with a white centre. Hovering, focusing or tapping it opens a white card with NAME, Description, the store's price and a chevron link to the product. Run `enhancePins()` for tap-to-open and to keep each card inside the photo.
+- **On the website, use pins:** mark each product with a `ce-pin`, a 28px (`ce-size-marker`) black dot with a white centre. Hovering, focusing or tapping it opens a white card with NAME, Description, the store's price and a chevron link to the product. Run `enhancePins()` for tap-to-open and to keep each card inside the photo.
 - **On media that cannot hover** (social posts, print, share images), mark each product with a lettered `ce-hotspot` instead.
   - A marker is a 32px black circle with a bold white capital letter `A`, `B`, `C` in reading order.
   - It has no period, no white ring and no promotional colour.

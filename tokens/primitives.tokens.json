@@ -674,6 +674,14 @@
         "unit": "px"
       },
       "$description": "Focus outline offset."
+    },
+    "heavy": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "$description": "Heavy rule, such as the left rule of a notice or an internal note."
     }
   },
   "size": {
@@ -720,6 +728,24 @@
         },
         "$description": "Table row height in compact density."
       }
+    },
+    "target": {
+      "public": {
+        "$type": "dimension",
+        "$value": {
+          "value": 44,
+          "unit": "px"
+        },
+        "$description": "Minimum 44px target: the least height, and the width of square actions, for chips, menu and select options, checks, radios, switches, quantity buttons and the site header's links and actions."
+      }
+    },
+    "marker": {
+      "$type": "dimension",
+      "$value": {
+        "value": 28,
+        "unit": "px"
+      },
+      "$description": "Marker circle: the web pin dot and the numbered step."
     },
     "product": {
       "gap-media": {

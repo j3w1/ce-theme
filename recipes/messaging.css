@@ -31,7 +31,7 @@
 .ce-message { max-width: min(85%, 560px); padding: var(--ce-space-8) var(--ce-space-12); border: var(--ce-stroke-thin) solid var(--ce-color-border-default); background: var(--ce-color-surface-canvas); font-size: var(--ce-font-size-body); line-height: var(--ce-font-line-body); overflow-wrap: anywhere; }
 .ce-message--incoming { align-self: flex-start; }
 .ce-message--outgoing { align-self: flex-end; border-color: var(--ce-color-text-primary); }
-.ce-message--note { align-self: stretch; max-width: none; border-color: var(--ce-color-status-info-text); border-left-width: 4px; background: var(--ce-color-status-info-bg); }
+.ce-message--note { align-self: stretch; max-width: none; border-color: var(--ce-color-status-info-text); border-left-width: var(--ce-stroke-heavy); background: var(--ce-color-status-info-bg); }
 .ce-message--system { align-self: center; max-width: 100%; padding: var(--ce-space-4) var(--ce-space-12); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); text-align: center; }
 .ce-message-note-label { display: flex; align-items: center; gap: var(--ce-space-8); margin: 0 0 var(--ce-space-4); color: var(--ce-color-status-info-text); font-size: var(--ce-font-size-xs); font-weight: var(--ce-font-weight-bold); }
 .ce-message-note-label svg { width: 14px; height: 14px; }
@@ -90,7 +90,7 @@
 .ce-work-step--stopped::before { background-size: 100% 8px; background-image: repeating-linear-gradient(135deg, var(--ce-color-status-warning-text) 0 4px, var(--ce-color-status-warning-bg) 4px 8px); }
 .ce-work-status-summary { margin: 0; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); }
 .ce-work-status-actions { display: flex; flex-wrap: wrap; gap: var(--ce-space-8); }
-.ce-work-status-actions .ce-button { flex: 1 1 8rem; min-height: 44px; padding-block: var(--ce-space-8); }
+.ce-work-status-actions .ce-button { flex: 1 1 8rem; min-height: var(--ce-size-target-public); padding-block: var(--ce-space-8); }
 
 /* Message composer: reply (default) or internal note. The note mode changes the whole composer to the informational
    palette, states "No la ve el cliente" and swaps the red send action for "Guardar nota". */
@@ -98,7 +98,7 @@
 .ce-composer--note { border-top-color: var(--ce-color-status-info-text); background: var(--ce-color-status-info-bg); }
 .ce-composer-mode { display: flex; justify-self: start; min-width: 0; max-width: 100%; margin: 0; padding: 0; border: var(--ce-stroke-thin) solid var(--ce-color-border-control); border-radius: var(--ce-radius-price); overflow: hidden; }
 .ce-composer-mode-option { position: relative; display: flex; min-width: 0; }
-.ce-composer-mode-option > span { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 var(--ce-space-4); min-height: 44px; text-align: center; padding: var(--ce-space-8) var(--ce-space-16); background: var(--ce-color-surface-canvas); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-semibold); cursor: pointer; }
+.ce-composer-mode-option > span { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 var(--ce-space-4); min-height: var(--ce-size-target-public); text-align: center; padding: var(--ce-space-8) var(--ce-space-16); background: var(--ce-color-surface-canvas); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-semibold); cursor: pointer; }
 .ce-composer-mode-option > span:hover { color: var(--ce-color-text-primary); }
 .ce-composer-mode-option input:checked + span { background: var(--ce-color-text-primary); color: var(--ce-color-text-inverse); }
 .ce-composer-mode-option--note input:checked + span { background: var(--ce-color-status-info-text); color: var(--ce-color-status-info-bg); }

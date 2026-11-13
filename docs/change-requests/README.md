@@ -48,7 +48,7 @@ If only one batch is possible: steps 1 to 4 (CR-03, CR-06, CR-09, CR-10, CR-08, 
 
 ## Cross-cutting owner decisions
 
-j3w1 decided all nine on 2026-11-06 ([issue #11](https://github.com/j3w1/ce-theme/issues/11)). The requests refer to them by number and record the outcome in the request that raises it. Nothing is implemented: the requests stay proposals for later pull requests, and `decisions.md` records these decisions through the CR implementation pull requests, which follow B1 (#8). The per-request decisions in section 8 of each request stay open unless a line there says "Decided".
+j3w1 decided all nine on 2026-11-06 ([issue #11](https://github.com/j3w1/ce-theme/issues/11)). The requests refer to them by number and record the outcome in the request that raises it. Only the X-1 and X-2 tokens are implemented: `size.target.public`, `stroke.heavy` and `size.marker` are in `tokens/`, and the bundle's existing literal 44px minimum targets, 28px markers and 4px rules use them at the same computed sizes. Nothing else is implemented: the requests stay proposals for later pull requests, and `decisions.md` records these decisions through the CR implementation pull requests, which follow B1 (#8). The per-request decisions in section 8 of each request stay open unless a line there says "Decided".
 
 | # | Question | Raised in | Decided (2026-11-06, [issue #11](https://github.com/j3w1/ce-theme/issues/11)) |
 |---|---|---|---|

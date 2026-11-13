@@ -27,7 +27,7 @@ Every reusable control documents and supports the states that apply to it:
 | Invalid | `aria-invalid="true"` or `:user-invalid`: 2px `color.status.danger.text` border plus a `ce-field-error` sentence that says how to continue; never colour alone |
 | Loading | `aria-busy="true"`; subtle surface and `cursor: progress`; `ce-progress` for waits over a second |
 
-Keyboard: Tab and Shift+Tab move between controls; Space activates buttons and toggles checks and switches; arrows move radios, ranges and select options; Enter submits or activates; Escape closes a select, menu, popover or dialog. Touch targets are at least 44px and text is 16px so mobile browsers do not zoom.
+Keyboard: Tab and Shift+Tab move between controls; Space activates buttons and toggles checks and switches; arrows move radios, ranges and select options; Enter submits or activates; Escape closes a select, menu, popover or dialog. Touch targets are at least 44px (`--ce-size-target-public`) and text is 16px so mobile browsers do not zoom.
 
 ## Inventory
 
