@@ -55,9 +55,8 @@ async function dots(page, boxes) {
       for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) if (ink(x, y)) { top ??= y; bottom = y; left = left === null ? x : Math.min(left, x); right = Math.max(right ?? x, x); }
       if (top === null) return null;
       const cx = Math.round((left + right) / 2), cy = Math.round((top + bottom) / 2);
-      const pixels = [];
-      for (let y = top; y <= bottom; y += 1) for (let x = left; x <= right; x += 1) { const i = (y * w + x) * 4; pixels.push(data[i], data[i + 1], data[i + 2]); }
-      return { top: y0 + top, bottom: y0 + bottom + 1, height: bottom - top + 1, width: right - left + 1, filledCentre: ink(cx, cy), pixels: pixels.join(',') };
+      const at = (x, y) => { const i = (y * w + x) * 4; return [data[i], data[i + 1], data[i + 2]]; };
+      return { top: y0 + top, bottom: y0 + bottom + 1, height: bottom - top + 1, width: right - left + 1, filledCentre: ink(cx, cy), centre: at(cx, cy) };
     });
   }, { png, boxes });
 }
@@ -115,11 +114,16 @@ test('acceptance 2: unknown and no data-state draw the same neutral dot; unavail
   expect(computed.unavailable.background).toBe('rgba(0, 0, 0, 0)');
   expect(computed.unavailable.shadow).not.toBe('none');
   for (const dot of Object.values(computed)) expect([dot.width, dot.height]).toEqual(['10px', '10px']);
-  // And on screen: the unknown dot and the dot of an item with no state are the same pixels; only unavailable is hollow.
+  // And on screen: the unknown dot and the dot of an item with no state look the same (same size and the same colour at
+  // the centre, within anti-aliasing at a different position on the page); only unavailable is hollow.
   const boxes = await statements(page);
   const found = Object.fromEntries((await dots(page, boxes)).map((dot, index) => [boxes[index].state, dot]));
-  expect(found.unknown.pixels).toBe(found.none.pixels);
-  expect(found.pending.pixels).toBe(found.none.pixels);
+  for (const state of ['unknown', 'pending']) {
+    expect(Math.abs(found[state].width - found.none.width), `${state} dot width`).toBeLessThanOrEqual(1);
+    expect(Math.abs(found[state].height - found.none.height), `${state} dot height`).toBeLessThanOrEqual(1);
+    for (const [channel, value] of found[state].centre.entries()) expect(Math.abs(value - found.none.centre[channel]), `${state} dot colour`).toBeLessThanOrEqual(8);
+  }
+  for (const state of ['available', 'limited']) expect(Math.max(...found[state].centre.map((value, channel) => Math.abs(value - found.none.centre[channel]))), `${state} dot differs from neutral`).toBeGreaterThan(24);
   for (const [state, dot] of Object.entries(found)) expect(dot.filledCentre, state).toBe(state !== 'unavailable');
 });
 

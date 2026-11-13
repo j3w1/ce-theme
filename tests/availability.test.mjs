@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { NAMES } from '../recipes/names.mjs';
 import { readRecipes } from '../scripts/sources.mjs';
-import { catalogue, stores, stockLine, cardFor } from '../site/data/store.mjs';
+import { catalogue, stores, stockLine, stockListAttributes, cardFor } from '../site/data/store.mjs';
 
 const root = new URL('../', import.meta.url);
 const read = (path) => readFile(new URL(path, root), 'utf8');
@@ -22,7 +22,7 @@ const STATES = Object.keys(WORDING);
 
 /** Every `ul.ce-stock` in an HTML string, with its attributes and statements. */
 function stockLists(html) {
-  return [...html.matchAll(/<ul\b([^>]*\bclass="ce-stock"[^>]*)>([\s\S]*?)<\/ul>/g)].map(([, attrs, body]) => ({
+  return [...html.matchAll(/<ul\b([^>]*\bclass="(?:[^"]*\s)?ce-stock(?:\s[^"]*)?"[^>]*)>([\s\S]*?)<\/ul>/g)].map(([, attrs, body]) => ({
     attrs,
     items: [...body.matchAll(/<li\b([^>]*)>([\s\S]*?)<\/li>/g)].map(([, itemAttrs, text]) => ({
       state: itemAttrs.match(/\bdata-state="([^"]*)"/)?.[1],
@@ -126,9 +126,21 @@ test('with no store chosen there is no availability line', async () => {
   }
   for (const page of ['site/pages/tienda/producto.astro', 'site/pages/tienda/escena.astro', 'site/components/ProductCard.astro']) {
     const source = await read(page);
-    assert.doesNotMatch(source, /<ul class="ce-stock"[^>]*data-store-view="ninguna"/, `${page}: no availability line for no store`);
-    for (const [tag] of source.matchAll(/<ul class="ce-stock"[^>]*>/g)) assert.match(tag, /aria-label="Disponibilidad"/, `${page}: ${tag}`);
+    assert.doesNotMatch(source, /<ul class="(?:[^"]*\s)?ce-stock\b[^>]*data-store-view="ninguna"/, `${page}: no availability line for no store`);
+    const tags = [...source.matchAll(/<ul class="(?:[^"]*\s)?ce-stock\b[^>]*>/g)].map(([tag]) => tag);
+    assert.ok(tags.length > 0, `${page}: renders an availability list`);
+    // Every list the site renders takes its name and its busy state from stockListAttributes(), checked below.
+    for (const tag of tags) assert.match(tag, /\{\.\.\.stockListAttributes\((\[line\]|stock)\)\}/, `${page}: ${tag}`);
   }
+});
+
+test('the site names every availability list and marks it busy exactly while a reading is pending', () => {
+  for (const state of STATES) {
+    const lines = [{ state, text: '' }];
+    assert.deepEqual(stockListAttributes(lines), { 'aria-label': 'Disponibilidad', 'aria-busy': state === 'pending' ? 'true' : undefined }, state);
+  }
+  assert.equal(stockListAttributes([{ state: 'available' }, { state: 'pending' }])['aria-busy'], 'true');
+  assert.deepEqual(stockLine({ stock: { tacna: 'pending' } }, stores[0]), { state: 'pending', text: 'Consultando disponibilidad…' });
 });
 
 test('the recipe makes unknown and pending explicit, keeps the ring for unavailable only and leaves ce-availability as it was', async () => {

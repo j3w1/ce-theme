@@ -35,6 +35,11 @@ export function stockLine(item, store) {
   return { state, text: stockText[state](store.name) };
 }
 
+/** The attributes of a StockLine list: its accessible name, and aria-busy while a reading is pending. */
+export function stockListAttributes(lines) {
+  return { 'aria-label': 'Disponibilidad', 'aria-busy': lines.some((line) => line.state === 'pending') ? 'true' : undefined };
+}
+
 export const categories = [
   { label: 'Cocina', icon: 'home', image: '/assets/product-nome.png', href: '/tienda/categoria/' },
   { label: 'Tazas y vasos', image: '/assets/product-mene.png', href: '/tienda/categoria/' },
