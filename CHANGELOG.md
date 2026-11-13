@@ -1,25 +1,19 @@
 # Changelog
 
-## Unreleased
+## @casaelida/vue 0.2.1 — 2026-11-13 (unreleased)
 
-CR-03, the demonstration cue (ce-theme#11).
+A patch for CR-06, the availability line (ce-theme#11): the packaged recipes name the availability states `unknown` and `pending`, with the same look, and the wording and accessible name are documented. The components are unchanged.
 
-### Added
-
-- `ce-demo-cue` in `recipes/interface.css`, the standard name `DemoCue` (Aviso de demostración) and its design-system card: one bordered block note from tokens, with the 2px border reusing `stroke.focus`. It holds no text; the consumer supplies the words and `role="note"`, and production output leaves it out. No Vue component.
-- The usage rules in `docs/names.md` (“Demonstration cue”), `docs/apply-ce-theme.md`, `docs/usage.md` and `docs/coverage.md`, and the decision in `docs/decisions.md`.
-- `tests/demo-cue.test.mjs` (no text and no raw colour in the recipe; canon wording in every example) and `tests/browser/demo-cue.spec.mjs` (390, 768 and 1440 px at 100%, 150% and 200% text; axe; reading order).
-
-### Changed: availability line (CR-06, ce-theme#11)
+### Changed
 
 - `ce-stock` (StockLine) names its documented states in the CSS: `unknown`, which an item with no `data-state` looks like, and `pending` keep the neutral dot, and `unavailable` stays the only ring. Nothing looks different.
 - The wording contract is in the StockLine section of `docs/names.md`: «Disponibilidad por confirmar en {tienda}» for an unknown, stale, conflicting or missing reading, «Consultando disponibilidad…» while it is read, and «Pocas unidades» and «Agotado» only from a confirmed reading. With no store chosen there is no availability line. The list is named `aria-label="Disponibilidad"` in every sample and reference page.
 - The ProductCard and StoreContext cards gain an unknown sample beside the confirmed ones; StoreContext also shows the pending state. `/tienda/producto/` shows a store note instead of an availability line when no store is chosen. `ce-availability` is unchanged.
 - Tests: `tests/availability.test.mjs` (wording, accessible name, the canon fixtures, supplied readings) and `tests/browser/availability.spec.mjs` (the five states at three widths and three text sizes, the dots, forced colours and greyscale).
 
-## @casaelida/vue 0.2.0 — 2026-11-12 (unreleased)
+## @casaelida/vue 0.2.0 — 2026-11-13 (`vue-v0.2.0`)
 
-SEAL #7 batch B1 (ce-theme#8).
+SEAL #7 batch B1 (ce-theme#8). The release was built from `f2a808a`, so it also contains CR-03, the demonstration cue (ce-theme#11).
 
 ### Added
 
@@ -38,6 +32,12 @@ SEAL #7 batch B1 (ce-theme#8).
 
 - `CEMessageList` keeps a reader who is at the newest message there in WebKit when content inside a message re-renders. WebKit lays the change out in a shorter intermediate state and clamps the scroll position while every size ends as it was. The list reads the position just before the first update of a render flush and puts a reader who was at the newest message back after it, before the clamp is reported as a scroll. A reader in history is still never moved.
 - `/mensajeria/`: in WebKit, a composing reader again moves to the thread view when the window narrows or the text grows. The example reads “narrow” from its panes grid instead of the Back button, whose container-query style WebKit leaves stale inside the hidden thread pane.
+
+### Added: demonstration cue (CR-03, ce-theme#11)
+
+- `ce-demo-cue` in `recipes/interface.css`, the standard name `DemoCue` (Aviso de demostración) and its design-system card: one bordered block note from tokens, with the 2px border reusing `stroke.focus`. It holds no text; the consumer supplies the words and `role="note"`, and production output leaves it out. No Vue component.
+- The usage rules in `docs/names.md` (“Demonstration cue”), `docs/apply-ce-theme.md`, `docs/usage.md` and `docs/coverage.md`, and the decision in `docs/decisions.md`.
+- `tests/demo-cue.test.mjs` (no text and no raw colour in the recipe; canon wording in every example) and `tests/browser/demo-cue.spec.mjs` (390, 768 and 1440 px at 100%, 150% and 200% text; axe; reading order).
 
 ## Unreleased — 2026-10-30 (pending owner review)
 
