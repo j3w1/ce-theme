@@ -1,12 +1,14 @@
 import { cssUrls, elements, jsImports } from '../dist/output.mjs';
 import { ROUTES } from './routes.mjs';
 
-// GitHub Pages propagation (issue #9 R6): the smoke starts only when everything it reads is served from the new deploy. That
-// covers every route with the expected commit and package version, and every same-site link and resource those pages use:
-// stylesheets and their fonts, scripts and their imports, the island bundles and the downloads. A first failure is retried
-// for at most five minutes, then counts. Every request is aborted at that deadline, so nothing is accepted after it.
-// When the deploy is ready, the tests get their own five-minute retry budget from that moment (CE_LIVE_DEADLINE, inherited by
-// the workers and read by tests/live/retry.mjs and tests/live/budget.mjs), so a test's first failure is always retried.
+// GitHub Pages propagation (issue #9 R6, "A first failure waits for propagation, retrying for at most 5 minutes before it
+// counts"). As the repository lead decided for #9, this preflight is that wait. Before any test runs, it waits until
+// everything the smoke reads is served from the new deploy:
+//   - every route with the expected commit and package version;
+//   - every same-site link and resource those pages use: stylesheets and their fonts, scripts and their imports, the island
+//     bundles and the downloads.
+// A first failure is retried for at most five minutes from the first attempt, then counts. Every request is aborted at that
+// deadline, so nothing is accepted after it. After the preflight the functional checks run once, with no retry.
 const BUDGET = 5 * 60_000;
 const PAUSE = 15_000;
 const SPENT = 'the five-minute budget ran out';
@@ -60,10 +62,7 @@ export default async function waitForDeploy() {
   for (;;) {
     try {
       const waiting = await pass();
-      if (waiting === undefined && Date.now() < deadline) {
-        process.env.CE_LIVE_DEADLINE = String(Date.now() + BUDGET);
-        return;
-      }
+      if (waiting === undefined && Date.now() < deadline) return;
       if (waiting === undefined) throw new Error(SPENT);
       last = waiting;
     } catch (error) {

@@ -16,16 +16,15 @@ export default defineConfig({
   testDir: './tests',
   testMatch: ['browser/foundation.spec.mjs', 'browser/messaging.spec.mjs', 'live/live.spec.mjs'],
   grep: [new RegExp(` (?:${ROUTES.map(escape).join('|')}): renders without errors`), /selecting a conversation opens its history/, /live\.spec\.mjs/],
-  // tests/live/propagation.mjs waits, for at most five minutes, until every route, version line, link and resource the tests
-  // read comes from the expected deploy. The tests then get their own five-minute budget: a test that fails is retried after a pause
-  // (tests/live/retry.mjs) while the same budget allows another attempt; then the failure counts. A retry's pass counts only
-  // if its result arrives within the budget (tests/live/budget.mjs). 20 retries of 15 s cover five minutes.
+  // Propagation is the preflight's (tests/live/propagation.mjs): it waits, for at most five minutes from its first attempt,
+  // until every route, version line, link and resource the tests read comes from the expected deploy. The checks then run
+  // once, with no retry, so a failure after the preflight counts at once.
   globalSetup: './tests/live/propagation.mjs',
   fullyParallel: true,
   workers: 2,
-  retries: 20,
+  retries: 0,
   timeout: 60_000,
-  reporter: [['list'], ['./tests/live/budget.mjs']],
+  reporter: [['list']],
   outputDir: './test-results/live',
   use: { baseURL: process.env.CE_SITE_URL.replace(/\/?$/, '/'), trace: 'retain-on-failure' },
   projects,

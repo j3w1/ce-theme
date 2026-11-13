@@ -1,10 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { clipboard } from './clipboard.mjs';
-import { liveRetries } from '../live/retry.mjs';
-
-// The live smoke reuses these checks; this bounds its propagation retries and does nothing in ordinary runs.
-liveRetries(test);
 
 const routes=['./','fundamentos/','componentes/','instalar/','patrones/','aplicaciones/','compartir/','descargas/','tienda/','tienda/categoria/','tienda/producto/','tienda/escena/','tienda/carrito/','tienda/cuenta/','sistemas/','sistemas/etiquetas/','mensajeria/'];
 for (const route of routes) {
