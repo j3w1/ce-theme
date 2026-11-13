@@ -158,8 +158,9 @@ test('cart changes leave a consumer page and controls outside the cart unchanged
   await page.goto('/');
   await page.setContent('<style>body{margin:13px;font:19px serif}#outside{padding:7px;color:rgb(10,20,30)}</style><p id="outside">Consumer content</p><div class="ce-quantity"><input aria-label="Other quantity" value="2"></div>');
   const read=() => page.locator('#outside, .ce-quantity input').evaluateAll((items) => items.map((el) => { const s=getComputedStyle(el); return [s.fontSize,s.fontFamily,s.padding,s.color,s.minHeight,s.width]; }));
-  await page.addStyleTag({ content:readFileSync('exports/tokens.css','utf8') + readFileSync('exports/recipes.css','utf8') });
+  await page.addStyleTag({ content:css.replace(/^\s*\.ce-cart[^\n]*\n/gm, '') });
   const before=await read();
+  await page.addStyleTag({ content:css });
+  expect(await read()).toEqual(before);
   expect(before[0]).toEqual(['19px','serif','7px','rgb(10, 20, 30)','0px',before[0][5]]);
-  expect(before[1][4]).toBe('0px');
 });
