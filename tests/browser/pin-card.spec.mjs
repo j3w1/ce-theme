@@ -142,6 +142,7 @@ async function checkCard(page, card, label, kind) {
     expect(await focusRingPainted(page, card), `${label} focus ring painted on every side`).toEqual(PAINTED);
     expect(await keyboardReachesEnd(page, card), `${label} keyboard reaches the end of the card`).toBe(true);
   }
+  expect((await card.evaluate(measure)).photoScrolled, `${label} the photo is not scrolled after focus and keyboard scrolling`).toBe(false);
   return m;
 }
 
@@ -238,11 +239,11 @@ async function cases() {
     { kind: 'long', name: LONG_NAME, description: LONG_DESCRIPTION, after: await price({ amount: '16.90', previousAmount: '20.50', discountLabel: '17%' }), x: '50%', y: '50%' },
   ];
 }
-const pinMarkup = (c, i) => `<div class="ce-pin" style="--ce-x:${c.x};--ce-y:${c.y}"><button class="ce-pin-dot" type="button" aria-expanded="false" aria-controls="p${i}"><span class="ce-sr-only">Ver ${c.name}, ${c.description}</span></button><a class="ce-pin-card" id="p${i}" href="#p${i}" data-kind="${c.kind}"><div class="ce-pin-text"><span class="ce-product-name">${c.name}</span><span class="ce-product-description">${c.description}</span>${c.after}</div>${chevron}</a></div>`;
+const pinMarkup = (c, i) => `<div class="ce-pin" style="--ce-x:${c.x};--ce-y:${c.y}"><button class="ce-pin-dot" type="button" aria-expanded="false" aria-controls="p${i}"><span class="ce-sr-only">Ver ${c.name}, ${c.description}</span></button><a class="ce-pin-card" id="p${i}" href="#p${i}" data-kind="${c.kind}"${c.cardStyle ? ` style="${c.cardStyle}"` : ''}><div class="ce-pin-text"><span class="ce-product-name">${c.name}</span><span class="ce-product-description">${c.description}</span>${c.after}</div>${chevron}</a></div>`;
 // The text is enlarged before enhancePins() places the cards, as when a reader's setting is on when the page loads.
-async function mount(page, { width, factor = 1, frame = '', scope = '' }, list) {
+async function mount(page, { width, factor = 1, frame = '', scope = '', consumerCss = '' }, list) {
   await page.setViewportSize({ width, height: 900 });
-  await page.setContent(`<!doctype html><html lang="es"><head><style>${css}body{margin:0}</style></head><body><main class="ce-scope" style="${scope}"><div class="ce-tagged-media" id="frame" style="${frame}aspect-ratio:4/3;background:var(--ce-color-surface-subtle)">${list.map(pinMarkup).join('')}</div></main></body></html>`);
+  await page.setContent(`<!doctype html><html lang="es"><head><style>${css}body{margin:0}${consumerCss}</style></head><body><main class="ce-scope" style="${scope}"><div class="ce-tagged-media" id="frame" style="${frame}aspect-ratio:4/3;background:var(--ce-color-surface-subtle)">${list.map(pinMarkup).join('')}</div></main></body></html>`);
   await page.evaluate(async () => { await Promise.all([400, 600, 700, 800].map((weight) => document.fonts.load(`${weight} 16px Inter`))); });
   expect(await page.evaluate(() => document.fonts.check('700 16px Inter') && document.fonts.check('800 16px Inter')), 'the Inter files are in use').toBe(true);
   if (factor !== 1) await enlargeText(page, factor);
@@ -316,6 +317,31 @@ for (const [unit, scope] of Object.entries(OVERRIDES)) {
     });
   }
 }
+
+// A consumer's own styles stay as they were: placement measures the ring without touching the card's declarations, so
+// a transition on outline-offset cannot skew it, and an inline outline-offset or max-height keeps its value and priority,
+// also after the card was limited to a small photo and released again when the photo grew.
+test('recipe with consumer styles: transitions and inline declarations keep the ring visible and are left as they were', async ({ page }) => {
+  const all = await cases();
+  const long = all.find((c) => c.kind === 'long');
+  const cardStyle = 'outline-offset: var(--ce-stroke-offset) !important; max-height: 40rem';
+  const consumerCss = '.ce-pin-card{outline-offset:var(--ce-stroke-offset);transition:outline-offset 1s linear}';
+  await mount(page, { width: 1440, factor: 2, frame: 'width:280px;', consumerCss }, [{ ...long, after: await price({ amount: '16.90' }), cardStyle, x: '92%', y: '8%' }]);
+  const card = page.locator('#frame .ce-pin-card');
+  const inline = () => card.evaluate((el) => ({ offset: [el.style.getPropertyValue('outline-offset'), el.style.getPropertyPriority('outline-offset')], max: [el.style.getPropertyValue('max-height'), el.style.getPropertyPriority('max-height')] }));
+  const [m] = await checkPins(page, 'consumer styles in a 280px photo, text x2');
+  expect(m.scrolls, 'the card is limited to the small photo').toBe(true);
+  const limited = await inline();
+  expect(limited.offset, 'inline outline-offset untouched').toEqual(['var(--ce-stroke-offset)', 'important']);
+  expect(limited.max[1], 'the limit is placePins’ own').toBe('important');
+  // The photo grows to the full 1440px width, where the card fits: the limit is released and the consumer's inline
+  // max-height comes back as it was.
+  await page.locator('#frame').evaluate((el) => { el.style.width = '100%'; });
+  await expect.poll(async () => (await inline()).max, { message: 'consumer max-height restored' }).toEqual(['40rem', '']);
+  expect((await inline()).offset, 'inline outline-offset still untouched').toEqual(['var(--ce-stroke-offset)', 'important']);
+  await page.locator('#frame .ce-pin-dot').click();
+  await checkCard(page, card, 'consumer styles in the full-width photo, text x2', 'long');
+});
 
 test('recipe source: the pin text spacing is written from the ProductStack tokens only', () => {
   const recipe = readFileSync('recipes/recipes.css', 'utf8');

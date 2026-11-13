@@ -158,13 +158,31 @@ export function enhanceMarkers(root = document) {
 }
 
 // How far a card's focus ring reaches outside it (stroke.focus at stroke.offset), in px as the browser resolves the
-// card's own tokens (rem, calc and overrides included); the inline value is restored before anything paints.
+// card's own tokens (rem, calc and overrides included). A hidden probe inside the card takes that length as its width
+// and is removed at once, so no declaration of the card changes and no transition applies.
 function focusRingReach(card) {
-  const inline = card.style.outlineOffset;
-  card.style.outlineOffset = 'calc(var(--ce-stroke-focus) + var(--ce-stroke-offset))';
-  const reach = parseFloat(getComputedStyle(card).outlineOffset) || 0;
-  card.style.outlineOffset = inline;
-  return Math.max(0, reach);
+  const probe = document.createElement('span');
+  probe.style.cssText = 'position:absolute!important;display:block!important;visibility:hidden!important;box-sizing:content-box!important;'
+    + 'padding:0!important;border:0!important;min-width:0!important;max-width:none!important;height:0!important;'
+    + 'width:calc(var(--ce-stroke-focus) + var(--ce-stroke-offset))!important';
+  card.append(probe);
+  const reach = probe.getBoundingClientRect().width;
+  probe.remove();
+  return reach;
+}
+
+// The height limit placePins() sets on a card taller than its photo; a consumer's own inline max-height (value and
+// priority) is kept aside while the limit applies and put back when it no longer does.
+const consumerMaxHeight = new WeakMap();
+function limitHeight(card, height) {
+  if (!consumerMaxHeight.has(card)) consumerMaxHeight.set(card, [card.style.getPropertyValue('max-height'), card.style.getPropertyPriority('max-height')]);
+  card.style.setProperty('max-height', `${height}px`, 'important');
+}
+function releaseHeight(card) {
+  if (!consumerMaxHeight.has(card)) return;
+  const [value, priority] = consumerMaxHeight.get(card);
+  consumerMaxHeight.delete(card);
+  if (value) card.style.setProperty('max-height', value, priority); else card.style.removeProperty('max-height');
 }
 
 /** Web pins: a .ce-pin shows its card on hover and focus in CSS; this adds tap-to-open for touch (aria-expanded on the dot),
@@ -179,9 +197,9 @@ export function placePins(frame, { gap = 20, inset = 14 } = {}) {
     if (!card) continue;
     const ring = focusRingReach(card);
     const room = box.height - 2 * ring;
-    card.style.maxHeight = '';
+    releaseHeight(card);
     const limited = card.getBoundingClientRect().height > room;
-    if (limited) card.style.maxHeight = `${room}px`;
+    if (limited) limitHeight(card, room);
     const width = card.offsetWidth;
     const height = limited ? room : card.offsetHeight;
     const at = pin.getBoundingClientRect();
