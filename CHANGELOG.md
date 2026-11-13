@@ -10,6 +10,17 @@ CR-03, the demonstration cue (ce-theme#11).
 - The usage rules in `docs/names.md` (“Demonstration cue”), `docs/apply-ce-theme.md`, `docs/usage.md` and `docs/coverage.md`, and the decision in `docs/decisions.md`.
 - `tests/demo-cue.test.mjs` (no text and no raw colour in the recipe; canon wording in every example) and `tests/browser/demo-cue.spec.mjs` (390, 768 and 1440 px at 100%, 150% and 200% text; axe; reading order).
 
+CR-07, the shopping-action rule (ce-theme#11).
+
+### Changed
+
+- Product cards are browse first: no purchase control at rest, no favourite and no full-width button. The optional QuickAdd icon (`ce-icon-button--action` in `ce-product-row`) shows only on the hovered or keyboard-focused card on hover-capable screens from 640px, at 44 × 44 (`--ce-size-target-public`), out of the row's height with its column kept clear, so the ProductStack gaps and the price do not move. It has no transition under reduced motion. Touch and narrow screens add nothing from a card.
+- `ce-product-add` is deprecated: it stays `display: none` at every width until consumers remove the element, and no longer shows on touch or narrow screens. Consumers that still render it must remove it from their markup; there is no opt-in variant.
+- The product page keeps one primary «Añadir al carrito» (`AddToCart`, re-scoped in the names registry) and one product-named favourite; the `ProductDetail` card shows the supplied add outcomes in words. CE Theme ships no sticky buy-bar recipe.
+- `docs/decisions.md` supersedes the behaviour of the 2026-10-25 “Add to cart” row and keeps its copy. `QuickAdd` (Añadir rápido) is added to the names registry. The `TaggedMedia` guideline applies the same rule to an open pin card, as documentation only.
+- The remaining “bag”/«Bolsa» cart wording in the guidelines, previews and `/tienda/` pages is now cart/«carrito». The `bag` and `bag-plus` icons are renamed `cart` and `cart-plus`, with the same drawing.
+- `tests/browser/shopping-actions.spec.mjs` and `tests/shopping-actions.test.mjs` check CR-07's acceptance 1 to 5.
+
 ## @casaelida/vue 0.2.0 — 2026-11-12 (unreleased)
 
 SEAL #7 batch B1 (ce-theme#8).
