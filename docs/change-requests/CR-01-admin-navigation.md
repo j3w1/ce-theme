@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Decided (section 8: the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; j3w1 can veto any of them). Implemented in CE Theme source by the CR-01 pull request; the frozen boards are not changed
 
 # CR-01 · Admin navigation (`ce-module-nav`): one module list, density-aware targets
 
@@ -108,6 +108,8 @@ To run when the repository work happens (not run here):
 5. Text x1.5, x2 at 240px: no overflow.
 6. Screen reader walk of the nav and of the hidden group headings at narrow widths: **not run, to schedule**.
 
+In the repository, checks 1 to 5 are browser tests in `tests/browser/app-shell.spec.mjs`. They run on the AppShell design-system card, rendered with only the shipped fonts, tokens and recipes, in Chromium and, in hosted CI, WebKit. Check 6 is not run: to schedule. No screen-reader or real-device result is claimed.
+
 ## 7. Risks and what it does not change
 
 - Every consumer of `ce-module-nav` is affected, not only CE Systems. Other consumers (the CE Radio admin card, CE Meta, CE Meta App) were **not inspected**. Under F1 a default-density consumer's links grow from 40px to 44px; under F2 nothing changes at default or compact density, touch shells grow to 56px.
@@ -117,8 +119,8 @@ To run when the repository work happens (not run here):
 
 ## 8. Owner decisions needed
 
-1. Link height rule: F1 (44px floor), F2 (40px, existing token) or F0 (no change). Recommended: F1. Still open. X-1 (decided 2026-11-06) settles only how a 44px floor is written: F1 uses `--ce-size-target-public`, never a literal 44px.
-2. Touch shells: 56px for every touch board? Twelve touch boards use 48px today (nine tablet, three phone); two of the tablets (Adm11Tableta, Adm11TabletaP2) reach 48px through an inline `--ce-control: 48px` that only a markup change removes.
-3. Icons: add twelve to CE Theme or leave them to the application?
-4. Is the module list itself a CE Theme example only (recommended), or a rule for every CE Systems build? CE Systems is planned to be rebuilt in `j3w1/casaelida.com`; its module list is its own decision.
-5. Accept the stricter `aria-current="page"` selector.
+1. Link height rule: F1 (44px floor), F2 (40px, existing token) or F0 (no change). Recommended: F1. X-1 (decided 2026-11-06) settles only how a 44px floor is written: F1 uses `--ce-size-target-public`, never a literal 44px. **Decided (2026-11-13, the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; [#11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): F1**, the documented density formula with the 44px floor from `--ce-size-target-public`.
+2. Touch shells: 56px for every touch board? Twelve touch boards use 48px today (nine tablet, three phone); two of the tablets (Adm11Tableta, Adm11TabletaP2) reach 48px through an inline `--ce-control: 48px` that only a markup change removes. **Decided (2026-11-13, the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; [#11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)):** new touch-shell examples use the existing 56px touch density, without local 48px overrides. The frozen boards and their inline overrides are preserved, not rewritten.
+3. Icons: add twelve to CE Theme or leave them to the application? **Decided (2026-11-13, the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; [#11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)):** module icons remain supplied by the consuming application. No twelve-icon asset set is added; the reference example reuses existing suitable CE Theme icons.
+4. Is the module list itself a CE Theme example only (recommended), or a rule for every CE Systems build? CE Systems is planned to be rebuilt in `j3w1/casaelida.com`; its module list is its own decision. **Decided (2026-11-13, the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; [#11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)):** the module list is a CE Theme example, not a mandatory module inventory for every CE Systems build. The application owns its navigation data.
+5. Accept the stricter `aria-current="page"` selector. **Decided (2026-11-13, the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; [#11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)):** accepted. The current non-colour cue, the focus ring and exactly one current-page link stay.
