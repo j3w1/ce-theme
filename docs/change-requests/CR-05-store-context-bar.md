@@ -1,4 +1,4 @@
-Status: Approved; implemented in CE Theme source by pull request [#22](https://github.com/j3w1/ce-theme/pull/22). X-1, X-7 and X-8 are j3w1's decisions of 2026-11-06; decisions 1, 2 and 4 are the ce-theme lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([#11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)). The evidence below still describes the frozen boards of 5 November 2026 (X-3)
+Status: Approved through X-1, X-7, X-8 and the lead's CR-05 selections; implemented in CE Theme source by pull request [#22](https://github.com/j3w1/ce-theme/pull/22). X-1, X-7 and X-8 are j3w1's decisions of 2026-11-06; decisions 1, 2 and 4 are the ce-theme lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([#11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)). The evidence below still describes the frozen boards of 5 November 2026 (X-3)
 
 # CR-05 · Store-context bar: the in-page line "prices are for this store · change store"
 
@@ -9,7 +9,7 @@ Status: Approved; implemented in CE Theme source by pull request [#22](https://g
 | Depends on | Nothing. CR-04 notes that CE Theme's Cart preview shows a `ce-store-note` above the cart list; no other request depends on this one |
 | Checked against | CE Theme — Design System artifact version 1793881448-c98f (design-system.json: re-synced to `j3w1/ce-theme@e8b8d7a8`; `bundle.css` sha256 `de102fad7d927541e3c31c2c30dd770fa0d0fca3b4000a84a9e5bfcb7353ed06`) and the workbench boards of 5 November 2026. Evidence tags **[A] [S] [R] [H]** are explained in CR-08. |
 
-**Interpretation.** The hand-off lists a "store-context bar" without a definition. I took it to mean the one-line bar that appears inside pages that show store-dependent amounts, naming the store and offering to change it. The utility-bar button already exists in CE Theme (`ce-store-context`) and is not the subject. If the owner meant something else, this request needs rewriting (owner decision 1).
+**Interpretation.** The hand-off lists a "store-context bar" without a definition. I took it to mean the one-line bar that appears inside pages that show store-dependent amounts, naming the store and offering to change it. The utility-bar button already exists in CE Theme (`ce-store-context`) and is not the subject. If the owner meant something else, this request needs rewriting (owner decision 1). Decision 1 (section 8) confirms this interpretation.
 
 ## 1. Summary
 
@@ -107,12 +107,12 @@ To run when the repository work happens (not run here, except where marked):
 4. Keyboard: the action is reachable, shows the focus ring and opens the same dialog as the utility-bar button.
 5. Screen reader announcement of the pending state: **not run, to schedule**.
 
-In the implementation, checks 1, 2 and 4 are browser tests in `tests/browser/store-bar.spec.mjs`. They render the StoreContext card's states with the supplied Inter files and the generated tokens and recipes only, and the storefront cart and listing, with and without a store. Before the rule, the action measured 16.8px at 100% text, 25.2px at x1.5 and 33.6px at x2, at all three widths (measured without the Inter files loaded). Check 3 is the page's rule in the StoreContext guideline. The examples keep it: the storefront cart shows each store's supplied amounts only with that store's bar, and with no store neither the cart nor the listing shows an amount; the pending state is shown in the card without amounts. Check 5 is still not run.
+In the implementation, checks 1, 2 and 4 are browser tests in `tests/browser/store-bar.spec.mjs`. They render the StoreContext card's states with the supplied Inter files and the generated tokens and recipes only, and the five storefront pages that depend on the store (home, listing, product, scene and cart), with and without a store. They also check that the text really grows: at x1.5 and x2 the bar, its action and the pill have 1.5 and 2 times their computed font size. Before the rule, the action measured 16.8px at 100% text, 25.2px at x1.5 and 33.6px at x2, at all three widths (measured without the Inter files loaded). Check 3 is the page's rule in the StoreContext guideline. The examples keep it: the storefront cart shows each store's supplied amounts only with that store's bar, no storefront page shows an amount without a store, and the pending state is shown in the card without amounts. Check 5 is still not run.
 
 ## 7. Risks and what it does not change
 
 - `ce-store-note` is also used inside pin cards and product cards for «Precio no disponible en {tienda}»; the new rule only touches a `.ce-link` inside it, so those uses are unaffected. One existing note with an inline link, «Consulta Ayuda» on the storefront product page, also gets the 44px target, so its row is taller. Pin-card spacing is CR-09.
-- Pages that today show both the utility-bar button and the in-page line repeat the store name by design; owner decision 4.
+- Pages that today show both the utility-bar button and the in-page line repeat the store name by design. Decision 4 (section 8) shows the in-page line on every store-dependent page.
 - The boards keep their three local markups as part of the frozen snapshot (X-3); new boards use the bar.
 - Not changed: `ce-store-context`, the dialog and drawer, choice cards, the price-pending recipe.
 

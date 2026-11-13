@@ -3,6 +3,7 @@ import Store from '../../layouts/Store.astro';
 import Icon from '../../components/Icon.astro';
 import Price from '../../components/Price.astro';
 import Pin from '../../components/Pin.astro';
+import StoreBar from '../../components/StoreBar.astro';
 import { productView } from '../../../recipes/product.mjs';
 import { catalogue, stockText } from '../../data/store.mjs';
 // Pin positions are supplied with the scene (percentages of the image). The web scene uses hover pins; the letters A, B, C belong to media that cannot hover.
@@ -16,13 +17,14 @@ const tags = [
   <div class="ce-container">
     <nav class="ce-breadcrumbs" aria-label="Ruta" style="padding-top:var(--ce-space-16)"><ol><li><a href="/tienda/">Inicio</a></li><li><span aria-current="page">Ambientes</span></li></ol></nav>
     <h1 class="store-page-title">Lo esencial para empezar el día</h1>
+    <StoreBar lead="Precios y disponibilidad de" style="margin-bottom:var(--ce-space-24)" />
     <div class="ce-scene">
       <figure style="margin:0">
         <div class="ce-tagged-media" id="escena-cocina">
           <div class="tagged-scene-art" role="img" aria-label="Composición con dos tazas de vidrio y un tapete de ducha"><img src="/assets/product-mene.png" alt="" width="300" height="300" /><img src="/assets/product-nome.png" alt="" width="300" height="300" /><img src="/assets/product-tilen.png" alt="" width="300" height="300" /></div>
           {tags.map((tag) => <Pin item={tag.item} x={tag.x} y={tag.y} id={`escena-pin-${tag.letter.toLowerCase()}`} />)}
         </div>
-        <figcaption class="ce-scene-toolbar"><span class="ce-store-note">Composición con fotos del catálogo. Precios de ejemplo en <strong data-store-name>Tacna</strong>.</span><button class="ce-chip" type="button" data-ce-markers="escena-cocina">Mostrar etiquetas</button></figcaption>
+        <figcaption class="ce-scene-toolbar"><span class="ce-store-note">Composición con fotos del catálogo. Precios de ejemplo.</span><button class="ce-chip" type="button" data-ce-markers="escena-cocina">Mostrar etiquetas</button></figcaption>
       </figure>
       <ol class="ce-tag-list" aria-label="Productos en esta escena">
         {tags.map(({ letter, item }) => { const view = productView(item); return (

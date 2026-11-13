@@ -48,6 +48,10 @@ for (const width of WIDTHS) {
       await mountCard(page, width, scale);
       const bars = page.locator('section[aria-label="Barra de tienda"] .ce-store-note');
       await expect(bars).toHaveCount(6);
+      // The text really grows with the root size: the bar, its action and the pill are rem-based (14px, 14px and 12px at 100%).
+      const factor = parseFloat(scale) / 100;
+      const sizes = await bars.evaluateAll((items) => items.map((bar) => [bar, bar.querySelector(':scope > .ce-link, .ce-pill')].map((el) => getComputedStyle(el).fontSize)));
+      expect(sizes).toEqual([0, 1, 2, 3, 4, 5].map((index) => [`${14 * factor}px`, `${([3, 5].includes(index) ? 12 : 14) * factor}px`]));
       // The action reaches the public target (--ce-size-target-public, 44px); without the rule it is one 1.2 line high.
       const heights = await bars.locator(':scope > .ce-link').evaluateAll((items) => items.map((el) => el.getBoundingClientRect().height));
       expect(heights).toHaveLength(4);
@@ -104,18 +108,33 @@ test('StoreBar states carry the documented wording and no amount', async ({ page
   expect(results.violations.map(({ id, nodes }) => ({ id, elements: nodes.map((n) => n.target) }))).toEqual([]);
 });
 
-// The storefront bar is one element; its lead and action label are per-store views, so the action keeps focus across changes.
+// The storefront bar is one element (site/components/StoreBar.astro); its lead and action label are per-store views, so the
+// action keeps focus across changes. Every storefront page whose prices or availability depend on the store shows it.
+const PAGES = [
+  ['/tienda/carrito/', 'Importes en'],
+  ['/tienda/categoria/', 'Precios y disponibilidad de'],
+  ['/tienda/producto/', 'Precios y disponibilidad de'],
+  ['/tienda/escena/', 'Precios y disponibilidad de'],
+  ['/tienda/', 'Precios y disponibilidad de'],
+];
 const storeBar = (page) => page.locator('main .ce-store-note:visible').filter({ has: page.locator(':scope > .ce-link') });
 const lead = (page) => storeBar(page).locator(':scope > span:visible');
-// The visible amounts in the cart: each line's price and the summary total.
-const cartAmounts = (page) => page.locator('main').evaluate((main) => ({
-  lines: [...main.querySelectorAll('.ce-cart-line .ce-price')].filter((el) => el.offsetParent !== null).map((el) => el.querySelector('.ce-sr-only').textContent),
-  total: [...main.querySelectorAll('.ce-summary-total dd')].filter((el) => el.offsetParent !== null).map((el) => el.textContent),
+const visibleAmounts = (page) => page.locator('main').evaluate((main) => ({
+  prices: [...main.querySelectorAll('.ce-price')].filter((el) => el.offsetParent !== null).length,
+  text: /S\/\s*\d/.test(main.innerText),
 }));
-const TACNA = { lines: ['Precio actual: 13 soles', 'Precio actual: 8.5 soles'], total: ['S/21.50'] };
-const AREQUIPA = { lines: ['Precio actual: 13.8 soles', 'Precio actual: 8.5 soles'], total: ['S/22.30'] };
+// The visible amounts in the cart: each line's price, the subtotal and the total.
+const cartAmounts = (page) => page.locator('main').evaluate((main) => {
+  const shown = (selector) => [...main.querySelectorAll(selector)].filter((el) => el.offsetParent !== null);
+  return {
+    lines: shown('.ce-cart-line .ce-price').map((el) => el.querySelector('.ce-sr-only').textContent),
+    summary: shown('.ce-summary dd').map((el) => el.textContent),
+  };
+});
+const TACNA = { lines: ['Precio actual: 13 soles', 'Precio actual: 8.5 soles'], summary: ['S/21.50', 'Sin costo', 'S/21.50'] };
+const AREQUIPA = { lines: ['Precio actual: 13.8 soles', 'Precio actual: 8.5 soles'], summary: ['S/22.30', 'Sin costo', 'S/22.30'] };
 
-for (const [route, words] of [['/tienda/carrito/', 'Importes en'], ['/tienda/categoria/', 'Precios y disponibilidad de']]) {
+for (const [route, words] of PAGES) {
   test(`${route}: the StoreBar action is reachable by keyboard, shows the focus ring and opens the same dialog as the utility-bar button`, async ({ page }) => {
     await page.goto(route);
     await expect(storeBar(page)).toHaveCount(1);
@@ -144,7 +163,8 @@ for (const [route, words] of [['/tienda/carrito/', 'Importes en'], ['/tienda/cat
     await expect(action).toBeFocused();
     await expect(lead(page)).toHaveText(`${words} Tacna`);
 
-    // Confirming a store from the StoreBar changes the same store as the utility-bar button, and focus returns to the action.
+    // Confirming a store from the StoreBar changes the same store as the utility-bar button, focus returns to the action,
+    // and nothing on the page still names the previous store.
     await action.click();
     await dialog.getByLabel('Arequipa').check();
     await dialog.getByRole('button', { name: 'Usar esta tienda' }).click();
@@ -152,42 +172,59 @@ for (const [route, words] of [['/tienda/carrito/', 'Importes en'], ['/tienda/cat
     await expect(utility).toContainText('Arequipa');
     await expect(lead(page)).toHaveText(`${words} Arequipa`);
     await expect(action).toBeFocused();
+    expect(await page.locator('main').innerText()).not.toContain('Tacna');
     // In the cart, the bar names the store whose amounts are shown: Arequipa's supplied amounts replace Tacna's.
     if (route === '/tienda/carrito/') expect(await cartAmounts(page)).toEqual(AREQUIPA);
   });
-}
 
-for (const route of ['/tienda/carrito/', '/tienda/categoria/']) {
   test(`${route} without a store: «Tienda: sin elegir» with «Elegir tienda», and no amount on the page`, async ({ page }) => {
     await page.goto(`${route}?tienda=ninguna`);
     await expect(storeBar(page)).toHaveCount(1);
     await expect(lead(page)).toHaveText('Tienda: sin elegir');
     const action = storeBar(page).getByRole('button', { name: 'Elegir tienda' });
     await expect(action).toBeVisible();
-    expect(await page.locator('main .ce-price').evaluateAll((items) => items.filter((el) => el.offsetParent !== null).length)).toBe(0);
-    expect(await page.locator('main').innerText()).not.toMatch(/S\/\s*\d/);
+    expect(await visibleAmounts(page)).toEqual({ prices: 0, text: false });
+    if (route === '/tienda/carrito/') {
+      // The no-store messages take the place of each line amount and of the summary.
+      await expect(page.locator('.ce-cart-line-actions > .ce-store-note:visible')).toHaveText(['Elige tu tienda para ver el precio.', 'Elige tu tienda para ver el precio.']);
+      await expect(page.locator('.ce-order-summary .ce-price-pending')).toBeVisible();
+    }
     await action.click();
     const dialog = page.getByRole('dialog', { name: 'Elige tu tienda' });
     await expect(dialog).toBeVisible();
     await dialog.getByLabel('Tacna').check();
     await dialog.getByRole('button', { name: 'Usar esta tienda' }).click();
-    await expect(lead(page)).toHaveText(route === '/tienda/carrito/' ? 'Importes en Tacna' : 'Precios y disponibilidad de Tacna');
+    await expect(lead(page)).toHaveText(`${words} Tacna`);
     await expect(storeBar(page).getByRole('button', { name: 'Cambiar tienda' })).toBeFocused();
     if (route === '/tienda/carrito/') expect(await cartAmounts(page)).toEqual(TACNA);
   });
 }
 
+test('/tienda/carrito/ opened for Arequipa shows Arequipa\'s supplied amounts with its bar', async ({ page }) => {
+  await page.goto('/tienda/carrito/?tienda=arequipa');
+  await expect(lead(page)).toHaveText('Importes en Arequipa');
+  expect(await cartAmounts(page)).toEqual(AREQUIPA);
+});
+
 for (const width of WIDTHS) {
-  test(`storefront StoreBar fits at ${width}px and with larger text, with a 44px action`, async ({ page }) => {
+  test(`storefront StoreBar fits at ${width}px with text enlarged to 150% and 200%, with a 44px action`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    for (const route of ['/tienda/carrito/', '/tienda/carrito/?tienda=ninguna', '/tienda/categoria/', '/tienda/categoria/?tienda=ninguna']) {
-      for (const scale of SCALES) {
-        await page.goto(route);
-        await page.addStyleTag({ content: `html{font-size:${scale}}` });
-        const bar = storeBar(page);
-        await expect(bar, `${route} ${scale}`).toHaveCount(1);
-        expect(await spill(bar), `${route} ${scale}`).toEqual([]);
-        expect(await bar.locator(':scope > .ce-link').evaluate((el) => el.getBoundingClientRect().height), `${route} ${scale}`).toBeGreaterThanOrEqual(44);
+    for (const [route] of PAGES) {
+      for (const query of ['', '?tienda=ninguna']) {
+        for (const scale of SCALES) {
+          const at = `${route}${query} ${scale}`;
+          await page.goto(`${route}${query}`);
+          await page.addStyleTag({ content: `html{font-size:${scale}}` });
+          const bar = storeBar(page);
+          await expect(bar, at).toHaveCount(1);
+          // The bar's text really grows with the root size (0.875rem: 14px at 100%).
+          expect(await bar.evaluate((el) => [el, el.querySelector(':scope > .ce-link')].map((item) => getComputedStyle(item).fontSize)), at).toEqual(Array(2).fill(`${14 * parseFloat(scale) / 100}px`));
+          expect(await spill(bar), at).toEqual([]);
+          expect(await bar.locator(':scope > .ce-link').evaluate((el) => el.getBoundingClientRect().height), at).toBeGreaterThanOrEqual(44);
+          // The cart's no-store messages stay inside the viewport too.
+          const outside = await page.locator('.ce-cart-line-actions > .ce-store-note:visible, .ce-order-summary .ce-price-pending:visible').evaluateAll((items) => items.filter((el) => el.getBoundingClientRect().right > innerWidth + 1).length);
+          expect(outside, at).toBe(0);
+        }
       }
     }
   });

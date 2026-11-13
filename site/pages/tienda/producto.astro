@@ -3,6 +3,7 @@ import Store from '../../layouts/Store.astro';
 import Icon from '../../components/Icon.astro';
 import Price from '../../components/Price.astro';
 import StoreProducts from '../../components/StoreProducts.astro';
+import StoreBar from '../../components/StoreBar.astro';
 import { productView } from '../../../recipes/product.mjs';
 import { catalogue, stores, stockText } from '../../data/store.mjs';
 const item = catalogue[0];
@@ -12,6 +13,7 @@ const related = catalogue.slice(1);
 <Store title={`${view.name} ${view.description}`} current="Productos" description="Ficha de producto de demostración con precio por tienda, variantes y opciones de entrega.">
   <div class="ce-container">
     <nav class="ce-breadcrumbs" aria-label="Ruta" style="padding-block:var(--ce-space-16) var(--ce-space-24)"><ol><li><a href="/tienda/">Inicio</a></li><li><a href="/tienda/categoria/">Cocina y baño</a></li><li><span aria-current="page">{view.name}</span></li></ol></nav>
+    <StoreBar lead="Precios y disponibilidad de" style="margin-bottom:var(--ce-space-24)" />
     <div class="ce-pdp">
       <div>
         <ul class="ce-gallery" aria-label="Fotos del producto" tabindex="0">

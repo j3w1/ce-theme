@@ -1,0 +1,13 @@
+---
+// Storefront demonstration of the StoreBar recipe composition (`ce-store-note` + `ce-link`; see the StoreContext guideline).
+// It is not a component of @casaelida/vue. One bar: its lead and action label are per-store views, so the Store layout shows
+// the chosen store's wording, «Tienda: sin elegir» without a store, and the action keeps focus when the store changes.
+import { stores } from '../data/store.mjs';
+interface Props { lead: 'Importes en' | 'Precios y disponibilidad de'; style?: string }
+const { lead, style } = Astro.props;
+---
+<p class="ce-store-note" style={style}>
+  {stores.map((store) => <span data-store-view={store.id} hidden={store.id !== 'tacna'}>{lead} <strong>{store.name}</strong></span>)}
+  <span data-store-view="ninguna" hidden>Tienda: sin elegir</span>
+  <button class="ce-link" type="button" data-ce-open="elegir-tienda">{stores.map((store) => <span data-store-view={store.id} hidden={store.id !== 'tacna'}>Cambiar tienda</span>)}<span data-store-view="ninguna" hidden>Elegir tienda</span></button>
+</p>

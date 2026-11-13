@@ -29,7 +29,7 @@ The **StoreBar** («Barra de tienda») is the in-page line that names the store 
 | Pending, after a committed change | The same lead with the new store | «Actualizando» in `ce-pill ce-pill--info`, instead of the action |
 
 - Show it on every store-dependent page: every page whose amounts, prices or availability depend on the chosen store, including browsing pages that show only availability.
-- The action is a `button.ce-link` that opens the same store dialog as the utility-bar button, or an `a.ce-link` to the store route. Inside `ce-store-note` it is at least 44px high (`--ce-size-target-public`) and shows the global focus ring.
+- The action is a `button.ce-link` that opens the same store dialog as the utility-bar button, or an `a.ce-link` to the store route. Inside `ce-store-note` it is at least 44px high (`--ce-size-target-public`) and shows the global focus ring. The rule applies to every `ce-link` inside a `ce-store-note`, so a link inside a sentence also gets the target and its row grows to 44px.
 - The pending bar carries `aria-busy="true"` and `role="status"` only while the change is pending (a recipe-level rule), and replaces the action with the word «Actualizando». The screen-reader announcement of this state has not been tested.
 - The lead and the label sit in one `span`. A long store label wraps, and the recipe's gap (4px × 8px) separates it from the action. Add no `·` separator and no gap of your own.
 - In the bar, «Tienda:» is used only for the empty state; «Tu tienda:» stays with the utility-bar button.
