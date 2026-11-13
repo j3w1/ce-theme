@@ -83,7 +83,9 @@ for (const width of [390, 768, 1440]) {
         expect(m.lines).toBeGreaterThan(1);
         expect(m.cue.w).toBeLessThanOrEqual(m.main.w + 0.5);
       }
-      if (width === 390) expect(m.lines).toBeGreaterThan(1);
+      // At 390px the larger text sizes must wrap. At 100% text the words fit on one line in some engines (WebKit) and not in
+      // others (Chromium), so that case is left to the rule above.
+      if (width === 390 && text > 1) expect(m.lines).toBeGreaterThan(1);
       if (width === 1440 && text === 1) expect(m.cue.w).toBeLessThan(m.main.w / 2);
       // Never overlaps the page header that follows it.
       expect(m.cue.b).toBeLessThanOrEqual(m.header.t + 0.5);
