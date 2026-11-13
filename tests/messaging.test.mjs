@@ -183,7 +183,7 @@ test('the /mensajeria/ fixture builds its URLs under the site base', async () =>
   const { stripTypeScriptTypes } = await import('node:module');
   const { default: config } = await import('../astro.config.mjs');
   const module = (source) => `data:text/javascript,${encodeURIComponent(source)}`;
-  const helper = module((await read('site/url.mjs')).replace('import.meta.env.BASE_URL', JSON.stringify(config.base)));
+  const helper = module((await read('site/url.mjs')).replace('import.meta.env?.BASE_URL', JSON.stringify(config.base)));
   const source = stripTypeScriptTypes(await read('site/data/messaging.ts'));
   assert.ok(source.includes("from '../url.mjs'"), 'the fixture builds its URLs with site/url.mjs');
   const { createThreads } = await import(module(source.replace("from '../url.mjs'", `from ${JSON.stringify(helper)}`)));
