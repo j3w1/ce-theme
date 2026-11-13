@@ -95,7 +95,7 @@ Effect on the 66 boards if they were re-synchronised (they are not: the boards a
 | Targets | Staff navigation: 44px (F1, `--ce-size-target-public`) or 40px (F2); the staff floor recorded by the workbench audit is 32px. The 44px public-target rule (R-10) is public-only |
 | Text and icons | Visible label on every link; icons `aria-hidden` |
 | NAME / Description / specs, CE codes, prices | Not applicable (no product identity in the navigation) |
-| Text x1.5 and x2 | Long labels («Tiendas y etiquetas», «Acceso y auditoría») wrap inside the 240px column; heights are `min-height`, so wrapping cannot clip |
+| Text x1.5 and x2 | Long labels («Tiendas y etiquetas», «Acceso y auditoría») wrap inside the 240px column; heights are `min-height`, so wrapping cannot clip. Single words that do not fit (at x2) break with `overflow-wrap: anywhere`; see section 6 |
 
 ## 6. Acceptance checks
 
@@ -109,6 +109,8 @@ To run when the repository work happens (not run here):
 6. Screen reader walk of the nav and of the hidden group headings at narrow widths: **not run, to schedule**.
 
 In the repository, checks 1 to 5 are browser tests in `tests/browser/app-shell.spec.mjs`. They run on the AppShell design-system card, rendered with only the shipped fonts, tokens and recipes, in Chromium and, in hosted CI, WebKit. Check 6 is not run: to schedule. No screen-reader or real-device result is claimed.
+
+Wrap rule, an implementation decision by the repository lead, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed: before it, at text x2 (root font size 200%) the words that cannot wrap («Disponibilidad», «Publicaciones», the heading «Administración») gave the nav's grid track a 268px min-content. Every link was then 268px wide and the 240px column scrolled (scrollWidth 280px, clientWidth 239px; measured in Chromium on the AppShell card with the generated tokens and recipes); x1.5 fitted. `overflow-wrap: anywhere` on the existing `.ce-module-nav h2` and `.ce-module-nav a` rules is the smallest change that meets check 5 and section 5's statement that labels wrap inside the column. It adds no class, API or global wrapping rule, does not apply to CE codes or prices, and waives no acceptance.
 
 ## 7. Risks and what it does not change
 
