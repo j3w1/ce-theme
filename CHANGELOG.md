@@ -13,7 +13,7 @@ CR-01, admin navigation (ce-theme#11). The shipped `styles.css` changes, so the 
 ### Added
 
 - The AppShell card's seven-group, seventeen-link module example, using existing CE Theme icons, and the module navigation rules in its guideline. The application supplies its modules and their icons.
-- `tests/browser/app-shell.spec.mjs` covers CR-01 acceptance 1 to 5 on the generated card. The screen-reader walk (acceptance 6) has not been run and is scheduled.
+- `tests/browser/app-shell.spec.mjs` covers CR-01 acceptance 1 to 5 on the generated card. The screen-reader walk (acceptance 6) has not been run and is still to be scheduled.
 - The CR-01 records: `docs/decisions.md` (with the rule for selections made under the #11 delegation), `docs/coverage.md`, the `ModuleNav` rule, CR-01 and `docs/workbench.md`.
 
 ## @casaelida/vue 0.2.1 — 2026-11-13 (`vue-v0.2.1`)
