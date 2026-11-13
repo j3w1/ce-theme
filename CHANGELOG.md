@@ -1,5 +1,13 @@
 # Changelog
 
+## Documentation kit — unreleased (not in `@casaelida/vue`)
+
+CR-02, the StateFrame documentation kit (ce-theme#11). It ships in the design-system bundle, not in the package: the package's contents and version are unchanged.
+
+### Added
+
+- The StateFrame documentation kit, `design-system/doc-kit/state-frame.css` with its `README.md`, shipped in the design-system bundle as `doc-kit/`. It draws the frame, marker, title, note and body of state sheets from tokens only, loads after `components/bundle.css`, styles only its own `ce-state-frame` classes and places `ce-demo-cue` and `ce-badge` without restyling them. It is not a recipe: it is not in `bundle.css`, `@casaelida/vue`'s styles, the standard names registry or the Components view. `scripts/validate.mjs` checks its CSS variables and colours; `tests/state-frame.test.mjs` and `tests/browser/state-frame.spec.mjs` (a synthetic sheet at 390, 768 and 1440 px with text at 100%, 150% and 200%) cover it.
+
 ## @casaelida/vue 0.2.1 — 2026-11-13 (unreleased)
 
 A patch for CR-06, the availability line (ce-theme#11): the packaged recipes name the availability states `unknown` and `pending`, with the same look, and the wording and accessible name are documented. The components are unchanged.

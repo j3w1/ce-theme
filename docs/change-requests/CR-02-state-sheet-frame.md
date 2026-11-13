@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Implemented in CE Theme by pull request [#PR](https://github.com/j3w1/ce-theme/pull/PR) as the StateFrame documentation kit: `design-system/doc-kit/state-frame.css` and its `README.md`, shipped in the design-system bundle as `doc-kit/`. It is not a recipe, a component, a registry entry or a design-system card; the name `StateFrame` appears only in the kit's documentation. Decisions 2, 4, 5 and 7 were decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)). Two corrections to the section 4.1 rule, found by the acceptance checks of section 6, are *pending review* (section 6, “Implemented with the kit”).
 
 # CR-02 · State-sheet frame (`ce-state-frame`): one frame and label for documentation sheets
 
@@ -218,12 +218,12 @@ To run when the kit or repository work happens:
 ## 8. Owner decisions needed
 
 1. **Home:** Decided (X-4, 2026-11-06): the frame goes in a documentation kit beside CE Theme, not the recipe bundle; the name `StateFrame` is accepted (X-8).
-2. Approve the anatomy: marker, title with optional `ce-badge` «Escenario», one-line note, body; frame named by its title.
+2. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the anatomy is approved: a decorative marker, a heading title with the optional `ce-badge` «Escenario», a one-line note and the body; the frame is named by its title.
 3. Marker size: Decided (X-2, 2026-11-06): the `size.marker` token (28px, `--ce-size-marker`) is added and the marker uses it; the 4px rule stays through the `stroke.heavy` token.
-4. Retire the inverse rectangular tag of the staff sheets (Variant D, 73 frames) in favour of the marker and title, or keep it as a modifier (`ce-state-frame-mark--tag`)?
-5. Should the kit also carry the sheet grid, sheet head and notes block (one more class each), or do those stay per board?
+4. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): new kit sheets retire the inverse rectangular tag in favour of the marker and title; no tag modifier is added. The frozen Variant D boards stay as they are.
+5. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the sheet grid, sheet head and notes block stay with each sheet; the kit adds no class for them.
 6. Decided (X-7, 2026-11-06): English frame labels carry `lang="en"` on Spanish pages.
-7. Confirm that a sheet built on the frame puts the cue in every frame with simulated commercial or staff data (CANON section B; CR-03 decision 4). The sheets that today carry one cue for the whole sheet (Variants B, C, D, G, K; section 2.2) stay as they are in the frozen snapshot (X-3) and are not accepted as equivalent; new sheets carry the cue in every such frame.
+7. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): every frame showing simulated commercial or staff data carries its own cue, first in its body. A sheet-level cue is optional and never replaces it. A frame with no simulated data may omit it only when the sheet's notes name it as exempt, in the form `doc-kit/README.md` documents. The sheets that today carry one cue for the whole sheet (Variants B, C, D, G, K; section 2.2) stay as they are in the frozen snapshot (X-3).
 
 ## 9. Dependency on CR-03
 
@@ -232,3 +232,4 @@ To run when the kit or repository work happens:
 - CR-03 decision 4 asks the owner to confirm the CANON reading (a cue in every frame with simulated commercial or staff data); the body rule then applies to every such frame. The inventory in section 2.2 (last paragraph) lists the sheets that today carry only a sheet-level cue and therefore need the per-frame cue added when rebuilt.
 - CR-03 decision 3 (compact forms) should also consider the quiet 12px strip (`.cue`, `.lg-cue`) that four variants here use for the sheet-level cue; it is not in CR-03's table.
 - Order of submission: CR-03 first (it defines the element this recipe positions), then CR-02. The README of this folder records the order.
+- CR-03 is implemented (pull request [#17](https://github.com/j3w1/ce-theme/pull/17)), so the kit's body places the bundle's `ce-demo-cue` as its first child; the kit never defines a cue of its own.
