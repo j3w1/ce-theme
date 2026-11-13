@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { clipboard } from './clipboard.mjs';
 
 const routes=['/','/fundamentos/','/componentes/','/patrones/','/aplicaciones/','/compartir/','/descargas/','/tienda/','/tienda/categoria/','/tienda/producto/','/tienda/escena/','/tienda/carrito/','/tienda/cuenta/','/sistemas/','/sistemas/etiquetas/','/mensajeria/'];
 for (const route of routes) {
@@ -109,13 +110,13 @@ test('application format changes retain code, price and readable proportions',as
     await expect(page.locator('#application-art .ce-price > .ce-sr-only')).toHaveText('Precio actual: 4.5 soles');
   }
 });
-test('copyable recipe HTML reaches the clipboard and confirms completion',async({page,context})=>{
-  await context.grantPermissions(['clipboard-read','clipboard-write']);
+test('copyable recipe HTML reaches the clipboard and confirms completion',async({page,context,browserName})=>{
+  const copied=await clipboard({page,context,browserName});
   await page.goto('/componentes/');
   await page.locator('.recipe-source summary').first().click();
   await page.getByRole('button',{name:'Copiar HTML'}).first().click();
   await expect(page.locator('#copy-status')).toHaveText('Copiado al portapapeles');
-  expect(await page.evaluate(()=>navigator.clipboard.readText())).toContain('class="ce-button"');
+  expect(await copied()).toContain('class="ce-button"');
 });
 test('long identifiers, larger text and failed product images do not break card layout',async({page})=>{
   await page.setViewportSize({width:390,height:1000});

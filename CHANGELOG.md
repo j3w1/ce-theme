@@ -1,5 +1,26 @@
 # Changelog
 
+## @casaelida/vue 0.2.0 — 2026-11-12 (unreleased)
+
+SEAL #7 batch B1 (ce-theme#8).
+
+### Added
+
+- `@casaelida/vue/styles.css`: Inter `@font-face` with the four Inter WOFF2 files and `OFL.txt` inside the package, the tokens and the recipes, built by `scripts/package.mjs` from `tokens/`, `recipes/` and `fonts/` into the ignored `dist/`. `sideEffects` names it, so bundlers keep the import. A `NOTICE` says the Casa Elida name, logo and brand assets are not licensed by the package.
+- `pnpm test:consumer` (`tests/consumer/`): the clean install proof. The packed file, checked against an expected file list and its sources, is installed into an empty Vite + Vue + TypeScript app outside the checkout with a fresh pnpm store and no user configuration; it checks the lockfile integrity, a single Vue resolved as the peer, a strict typecheck, the build and a browser test of the built output. CI runs it as its own job.
+- A standalone browser test of the collapse of `CEAttachmentGroup` and `CEWorkStatus` in shrink-to-fit parents and of the definite-width fix (#5), with the rule and examples in the package README, `docs/apply-ce-theme.md` and the names registry.
+
+### Changed
+
+- The package and the foundation share one version, 0.2.0. Installation, upgrade and rollback by one pinned package file are documented in the package README and `docs/apply-ce-theme.md`.
+- Browser tests use their own port and never an existing server. CI installs and runs Chromium and WebKit; a local run says WebKit was not run.
+- `docs/decisions.md` records the SEAL #7 revisions of “Workflow”, “Delivery”, “Application identities” and “Showcase exception”, and three Step 4B decisions; `AGENTS.md`, `docs/workflow.md` and `packages/vue/CONTRIBUTING.md` follow them.
+
+### Fixed (found by the new WebKit project; scope decision by j3w1)
+
+- `CEMessageList` keeps a reader who is at the newest message there in WebKit when content inside a message re-renders. WebKit lays the change out in a shorter intermediate state and clamps the scroll position while every size ends as it was. The list reads the position just before the first update of a render flush and puts a reader who was at the newest message back after it, before the clamp is reported as a scroll. A reader in history is still never moved.
+- `/mensajeria/`: in WebKit, a composing reader again moves to the thread view when the window narrows or the text grows. The example reads “narrow” from its panes grid instead of the Back button, whose container-query style WebKit leaves stale inside the hidden thread pane.
+
 ## Unreleased — 2026-10-30 (pending owner review)
 
 ### Added

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, onUpdated, ref, useSlots, watch } from 'vue';
+import { nextTick, onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, ref, useSlots, watch } from 'vue';
 import { SlotWrapper } from '../internal/slot';
 import CEAttachmentGroup from './CEAttachmentGroup.vue';
 import type { CEAttachment } from './CEAttachmentGroup.vue';
@@ -90,6 +90,22 @@ onMounted(() => {
   }
 });
 onUpdated(observeMessages);
+// An update can also move the position on its own: WebKit lays a re-render inside a message (contextual content swapping its
+// actions, for example) out in a shorter intermediate state and clamps the scroll position, while every size ends as it was,
+// so the resize observer sees nothing. The position is read just before the first update of a render flush (of the list or
+// of a message's contextual content, which updates on its own), not from the last scroll event, so a reader who has just
+// scrolled into history is never pulled back. A reader who was at the newest message is put back there after the flush,
+// before the clamp is reported as a scroll.
+let atBottomBeforeUpdate: boolean | null = null;
+function beforeUpdate() {
+  if (atBottomBeforeUpdate !== null) return;
+  atBottomBeforeUpdate = atBottom();
+  void nextTick(() => {
+    if (atBottomBeforeUpdate) scrollToLatest();
+    atBottomBeforeUpdate = null;
+  });
+}
+onBeforeUpdate(beforeUpdate);
 onBeforeUnmount(() => { observer?.disconnect(); observed.clear(); });
 watch(
   () => [props.messages.length, props.messages.at(-1)?.id] as const,
@@ -121,7 +137,7 @@ watch(
           <span v-if="statusText(message)" :class="['ce-message-status', message.status === 'failed' && 'ce-message-status--failed']">{{ statusText(message) }}</span>
           <span v-if="noteText(message)" class="ce-message-status">{{ noteText(message) }}</span>
         </p>
-        <SlotWrapper :render="slots.context" :params="{ message }" wrapper-class="ce-message-context" />
+        <SlotWrapper :render="slots.context" :params="{ message }" wrapper-class="ce-message-context" @vue:before-update="beforeUpdate" />
       </article>
     </template>
   </div>

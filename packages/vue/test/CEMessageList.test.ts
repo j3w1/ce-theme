@@ -152,6 +152,29 @@ describe('CEMessageList keeps a following reader at the bottom when its size cha
     expect(log.top()).toBe(100);
   });
 
+  // WebKit lays a re-render inside a message (contextual content swapping its actions) out in a shorter intermediate state and
+  // clamps the position while the sizes end as they were. The slot below drops the position during the update the same way.
+  it('puts a reader who was at the newest message back after an update that moved the position, but never a reader in history', async () => {
+    const state = ref('Solicitado');
+    let clamp: number | null = null;
+    const wrapper = mount(CEMessageList, {
+      props: { messages: base, label: 'Mensajes' },
+      slots: { context: () => { if (clamp !== null) (wrapper.element as HTMLElement).scrollTop = clamp; return h('p', state.value); } },
+      attachTo: document.body,
+    });
+    const log = geometry(wrapper, 800);
+    clamp = 726;
+    state.value = 'Aceptado';
+    await new Promise((resolve) => setTimeout(resolve));
+    expect(log.top()).toBe(1000);
+    // A reader who scrolled into history is not moved, even before the scroll event reports it.
+    (wrapper.element as HTMLElement).scrollTop = 100;
+    clamp = null;
+    state.value = 'Preparando';
+    await new Promise((resolve) => setTimeout(resolve));
+    expect(log.top()).toBe(100);
+  });
+
   it('stops observing when it is removed', () => {
     const disconnect = vi.fn();
     vi.stubGlobal('ResizeObserver', class { observe() {} disconnect = disconnect; });

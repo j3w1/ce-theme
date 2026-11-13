@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { clipboard } from './clipboard.mjs';
 
 const storePages = ['/tienda/', '/tienda/categoria/', '/tienda/producto/', '/tienda/escena/', '/tienda/carrito/', '/tienda/cuenta/', '/sistemas/', '/compartir/'];
 const fits = (page) => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth);
@@ -225,8 +226,8 @@ test('gondola labels are 80 × 40 mm and nothing spills outside them', async ({ 
   expect(await labels.nth(2).evaluate((el) => getComputedStyle(el).backgroundColor)).toBe('rgba(0, 0, 0, 0)');
 });
 
-test('internal tools: tabs work by keyboard, codes copy exactly and dense tables keep targets', async ({ page, context }) => {
-  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+test('internal tools: tabs work by keyboard, codes copy exactly and dense tables keep targets', async ({ page, context, browserName }) => {
+  const copied = await clipboard({ page, context, browserName });
   await page.goto('/sistemas/');
   const first = page.getByRole('tab', { name: 'Productos' });
   await first.focus();
@@ -234,7 +235,7 @@ test('internal tools: tabs work by keyboard, codes copy exactly and dense tables
   await expect(page.getByRole('tab', { name: 'Ficha' })).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByRole('tabpanel', { name: 'Ficha' })).toBeVisible();
   await page.getByRole('button', { name: 'Copiar código' }).click();
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('CE26061441');
+  expect(await copied()).toBe('CE26061441');
   await page.getByRole('tab', { name: 'Productos' }).click();
   const code = page.locator('#productos .ce-data-table .ce-code').first();
   await expect(code).toHaveText('CE26061441');

@@ -1,13 +1,16 @@
 {
   "name": "@casaelida/vue",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "Casa Elida Vue 3 components. They render the ce-theme recipes; load the foundation CSS once in the application.",
+  "description": "Casa Elida Vue 3 components with their foundation styles and the Inter fonts. Import @casaelida/vue/styles.css once in the application.",
   "license": "UNLICENSED",
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/styles.css"
+  ],
   "files": [
-    "dist"
+    "dist",
+    "NOTICE"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,10 +18,11 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./styles.css": "./dist/styles.css"
   },
   "scripts": {
-    "build": "vite build && vue-tsc -p tsconfig.build.json",
+    "build": "vite build && vue-tsc -p tsconfig.build.json && node ../../scripts/package.mjs",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "test": "vitest run"
   },

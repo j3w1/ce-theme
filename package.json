@@ -19,6 +19,7 @@
     "build": "pnpm generate && pnpm build:vue && astro build",
     "preview": "astro preview --host 127.0.0.1",
     "test:browser": "playwright test",
+    "test:consumer": "node tests/consumer/run.mjs",
     "check": "pnpm validate && pnpm check:generated && pnpm test && pnpm test:vue && pnpm build"
   },
   "devDependencies": {

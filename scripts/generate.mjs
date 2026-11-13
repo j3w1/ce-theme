@@ -1,7 +1,7 @@
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readSources } from './tokens.mjs';
+import { readSources, tokensCss } from './tokens.mjs';
 import { buildDesignSystem } from './design-system.mjs';
 import { readRecipes } from './sources.mjs';
 import { vuetifyAdapter } from './adapters.mjs';
@@ -10,7 +10,7 @@ import { NAMES, NAME_GROUPS } from '../recipes/names.mjs';
 
 const check = process.argv.includes('--check');
 const { manifest, tokens } = await readSources();
-const css = `/* Casa Elida ${manifest.version} — generated from tokens/. Do not edit. */\n:root {\n${Object.values(tokens).map((t) => `  ${t.variable}: ${t.css};`).join('\n')}\n}\n`;
+const css = tokensCss(manifest, tokens);
 const resolved = JSON.stringify({ version: manifest.version, theme: manifest.theme, tokens }, null, 2) + '\n';
 const recipes = await readRecipes();
 const source = (path) => readFile(new URL(`../${path}`, import.meta.url), 'utf8');

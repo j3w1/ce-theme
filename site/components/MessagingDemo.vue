@@ -22,6 +22,7 @@ const heading = ref<HTMLElement | null>(null);
 const backButton = ref<HTMLElement | null>(null);
 const listPane = ref<HTMLElement | null>(null);
 const threadPane = ref<HTMLElement | null>(null);
+const panes = ref<HTMLElement | null>(null);
 
 let minute = FIRST_FREE_MINUTE;
 let serial = 0;
@@ -50,8 +51,9 @@ const items = computed<CEConversationItem[]>(() => threads.map((thread) => ({
   preview: previewOf(thread), draft: thread.drafts.reply.trim() !== '' || thread.drafts.note.trim() !== '',
 })));
 
-// The back button is shown exactly when the thread replaces the list, so it is the single source of that decision.
-const narrow = () => backButton.value !== null && getComputedStyle(backButton.value).display !== 'none';
+// Narrow: the list and the thread do not fit side by side. It is read from the panes grid, which is always rendered. The Back
+// button cannot tell: in the list view it sits in the hidden thread pane, where WebKit keeps its earlier container-query style.
+const narrow = () => panes.value !== null && getComputedStyle(panes.value).gridTemplateColumns.trim().split(/\s+/).length < 2;
 const selectedRow = () => root.value?.querySelector<HTMLElement>('.ce-conversation[aria-current="true"]') ?? null;
 function open(id: string) {
   selectedId.value = id;
@@ -167,7 +169,7 @@ function simulateOther() {
 <template>
   <section ref="root" class="messaging-demo" :data-view="view" aria-label="Ejemplo de mensajería con datos ficticios" @focusin="onFocusIn" @focusout="onFocusOut">
     <p class="messaging-demo-notice" role="note">{{ SIMULATION_NOTICE }}</p>
-    <div class="messaging-demo-panes">
+    <div ref="panes" class="messaging-demo-panes">
       <div ref="listPane" class="messaging-demo-list">
         <CEConversationList :model-value="selectedId" :conversations="items" label="Conversaciones" @select="open" />
       </div>

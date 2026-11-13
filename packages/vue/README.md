@@ -1,8 +1,22 @@
 # @casaelida/vue
 
-Casa Elida's reusable Vue 3 + TypeScript components. Each component renders an approved ce-theme recipe and reuses the recipe helpers, so an application gets the same markup, classes and behaviour that the foundation documents. The package adds no CSS of its own.
+Casa Elida's reusable Vue 3 + TypeScript components. Each component renders an approved ce-theme recipe and reuses the recipe helpers, so an application gets the same markup, classes and behaviour that the foundation documents. The components add no CSS of their own: the package ships the foundation stylesheet they render, built from the same tokens and recipes.
 
-Status: `0.1.0`, private. It is built and tested in this repository; how applications such as `j3w1/casaelida.com` install it (workspace, Git dependency or a registry) is still an owner decision.
+Status: `0.2.0`, private. `private: true` is the publication safeguard: the package is never published to a registry; each version is one package file, `casaelida-vue-X.Y.Z.tgz`, made with `pnpm pack`.
+
+## Install
+
+1. Install one pinned package file with pnpm, and commit `package.json` and `pnpm-lock.yaml`. The lockfile records the file's integrity hash, so every install, including a clean CI checkout, gets the same package and styles.
+   - A published version is a GitHub Release asset of `j3w1/ce-theme`: `pnpm add https://github.com/j3w1/ce-theme/releases/download/vue-vX.Y.Z/casaelida-vue-X.Y.Z.tgz`. No release is published yet.
+   - Until then, use a local package file: in a ce-theme checkout at a pinned commit, `pnpm install`, `pnpm build:vue`, then `pnpm pack` in `packages/vue`; copy `casaelida-vue-0.2.0.tgz` into the application, run `pnpm add ./casaelida-vue-0.2.0.tgz` and commit the file with the manifest and lockfile: a local file is part of the pin, so a clean checkout needs it. Keep the previous file while it may be needed for a rollback.
+2. Import the styles once, in the application entry: `import '@casaelida/vue/styles.css';`. It holds Inter (400, 600, 700 and 800, with its fonts beside it), the `--ce-` tokens and the `ce-` recipes. It resets nothing: every rule sits under a `ce-` class, and the tokens are custom properties on `:root`.
+3. Wrap the application region in `class="ce-scope"`. Without the styles or the scope the components render unstyled.
+
+Vue is a peer dependency, `^3.5.0`: the application installs Vue itself, and the package bundles no Vue runtime.
+
+**Upgrade** by changing the pinned URL (or file) to the newer version and committing the updated lockfile. **Roll back** by restoring the previous URL and lockfile, then `pnpm install --frozen-lockfile`.
+
+The package file contains the built components with their declarations and source maps, `dist/styles.css`, `dist/fonts/` (the four Inter WOFF2 files and `OFL.txt`), this README and `NOTICE`: the Casa Elida name, logo and brand assets are not licensed by the package.
 
 ## Components
 
@@ -35,12 +49,26 @@ import { CEButton, CEPrice, CEProductCode, CETextField } from '@casaelida/vue';
 
 They draw conversations and send nothing. The application owns the drafts (`v-model:reply`, `v-model:note`), the selected conversation, delivery states, authorization and transport. `CEMessageComposer` emits `submitReply(text)` or `saveNote(text)`; an internal note can never leave through the reply event. Drawing a note differently is presentation, not a security control: the service must still decide who may read it. The message bubble is part of `CEMessageList` and is not exported. **Mount one `CEMessageList` per conversation and key it** (`<CEMessageList :key="conversation.id" ... />`): the list never infers a conversation change from its messages, so ids may repeat across conversations (each can start with the same day separator) and older messages may be added above. A keyed mount opens at the newest message. See the interactive fixture example on `/mensajeria/` in the showcase. It shows the fictional conversation “Reposición · Tacna”: a photo and a replenishment request inside one message, the delivery status in the message meta and the request's progress in `CEWorkStatus` (read is not accepted, accepted is not resolved), simulated warehouse actions, and a simulated attachment-open event. The states are illustrative, not business rules of any system.
 
-**Standalone use of `CEAttachmentGroup` and `CEWorkStatus`.** Neither needs `CEMessageList` or any application CSS to respond to a narrow container: each draws its own query container (`ce-attachment-group` and `ce-work-status`), so the layout follows the component's own width, in a message bubble, a side panel or a plain page, at any text size. A query container has no intrinsic width. Place the component in a block-level parent (the normal case: it then takes the parent's width) or give it a width. In a shrink-to-fit parent (`display: inline-flex`, a float, an auto table cell) it collapses; give that parent a width. `CEMessageList` itself is not a query container and keeps its intrinsic width.
+**Standalone use of `CEAttachmentGroup` and `CEWorkStatus`.** Neither needs `CEMessageList` or any application CSS to respond to a narrow container: each draws its own query container (`ce-attachment-group` and `ce-work-status`), so the layout follows the component's own width, in a message bubble, a side panel or a plain page, at any text size.
 
-Load the foundation CSS once in the application: `fonts.css`, `tokens.css` and `recipes.css` from `exports/` (see `docs/apply-ce-theme.md`). Without it the components render unstyled.
+**Give them a definite width.** A query container has no width of its own. In a block-level parent or a grid cell it takes the parent's width (the normal case). In a flex row (`display: flex` or `inline-flex`) a flex item is as wide as its content, so the component collapses to zero width even when the row has a width: give the component `flex: 1` (or a `width`). Any other parent that sizes itself to its content (`inline-block`, a float, `width: max-content`, an auto-width table cell) collapses it too, until that parent gets a width.
+
+```vue
+<!-- Correct: the flex row gives the component its free width. -->
+<div style="display: flex; gap: 8px">
+  <CEWorkStatus style="flex: 1" title="Pedido de reposición" :steps="steps" status="Aceptado" />
+</div>
+
+<!-- Collapses to zero width: a flex item is as wide as its content, and a query container has none. -->
+<div style="display: flex; gap: 8px">
+  <CEWorkStatus title="Pedido de reposición" :steps="steps" status="Aceptado" />
+</div>
+```
+
+`CEMessageList` itself is not a query container and keeps its intrinsic width.
 
 When several Vue apps render on one page (for example Astro islands), give each `CETextField` an `id`; generated ids are unique only within one app.
 
 ## Develop
 
-From the repository root: `pnpm check` typechecks, tests and builds this package with the rest of the foundation. In this folder: `pnpm typecheck`, `pnpm test`, `pnpm build`. See [CONTRIBUTING.md](CONTRIBUTING.md).
+From the repository root: `pnpm check` typechecks, tests and builds this package with the rest of the foundation. `pnpm test:consumer` packs it and proves a clean install in an empty application outside the checkout (`tests/consumer/`). In this folder: `pnpm typecheck`, `pnpm test`, `pnpm build`. See [CONTRIBUTING.md](CONTRIBUTING.md).
