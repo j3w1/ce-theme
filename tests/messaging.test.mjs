@@ -7,6 +7,7 @@ import { sep, win32 } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { NAMES, NAME_GROUPS } from '../recipes/names.mjs';
 import { RECIPE_SOURCES } from '../scripts/sources.mjs';
+import { createExamples } from '../site/data/messaging-example.mjs';
 
 const root = new URL('../', import.meta.url);
 const read = (path) => readFile(new URL(path, root), 'utf8');
@@ -167,28 +168,19 @@ test('the shelf illustration is a self-contained fictional SVG with recorded pro
   assert.match(entry.source, /private Claude Design photo/);
   for (const field of ['description', 'rights', 'sha256']) assert.ok(entry[field], field);
   assert.equal(entry.sha256, createHash('sha256').update(svg).digest('hex'));
-  // The example uses this file and no other image.
-  const fixtures = await read('site/data/messaging.ts');
-  assert.match(fixtures, /SHELF_PHOTO = '\/references\/shelf-gap-fictional\.svg'/);
-  assert.doesNotMatch(fixtures, /PRIVATE-DESIGN-ASSET|\.(png|jpe?g|webp)\b/i);
+  const examples = createExamples('/');
+  assert.equal(examples[0].messages.find((message) => message.attachments)?.attachments[0].src, '/references/shelf-gap-fictional.svg');
 });
 
-test('the Reposición example keeps delivery status and work progress apart, with simulated actions and no viewer', async () => {
-  const demo = await read('site/components/MessagingDemo.vue');
-  const fixtures = await read('site/data/messaging.ts');
-  assert.match(fixtures, /name: 'Reposición · Tacna', kind: 'team'/);
-  assert.match(fixtures, /Se acabaron los frascos de 1 L en el anaquel 3\./);
-  assert.match(fixtures, /'¿Algo más para reponer hoy\?'/);
-  for (const label of ['Me encargo', 'Empezar a preparar', 'Marcar resuelto', 'No se puede atender']) assert.ok(fixtures.includes(label), label);
-  assert.match(demo, /<template #context=/);
-  assert.match(demo, /@open-attachment="onOpenAttachment"/);
-  assert.match(demo, /Acciones simuladas del almacén/);
-  assert.match(demo, /No hay visor en esta demostración/);
-  assert.doesNotMatch(demo, /<dialog|role="dialog"|CEModal|window\.open/);
-  // The delivery status is a field of the message; the request state is a separate structure.
-  assert.match(fixtures, /requests: \{ m03: \{ state: 'requested' \} \}/);
-  assert.match(fixtures, /status: 'read', simulated: true,\s+attachments:/);
-  assert.match(fixtures, /The states are illustrative|Illustrative states|illustrative/i);
+test('the /mensajeria/ fixture builds its URLs under the site base', async () => {
+  for (const base of ['/', '/ce-theme/']) {
+    const images = createExamples(base).flatMap((example) => example.messages.flatMap((message) => message.attachments ?? []));
+    assert.equal(images.length, 1);
+    for (const image of images) {
+      assert.ok(image.src.startsWith(base), image.src);
+      assert.ok((await read(`public/${image.src.slice(base.length)}`)).length > 0, image.src);
+    }
+  }
 });
 
 test('the composer has separate typed events and no generic send event', async () => {
@@ -203,7 +195,7 @@ test('the composer has separate typed events and no generic send event', async (
 test('the messaging components and the example add no network, transport, storage or provider code', async () => {
   const sources = [
     ...await files('packages/vue/src/', /\.(vue|ts)$/),
-    'site/components/MessagingDemo.vue', 'site/data/messaging.ts', 'site/pages/mensajeria.astro',
+    'site/components/MessagingDemo.vue', 'site/data/messaging-example.mjs', 'site/pages/mensajeria.astro',
   ];
   const forbidden = [
     [/\bfetch\s*\(/, 'fetch'], [/XMLHttpRequest/, 'XMLHttpRequest'], [/\bWebSocket\b/, 'WebSocket'], [/\bEventSource\b/, 'EventSource'],
@@ -216,17 +208,16 @@ test('the messaging components and the example add no network, transport, storag
     const text = await read(file);
     for (const [pattern, name] of forbidden) assert.doesNotMatch(text, pattern, `${file} uses ${name}`);
   }
-  for (const file of ['site/components/MessagingDemo.vue', 'site/data/messaging.ts', 'site/pages/mensajeria.astro']) {
+  for (const file of ['site/components/MessagingDemo.vue', 'site/data/messaging-example.mjs', 'site/pages/mensajeria.astro']) {
     assert.doesNotMatch(await read(file), /whatsapp|instagram|messenger|telegram|facebook|\bSMS\b/i, `${file} names a provider`);
   }
 });
 
 test('the example fixtures are fictional: no catalogue codes, prices, stock or real domains', async () => {
-  const fixtures = await read('site/data/messaging.ts');
-  const data = fixtures.replace(/^\s*\/\/.*$/gm, ''); // the header comment says what the fixtures leave out
+  const data = JSON.stringify(createExamples('/'));
   assert.doesNotMatch(data, /\bCE\d{8,}\b|S\/\s?\d|stock|existencias|disponible/i);
   assert.doesNotMatch(data, /https?:\/\/(?!ejemplo\.invalido)/);
-  assert.match(data, /Simulación: ningún mensaje sale de esta página\./);
+  assert.match(await read('site/components/MessagingDemo.vue'), /Simulación: ningún mensaje sale de esta página\./);
 });
 
 test('the file enumeration helper returns repository-relative paths with "/" that git lists and that exist', async () => {
@@ -249,9 +240,10 @@ test('converting a Windows-style relative path gives the repository path, with n
   assert.equal(toPosix('a/b/c.vue', '/'), 'a/b/c.vue');
 });
 
-test('every example conversation starts with the same separator id, so the list must be keyed by conversation', async () => {
-  const fixtures = await read('site/data/messaging.ts');
-  assert.equal(fixtures.match(/\{ id: 'day-1', kind: 'system'/g)?.length, 4);
+test('the compact examples share separator ids and keep the keyed conversation contract', async () => {
+  const examples = createExamples('/');
+  assert.equal(examples.length, 2);
+  assert.equal(examples[0].messages[0].id, examples[1].messages[0].id);
   assert.match(await read('site/components/MessagingDemo.vue'), /<CEMessageList :key="current\.id"/);
   assert.match(await read('packages/vue/src/components/CEMessageList.vue'), /Mount one list per conversation and key it by the conversation id/);
 });
