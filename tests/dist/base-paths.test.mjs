@@ -3,9 +3,8 @@
 // base-path test, with its exceptions: fragment-only links (#contenido), external links and mailto: links.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { lstat } from 'node:fs/promises';
-import { join, posix } from 'node:path';
-import { SITE, cssUrls, distFiles, distPath, elements, markdownLinks, readDist, servedAt, srcsetUrls } from './output.mjs';
+import { posix } from 'node:path';
+import { SITE, cssUrls, distFiles, elements, isBuiltFile, markdownLinks, readDist, servedAt, srcsetUrls } from './output.mjs';
 
 const URL_ATTRIBUTES = new Set(['href', 'src', 'action', 'poster', 'component-url', 'renderer-url', 'before-hydration-url']);
 
@@ -27,8 +26,7 @@ async function problem(value, page) {
   const inside = posix.normalize(path === '' ? '.' : path);
   if (inside === '..' || inside.startsWith('../') || posix.isAbsolute(inside) || path.includes('\0')) return 'leaves dist/';
   const file = path === '' || path.endsWith('/') ? posix.join(inside, 'index.html') : inside;
-  const entry = await lstat(join(distPath, file)).catch(() => null);
-  return entry?.isFile() ? undefined : 'does not resolve to a built file';
+  return (await isBuiltFile(file)) ? undefined : 'does not resolve to a regular built file';
 }
 
 /** Collects problems as "file: where #n reason", numbering the URL-bearing values of each file so a failure can be found. */
@@ -46,7 +44,9 @@ function collector() {
 
 test('every href, src, srcset, action and CSS url() in the built HTML and CSS resolves under the base to a built file', async () => {
   const { problems, check } = collector();
-  const files = await distFiles();
+  // Special entries are refused by the allowlist test; reading one here could block.
+  const files = [];
+  for (const file of await distFiles()) if (await isBuiltFile(file)) files.push(file);
   for (const file of files.filter((name) => name.endsWith('.html'))) {
     for (const element of elements(await readDist(file, 'utf8'))) {
       for (const [name, value] of element.attrs) {
@@ -66,7 +66,8 @@ test('every href, src, srcset, action and CSS url() in the built HTML and CSS re
 
 test('every relative link in the generated Markdown downloads resolves to a file in the build', async () => {
   const { problems, check } = collector();
-  const files = (await distFiles()).filter((name) => name.startsWith('downloads/') && name.endsWith('.md'));
+  const files = [];
+  for (const file of await distFiles()) if (file.startsWith('downloads/') && file.endsWith('.md') && (await isBuiltFile(file))) files.push(file);
   assert.ok(files.length > 0, 'the build publishes the Markdown downloads');
   for (const file of files) {
     for (const link of markdownLinks(await readDist(file, 'utf8'))) await check(file, 'a link', link.trim().replace(/ /g, '%20'));

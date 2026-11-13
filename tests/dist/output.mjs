@@ -1,5 +1,5 @@
 // Shared by the post-build tests: they read dist/ exactly as `astro build` left it, the tree CI uploads to GitHub Pages.
-import { readFile, readdir } from 'node:fs/promises';
+import { lstat, readFile, readdir, realpath } from 'node:fs/promises';
 import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import config from '../../astro.config.mjs';
@@ -26,7 +26,20 @@ export async function distFiles() {
   return files;
 }
 
-export const readDist = (file, encoding) => readFile(join(distPath, file), encoding);
+let distReal;
+/** True when `file` is a regular file inside dist/: not a link or special entry, and not reached through a link that leaves dist/. */
+export async function isBuiltFile(file) {
+  const path = join(distPath, file);
+  if (!(await lstat(path).catch(() => null))?.isFile()) return false;
+  distReal ??= await realpath(distPath);
+  return (await realpath(path).catch(() => '')).startsWith(distReal + sep);
+}
+
+/** Reads a built file. Anything else is refused before it is opened, so a FIFO or a link out of dist/ never blocks a test. */
+export async function readDist(file, encoding) {
+  if (!(await isBuiltFile(file))) throw new Error(`${file} is not a regular file inside dist/`);
+  return readFile(join(distPath, file), encoding);
+}
 
 /** The URL a built file is served at: dist/fundamentos/index.html is https://j3w1.github.io/ce-theme/fundamentos/. */
 export const servedAt = (file) => new URL(file.replace(/(^|\/)index\.html$/, '$1'), SITE);
@@ -51,10 +64,12 @@ export function* elements(html) {
 }
 
 /**
- * The URL of every CSS url() reference. A small tokenizer after CSS Syntax: comments and strings are not URLs, the function
- * name is case-insensitive and may be written with escapes (u\72l), and escapes in the URL itself are decoded.
+ * The URL of every CSS url() reference. A small tokenizer after CSS Syntax: comments, strings, hash tokens and at-keywords
+ * are not URLs, the function name is case-insensitive and may be written with escapes (u\72l), and escapes in the URL itself
+ * are decoded.
  */
-export function cssUrls(css) {
+export function cssUrls(source) {
+  const css = source.replace(/\r\n?|\f/g, '\n'); // CSS Syntax preprocessing
   const urls = [];
   let i = 0;
   const escape = () => { // css[i] is a backslash; returns the escaped character and moves past it.
@@ -77,6 +92,7 @@ export function cssUrls(css) {
     const c = css[i];
     if (c === '/' && css[i + 1] === '*') { const end = css.indexOf('*/', i + 2); i = end < 0 ? css.length : end + 2; continue; }
     if (c === '"' || c === "'") { string(c); continue; }
+    if (c === '#' || c === '@') { for (i += 1; i < css.length && nameChar(css[i]);) if (css[i] === '\\') escape(); else i += 1; continue; } // a hash token or at-keyword, not a function
     if (!nameChar(c)) { i += 1; continue; }
     let name = '';
     while (i < css.length && nameChar(css[i])) name += css[i] === '\\' ? escape() : css[i++];
@@ -107,33 +123,51 @@ export function srcsetUrls(value) {
   }
 }
 
+/** CommonMark backslash escapes: only ASCII punctuation is escaped; any other backslash stays. */
+const unescaped = (text, at) => { let backslashes = 0; while (text[at - 1 - backslashes] === '\\') backslashes += 1; return backslashes % 2 === 0; };
+/** The unescaped [ that the ] at `close` closes, within one paragraph, or -1. */
+function opener(text, close) {
+  for (let j = close - 1, depth = 0; j >= 0 && !(text[j] === '\n' && text[j - 1] === '\n'); j -= 1) {
+    if (!unescaped(text, j)) continue;
+    if (text[j] === ']') depth += 1;
+    else if (text[j] === '[' && depth-- === 0) return j;
+  }
+  return -1;
+}
+const unescapeMarkdown = (text) => text.replace(/\\([!-/:-@[-`{-~])/g, '$1');
+
 /**
  * The destinations of Markdown links and images, after CommonMark: an inline destination is <…> or a run without spaces whose
- * parentheses balance, with backslash escapes; reference definitions are [label]: destination. Code is removed first.
+ * parentheses balance, followed by an optional title and the closing parenthesis; reference definitions are [label]:
+ * destination. Only ASCII punctuation is backslash-escaped. Fenced code and code spans are removed first.
  */
 export function markdownLinks(markdown) {
   const text = markdown.replace(/^ {0,3}(```|~~~)[\s\S]*?^ {0,3}\1/gm, '').replace(/(`+)[^`\n][\s\S]*?\1/g, '');
   const links = [];
   for (let at = text.indexOf(']('); at >= 0; at = text.indexOf('](', at + 2)) {
+    if (text[at - 1] === '\\' || opener(text, at) < 0) continue; // escaped brackets open or close no link text
     let i = at + 2;
     while (/[ \t\n]/.test(text[i] ?? '')) i += 1;
-    let destination = '';
+    let raw = '';
     if (text[i] === '<') {
-      const end = text.indexOf('>', i);
-      if (end < 0) continue;
-      destination = text.slice(i + 1, end).replace(/\\(.)/g, '$1');
+      let end = i + 1;
+      while (end < text.length && text[end] !== '>' && text[end] !== '\n') end += text[end] === '\\' ? 2 : 1;
+      if (text[end] !== '>') continue;
+      raw = text.slice(i + 1, end);
+      i = end + 1;
     } else {
       for (let depth = 0; i < text.length; i += 1) {
         const c = text[i];
-        if (c === '\\' && i + 1 < text.length) { destination += text[++i]; continue; }
+        if (c === '\\' && i + 1 < text.length) { raw += c + text[++i]; continue; }
         if (/\s/.test(c) || (c === ')' && depth === 0)) break;
         if (c === '(') depth += 1;
         if (c === ')') depth -= 1;
-        destination += c;
+        raw += c;
       }
     }
-    if (destination) links.push(destination);
+    const tail = text.slice(i).match(/^[ \t\n]*(?:(?:"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\((?:[^()\\]|\\.)*\))[ \t\n]*)?\)/);
+    if (raw && tail) links.push(unescapeMarkdown(raw));
   }
-  for (const [, angle, bare] of text.matchAll(/^ {0,3}\[[^\]\n]+\]:[ \t]*\n?[ \t]*(?:<([^>\n]*)>|(\S+))/gm)) links.push(angle ?? bare);
+  for (const [, angle, bare] of text.matchAll(/^ {0,3}\[[^\]\n]+\]:[ \t]*\n?[ \t]*(?:<((?:[^>\n\\]|\\.)*)>|(\S+))/gm)) links.push(unescapeMarkdown(angle ?? bare));
   return links;
 }

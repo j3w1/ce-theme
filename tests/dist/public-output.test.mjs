@@ -3,10 +3,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { lstat, readFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { readFile } from 'node:fs/promises';
 import { WITHHELD } from '../../scripts/withheld.mjs';
-import { SITE, cssUrls, distFiles, distPath, elements, jsImports, listFiles, readDist, root, servedAt } from './output.mjs';
+import { SITE, cssUrls, distFiles, elements, isBuiltFile, jsImports, listFiles, readDist, root, servedAt } from './output.mjs';
 
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 'utf8'));
@@ -35,8 +34,9 @@ async function recordedHashes() {
 
 /**
  * The _astro/ files the pages really load: resources named by page elements (stylesheets, module scripts, island component
- * and renderer URLs), the imports of the pages' inline module scripts, and, from there, every bundle's imports and CSS url().
- * A path that only appears in text, such as a code example, loads nothing.
+ * and renderer URLs of astro-island elements), the imports of the pages' inline module scripts, and, from there, every
+ * bundle's imports and CSS url(). A path that only appears in text, such as a code example, loads nothing. Imports are read
+ * with a pattern, not a JavaScript parser, so import-like text inside a script comment or string would still count.
  */
 async function pageBundles(pages) {
   const found = new Set();
@@ -51,7 +51,8 @@ async function pageBundles(pages) {
     const at = servedAt(page);
     for (const element of elements(await readDist(page, 'utf8').catch(() => ''))) {
       for (const [name, value] of element.attrs) {
-        if ((element.name === 'script' && name === 'src') || (element.name === 'link' && name === 'href') || ['component-url', 'renderer-url', 'before-hydration-url'].includes(name)) reach(value, at);
+        const rel = element.attrs.find(([attr]) => attr === 'rel')?.[1] ?? '';
+        if ((element.name === 'script' && name === 'src') || (element.name === 'link' && name === 'href' && /\b(stylesheet|modulepreload|preload)\b/i.test(rel)) || (element.name === 'astro-island' && ['component-url', 'renderer-url', 'before-hydration-url'].includes(name))) reach(value, at);
       }
       if (element.name === 'script' && element.body) for (const specifier of jsImports(element.body)) reach(specifier, at);
     }
@@ -77,7 +78,7 @@ test('the build publishes only pages, their bundles, recorded assets and fonts, 
   const problems = [];
   const files = await distFiles();
   for (const file of files) {
-    if (!(await lstat(join(distPath, file))).isFile()) { problems.push(`${file}: not a regular file`); continue; }
+    if (!(await isBuiltFile(file))) { problems.push(`${file}: not a regular file inside dist/`); continue; }
     const bytes = await readDist(file);
     if (FONT.test(file)) { if (!fonts.has(sha256(bytes))) problems.push(`${file}: font not recorded in fonts/manifest.json`); }
     else if (pages.has(file)) continue;
@@ -108,6 +109,7 @@ test('no published text carries a home path, a private address, a credential or 
   const problems = [];
   let scanned = 0;
   for (const file of await distFiles()) {
+    if (!(await isBuiltFile(file))) continue; // refused by the allowlist test, never opened
     const bytes = await readDist(file);
     // Only an image or font whose bytes match its manifest sha256 is binary and skipped; every other file is read as text,
     // whatever its name or extension.
