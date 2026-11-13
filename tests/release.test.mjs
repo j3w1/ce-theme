@@ -187,6 +187,7 @@ test('state 1 never retries readiness; tag/hash/download failures never reach at
     assert.deepEqual(fake.delays, []);
     assert.equal(fake.writes().length, 1);
   }
+});
 
 // A rollback run (#9) is verify-only: it passes only for an already published release and never writes one.
 test('verify-only: a published release is verified and nothing is written', () => {

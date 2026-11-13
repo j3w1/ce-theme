@@ -176,7 +176,7 @@ test('acceptance 4: in greyscale the states stay distinguishable by their words'
   }
 });
 
-for (const route of ['/tienda/', '/tienda/categoria/', '/tienda/producto/', '/tienda/escena/']) {
+for (const route of ['tienda/', 'tienda/categoria/', 'tienda/producto/', 'tienda/escena/']) {
   test(`${route}: every availability list is named Disponibilidad`, async ({ page }) => {
     await page.goto(route);
     const lists = page.locator('ul.ce-stock');
