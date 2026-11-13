@@ -111,44 +111,74 @@ test('a nested identity is unchanged by the recipe; normalised to direct childre
   ]);
 });
 
-// A long NAME and Description in a record header: they wrap inside the title column, the code stays on one line, nothing
-// overflows the page, and the ProductStack distances hold.
+// CR-10 acceptance 4: a long NAME and Description in a title as wide as the page (16px gutters). They wrap inside the title
+// when they are wider than it, the code stays on one line, nothing overflows, and the ProductStack distances hold.
+// The NAME has the most a NAME may have: two words of eight letters.
+const LONG = identity('h1', { name: 'BALTELON SORMIKAN', description: 'Organizador de Cocina Extensible con Dos Niveles, Bandeja Antideslizante, Ganchos Laterales para Utensilios de Uso Diario y Soporte Desmontable para Tablas de Cortar y Tapas' });
+const IMAGE = `<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'/%3E" alt="" width="64" height="64">`;
+const LONG_TITLE = title('long', CODE + LONG + SPECS + META, '--ce-product-text:var(--ce-font-size-title)');
+const wrapping = (page) => page.evaluate(() => {
+  const q = (name) => document.querySelector(`[data-m="${name}"]`);
+  const lines = (el) => { const range = document.createRange(); range.selectNodeContents(el); return new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size; };
+  // The width a line of text would take without wrapping.
+  const natural = (el) => { el.style.whiteSpace = 'nowrap'; const width = el.scrollWidth; el.style.whiteSpace = ''; return width; };
+  const column = document.querySelector('.ce-record-title').getBoundingClientRect();
+  const pill = document.querySelector('.ce-record-header > .ce-pill')?.getBoundingClientRect();
+  const parts = ['code', 'heading', 'name', 'description', 'specs', 'meta'];
+  const box = (name) => q(name).getBoundingClientRect();
+  return {
+    pageFits: document.documentElement.scrollWidth <= innerWidth,
+    column: column.width, code: box('code').width,
+    codeLines: lines(q('code')), codeWrap: getComputedStyle(q('code')).whiteSpace,
+    name: { lines: lines(q('name')), wider: natural(q('name')) > column.width + 0.5 },
+    description: { lines: lines(q('description')), wider: natural(q('description')) > column.width + 0.5 },
+    outsideColumn: parts.filter((name) => box(name).left < column.left - 0.5 || box(name).right > column.right + 0.5 || q(name).scrollWidth > q(name).clientWidth + 1),
+    underPill: pill ? parts.filter((name) => box(name).right > pill.left + 0.5) : [],
+  };
+});
+const expectWrapping = async (page) => {
+  const result = await wrapping(page);
+  expect(result.pageFits).toBe(true);
+  expect(result.codeWrap).toBe('nowrap');
+  expect(result.codeLines).toBe(1);
+  expect(result.outsideColumn).toEqual([]);
+  expect(result.underPill).toEqual([]);
+  // The Description is longer than every title here, so it always wraps; the NAME wraps exactly when it is wider than the title.
+  expect(result.description).toMatchObject({ wider: true });
+  expect(result.description.lines).toBeGreaterThan(1);
+  expect(result.name.lines > 1).toBe(result.name.wider);
+  await expectDistances(page, [['long', 'code', 'heading', 8], ['long', 'name', 'description', 2], ['long', 'heading', 'specs', 2], ['long', 'specs', 'meta', 4]]);
+  return result;
+};
 for (const width of [390, 768, 1440]) {
   for (const [label, rootSize] of [['100%', ''], ['150%', 'html{font-size:150%}'], ['200%', 'html{font-size:200%}']]) {
     test(`long identity at ${width}px, text ${label}: wraps in the title, the code stays on one line`, async ({ page }) => {
-      const long = identity('h1', { name: 'BALTEL STORM', description: 'Organizador de Cocina Extensible con Dos Niveles, Bandeja Antideslizante y Ganchos Laterales para Utensilios de Uso Diario' });
-      await mount(page, `<div class="ce-record-header" style="padding:var(--ce-space-16)"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'/%3E" alt="" width="64" height="64">${title('long', CODE + long + SPECS + META, '--ce-product-text:var(--ce-font-size-title)')}<span class="ce-pill ce-pill--success">Publicado</span></div>`, { width, rootSize });
-      const result = await page.evaluate(() => {
-        const q = (name) => document.querySelector(`[data-m="${name}"]`);
-        const lines = (el) => { const range = document.createRange(); range.selectNodeContents(el); return new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size; };
-        const title = document.querySelector('.ce-record-title');
-        const column = title.getBoundingClientRect();
-        // The title's one grid track: the column the header gives it, or the code's width when the code alone is wider.
-        const track = parseFloat(getComputedStyle(title).gridTemplateColumns);
-        const outside = (el) => { const r = el.getBoundingClientRect(); return r.left < column.left - 0.5 || r.right > column.left + track + 0.5 || el.scrollWidth > el.clientWidth + 1; };
-        return {
-          pageFits: document.documentElement.scrollWidth <= innerWidth,
-          column: column.width, track, code: q('code').getBoundingClientRect().width,
-          codeLines: lines(q('code')), codeWrap: getComputedStyle(q('code')).whiteSpace,
-          nameLines: lines(q('name')), descriptionLines: lines(q('description')),
-          outside: ['code', 'heading', 'name', 'description', 'specs', 'meta'].filter((name) => outside(q(name))),
-        };
-      });
-      expect(result.pageFits).toBe(true);
-      expect(result.codeWrap).toBe('nowrap');
-      expect(result.codeLines).toBe(1);
-      expect(result.outside).toEqual([]);
-      expect(result.descriptionLines).toBeGreaterThan(1);
-      // The two-word NAME needs a second line where the title column is narrower than it.
-      if (width === 390 && rootSize) expect(result.nameLines).toBeGreaterThan(1);
-      if (result.code <= result.column + 0.5) expect(Math.abs(result.track - result.column)).toBeLessThan(0.5);
-      // At 390px and 200% text the record header (image, title, status pill) leaves the title less room than the one-line code
-      // needs, so the code sets the title's width and the identity wraps to it. The header grid is outside CR-10 (section 7).
-      else test.info().annotations.push({ type: 'record header', description: `the header leaves the title ${Math.round(result.column)}px; the one-line code needs ${Math.round(result.code)}px` });
-      await expectDistances(page, [['long', 'code', 'heading', 8], ['long', 'name', 'description', 2], ['long', 'heading', 'specs', 2], ['long', 'specs', 'meta', 4]]);
+      await mount(page, `<div style="padding:var(--ce-space-16)">${LONG_TITLE}</div>`, { width, rootSize });
+      const result = await expectWrapping(page);
+      // At 390px with enlarged text the NAME is wider than the title and wraps too.
+      if (width === 390 && rootSize) expect(result.name.lines).toBeGreaterThan(1);
+    });
+
+    // The same title in a record header, beside the 64px image and the status pill.
+    test(`long identity in a record header at ${width}px, text ${label}: stays in the title column, clear of the status pill`, async ({ page }) => {
+      test.fixme(width === 390 && rootSize.includes('200%'), 'Outside CR-10: at 390px and 200% text the record header leaves the title about 119px while the one-line code needs about 189px, so the title\'s grid track overflows its column under the status pill. CR-10 leaves ce-record-header unchanged (section 7); reported to the repository lead.');
+      await mount(page, `<div class="ce-record-header" style="padding:var(--ce-space-16)">${IMAGE}${LONG_TITLE}<span class="ce-pill ce-pill--success">Publicado</span></div>`, { width, rootSize });
+      await expectWrapping(page);
     });
   }
 }
+
+test('at the edges of the title: a first-child identity heading starts at the top; specs after a plain heading sit 2px below it', async ({ page }) => {
+  await mount(page, [
+    title('heading first', identity('h1') + META),
+    title('specs after a plain heading', `<h2 data-m="heading">Categorías de cocina</h2>${SPECS}${META}`),
+  ].join(''));
+  expect(await page.evaluate(() => { const t = document.querySelector('[data-title="heading first"]'); return t.querySelector('[data-m="heading"]').getBoundingClientRect().top - t.getBoundingClientRect().top; })).toBe(0);
+  await expectDistances(page, [
+    ['heading first', 'name', 'description', 2], ['heading first', 'heading', 'meta', 4],
+    ['specs after a plain heading', 'heading', 'specs', 2], ['specs after a plain heading', 'specs', 'meta', 4],
+  ]);
+});
 
 test('the RecordEditor sample draws the identity heading and follows the ProductStack', async ({ page }) => {
   const preview = readFileSync('exports/design-system/project/components/RecordEditor/preview.html', 'utf8');
