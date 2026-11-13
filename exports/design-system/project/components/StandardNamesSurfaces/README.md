@@ -1,11 +1,12 @@
 # StandardNamesSurfaces
 
-Standard names for surfaces: **ProductCard** (Tarjeta de producto), **AddToCart** (Añadir al carrito), **ProductCallout** (Tarjeta flotante), **Mosaic** (Mosaico), **MosaicTile** (Baldosa), **PromoTile** (Baldosa Promo), **PromoPanel** (Panel Promo).
+Standard names for surfaces: **ProductCard** (Tarjeta de producto), **QuickAdd** (Añadir rápido), **AddToCart** (Añadir al carrito), **ProductCallout** (Tarjeta flotante), **Mosaic** (Mosaico), **MosaicTile** (Baldosa), **PromoTile** (Baldosa Promo), **PromoPanel** (Panel Promo).
 
 ## Classes
 
 - **ProductCard** · Tarjeta de producto: `ce-product`. Photo, then the ProductStack. No borders, shadows or rounded corners.
-- **AddToCart** · Añadir al carrito: `ce-product-add`, `ce-icon-button--action`. On hover-capable screens an icon button appears on card hover or focus; on touch and narrow screens a full-width button sits at the bottom of the card.
+- **QuickAdd** · Añadir rápido: `ce-icon-button--action`. Optional icon on the active product card: it shows only when the card is hovered or keyboard-focused, on hover-capable screens from 640px. A separate 44px control beside the product link, named with the product. Never on touch or narrow screens, where the card is the product link.
+- **AddToCart** · Añadir al carrito: `ce-buy-actions`. The one primary action on the product page, 56px, beside the quantity and a quiet favourite. Its outcomes and whether it is enabled are supplied by the commerce service.
 - **ProductCallout** · Tarjeta flotante: `ce-callout`. White floating card with a photo, identity and price for editorial pieces.
 - **Mosaic** · Mosaico: `ce-mosaic`. Editorial grid of tiles; one large tile, one wide, two small.
 - **MosaicTile** · Baldosa: `ce-tile`, `ce-tile--light`. One link in a mosaic. Neutral surface; yellow never sits behind or over a product photo.

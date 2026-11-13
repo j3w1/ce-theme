@@ -1,6 +1,6 @@
 # Cart
 
-The bag and checkout: steps, product lines with quantity, the fulfilment choice and an order summary whose amounts come from the commerce service.
+The cart and checkout: steps, product lines with quantity, the fulfilment choice and an order summary whose amounts come from the commerce service.
 
 ## Classes
 
@@ -16,6 +16,6 @@ Lines, quantities and every amount (line totals, subtotal, delivery, total) as d
 
 ## Do and don't
 
-- Do say which store the bag is priced in.
+- Do say which store the cart is priced in.
 - Don't compute totals, taxes or discounts in the interface.
 - Don't hide fees until the last step.

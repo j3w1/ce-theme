@@ -182,15 +182,13 @@ test('Novedad is green and promotion tiles keep the neutral surface; S/ sits on 
   expect(await page.locator('.ce-price-currency').first().evaluate(el=>getComputedStyle(el).alignSelf)).toBe('auto');
 });
 
-test('touch and narrow screens show a full-width Añadir al carrito button instead of the hover icon',async({page})=>{
+test('narrow screens add nothing from a card: no hover icon and no full-width Añadir al carrito button',async({page})=>{
   await page.setViewportSize({width:390,height:900});
   await page.goto('/tienda/categoria/');
   const card=page.locator('[data-store-view="tacna"] .ce-product').first();
-  const big=card.locator('.ce-product-add');
-  await expect(big).toBeVisible(); await expect(big).toHaveText('Añadir al carrito');
+  await expect(card.locator('.ce-product-add')).toHaveCount(0);
   await expect(card.locator('.ce-product-row > .ce-icon-button--action')).toBeHidden();
-  const [b,c]=await Promise.all([big.boundingBox(),card.locator('.ce-product-info').boundingBox()]);
-  expect(Math.abs(b.width-c.width)).toBeLessThan(2);
+  await expect(card.getByRole('button',{name:/carrito/})).toBeHidden();
 });
 test('promo and sale boxes surround only the price, never the basis label',async({page})=>{
   await page.goto('/patrones/');

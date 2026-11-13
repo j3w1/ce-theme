@@ -76,9 +76,8 @@ test('product cards keep identity order, readable controls and named actions', a
   await expect(add).toHaveCSS('opacity', '0');
   await card.hover();
   await expect(add).toHaveCSS('opacity', '1');
-  const favourite = card.getByRole('button', { name: /favoritos/ });
-  await favourite.click();
-  await expect(favourite).toHaveAttribute('aria-pressed', 'true');
+  // Browse first: the favourite lives on the product page, not on the card.
+  await expect(card.getByRole('button', { name: /favoritos/ })).toHaveCount(0);
   const sizes = await page.locator('[data-store-view="tacna"] :is(.ce-icon-button, .ce-chip, .ce-check)').evaluateAll((items) => items.map((el) => Math.min(el.getBoundingClientRect().width, el.getBoundingClientRect().height)));
   expect(Math.min(...sizes)).toBeGreaterThanOrEqual(24);
 });

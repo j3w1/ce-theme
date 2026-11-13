@@ -14,9 +14,9 @@ const extra = Astro.slots.has('default') ? await Astro.slots.render('default') :
       ? <div class="ce-rail-wrap">
           <a class="ce-skip" href={`#${id}-${store}-fin`}>Saltar lista: {label}</a>
           <div class="ce-rail-buttons"><button class="ce-icon-button" type="button" data-ce-rail="prev" aria-controls={`${id}-${store}`} aria-label={`Anterior: ${label}`}><Icon name="arrow" /></button><button class="ce-icon-button" type="button" data-ce-rail="next" aria-controls={`${id}-${store}`} aria-label={`Siguiente: ${label}`}><Icon name="arrow" /></button></div>
-          <ul class="ce-rail" id={`${id}-${store}`} aria-label={label}>{items.map((item) => <li><ProductCard product={item} actions showCode={false} {...cardFor(item, store)} /></li>)}</ul>
+          <ul class="ce-rail" id={`${id}-${store}`} aria-label={label}>{items.map((item) => <li><ProductCard product={item} quickAdd showCode={false} {...cardFor(item, store)} /></li>)}</ul>
           <span id={`${id}-${store}-fin`} tabindex="-1"></span>
         </div>
-      : <div class="ce-product-grid ce-product-grid--divided">{items.map((item) => <ProductCard product={item} actions compare={compare} {...cardFor(item, store)} />)}<Fragment set:html={extra} /></div>}
+      : <div class="ce-product-grid ce-product-grid--divided">{items.map((item) => <ProductCard product={item} quickAdd compare={compare} {...cardFor(item, store)} />)}<Fragment set:html={extra} /></div>}
   </div>
 ))}

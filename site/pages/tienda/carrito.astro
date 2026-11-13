@@ -12,18 +12,18 @@ const lines = [
 ];
 const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
 ---
-<Store title="Tu bolsa" description="Bolsa y pago de demostración con retiro en tienda o envío.">
+<Store title="Tu carrito" description="Carrito y pago de demostración con retiro en tienda o envío.">
   <div class="ce-container">
-    <h1 class="store-page-title">Tu bolsa</h1>
+    <h1 class="store-page-title">Tu carrito</h1>
     <ol class="ce-steps" aria-label="Pasos de compra" style="margin-bottom:var(--ce-space-32)">
-      <li aria-current="step"><span class="ce-step-label">Bolsa</span></li>
+      <li aria-current="step"><span class="ce-step-label">Carrito</span></li>
       <li><span class="ce-step-label">Entrega</span></li>
       <li><span class="ce-step-label">Pago</span></li>
     </ol>
     <div class="ce-cart">
       <div>
         <p class="ce-store-note">Comprando en <strong data-store-name>Tacna</strong>. Los precios pueden variar en otra tienda.</p>
-        <ul class="ce-cart-lines" aria-label="Productos en tu bolsa">
+        <ul class="ce-cart-lines" aria-label="Productos en tu carrito">
           {lines.map(({ item, quantity, lineAmount }, index) => { const view = productView(item); return (
             <li class="ce-cart-line">
               <img src={view.image} alt="" width="128" height="128" />

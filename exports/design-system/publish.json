@@ -143,8 +143,8 @@
           "source": "exports/design-system/project/assets/Icons/menu.svg"
         },
         {
-          "name": "bag.svg",
-          "source": "exports/design-system/project/assets/Icons/bag.svg"
+          "name": "cart.svg",
+          "source": "exports/design-system/project/assets/Icons/cart.svg"
         },
         {
           "name": "heart.svg",
@@ -231,8 +231,8 @@
           "source": "exports/design-system/project/assets/Icons/info.svg"
         },
         {
-          "name": "bag-plus.svg",
-          "source": "exports/design-system/project/assets/Icons/bag-plus.svg"
+          "name": "cart-plus.svg",
+          "source": "exports/design-system/project/assets/Icons/cart-plus.svg"
         },
         {
           "name": "share.svg",
