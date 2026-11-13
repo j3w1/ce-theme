@@ -14,12 +14,12 @@ CR-07, the shopping-action rule (ce-theme#11).
 
 ### Changed
 
-- Product cards are browse first: no purchase control at rest, no favourite and no full-width button. The optional QuickAdd icon (`ce-icon-button--action` in `ce-product-row`) shows only on the hovered or keyboard-focused card on hover-capable screens from 640px, at 44 × 44 (`--ce-size-target-public`), out of the row's height with its column kept clear, so the ProductStack gaps and the price do not move. It has no transition under reduced motion. Touch and narrow screens add nothing from a card.
+- Product cards are browse first: no purchase control at rest, no favourite and no full-width button. The optional QuickAdd icon (`ce-icon-button--action` in `ce-product-row`) shows only on the hovered or keyboard-focused card on hover-capable screens from 640px, at 44 × 44 (`--ce-size-target-public`), out of the row's height with its column kept clear, so the ProductStack gaps and the price do not move. It has no transition under reduced motion, and a card with no Description and no specs does not show it (no room above its price). Touch and narrow screens add nothing from a card: the whole card opens the product page, and its other controls (variant thumbnails, «Comparar», a list's own task) stay separate.
 - `ce-product-add` is deprecated: it stays `display: none` at every width until consumers remove the element, and no longer shows on touch or narrow screens. Consumers that still render it must remove it from their markup; there is no opt-in variant.
 - The product page keeps one primary «Añadir al carrito» (`AddToCart`, re-scoped in the names registry) and one product-named favourite; the `ProductDetail` card shows the supplied add outcomes in words. CE Theme ships no sticky buy-bar recipe.
 - `docs/decisions.md` supersedes the behaviour of the 2026-10-25 “Add to cart” row and keeps its copy. `QuickAdd` (Añadir rápido) is added to the names registry. The `TaggedMedia` guideline applies the same rule to an open pin card, as documentation only.
 - The remaining “bag”/«Bolsa» cart wording in the guidelines, previews and `/tienda/` pages is now cart/«carrito». The `bag` and `bag-plus` icons are renamed `cart` and `cart-plus`, with the same drawing.
-- `tests/browser/shopping-actions.spec.mjs` and `tests/shopping-actions.test.mjs` check CR-07's acceptance 1 to 5.
+- `tests/browser/shopping-actions.spec.mjs` and `tests/shopping-actions.test.mjs` check CR-07's acceptance 1 to 5. The geometry matrix loads the supplied Inter files and measures glyph ink across sixteen card shapes, three card widths, eight asserted text sizes and both writing directions.
 
 ## @casaelida/vue 0.2.0 — 2026-11-12 (unreleased)
 

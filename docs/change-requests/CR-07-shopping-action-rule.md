@@ -103,23 +103,44 @@ To run when the repository work happens (not run here, except where marked):
 
 **Implemented with the recipe.** Checks 1 to 4 are `tests/browser/shopping-actions.spec.mjs`; check 5 is `tests/shopping-actions.test.mjs` with the existing naming and registry tests (`tests/vue-naming.test.mjs`, the generated-file check). Check 6 is still not run: no screen reader, real phone or real hover device was used, and nothing here claims one.
 
-- **Row height (check 2).** Measured in Chromium with the generated CSS: NAME with a one-line Description is 39.19px tall, so the in-flow 44px action of 4.1 grew the row to 44px and moved the specs and the price 4.81px down (Description to specs 6.81px instead of 2px). The lead did not take the negative block margin or a change to check 2. Instead, on hover-capable screens from 640px, the action is positioned at the top inline-end corner of `ce-product-row`, out of the row's height. Its column stays clear: the row, and the next line the action can reach (the specs, or with no Description whatever follows the row), keep `--ce-size-target-public` plus the 12px row gap free at the inline end. No class, slot or markup was added. On touch and narrow screens the action is `display: none`, and none of this applies.
-- **What the geometry test proves.** It renders nine identity shapes in 300, 200 and 150px cards at a 1440px viewport, with root text at 100%, 150% and 200%, each with and without the action. The shapes are one- and two-line Descriptions, no specs, no Description, NAME only (with a price or a store note), a store note, long text and unbreakable specs. For each card with the action, the test checks:
-  - the action is 44 × 44;
-  - seven points inside it hit the action;
-  - no text line box and no other target overlaps it;
+- **Row height (check 2).** Measured in Chromium with the generated CSS: NAME with a one-line Description is 39.19px tall, so the in-flow 44px action of 4.1 grew the row to 44px and moved the specs and the price 4.81px down (Description to specs 6.81px instead of 2px). The lead did not take the negative block margin or a change to check 2. Instead, on hover-capable screens from 640px, the action is positioned at the top inline-end corner of `ce-product-row`, out of the row's height. Its column stays clear: the row, the line that follows it and, with no Description, the line after that keep `--ce-size-target-public` plus the 12px row gap free at the inline end. No class, slot or markup was added.
+- **A card with no room (check 2, measured conflict).** A NAME with no Description and no specs is 18px tall, so the price starts 30px below the row top, inside the action's 44px. A price is one unbreakable line, so no reserved space can move it. Minimal counterexample, with Inter loaded: a 150px card at a 1440px viewport, default text, NAME «MENE», price S/12.5. The digits ran 8.0px × 1.9px under the action, and S/1250.90 ran 8.0 × 44.0px; in a 200px card S/1250.90 ran 8.0 × 6.9px. The full 44 × 44 action, the 12px gap, an unmoved price and no overlap cannot all hold there with the existing markup. The repository lead chose, under the same delegation and not j3w1-typed, not to show the optional quick-add on a card with no Description and no specs, enforced in the recipe at every width. Buying stays on the product page. Empty Description or specs elements count as absent.
+- **Whole card on touch and narrow screens (check 1).** On `(hover: none)` and below 640px the action is `display: none`, and the `ce-product-link` covers the card through its `::after`. Every other control in the card (variant thumbnails, «Comparar», a list's own task) is lifted above it by a zero-specificity rule, so it keeps its own target and the keyboard order is unchanged. Nothing is nested in the link. Taps and clicks on the photo, identity, specs, price, availability and empty card space open the product page; a variant link, «Comparar» and a task button keep their own behaviour. Removing the link's `::after` fails these tests, and removing the rule that lifts the other controls leaves them untappable.
+- **What the geometry test proves.** The test page loads the supplied Inter files (it checks that the four faces loaded), the generated tokens and the generated recipes. It renders sixteen card shapes in 300, 200 and 150px cards at a 1440px viewport, each with and without the action, in left-to-right and right-to-left. The shapes are:
+  - one- and two-line Descriptions;
+  - no specs, and no specs with a wide price;
+  - no Description, and no Description with a wide price;
+  - NAME only, with a price, a wide price or a store note;
+  - NAME only with empty Description and specs elements, with a price or a wide price;
+  - a store note;
+  - a wide price (S/1250.90);
+  - long text;
+  - unbreakable specs;
+  - a card with a variant link, «Comparar» and a task button.
+
+  It runs eight text sizes, and each run asserts the computed font sizes it names:
+  - default text;
+  - root text at 150% and 200% (the rem-based text grows; the card price is set in px and stays 44px);
+  - every text at ×1.5 and ×2 (root text at 150% and 200%, with the test page setting the px card price to 66 and 88px);
+  - product text set to 24px, 14px and 12px.
+
+  Text under the action is measured as glyph ink (the font's own bounds through `measureText`), so the empty space of a line box or of the font's content area does not count. For each card that can show the action, the test checks:
+  - the action is 44 × 44 at the inline end;
+  - seven points inside it hit the action, and it takes focus;
+  - no text ink and no other target lies under it;
+  - the product link's focus ring ends before it;
   - the row is exactly the heading's height;
-  - the ProductStack gaps are 2px and 12px;
+  - the gaps are 2px and 12px;
   - with the same text layout, the price sits where it sits without the action.
 
-  Removing the corridor rules makes the 100% case fail.
+  For the NAME-only shapes, the action has no box, takes no focus and is not under a pointer, no space is reserved, and the price sits as in the card without it. Removing the corridor rules, or the NAME-only rule, makes the matrix fail. Nothing is claimed for text sizes not listed here.
 - **Legacy markup (check 2b).** A card that keeps `<button class="ce-button ce-product-add">` renders no visible add at 1440, at 390 and under `(hover: none)`. Removing the deprecated rule makes these tests fail. The previews and the reference pages no longer contain the element (`tests/shopping-actions.test.mjs`).
 - **Touch.** `(hover: none)` is emulated with a touch context. The tests skip, and say so, in a browser that does not apply it. Locally only Chromium was run; hosted CI also runs WebKit.
 - **Sticky bar (check 4).** CE Theme ships no sticky-bar recipe, so the rule is written for consumers, and the test only confirms that the reference product page has no such bar.
 
 ## 7. Risks and what it does not change
 
-- It reverses the behaviour rule of a decision recorded on 2026-10-25; the copy of that decision, «Añadir al carrito», stands (X-6). The boards say j3w1 approved the direction as a design default; the repository change needs j3w1's explicit approval of the new `decisions.md` row.
+- It reverses the behaviour rule of a decision recorded on 2026-10-25; the copy of that decision, «Añadir al carrito», stands (X-6). The boards say j3w1 approved the direction as a design default. The new `decisions.md` row records the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)); j3w1 may veto it. It is not a merge authorization, and the merge order stays with the lead.
 - Consumers of the card recipe (the CE Theme reference site, `/tienda/` pages) that keep the `ce-product-add` element: with the deprecated rule the button disappears at every width (today it shows on touch and narrow screens only); if the rule were dropped instead, the button would appear at every width including desktop (`.ce-button` is `display: inline-flex`, line 9). Either way their markup must change; their review is **to do** (not seen).
 - The quick action is hidden with `opacity: 0` rather than removed from the tree; some teams may prefer `visibility`. Left as the recipe has it.
 - Touch quick-buy is not designed: `AccionesCompra` says it must be designed and validated separately if ever proposed.

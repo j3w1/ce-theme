@@ -566,14 +566,25 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
    product page (AddToCart). */
 .ce-product-row > .ce-icon-button--action { opacity: 0; transition: opacity var(--ce-motion-quick); flex-basis: var(--ce-size-target-public); width: var(--ce-size-target-public); min-height: var(--ce-size-target-public); }
 .ce-product:hover .ce-product-row > .ce-icon-button--action, .ce-product:focus-within .ce-product-row > .ce-icon-button--action { opacity: 1; }
-@media (hover: none), (max-width: 639.98px) { .ce-product-row > .ce-icon-button--action { display: none; } }
+/* A card with no Description and no specs under its NAME has no room for the action: the 44px action would reach over the price,
+   which starts 12px below the NAME. The optional quick-add is not shown there, and buying stays on the product page. Empty
+   elements count as absent. */
+.ce-product-row:not(:has(.ce-product-description:not(:empty))):not(:has(+ .ce-product-specs:not(:empty))) > .ce-icon-button--action { display: none; }
+/* On touch and narrow screens the whole card opens the product page: the product link covers the card, and every other control in it
+   (variant thumbnails, «Comparar», a list's own task) stays a separate target above it. */
+@media (hover: none), (max-width: 639.98px) {
+  .ce-product-row > .ce-icon-button--action { display: none; }
+  .ce-product { position: relative; }
+  .ce-product .ce-product-link::after { position: absolute; inset: 0; content: ''; }
+  .ce-product :where(a[href], button, input, select, textarea, label, summary):where(:not(.ce-product-link)) { position: relative; z-index: 1; }
+}
 /* The 44px quick action is taller than a NAME with a one-line Description, so it is taken out of the row's height: the ProductStack
-   gaps and the price stay where they are with or without it. Its column stays clear: the heading and the next line it can reach
-   (the specs, or with no Description whatever follows the row) keep the target width plus the row gap free beside it. */
+   gaps and the price stay where they are with or without it. Its column stays clear: the heading, the line that follows the row and,
+   with no Description, the line after that keep the target width plus the row gap free beside it. */
 @media (hover: hover) and (min-width: 640px) {
-  .ce-product-row:has(> .ce-icon-button--action) { position: relative; padding-inline-end: calc(var(--ce-size-target-public) + var(--ce-space-12)); }
+  .ce-product-row:has(> .ce-icon-button--action):is(:has(.ce-product-description:not(:empty)), :has(+ .ce-product-specs:not(:empty))) { position: relative; padding-inline-end: calc(var(--ce-size-target-public) + var(--ce-space-12)); }
   .ce-product-row > .ce-icon-button--action { position: absolute; inset-block-start: 0; inset-inline-end: 0; }
-  .ce-product-row:has(> .ce-icon-button--action) + .ce-product-specs, .ce-product-row:has(> .ce-icon-button--action):not(:has(.ce-product-description)) + * { padding-inline-end: calc(var(--ce-size-target-public) + var(--ce-space-12)); }
+  .ce-product-row:has(> .ce-icon-button--action):is(:has(.ce-product-description:not(:empty)), :has(+ .ce-product-specs:not(:empty))) + *, .ce-product-row:has(> .ce-icon-button--action):not(:has(.ce-product-description:not(:empty))):has(+ .ce-product-specs:not(:empty)) + * + * { padding-inline-end: calc(var(--ce-size-target-public) + var(--ce-space-12)); }
 }
 /* Deprecated: the full-width card button of the earlier rule. It stays hidden at every width until the previews and the consumers have
    removed the element; without this rule a leftover .ce-button.ce-product-add would show at every width. No opt-in variant. */

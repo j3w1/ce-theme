@@ -5,7 +5,7 @@ Standard names for surfaces: **ProductCard** (Tarjeta de producto), **QuickAdd**
 ## Classes
 
 - **ProductCard** · Tarjeta de producto: `ce-product`. Photo, then the ProductStack. No borders, shadows or rounded corners.
-- **QuickAdd** · Añadir rápido: `ce-icon-button--action`. Optional icon on the active product card: it shows only when the card is hovered or keyboard-focused, on hover-capable screens from 640px. A separate 44px control beside the product link, named with the product. Never on touch or narrow screens, where the card is the product link.
+- **QuickAdd** · Añadir rápido: `ce-icon-button--action`. Optional icon on the active product card: it shows only when the card is hovered or keyboard-focused, on hover-capable screens from 640px. A separate 44px control beside the product link, named with the product. Never on touch or narrow screens, where the whole card is the product link, and not on a card with no Description and no specs.
 - **AddToCart** · Añadir al carrito: `ce-buy-actions`. The one primary action on the product page, 56px, beside the quantity and a quiet favourite. Its outcomes and whether it is enabled are supplied by the commerce service.
 - **ProductCallout** · Tarjeta flotante: `ce-callout`. White floating card with a photo, identity and price for editorial pieces.
 - **Mosaic** · Mosaico: `ce-mosaic`. Editorial grid of tiles; one large tile, one wide, two small.
