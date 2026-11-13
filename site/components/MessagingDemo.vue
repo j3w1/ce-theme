@@ -51,7 +51,6 @@ const items = computed<CEConversationItem[]>(() => threads.map((thread) => ({
   preview: previewOf(thread), draft: thread.drafts.reply.trim() !== '' || thread.drafts.note.trim() !== '',
 })));
 
-// The back button is shown exactly when the thread replaces the list, so it is the single source of that decision.
 // Narrow: the list and the thread do not fit side by side. It is read from the panes grid, which is always rendered. The Back
 // button cannot tell: in the list view it sits in the hidden thread pane, where WebKit keeps its earlier container-query style.
 const narrow = () => panes.value !== null && getComputedStyle(panes.value).gridTemplateColumns.trim().split(/\s+/).length < 2;
