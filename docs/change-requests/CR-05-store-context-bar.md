@@ -1,4 +1,4 @@
-Status: Approved; implemented in CE Theme source by the CR-05 pull request. X-1, X-7 and X-8 are j3w1's decisions of 2026-11-06; decisions 1, 2 and 4 are the ce-theme lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([#11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)). The evidence below still describes the frozen boards of 5 November 2026 (X-3)
+Status: Approved; implemented in CE Theme source by pull request [#22](https://github.com/j3w1/ce-theme/pull/22). X-1, X-7 and X-8 are j3w1's decisions of 2026-11-06; decisions 1, 2 and 4 are the ce-theme lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([#11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)). The evidence below still describes the frozen boards of 5 November 2026 (X-3)
 
 # CR-05 · Store-context bar: the in-page line "prices are for this store · change store"
 
@@ -83,7 +83,7 @@ Wording in the documentation (Spanish UI strings; the store label is supplied):
 | No store | «Tienda: sin elegir» | «Elegir tienda» |
 | Pending | the lead with the new store | the word «Actualizando» (no link) |
 
-Whether the three leads stay three is owner decision 2. Documentation in the same change: StoreContext README (the bar, its states, the invariants above), a card or preview state for each, the `names.md` entry, a `coverage.md` row.
+Decision 2 (section 8) keeps the two leads and uses «Tienda:» only for the empty state. Documentation in the same change: StoreContext README (the bar, its states, the invariants above), a card or preview state for each, the `names.md` entry, a `coverage.md` row.
 
 ## 5. Accessibility and invariants it must keep
 
@@ -107,11 +107,11 @@ To run when the repository work happens (not run here, except where marked):
 4. Keyboard: the action is reachable, shows the focus ring and opens the same dialog as the utility-bar button.
 5. Screen reader announcement of the pending state: **not run, to schedule**.
 
-In the implementation, checks 1, 2 and 4 are browser tests in `tests/browser/store-bar.spec.mjs`. They render the StoreContext card's states with the generated tokens and recipes only, and the storefront cart and listing. Before the rule, the action measured 16.8px at 100% text, 25.2px at x1.5 and 33.6px at x2, at all three widths. Check 3 is the page's rule in the StoreContext guideline, and no example puts an amount beside a pending or no-store bar. Check 5 is still not run.
+In the implementation, checks 1, 2 and 4 are browser tests in `tests/browser/store-bar.spec.mjs`. They render the StoreContext card's states with the supplied Inter files and the generated tokens and recipes only, and the storefront cart and listing, with and without a store. Before the rule, the action measured 16.8px at 100% text, 25.2px at x1.5 and 33.6px at x2, at all three widths (measured without the Inter files loaded). Check 3 is the page's rule in the StoreContext guideline. The examples keep it: the storefront cart shows each store's supplied amounts only with that store's bar, and with no store neither the cart nor the listing shows an amount; the pending state is shown in the card without amounts. Check 5 is still not run.
 
 ## 7. Risks and what it does not change
 
-- `ce-store-note` is also used inside pin cards and product cards for «Precio no disponible en {tienda}»; the new rule only touches a `.ce-link` inside it, so those uses are unaffected. Pin-card spacing is CR-09.
+- `ce-store-note` is also used inside pin cards and product cards for «Precio no disponible en {tienda}»; the new rule only touches a `.ce-link` inside it, so those uses are unaffected. One existing note with an inline link, «Consulta Ayuda» on the storefront product page, also gets the 44px target, so its row is taller. Pin-card spacing is CR-09.
 - Pages that today show both the utility-bar button and the in-page line repeat the store name by design; owner decision 4.
 - The boards keep their three local markups as part of the frozen snapshot (X-3); new boards use the bar.
 - Not changed: `ce-store-context`, the dialog and drawer, choice cards, the price-pending recipe.

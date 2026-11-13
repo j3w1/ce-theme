@@ -16,8 +16,11 @@ const filterGroups = (prefix: string) => filters.map((group, index) => (
   <div class="ce-container">
     <nav class="ce-breadcrumbs" aria-label="Ruta" style="padding-top:var(--ce-space-16)"><ol><li><a href="/tienda/">Inicio</a></li><li><a href="/tienda/categoria/">Productos</a></li><li><span aria-current="page">Cocina y baño</span></li></ol></nav>
     <h1 class="store-page-title">Cocina y baño</h1>
-    {stores.map((store) => <p class="ce-store-note" data-store-view={store.id} hidden={store.id !== 'tacna'} style="margin-bottom:var(--ce-space-24)"><span>Precios y disponibilidad de <strong>{store.name}</strong></span><button class="ce-link" type="button" data-ce-open="elegir-tienda">Cambiar tienda</button></p>)}
-    <p class="ce-store-note" data-store-view="ninguna" hidden style="margin-bottom:var(--ce-space-24)"><span>Tienda: sin elegir</span><button class="ce-link" type="button" data-ce-open="elegir-tienda">Elegir tienda</button></p>
+    <p class="ce-store-note" style="margin-bottom:var(--ce-space-24)">
+      {stores.map((store) => <span data-store-view={store.id} hidden={store.id !== 'tacna'}>Precios y disponibilidad de <strong>{store.name}</strong></span>)}
+      <span data-store-view="ninguna" hidden>Tienda: sin elegir</span>
+      <button class="ce-link" type="button" data-ce-open="elegir-tienda">{stores.map((store) => <span data-store-view={store.id} hidden={store.id !== 'tacna'}>Cambiar tienda</span>)}<span data-store-view="ninguna" hidden>Elegir tienda</span></button>
+    </p>
     <nav aria-label="Subcategorías"><ul class="ce-category-tiles">{categories.slice(0, 4).map((category) => <li><a class="ce-category-tile" href={category.href}>{category.image ? <img src={category.image} alt="" width="120" height="120" loading="lazy" /> : null}{category.label}</a></li>)}</ul></nav>
 
     <div class="ce-listing" style="margin-top:var(--ce-space-40)">

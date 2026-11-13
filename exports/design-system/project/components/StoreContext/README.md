@@ -36,7 +36,7 @@ The **StoreBar** («Barra de tienda») is the in-page line that names the store 
 
 The page, not the bar, keeps these rules:
 
-- No store means no amount and no stock claim. The no-store bar always sits with the no-store price message in place of every amount (`ce-price-pending`, or the card's `ce-store-note`), never with a price.
+- No store means no amount and no stock claim. The no-store bar always sits with the no-store price message in place of every amount (`ce-price-pending`, or a `ce-store-note` where a card or line would show its price), never with a price.
 - A committed store change removes the old store's amounts at once. While the bar is pending, the page's amounts are absent or marked pending. A late response for the previous store never replaces the active one.
 - The bar names the store and nothing else: no amount, no availability claim, no invented address, hours or service promise.
 

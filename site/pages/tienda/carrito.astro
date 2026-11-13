@@ -4,13 +4,17 @@ import Icon from '../../components/Icon.astro';
 import Price from '../../components/Price.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { productView } from '../../../recipes/product.mjs';
-import { catalogue } from '../../data/store.mjs';
-// Line and order amounts are supplied by the commerce service as decimal strings; the page never computes them.
+import { catalogue, stores } from '../../data/store.mjs';
+// Line and order amounts are supplied per store by the commerce service as decimal strings; the page never computes them.
+// Each store's amounts are a separate view, so no amount is shown for a store it was not supplied for, and none without a store.
 const lines = [
-  { item: catalogue[0], quantity: 2, lineAmount: '13.00' },
-  { item: catalogue[3], quantity: 1, lineAmount: '8.50' },
+  { item: catalogue[0], quantity: 2, lineAmount: { tacna: '13.00', arequipa: '13.80' } },
+  { item: catalogue[3], quantity: 1, lineAmount: { tacna: '8.50', arequipa: '8.50' } },
 ];
-const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
+const summary = {
+  tacna: { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' },
+  arequipa: { subtotal: 'S/22.30', pickup: 'Sin costo', total: 'S/22.30' },
+};
 ---
 <Store title="Tu bolsa" description="Bolsa y pago de demostración con retiro en tienda o envío.">
   <div class="ce-container">
@@ -22,7 +26,11 @@ const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
     </ol>
     <div class="ce-cart">
       <div>
-        <p class="ce-store-note"><span>Importes en <strong data-store-name>Tacna</strong></span><button class="ce-link" type="button" data-ce-open="elegir-tienda">Cambiar tienda</button></p>
+        <p class="ce-store-note">
+          {stores.map((store) => <span data-store-view={store.id} hidden={store.id !== 'tacna'}>Importes en <strong>{store.name}</strong></span>)}
+          <span data-store-view="ninguna" hidden>Tienda: sin elegir</span>
+          <button class="ce-link" type="button" data-ce-open="elegir-tienda">{stores.map((store) => <span data-store-view={store.id} hidden={store.id !== 'tacna'}>Cambiar tienda</span>)}<span data-store-view="ninguna" hidden>Elegir tienda</span></button>
+        </p>
         <ul class="ce-cart-lines" aria-label="Productos en tu bolsa">
           {lines.map(({ item, quantity, lineAmount }, index) => { const view = productView(item); return (
             <li class="ce-cart-line">
@@ -33,7 +41,8 @@ const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
                 <span class="ce-code" style="justify-self:start">{view.code}</span>
                 <div class="ce-cart-line-actions">
                   <div class="ce-quantity"><button type="button" aria-label={`Quitar uno de ${view.name}`}><Icon name="minus" size={18} /></button><label class="ce-sr-only" for={`cantidad-${index}`}>{`Cantidad de ${view.name}`}</label><input id={`cantidad-${index}`} type="number" inputmode="numeric" min="1" max="20" value={quantity} /><button type="button" aria-label={`Agregar uno de ${view.name}`}><Icon name="plus" size={18} /></button></div>
-                  <Price amount={lineAmount} />
+                  {stores.map((store) => <span data-store-view={store.id} hidden={store.id !== 'tacna'}><Price amount={lineAmount[store.id]} /></span>)}
+                  <span data-store-view="ninguna" hidden class="ce-store-note">Elige tu tienda para ver el precio.</span>
                   <button class="ce-link" type="button"><Icon name="trash" size={18} /> Quitar</button>
                 </div>
               </div>
@@ -52,11 +61,12 @@ const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
       </div>
       <aside class="ce-order-summary" aria-labelledby="resumen">
         <h2 id="resumen">Resumen</h2>
-        <dl class="ce-summary">
-          <div><dt>Subtotal (3 productos)</dt><dd>{summary.subtotal}</dd></div>
-          <div><dt>Retiro en tienda</dt><dd>{summary.pickup}</dd></div>
-          <div class="ce-summary-total"><dt>Total</dt><dd>{summary.total}</dd></div>
-        </dl>
+        {stores.map((store) => <dl class="ce-summary" data-store-view={store.id} hidden={store.id !== 'tacna'}>
+          <div><dt>Subtotal (3 productos)</dt><dd>{summary[store.id].subtotal}</dd></div>
+          <div><dt>Retiro en tienda</dt><dd>{summary[store.id].pickup}</dd></div>
+          <div class="ce-summary-total"><dt>Total</dt><dd>{summary[store.id].total}</dd></div>
+        </dl>)}
+        <div data-store-view="ninguna" hidden class="ce-price-pending"><span>Elige tu tienda para ver precio y disponibilidad.</span><button class="ce-button ce-button--secondary" type="button" data-ce-open="elegir-tienda">Elegir tienda</button></div>
         <a class="ce-button" href="/tienda/cuenta/">Continuar</a>
         <p class="ce-fine-print">Importes de ejemplo calculados por el servicio de comercio, no por la interfaz.</p>
       </aside>
