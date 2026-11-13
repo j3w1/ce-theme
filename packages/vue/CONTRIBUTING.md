@@ -1,6 +1,6 @@
 # Contributing to @casaelida/vue
 
-Read [docs/workflow.md](../../docs/workflow.md) first: Claude Design → approved Git source → reusable component → optional showcase. A component implements a recipe the owner has approved in `docs/decisions.md`; it is not where a design is decided.
+Read [docs/workflow.md](../../docs/workflow.md) first: Claude Design → approved Git source → reusable component → optional showcase. A component implements a recipe j3w1 has approved in `docs/decisions.md`; it is not where a design is decided. Within SEAL #7, j3w1's SEAL is the design and scope approval, so no approval by j3w1 is needed at every step; delivery still passes the CE delivery gates (SEAL #7 §4) and the applicable consent: a current standing authorization, reused without asking again, or exact CE consent.
 
 ## Naming
 
@@ -25,5 +25,6 @@ Read [docs/workflow.md](../../docs/workflow.md) first: Claude Design → approve
 ## A pull request
 
 - Adds a few components, not a library. It names the decisions it implements.
-- Replaces hand-written markup on an existing showcase page with the component where that page already shows the recipe. It does not add showcase pages. The one exception is `/mensajeria/`, the messaging example the owner approved specifically (see `docs/decisions.md`, “Showcase exception”); every other new page needs the owner's explicit request.
-- Passes `pnpm check` and `pnpm test:browser` from the repository root.
+- Replaces hand-written markup on an existing showcase page with the component where that page already shows the recipe. It does not add showcase pages. The exceptions are `/mensajeria/`, the messaging example j3w1 approved specifically (see `docs/decisions.md`, “Showcase exception”), and the pages SEAL #7 asks for, B2's install and version page and its component reference (“Showcase exception (SEAL #7)”); every other new page needs j3w1's explicit request.
+- Never publishes the package or deploys the site: the B1-release workflow and B2's site workflow do that from merged `main`.
+- Passes `pnpm check`, `pnpm test:browser` and `pnpm test:consumer` from the repository root. A change to the packed files updates the expected list in `tests/consumer/run.mjs`.

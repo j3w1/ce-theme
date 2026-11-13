@@ -1,6 +1,6 @@
 /**
- * Casa Elida Vue components. Each one renders a ce-theme recipe; load the foundation CSS once in the application
- * (`fonts.css`, `tokens.css`, `recipes.css` from `exports/`, as `docs/apply-ce-theme.md` describes).
+ * Casa Elida Vue components. Each one renders a ce-theme recipe; import the package's foundation styles once in the
+ * application (`import '@casaelida/vue/styles.css'`) and wrap the application region in `ce-scope`.
  */
 export { default as CEButton } from './components/CEButton.vue';
 export { default as CETextField } from './components/CETextField.vue';

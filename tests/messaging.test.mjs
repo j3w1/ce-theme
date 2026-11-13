@@ -277,3 +277,26 @@ test('the docs keep the general no-new-showcase-pages rule, name the one /mensaj
   // No document claims that the rebuild or the retirement has already happened.
   for (const file of ['docs/evolution/2026-10-reconciliation.md', 'docs/usage.md', 'docs/decisions.md']) assert.doesNotMatch(await read(file), /CE Systems is now rebuilt|retired CE Systems|existing repository is retired as/, file);
 });
+
+test('SEAL #7 revises the workflow, delivery, identity and showcase rows without hiding their earlier wording', async () => {
+  const decisions = await read('docs/decisions.md');
+  const row = (topic) => decisions.split('\n').find((line) => line.includes(`| ${topic} |`)) ?? '';
+  for (const topic of ['Workflow', 'Delivery', 'Application identities', 'Showcase exception']) {
+    assert.match(row(topic), new RegExp(`Revised for SEAL #7: see “${topic} \\(SEAL #7\\)”`), `${topic} points at its revision`);
+    assert.match(row(`${topic} (SEAL #7)`), /\| SEAL j3w1\/ce-theme#7 /, `${topic} revision cites SEAL #7`);
+  }
+  assert.match(row('Workflow'), /Nothing moves to the next step without the owner's approval in a pull request/);
+  assert.match(row('Workflow (SEAL #7)'), /supersedes “Nothing moves to the next step without the owner's approval in a pull request”/);
+  assert.match(row('Workflow (SEAL #7)'), /Design System artifact synchronization \(B7\) stays possible/);
+  assert.match(row('Showcase exception (SEAL #7)'), /only the pages SEAL #7 asks for: B2's install and version page and its component reference/);
+  for (const topic of ['Work status at 390px', 'Photo attachments', 'Work status prop']) assert.match(row(topic), /\| Owner confirmation to the temporary supervisor, 2026-10-30 \|$/, topic);
+  assert.match(row('Photo attachments'), /called “foto”/);
+  for (const file of ['docs/workflow.md', 'packages/vue/CONTRIBUTING.md']) {
+    const text = await read(file);
+    assert.match(text, /j3w1's SEAL is the design and scope approval/, `${file} states the SEAL #7 approval`);
+    assert.match(text, /a current standing authorization, reused without asking again, or exact CE consent/, `${file} keeps consent`);
+    assert.match(text, /Showcase exception \(SEAL #7\)/, `${file} names the revised exception`);
+    assert.match(text, /B1-release workflow/, `${file} names the only package publisher`);
+  }
+  assert.match(await read('AGENTS.md'), /nothing else publishes the package or deploys the site/);
+});
