@@ -1,6 +1,6 @@
 # StandardNamesFeedback
 
-Standard names for feedback and layers: **Badge** (Distintivo), **StatusPill** (Estado), **Pill** (Píldora), **Notice** (Aviso), **Toast** (Notificación), **Progress** (Barra de progreso), **Dialog** (Diálogo), **Disclosure** (Desplegable).
+Standard names for feedback and layers: **Badge** (Distintivo), **StatusPill** (Estado), **Pill** (Píldora), **Notice** (Aviso), **DemoCue** (Aviso de demostración), **Toast** (Notificación), **Progress** (Barra de progreso), **Dialog** (Diálogo), **Disclosure** (Desplegable).
 
 ## Classes
 
@@ -8,6 +8,7 @@ Standard names for feedback and layers: **Badge** (Distintivo), **StatusPill** (
 - **StatusPill** · Estado: `ce-status`, `ce-status--success`, `ce-status--warning`, `ce-status--danger`, `ce-status--info`. A status with colour and a word, never colour alone.
 - **Pill** · Píldora: `ce-pill`. A compact neutral label for roles and densities in tools.
 - **Notice** · Aviso: `ce-notice`. An inline message with an icon, a title and a sentence.
+- **DemoCue** · Aviso de demostración: `ce-demo-cue`. A bordered note (role note) saying that the data and operations are simulated, in the words the consumer supplies. One at the top of the main content and one inside every frame that shows simulated commercial or staff data. Left out of production output, never just hidden.
 - **Toast** · Notificación: `ce-toast`. A short confirmation that disappears.
 - **Progress** · Barra de progreso: `ce-progress`. A thin determinate progress bar.
 - **Dialog** · Diálogo: `ce-dialog`. A modal window that asks for a decision.

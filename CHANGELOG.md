@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+CR-03, the demonstration cue (ce-theme#11).
+
+### Added
+
+- `ce-demo-cue` in `recipes/interface.css`, the standard name `DemoCue` (Aviso de demostración) and its design-system card: one bordered block note from tokens, with the 2px border reusing `stroke.focus`. It holds no text; the consumer supplies the words and `role="note"`, and production output leaves it out. No Vue component.
+- The usage rules in `docs/names.md` (“Demonstration cue”), `docs/apply-ce-theme.md`, `docs/usage.md` and `docs/coverage.md`, and the decision in `docs/decisions.md`.
+- `tests/demo-cue.test.mjs` (no text and no raw colour in the recipe; canon wording in every example) and `tests/browser/demo-cue.spec.mjs` (390, 768 and 1440 px at 100%, 150% and 200% text; axe; reading order).
+
 ## @casaelida/vue 0.2.0 — 2026-11-12 (unreleased)
 
 SEAL #7 batch B1 (ce-theme#8).

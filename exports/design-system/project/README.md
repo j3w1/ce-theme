@@ -157,7 +157,7 @@ Every pattern has one stable English id for code and designs and one Spanish nam
 
 - **Actions:** `Button`, `IconButton`, `Link`, `Chip`.
 - **Forms:** `Field`, `FormControls`, `Controls`, `Swatch`.
-- **Feedback and interface:** `Badge`, `Status`, `Overlays`.
+- **Feedback and interface:** `Badge`, `Status`, `DemoCue`, `Overlays`.
 - **Retail navigation:** `SiteHeader`, `CategoryRail`, `Footer`.
 - **Retail discovery:** `Mosaic`, `Rail`, `FilterBar`.
 - **Commerce and product:** `ProductCode`, `Price`, `Specs`, `ProductCard`, `Callout`, `PhotoPanel`, `ProductDetail`, `StoreContext`.

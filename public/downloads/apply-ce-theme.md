@@ -45,6 +45,7 @@ Optional outputs:
 - **Accessibility** ([accessibility.md](accessibility.md)): WCAG 2.2 AA; native elements; visible focus; text, not colour alone.
 - **Logos.** Supplied files only, unchanged (`public/assets/manifest.json`).
 - **Data authority.** The design system presents data; CE Systems and the commerce services own records, prices, stock, permissions and workflows.
+- **Simulated data** ([names.md](names.md#demonstration-cue)): a page that shows simulated data starts its main content with a `ce-demo-cue` note in words the application supplies, and so does every frame showing simulated commercial or staff data. Production output leaves the element out; hiding it is not enough.
 
 ## 3. Pick the patterns for the surface
 
@@ -54,7 +55,7 @@ Optional outputs:
 | Messaging apps (CE Meta App) | [coverage.md](coverage.md#messaging-ce-meta-app), [definite width](../packages/vue/README.md#messaging-components) | `ce-conversation-list`, `ce-message-list`, `ce-composer` and the `CEConversationList`, `CEMessageList`, `CEMessageComposer`, `CEAttachmentGroup`, `CEWorkStatus` components. `CEAttachmentGroup` and `CEWorkStatus` are query containers with no width of their own: give them a definite width. Correct: `<div style="display:flex"><CEWorkStatus style="flex:1" …/></div>`. Collapses to zero width: `<div style="display:flex"><CEWorkStatus …/></div>` (the same in `inline-block`, a float or `width: max-content` unless that parent has a width). |
 | Internal tools (CE Systems, CE Meta, CE Radio) | [coverage.md](coverage.md) | `ce-app`, `ce-module-nav`, `data-ce-density`, `ce-data-table`, `ce-bulk-bar`, `ce-record-header`, `ce-form-actions`, `ce-audit`, `ce-pos` |
 | Print | [product-identity.md](product-identity.md) | `ce-label`, `ce-label-sheet` |
-| Overlays and feedback | — | `ce-dialog`, `ce-drawer`, `ce-disclosure`, `ce-tabs`, `ce-notice`, `ce-toast`, `ce-empty`, `ce-skeleton` |
+| Overlays and feedback | — | `ce-dialog`, `ce-drawer`, `ce-disclosure`, `ce-tabs`, `ce-notice`, `ce-demo-cue`, `ce-toast`, `ce-empty`, `ce-skeleton` |
 
 Every form control follows the [native control policy](controls.md): style the native element with its ce-theme class, never ship an unstyled browser control. The reference site (`pnpm dev`) shows runnable markup for each recipe. [coverage.md](coverage.md) states what is implemented, tested, only specified, or waiting for a business rule.
 
