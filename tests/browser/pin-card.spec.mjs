@@ -29,7 +29,10 @@ function measure(card) {
   const history = follower?.querySelector('.ce-price-history');
   const frame = box(card.closest('.ce-tagged-media'));
   const outer = box(card);
-  const spill = [...card.querySelectorAll('*')].filter((el) => { const r = box(el); return r.width > 0 && (r.left < outer.left - 1 || r.right > outer.right + 1); }).length;
+  // Overflow: any visible box of the text that leaves the text column's content box (its padding excluded).
+  const ts = getComputedStyle(text), tb = box(text);
+  const contentLeft = tb.left + parseFloat(ts.paddingLeft), contentRight = tb.right - parseFloat(ts.paddingRight);
+  const spill = [...text.querySelectorAll('*')].filter((el) => { if (el.closest('.ce-sr-only')) return false; const r = box(el); return r.width > 0 && (r.left < contentLeft - 0.5 || r.right > contentRight + 0.5); }).length;
   // The width the NAME would need on one line (with its own, possibly enlarged, size), to tell whether it has to wrap.
   const probe = nameEl.cloneNode(true);
   probe.style.cssText += ';position:absolute;visibility:hidden;white-space:nowrap;max-width:none;width:max-content';
@@ -46,7 +49,7 @@ function measure(card) {
     descriptionLines: Math.round(description.height / parseFloat(getComputedStyle(card.querySelector('.ce-product-description')).lineHeight)),
     card: { left: outer.left, right: outer.right, top: outer.top, bottom: outer.bottom },
     frame: { left: frame.left, right: frame.right, top: frame.top, bottom: frame.bottom },
-    overflow: text.scrollWidth > text.clientWidth + 1 || spill > 0,
+    overflow: spill > 0 || text.scrollWidth > text.clientWidth + 1,
     scrolls: card.scrollHeight > card.clientHeight + 1,
     overflowY: getComputedStyle(card).overflowY,
   };
@@ -59,6 +62,37 @@ const inside = (m, label) => {
   expect(m.card.top, `${label} top`).toBeGreaterThanOrEqual(m.frame.top - 1);
   expect(m.card.bottom, `${label} bottom`).toBeLessThanOrEqual(m.frame.bottom + 1);
 };
+// Keyboard focus on the card: its outline (stroke.focus at stroke.offset) must lie inside the photo, which clips.
+async function focusRingInside(page, card, label) {
+  await page.keyboard.press('Shift');
+  await card.focus();
+  const r = await card.evaluate((el) => {
+    const s = getComputedStyle(el), c = el.getBoundingClientRect(), f = el.closest('.ce-tagged-media').getBoundingClientRect();
+    const ring = parseFloat(s.outlineOffset) + parseFloat(s.outlineWidth);
+    return { style: s.outlineStyle, width: s.outlineWidth, offset: s.outlineOffset, left: c.left - ring - f.left, right: f.right - c.right - ring, top: c.top - ring - f.top, bottom: f.bottom - c.bottom - ring };
+  });
+  expect({ style: r.style, width: r.width, offset: r.offset }, `${label} focus ring`).toEqual({ style: 'solid', width: '2px', offset: '3px' });
+  for (const side of ['left', 'right', 'top', 'bottom']) expect(r[side], `${label} focus ring ${side} edge inside the photo`).toBeGreaterThanOrEqual(-0.5);
+}
+// The focus ring is painted on every side: a 1px strip through the middle of the outline band differs between the
+// focused and the unfocused card (the photo would clip a ring outside it, and both strips would then be equal).
+async function focusRingPainted(page, card) {
+  await page.keyboard.press('Shift');
+  await card.focus();
+  const bands = await card.evaluate((el) => {
+    const s = getComputedStyle(el), c = el.getBoundingClientRect();
+    const mid = parseFloat(s.outlineOffset) + parseFloat(s.outlineWidth) / 2;
+    const w = (c.right - c.left) / 3, h = (c.bottom - c.top) / 3;
+    const strip = (x, y, width, height) => ({ x: Math.round(x), y: Math.round(y), width: Math.max(1, Math.round(width)), height: Math.max(1, Math.round(height)) });
+    return { left: strip(c.left - mid - 0.5, c.top + h, 1, h), right: strip(c.right + mid - 0.5, c.top + h, 1, h), top: strip(c.left + w, c.top - mid - 0.5, w, 1), bottom: strip(c.left + w, c.bottom + mid - 0.5, w, 1) };
+  });
+  const shoot = async () => { const out = {}; for (const [side, clip] of Object.entries(bands)) out[side] = await page.screenshot({ clip }); return out; };
+  const focused = await shoot();
+  await card.evaluate((el) => el.blur());
+  const unfocused = await shoot();
+  return Object.fromEntries(Object.keys(bands).map((side) => [side, !focused[side].equals(unfocused[side])]));
+}
+const PAINTED = { left: true, right: true, top: true, bottom: true };
 // A card limited to the photo's height is reachable to its end from the keyboard: the card is the focused link.
 async function keyboardReachesEnd(page, card) {
   await page.keyboard.press('Shift');
@@ -80,8 +114,10 @@ async function checkCard(page, card, label, kind) {
   if (m.nameMustWrap) expect(m.nameLines, `${label} NAME wraps`).toBeGreaterThan(1);
   expect(m.overflow, `${label} overflow`).toBe(false);
   inside(m, label);
+  await focusRingInside(page, card, label);
   if (m.scrolls) {
     expect(m.overflowY, `${label} a card limited to the photo scrolls`).toBe('auto');
+    expect(await focusRingPainted(page, card), `${label} focus ring painted on every side`).toEqual(PAINTED);
     expect(await keyboardReachesEnd(page, card), `${label} keyboard reaches the end of the card`).toBe(true);
   }
   return m;
@@ -225,6 +261,18 @@ test('recipe in a 240px photo: the longest NAME wraps and the card stays inside 
   const [m] = await checkPins(page, 'in a 240px photo');
   expect(m.nameMustWrap, 'the NAME has to wrap in a 240px photo').toBe(true);
 });
+
+// Below the acceptance widths: a 240px photo with x1.5 and x2 text and the longest identity with a regular price. The card
+// is as large as the photo allows, scrolls, and keeps its focus ring visible inside the photo on every side. (A
+// promotional offer price at x2, 180px with its offer padding, needs a photo of about 266px or more.)
+for (const factor of [1.5, 2]) {
+  test(`recipe in a 240px photo, text x${factor}: the longest identity fits, scrolls and keeps a visible focus ring`, async ({ page }) => {
+    const [long] = (await cases()).filter((c) => c.kind === 'long');
+    await mount(page, { width: 390, factor, frame: 'width:240px;' }, [{ ...long, after: await price({ amount: '16.90' }), x: '50%', y: '20%' }]);
+    const [m] = await checkPins(page, `in a 240px photo, text x${factor}`);
+    expect(m.scrolls, 'the card is limited to the photo and scrolls').toBe(true);
+  });
+}
 
 test('recipe source: the pin text spacing is written from the ProductStack tokens only', () => {
   const recipe = readFileSync('recipes/recipes.css', 'utf8');

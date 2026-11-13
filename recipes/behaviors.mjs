@@ -160,25 +160,30 @@ export function enhanceMarkers(root = document) {
 /** Web pins: a .ce-pin shows its card on hover and focus in CSS; this adds tap-to-open for touch (aria-expanded on the dot),
  * Escape and outside-tap to close, one open card per photo, and keeps each card inside its frame by flipping it
  * (ce-pin--start, ce-pin--above) when the side it would open on has no room. A card taller than the photo (large text
- * on a small photo) is limited to the photo's height, and the card scrolls. */
+ * on a small photo) is limited to the photo's height, and the card scrolls. The photo clips, so a card never comes
+ * closer to its edge than the card's focus ring (stroke.focus at stroke.offset), which therefore stays visible. */
 export function placePins(frame, { gap = 20, inset = 14 } = {}) {
   const box = frame.getBoundingClientRect();
   for (const pin of frame.querySelectorAll('.ce-pin')) {
     const card = pin.querySelector('.ce-pin-card');
     if (!card) continue;
+    const style = getComputedStyle(card);
+    const ring = (parseFloat(style.getPropertyValue('--ce-stroke-focus')) || 0) + (parseFloat(style.getPropertyValue('--ce-stroke-offset')) || 0);
+    const room = box.height - 2 * ring;
     card.style.maxHeight = '';
+    const limited = card.getBoundingClientRect().height > room;
+    if (limited) card.style.maxHeight = `${room}px`;
     const width = card.offsetWidth;
-    const height = Math.min(card.offsetHeight, box.height);
-    if (height < card.offsetHeight) card.style.maxHeight = `${box.height}px`;
+    const height = limited ? room : card.offsetHeight;
     const at = pin.getBoundingClientRect();
     const start = at.left + width - inset > box.right;
     const above = at.top + gap + height > box.bottom && (at.top - gap - height >= box.top || at.top - box.top > box.bottom - at.top);
     pin.classList.toggle('ce-pin--start', start);
     pin.classList.toggle('ce-pin--above', above);
-    // Preferred offset from the dot, then clamped so the whole card stays inside the photo.
+    // Preferred offset from the dot, then clamped so the whole card and its focus ring stay inside the photo.
     const clamp = (value, low, high) => Math.max(low, Math.min(value, Math.max(low, high)));
-    const left = clamp(start ? -(width - inset) : -inset, box.left - at.left, box.right - at.left - width);
-    const top = clamp(above ? -(height + gap) : gap, box.top - at.top, box.bottom - at.top - height);
+    const left = clamp(start ? -(width - inset) : -inset, box.left + ring - at.left, box.right - ring - at.left - width);
+    const top = clamp(above ? -(height + gap) : gap, box.top + ring - at.top, box.bottom - ring - at.top - height);
     Object.assign(card.style, { left: `${left}px`, right: 'auto', top: `${top}px`, bottom: 'auto' });
   }
 }

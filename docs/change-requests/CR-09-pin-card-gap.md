@@ -65,13 +65,17 @@ Recipe: `ce-pin-text` (existing; no new name).
   <span class="ce-pin-chevron" aria-hidden="true">…</span></a>
 ```
 
-**Fit with large text (decision 3).** The section 6 checks with text enlarged x1.5 and x2 showed a defect that predates this request: the card's `min-width: 11rem` could make it wider than a small photo, and a card taller than its photo was clipped by `ce-tagged-media`. The correction keeps the type scale, the identity and the markup, and adds no public API:
+**Fit with large text (decision 3).** The section 6 checks with text enlarged x1.5 and x2 showed a defect that predates this request: the card's `min-width: 11rem` could make it wider than a small photo, a card taller than its photo was clipped by `ce-tagged-media`, and a card at the photo's edge lost the part of its focus ring outside the photo. The correction keeps the type scale, the identity and the markup, and adds no public API:
 
 ```css
-.ce-pin-card { min-width: min(11rem, 100cqw); overflow: hidden auto; overscroll-behavior: contain; }
+.ce-pin-card {
+  min-width: min(11rem, 100cqw - 2 * (var(--ce-stroke-focus) + var(--ce-stroke-offset)));
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+}
 ```
 
-`placePins()` in `behaviors.mjs` limits a card that is taller than its photo to the photo's height, so the card scrolls inside the photo; the card is the focusable link, so keyboard users scroll it too. `enhancePins()` also places the cards again once the fonts have loaded. A card that fits is placed exactly as before.
+`placePins()` in `behaviors.mjs` keeps every card the width of its focus ring (`stroke.focus` at `stroke.offset`, 5px) inside the photo's edges, so the ring is always visible, and limits a card that is taller than that room to it, so the card scrolls inside the photo; the card is the focusable link, so keyboard users scroll it too. `enhancePins()` also places the cards again once the fonts have loaded. A card away from the photo's edges is placed exactly as before; one that would come closer to an edge than its focus ring moves in by at most that width. Below the acceptance widths a limit remains: with x2 text, a promotional offer price (64px with its offer padding, about 180px) needs a photo of about 266px or more.
 
 ## 5. Accessibility and invariants it must keep
 
@@ -80,7 +84,7 @@ Recipe: `ce-pin-text` (existing; no new name).
 | NAME above Description, 2px / 2px / 12px | Yes. In a pin card there are no specs; the price offset stays at the 8px the recipe and boards already use (see owner decision 2) |
 | One-line CE code | The pin card shows no code: unchanged |
 | Supplied decimal-string prices | Unchanged; the price block keeps the supplied string and its screen-reader text |
-| Focus ring | Unchanged (`.ce-pin-card:focus-visible` 2px outline, 3px offset) |
+| Focus ring | Unchanged (`.ce-pin-card:focus-visible` 2px outline, 3px offset); with decision 3 it always stays inside the photo |
 | 44px targets | Unchanged (dot with 44px hit area, chevron cell 44px per `TaggedMedia/README.md`) |
 | Pins never mixed with lettered markers on one photo; every pinned product also listed in text | Unchanged |
 
@@ -96,7 +100,7 @@ To run when the repository work happens (not run here, except where marked):
 
 - Pin cards become about 2px shorter (and about 2px more where a note takes the price offset): the "flip above" placement in `enhancePins()` depends on card height; to verify in the repository tests (not seen).
 - The 77 boards keep their local patches as part of the frozen snapshot (X-3); there is no re-synchronisation pass. A board that combined the new recipe with its patches would find `.ce-pin-card .ce-pin-text{gap:2px}` harmless (same value) and the 17 boards' `margin-top: 6px` equal to the new computed value.
-- Not changed: padding (12px 16px), price size (32px in the pin), chevron cell, hover and focus behaviour. The card's width limits are unchanged except that, with decision 3, its minimum width never exceeds its photo (section 4).
+- Not changed: padding (12px 16px), price size (32px in the pin), chevron cell, hover and focus behaviour. The card's width limits are unchanged except that, with decision 3, its minimum width never exceeds its photo less the room for its focus ring (section 4).
 - Related, not proposed here: boards add `.ce-pin-card .ce-store-note { font-size: 13px }` and `.ce-pin-card .ce-skeleton { width: 72px; height: 24px }` (7 boards each). These are raw values for pin states.
 
 ## 8. Owner decisions needed
