@@ -1,5 +1,5 @@
 // The live smoke's retries (issue #9 R6): a failure caused by GitHub Pages propagation is retried after a pause, within the
-// one five-minute budget the smoke started with (CE_LIVE_DEADLINE, set by tests/live/propagation.mjs). Ordinary runs set no
+// five-minute budget that starts when the deploy is ready (CE_LIVE_DEADLINE, set by tests/live/propagation.mjs). Ordinary runs set no
 // deadline and never retry, so the hook does nothing there.
 //
 // A retry starts only while a whole test timeout is left before the deadline, so its test body ends in time; the pause runs

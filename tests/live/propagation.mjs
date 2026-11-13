@@ -4,7 +4,9 @@ import { ROUTES } from './routes.mjs';
 // GitHub Pages propagation (issue #9 R6): the smoke starts only when everything it reads is served from the new deploy. That
 // covers every route with the expected commit and package version, and every same-site link and resource those pages use:
 // stylesheets and their fonts, scripts and their imports, the island bundles and the downloads. A first failure is retried
-// for at most five minutes in total, then counts. Every request is aborted at that deadline, so nothing is accepted after it.
+// for at most five minutes, then counts. Every request is aborted at that deadline, so nothing is accepted after it.
+// When the deploy is ready, the tests get their own five-minute retry budget from that moment (CE_LIVE_DEADLINE, inherited by
+// the workers and read by tests/live/retry.mjs and tests/live/budget.mjs), so a test's first failure is always retried.
 const BUDGET = 5 * 60_000;
 const PAUSE = 15_000;
 const SPENT = 'the five-minute budget ran out';
@@ -14,8 +16,6 @@ export default async function waitForDeploy() {
   const commit = process.env.CE_EXPECT_COMMIT;
   const version = process.env.CE_EXPECT_VERSION;
   const deadline = Date.now() + BUDGET;
-  // The same budget bounds the retries of the tests (tests/live/retry.mjs); workers inherit it.
-  process.env.CE_LIVE_DEADLINE = String(deadline);
   const get = async (url) => {
     const left = deadline - Date.now();
     if (left <= 0) throw new Error(SPENT);
@@ -60,7 +60,10 @@ export default async function waitForDeploy() {
   for (;;) {
     try {
       const waiting = await pass();
-      if (waiting === undefined && Date.now() < deadline) return;
+      if (waiting === undefined && Date.now() < deadline) {
+        process.env.CE_LIVE_DEADLINE = String(Date.now() + BUDGET);
+        return;
+      }
       if (waiting === undefined) throw new Error(SPENT);
       last = waiting;
     } catch (error) {

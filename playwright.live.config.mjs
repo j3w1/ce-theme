@@ -16,8 +16,8 @@ export default defineConfig({
   testDir: './tests',
   testMatch: ['browser/foundation.spec.mjs', 'browser/messaging.spec.mjs', 'live/live.spec.mjs'],
   grep: [new RegExp(` (?:${ROUTES.map(escape).join('|')}): renders without errors`), /selecting a conversation opens its history/, /live\.spec\.mjs/],
-  // One five-minute propagation budget for the whole smoke. tests/live/propagation.mjs waits until every route, version line,
-  // link and resource the tests read comes from the expected deploy. A test that still fails is then retried after a pause
+  // tests/live/propagation.mjs waits, for at most five minutes, until every route, version line, link and resource the tests
+  // read comes from the expected deploy. The tests then get their own five-minute budget: a test that fails is retried after a pause
   // (tests/live/retry.mjs) while the same budget allows another attempt; then the failure counts. A retry's pass counts only
   // if its result arrives within the budget (tests/live/budget.mjs). 20 retries of 15 s cover five minutes.
   globalSetup: './tests/live/propagation.mjs',
