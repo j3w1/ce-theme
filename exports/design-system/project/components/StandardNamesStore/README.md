@@ -4,7 +4,7 @@ Standard names for store: **StockLine** (Disponibilidad), **StoreNote** (Nota de
 
 ## Classes
 
-- **StockLine** · Disponibilidad: `ce-stock`. Per-store availability in words, with a state dot.
+- **StockLine** · Disponibilidad: `ce-stock`. Per-store availability in words, with a state dot, in a list named «Disponibilidad». An unknown, stale, conflicting or missing reading reads «Disponibilidad por confirmar en {tienda}», never «Agotado»; «Pocas unidades» and «Agotado» only from a confirmed reading the inventory service supplies.
 - **StoreNote** · Nota de tienda: `ce-store-note`. Short store-specific text that replaces a missing price.
 - **StoreContext** · Tienda activa: `ce-store-context`. The button that shows and changes the chosen store; prices and availability follow it.
 

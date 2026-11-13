@@ -8,7 +8,7 @@ Catalogue product card: a whole product photo on white, then the product stack: 
 - `ce-product`: the card, no fixed height. `ce-product-media`: square, `object-fit: contain`; optional `ce-badge` top left and a favourite `ce-icon-button ce-icon-button--small` (`aria-pressed`) bottom right. `ce-media-missing` replaces a missing photo.
 - `ce-product-info`: optional `ce-product-flag` (“Novedad”, a green Novedad tag with white text; `ce-product-flag--promo`, `--top` and `--limited` for the other tags), optional `ce-code`, then `ce-product-row` holding `ce-product-heading` (`ce-product-name` + `ce-product-description`) and the add-to-bag `ce-icon-button ce-icon-button--action ce-icon-button--small`.
 - `ce-product-specs`, then the `Price` recipe (44px, 36px below 640px). Without a price for the chosen store, a `ce-store-note` takes its place.
-- `ce-stock` lines (`data-state="available|limited|unavailable|unknown"`), and `ce-variant-more` with `ce-variant-thumbs` (`aria-current` on the shown variant).
+- `ce-stock` lines in a list named `aria-label="Disponibilidad"` (`data-state="available|limited|unavailable|unknown|pending"`; the wording is in the StockLine section of `names.md`), and `ce-variant-more` with `ce-variant-thumbs` (`aria-current` on the shown variant).
 - `ce-product-link` makes the heading a link; `ce-product-select` holds an optional “Comparar” `ce-check`.
 
 ## The consumer supplies
@@ -19,5 +19,6 @@ Catalogue product card: a whole product photo on white, then the product stack: 
 
 - Do keep the order NAME, Description, specs, price, availability, with the `size.product.*` gaps (the **ProductStack**, see `names.md`). Every card has a NAME. On retail cards the code is optional; tools and labels show it.
 - Do show the whole product; never crop a catalogue photo.
+- Do show availability the inventory service has not confirmed as «Disponibilidad por confirmar en {tienda}». «Pocas unidades» and «Agotado» need a confirmed reading; a missing price is no reason to drop or change it.
 - Don't add borders, shadows or rounded corners to the card; white space or the divided grid separates cards.
 - Don't show ratings or review counts: there is no review data.

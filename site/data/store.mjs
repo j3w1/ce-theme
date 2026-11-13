@@ -19,11 +19,26 @@ export const catalogue = [
   { ...talen, prices: { tacna: '8.50', arequipa: '8.50' }, stock: { tacna: 'limited', arequipa: 'available' }, family: 'tapetes', options: [talen, tilen] },
 ];
 
+// The StockLine wording (docs/names.md#stockline). Each fixture reading is supplied per store; limited and unavailable
+// are confirmed readings. A store without a reading is unknown, never sold out. Nothing is worked out from a price or count.
 export const stockText = {
   available: (store) => `Disponible en ${store}`,
   limited: (store) => `Pocas unidades en ${store}`,
   unavailable: (store) => `Agotado en ${store}`,
+  unknown: (store) => `Disponibilidad por confirmar en ${store}`,
+  pending: () => 'Consultando disponibilidad…',
 };
+
+/** The availability statement of one catalogue item in one chosen store. */
+export function stockLine(item, store) {
+  const state = item.stock?.[store.id] ?? 'unknown';
+  return { state, text: stockText[state](store.name) };
+}
+
+/** The attributes of a StockLine list: its accessible name, and aria-busy while a reading is pending. */
+export function stockListAttributes(lines) {
+  return { 'aria-label': 'Disponibilidad', 'aria-busy': lines.some((line) => line.state === 'pending') ? 'true' : undefined };
+}
 
 export const categories = [
   { label: 'Cocina', icon: 'home', image: '/assets/product-nome.png', href: '/tienda/categoria/' },
@@ -54,11 +69,10 @@ export function cardFor(item, storeId) {
   const options = item.options.map((option) => ({ name: `${option.name}, ${option.specs.at(-1)}`, image: option.image, href, current: option.code === item.code }));
   if (!store) return { href, flag: item.flag, options, priceNote: 'Elige tu tienda para ver precio y disponibilidad.' };
   const amount = item.prices[store.id];
-  const state = item.stock[store.id];
   return {
     href, flag: item.flag, options,
     price: amount ? { amount, previousAmount: item.previous?.[store.id], discountLabel: item.discount?.[store.id] } : undefined,
     priceNote: amount ? undefined : `Precio no disponible en ${store.name}.`,
-    stock: state ? [{ state, text: stockText[state](store.name) }] : [],
+    stock: [stockLine(item, store)],
   };
 }
