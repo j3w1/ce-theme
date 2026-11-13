@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { pauseBeforeRetry } from '../live/retry.mjs';
+import { liveRetries } from '../live/retry.mjs';
 
-// The live smoke reuses one of these checks; this pauses its propagation retries and does nothing in ordinary runs.
-test.beforeEach(pauseBeforeRetry);
+// The live smoke reuses one of these checks; this bounds its propagation retries and does nothing in ordinary runs.
+liveRetries(test);
 
 // The /mensajeria/ example: the real @casaelida/vue components on fictional, in-memory fixtures.
 // Browser tests verify this web page only. They do not verify native Android or iOS notifications, camera access or calls.
