@@ -5,35 +5,47 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { lstat } from 'node:fs/promises';
 import { join, posix } from 'node:path';
-import { SITE, cssUrls, distFiles, distPath, elements, readDist, servedAt, srcsetUrls } from './output.mjs';
+import { SITE, cssUrls, distFiles, distPath, elements, markdownLinks, readDist, servedAt, srcsetUrls } from './output.mjs';
 
 const URL_ATTRIBUTES = new Set(['href', 'src', 'action', 'poster', 'component-url', 'renderer-url', 'before-hydration-url']);
 
-/** A path for a failure message: no query, fragment or credentials, and no long token-like run that could be a secret. */
-const shown = (target) => target.pathname.replace(/[\w-]{32,}/g, '…');
-
-/** Why `value`, found in a file served at `page`, is not a valid reference; undefined when it is. Never repeats the value. */
+/**
+ * Why `value`, found in a file served at `page`, is not a valid reference; undefined when it is. The reason is a fixed
+ * category: no part of the URL is repeated, so a credential in a broken link never reaches a test log.
+ */
 async function problem(value, page) {
   const raw = value.trim();
   if (raw === '' || raw.startsWith('#') || /^mailto:/i.test(raw)) return undefined;
   if (/^data:/i.test(raw)) return 'is a data: URI';
   let target;
   try { target = new URL(raw, page); } catch { return 'is not a valid URL'; }
-  if (!/^https?:$/.test(target.protocol)) return `uses the ${target.protocol} scheme`;
+  if (!/^https?:$/.test(target.protocol)) return 'uses a scheme other than http or https';
   if (target.host !== SITE.host) return undefined;
-  if (!target.pathname.startsWith(SITE.pathname)) return `resolves outside ${SITE.pathname} (${shown(target)})`;
+  if (!target.pathname.startsWith(SITE.pathname)) return `resolves outside ${SITE.pathname}`;
   let path;
-  try { path = decodeURIComponent(target.pathname.slice(SITE.pathname.length)); } catch { return `has a malformed escape (${shown(target)})`; }
+  try { path = decodeURIComponent(target.pathname.slice(SITE.pathname.length)); } catch { return 'has a malformed percent escape'; }
   const inside = posix.normalize(path === '' ? '.' : path);
-  if (inside === '..' || inside.startsWith('../') || posix.isAbsolute(inside) || path.includes('\0')) return `leaves dist/ (${shown(target)})`;
+  if (inside === '..' || inside.startsWith('../') || posix.isAbsolute(inside) || path.includes('\0')) return 'leaves dist/';
   const file = path === '' || path.endsWith('/') ? posix.join(inside, 'index.html') : inside;
   const entry = await lstat(join(distPath, file)).catch(() => null);
-  return entry?.isFile() ? undefined : `does not resolve to a built file (${shown(target)})`;
+  return entry?.isFile() ? undefined : 'does not resolve to a built file';
+}
+
+/** Collects problems as "file: where #n reason", numbering the URL-bearing values of each file so a failure can be found. */
+function collector() {
+  const problems = [];
+  const counts = new Map();
+  const check = async (file, where, value) => {
+    const n = (counts.get(file) ?? 0) + 1;
+    counts.set(file, n);
+    const why = await problem(value, servedAt(file));
+    if (why) problems.push(`${file}: ${where} (URL #${n} in this file) ${why}`);
+  };
+  return { problems, check };
 }
 
 test('every href, src, srcset, action and CSS url() in the built HTML and CSS resolves under the base to a built file', async () => {
-  const problems = [];
-  const check = async (file, where, value) => { const why = await problem(value, servedAt(file)); if (why) problems.push(`${file}: ${where} ${why}`); };
+  const { problems, check } = collector();
   const files = await distFiles();
   for (const file of files.filter((name) => name.endsWith('.html'))) {
     for (const element of elements(await readDist(file, 'utf8'))) {
@@ -43,7 +55,7 @@ test('every href, src, srcset, action and CSS url() in the built HTML and CSS re
         if (name === 'style') for (const ref of cssUrls(value)) await check(file, `<${element.name} style> url()`, ref);
         if (element.name === 'meta' && name === 'content' && /^(https?:\/\/|\/)/.test(value)) await check(file, '<meta content>', value);
       }
-      if (element.style) for (const ref of cssUrls(element.style)) await check(file, '<style> url()', ref);
+      if (element.name === 'style') for (const ref of cssUrls(element.body)) await check(file, '<style> url()', ref);
     }
   }
   for (const file of files.filter((name) => name.endsWith('.css'))) {
@@ -52,22 +64,12 @@ test('every href, src, srcset, action and CSS url() in the built HTML and CSS re
   assert.deepEqual(problems, []);
 });
 
-// Inline links and images with any title form ("…", '…' or (…)) and <…> destinations, and reference definitions.
-const MARKDOWN_LINK = /\]\(\s*(?:<([^>\n]*)>|([^\s()<>]+(?:\([^\s()]*\)[^\s()<>]*)*))(?:\s+(?:"[^"\n]*"|'[^'\n]*'|\([^)\n]*\)))?\s*\)/g;
-const MARKDOWN_DEFINITION = /^ {0,3}\[[^\]\n]+\]:\s*(?:<([^>\n]*)>|(\S+))/gm;
-
 test('every relative link in the generated Markdown downloads resolves to a file in the build', async () => {
-  const problems = [];
+  const { problems, check } = collector();
   const files = (await distFiles()).filter((name) => name.startsWith('downloads/') && name.endsWith('.md'));
   assert.ok(files.length > 0, 'the build publishes the Markdown downloads');
   for (const file of files) {
-    // Code is example text for consumers, not a link of this site.
-    const text = (await readDist(file, 'utf8')).replace(/^ {0,3}(```|~~~)[\s\S]*?^ {0,3}\1/gm, '').replace(/(`+)[^`\n][\s\S]*?\1/g, '');
-    const links = [...text.matchAll(MARKDOWN_LINK), ...text.matchAll(MARKDOWN_DEFINITION)].map((match) => (match[1] ?? match[2]).trim().replace(/ /g, '%20'));
-    for (const link of links) {
-      const why = await problem(link, servedAt(file));
-      if (why) problems.push(`${file}: a link ${why}`);
-    }
+    for (const link of markdownLinks(await readDist(file, 'utf8'))) await check(file, 'a link', link.trim().replace(/ /g, '%20'));
   }
   assert.deepEqual(problems, []);
 });

@@ -35,8 +35,8 @@ const entity = { amp: '&', quot: '"', apos: "'", lt: '<', gt: '>' };
 const decode = (value) => value.replace(/&(?:#(\d+)|#x([\da-f]+)|(\w+));/gi, (all, dec, hex, name) => (dec ? String.fromCodePoint(+dec) : hex ? String.fromCodePoint(parseInt(hex, 16)) : entity[name] ?? all));
 
 /**
- * The start tags of built HTML with their decoded attributes, and the text of each <style> element. Text, comments and the
- * bodies of script, style, textarea and title elements are not markup, so a consumer example such as
+ * The start tags of built HTML with their decoded attributes, and the body of each script and style element. Text, comments
+ * and the bodies of textarea and title elements are not markup, so a consumer example such as
  * `<code>&lt;link href="/styles/tokens.css"&gt;</code>` or a `data-copy` snippet is never read as a URL of this site.
  */
 export function* elements(html) {
@@ -45,12 +45,53 @@ export function* elements(html) {
     if (all.startsWith('<!--')) continue;
     const list = [...(rawAttrs ?? attrs).matchAll(/([^\s=/>"']+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+)))?/g)]
       .map(([, attr, double, single, bare]) => [attr.toLowerCase(), decode(double ?? single ?? bare ?? '')]);
-    yield { name: (raw ?? name).toLowerCase(), attrs: list, style: raw?.toLowerCase() === 'style' ? body : undefined };
+    const tag = (raw ?? name).toLowerCase();
+    yield { name: tag, attrs: list, body: tag === 'script' || tag === 'style' ? body : undefined };
   }
 }
 
-/** The values of CSS url() references, outside comments. CSS function names are case-insensitive. */
-export const cssUrls = (css) => [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/\burl\(\s*(["']?)(.*?)\1\s*\)/gi)].map((match) => match[2]);
+/**
+ * The URL of every CSS url() reference. A small tokenizer after CSS Syntax: comments and strings are not URLs, the function
+ * name is case-insensitive and may be written with escapes (u\72l), and escapes in the URL itself are decoded.
+ */
+export function cssUrls(css) {
+  const urls = [];
+  let i = 0;
+  const escape = () => { // css[i] is a backslash; returns the escaped character and moves past it.
+    const digits = css.slice(i + 1, i + 7).match(/^[\da-f]+/i)?.[0];
+    if (!digits) { i += 2; return css[i - 1] ?? ''; }
+    i += 1 + digits.length;
+    if (/\s/.test(css[i] ?? '')) i += 1;
+    return String.fromCodePoint(Math.min(parseInt(digits, 16), 0x10ffff) || 0xfffd);
+  };
+  const string = (quote) => {
+    let value = '';
+    for (i += 1; i < css.length && css[i] !== quote && css[i] !== '\n';) {
+      if (css[i] === '\\') { if (css[i + 1] === '\n') i += 2; else value += escape(); } else value += css[i++];
+    }
+    i += 1;
+    return value;
+  };
+  const nameChar = (c) => /[\w-]/.test(c) || c > '\x7f' || c === '\\';
+  while (i < css.length) {
+    const c = css[i];
+    if (c === '/' && css[i + 1] === '*') { const end = css.indexOf('*/', i + 2); i = end < 0 ? css.length : end + 2; continue; }
+    if (c === '"' || c === "'") { string(c); continue; }
+    if (!nameChar(c)) { i += 1; continue; }
+    let name = '';
+    while (i < css.length && nameChar(css[i])) name += css[i] === '\\' ? escape() : css[i++];
+    if (css[i] !== '(' || name.toLowerCase() !== 'url') continue;
+    for (i += 1; /\s/.test(css[i] ?? '');) i += 1;
+    if (css[i] === '"' || css[i] === "'") { urls.push(string(css[i])); continue; }
+    let value = '';
+    while (i < css.length && css[i] !== ')') value += css[i] === '\\' ? escape() : css[i++];
+    urls.push(value.trim());
+  }
+  return urls;
+}
+
+/** The specifiers of static, side-effect and dynamic imports with a literal string: from"./a.js", import"./b.js", import("./c.js"). */
+export const jsImports = (js) => [...js.matchAll(/(?:\bfrom\s*|\bimport\s*\(\s*|\bimport\s*)(["'`])([^"'`\n]+)\1/g)].map((match) => match[2]);
 
 /** The URL of each srcset candidate. A URL may contain commas; one at its end, or after its descriptors, ends the candidate. */
 export function srcsetUrls(value) {
@@ -64,4 +105,35 @@ export function srcsetUrls(value) {
     urls.push(candidate.replace(/,+$/, ''));
     if (!candidate.endsWith(',')) rest = rest.replace(/^[^,]*,?/, '');
   }
+}
+
+/**
+ * The destinations of Markdown links and images, after CommonMark: an inline destination is <…> or a run without spaces whose
+ * parentheses balance, with backslash escapes; reference definitions are [label]: destination. Code is removed first.
+ */
+export function markdownLinks(markdown) {
+  const text = markdown.replace(/^ {0,3}(```|~~~)[\s\S]*?^ {0,3}\1/gm, '').replace(/(`+)[^`\n][\s\S]*?\1/g, '');
+  const links = [];
+  for (let at = text.indexOf(']('); at >= 0; at = text.indexOf('](', at + 2)) {
+    let i = at + 2;
+    while (/[ \t\n]/.test(text[i] ?? '')) i += 1;
+    let destination = '';
+    if (text[i] === '<') {
+      const end = text.indexOf('>', i);
+      if (end < 0) continue;
+      destination = text.slice(i + 1, end).replace(/\\(.)/g, '$1');
+    } else {
+      for (let depth = 0; i < text.length; i += 1) {
+        const c = text[i];
+        if (c === '\\' && i + 1 < text.length) { destination += text[++i]; continue; }
+        if (/\s/.test(c) || (c === ')' && depth === 0)) break;
+        if (c === '(') depth += 1;
+        if (c === ')') depth -= 1;
+        destination += c;
+      }
+    }
+    if (destination) links.push(destination);
+  }
+  for (const [, angle, bare] of text.matchAll(/^ {0,3}\[[^\]\n]+\]:[ \t]*\n?[ \t]*(?:<([^>\n]*)>|(\S+))/gm)) links.push(angle ?? bare);
+  return links;
 }
