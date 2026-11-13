@@ -24,20 +24,21 @@ const FILES = { 'package.json': '{"name":"@casaelida/vue","version":"0.2.0"}', '
 const file = pack(FILES);
 const own = (sha) => notes({ url: 'URL', sha, asset: 'casaelida-vue-0.2.0.tgz', workflow: WORKFLOW, commit: COMMIT, run: RUN });
 
-function github({ releases = [], tag = null, published = file, fails } = {}) {
-  const calls = [];
+function github({ releases = [], tag = null, published = file, fails, verifyErrors = {}, createdTag = COMMIT } = {}) {
+  const calls = [], delays = [];
   const gh = (args) => {
     calls.push(args);
     const line = args.join(' ');
     if (fails && line.includes(fails)) throw new Error(`gh: HTTP 502 (${fails})`);
+    if (verifyErrors[args[1]]?.length) throw verifyErrors[args[1]].shift();
     if (line.includes('/releases?')) return JSON.stringify([releases]);
     if (line.includes('/matching-refs/')) return JSON.stringify(tag ? [{ ref: `refs/tags/${TAG}`, object: { type: 'commit', sha: tag } }] : []);
     if (args[1] === 'download') copyFileSync(published, join(args[args.indexOf('--dir') + 1], 'casaelida-vue-0.2.0.tgz'));
-    if (args[1] === 'create' || line.includes('--draft=false')) tag = COMMIT;
+    if (args[1] === 'create' || line.includes('--draft=false')) tag = createdTag;
     return '';
   };
   const writes = () => calls.filter(([command, sub]) => command === 'release' && ['create', 'upload', 'edit', 'delete'].includes(sub));
-  return { gh, calls, writes, run: () => release({ gh, file, repo: 'j3w1/ce-theme', commit: COMMIT, workflow: WORKFLOW, run: RUN }) };
+  return { gh, calls, writes, delays, run: () => release({ gh, delay: (ms) => delays.push(ms), file, repo: 'j3w1/ce-theme', commit: COMMIT, workflow: WORKFLOW, run: RUN }) };
 }
 const published = { tag_name: TAG, draft: false };
 const draft = (changes = {}) => ({ tag_name: TAG, draft: true, author: { login: 'github-actions[bot]' }, target_commitish: COMMIT, body: own('x'), assets: [{ name: 'casaelida-vue-0.2.0.tgz' }], ...changes });
@@ -114,5 +115,76 @@ test('a failed read fails the run and never counts as absent', () => {
     const failing = github(fails.startsWith('release') ? { releases: [published], tag: OLDER, fails } : { fails });
     assert.throws(failing.run, /HTTP 502/, fails);
     assert.deepEqual(failing.writes(), [], fails);
+  }
+});
+
+// Match execFileSync's stderr, including the exact diagnostic observed in the first 0.2.0 publication.
+const notAttested = (tag = TAG) => Object.assign(new Error('gh verification failed'), {
+  stderr: Buffer.from(`no attestations for tag ${tag} (sha1:${COMMIT})\n`),
+});
+const count = (fake, sub) => fake.calls.filter((args) => args[1] === sub).length;
+
+for (const recovery of [false, true]) for (const sub of ['verify', 'verify-asset']) {
+  const setup = recovery ? { releases: [draft()] } : {};
+  const writes = recovery ? ['upload', 'edit'] : ['create'];
+  test(`${recovery ? 3 : 2}. delayed ${sub} retries only verification after tag and hash match`, () => {
+    const fake = github({ ...setup, verifyErrors: { [sub]: [notAttested(), notAttested()] } });
+    assert.equal(fake.run().state, recovery ? 'recovered' : 'created');
+    assert.deepEqual(fake.delays, [5000, 5000]);
+    assert.equal(count(fake, sub), 3);
+    assert.equal(count(fake, 'download'), 1);
+    assert.deepEqual(fake.writes().map((args) => args[1]), writes);
+  });
+  test(`${recovery ? 3 : 2}. ${sub} exhaustion preserves the sixth error and stops at 25 seconds`, () => {
+    const errors = Array.from({ length: 6 }, () => notAttested()), last = errors[5];
+    const fake = github({ ...setup, verifyErrors: { [sub]: errors } });
+    assert.throws(fake.run, (error) => error === last);
+    assert.equal(count(fake, sub), 6);
+    assert.deepEqual(fake.delays, Array(5).fill(5000));
+    assert.equal(count(fake, 'download'), 1);
+    assert.deepEqual(fake.writes().map((args) => args[1]), writes);
+  });
+}
+
+test('verification errors other than the exact expected-tag readiness diagnostic fail immediately', () => {
+  for (const sub of ['verify', 'verify-asset']) for (const stderr of [
+    'HTTP 401: authentication required', 'HTTP 403: permission denied', 'HTTP 502', 'network timeout',
+    'asset digest mismatch', 'invalid signature', notAttested('vue-v0.2.1').stderr.toString(),
+    `${notAttested().stderr}HTTP 403: permission denied`,
+  ]) {
+    const error = Object.assign(new Error('gh failed'), { stderr: Buffer.from(stderr) });
+    const fake = github({ verifyErrors: { [sub]: [error] } });
+    assert.throws(fake.run, (actual) => actual === error);
+    assert.equal(count(fake, sub), 1);
+    assert.deepEqual(fake.delays, []);
+    assert.equal(fake.writes().length, 1);
+  }
+});
+
+test('a readiness retry stops immediately on a subsequent authentication error', () => {
+  const error = Object.assign(new Error('authentication failed'), { stderr: 'HTTP 401: authentication required' });
+  const fake = github({ verifyErrors: { verify: [notAttested(), error, notAttested()] } });
+  assert.throws(fake.run, (actual) => actual === error);
+  assert.equal(count(fake, 'verify'), 2);
+  assert.equal(count(fake, 'verify-asset'), 0);
+  assert.deepEqual(fake.delays, [5000]);
+  assert.equal(count(fake, 'download'), 1);
+  assert.equal(fake.writes().length, 1);
+});
+
+test('state 1 never retries readiness; tag/hash/download failures never reach attestation verification', () => {
+  for (const sub of ['verify', 'verify-asset']) {
+    const error = notAttested(), fake = github({ releases: [published], tag: OLDER, verifyErrors: { [sub]: [error] } });
+    assert.throws(fake.run, (actual) => actual === error);
+    assert.equal(count(fake, sub), 1);
+    assert.deepEqual(fake.delays, []);
+    assert.deepEqual(fake.writes(), []);
+  }
+  for (const setup of [{ createdTag: OLDER }, { published: pack({ other: '' }) }, { fails: 'release download' }]) {
+    const fake = github({ ...setup, verifyErrors: { verify: [notAttested()] } });
+    assert.throws(fake.run, /resolves to|not the validated file|HTTP 502/);
+    assert.equal(count(fake, 'verify'), 0);
+    assert.deepEqual(fake.delays, []);
+    assert.equal(fake.writes().length, 1);
   }
 });
