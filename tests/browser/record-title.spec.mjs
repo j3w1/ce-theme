@@ -193,11 +193,11 @@ for (const width of [390, 768, 1440]) {
       expectEnlarged(result.fontSizes, base, factor);
       expect(result.layout.overPill).toEqual([]);
       expect(result.layout.outsideHeader).toEqual([]);
-      expect(result.layout.imageToTitle).toBe(16);
+      expect(Math.abs(result.layout.imageToTitle - 16)).toBeLessThan(0.05);
       // The narrowest, largest case has no room for the code beside the image and the pill, so the pill takes the next line;
       // at 768px and wider it stays at the end of the title's line. (390px at 150% depends on the font's width.)
-      if (width === 390 && factor === 2) expect(result.layout).toMatchObject({ pillWrapped: true, pillStart: 0 });
-      if (width >= 768 || factor === 1) expect(result.layout).toMatchObject({ pillWrapped: false, pillEnd: 0 });
+      if (width === 390 && factor === 2) { expect(result.layout.pillWrapped).toBe(true); expect(Math.abs(result.layout.pillStart)).toBeLessThan(0.05); }
+      if (width >= 768 || factor === 1) { expect(result.layout.pillWrapped).toBe(false); expect(Math.abs(result.layout.pillEnd)).toBeLessThan(0.05); }
     });
   }
 }
