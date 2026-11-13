@@ -42,7 +42,8 @@ test('the design-system title has one source, ce-theme.json, and every generated
 test('CE Meta is described as the administration platform and CE Meta App as the messaging app', async () => {
   const readme = await read('design-system/README.md');
   assert.match(readme, /CE Meta \(the internal administration and control platform\)/);
-  assert.match(readme, /CE Meta App \(the messaging app, planned\)/);
+  // SEAL #7 Amendment 1 C5: the repository exists; the README claims neither a built application nor a package consumer.
+  assert.match(readme, /CE Meta App \(the messaging app; its repository `j3w1\/ce-meta-app` exists and the application is not built yet\)/);
   const decisions = await read('docs/decisions.md');
   const row = decisions.split('\n').find((line) => line.includes('| Application identities |'));
   assert.ok(row, 'docs/decisions.md records the application identities');

@@ -124,7 +124,7 @@ const nativeCode=`<textarea class="ce-textarea"></textarea>
     </Recipe>
     <section class="section vue-reference" aria-labelledby="referencia-vue">
       <h2 id="referencia-vue">Referencia de @casaelida/vue</h2>
-      <p class="section-description">Los nueve componentes públicos de @casaelida/vue {vueVersion}, escritos desde sus fuentes. Cada uno dibuja una receta <code>ce-</code> de esta página y se importa por su nombre: <code>{"import { CEButton } from '@casaelida/vue'"}</code>.</p>
+      <p class="section-description">Los nueve componentes públicos de @casaelida/vue {vueVersion}, escritos desde sus fuentes. Cada uno dibuja una receta <code>ce-</code> de esta página y se importa por su nombre: <code>{"import { CEButton } from '@casaelida/vue'"}</code>. Cómo instalar el paquete: <a class="ce-link" href={url('/instalar/')}>Instalar</a>.</p>
       <nav class="page-nav" aria-label="Componentes Vue">{VUE_REFERENCE.map(({ name }) => <a class="ce-link" href={`#${slug(name)}`}>{name}</a>)}</nav>
       {VUE_REFERENCE.map(({ name, recipe, summary, props, models = [], events = [], slots = [], types, width, example }) => (
         <section class="reference-item" id={slug(name)} aria-labelledby={`${slug(name)}-titulo`}>

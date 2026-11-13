@@ -42,7 +42,7 @@ Optional outputs:
   - Never `S/0` for missing data, never one store's price as universal, never computed discounts.
 - **Images.** Catalogue photos whole (`contain`) on white; lifestyle photos may be cropped without misrepresenting the product. Lettered markers `A`, `B`, `C` are black circles, and every marked product is also listed in text.
 - **Shared links** ([sharing.md](sharing.md)): use the share-card template; no prices in default previews.
-- **Accessibility** ([accessibility.md](accessibility.md)): WCAG 2.2 AA; native elements; visible focus; text, not colour alone.
+- **Accessibility** ([accessibility.md](https://github.com/j3w1/ce-theme/blob/main/docs/accessibility.md)): WCAG 2.2 AA; native elements; visible focus; text, not colour alone.
 - **Logos.** Supplied files only, unchanged (`public/assets/manifest.json`).
 - **Data authority.** The design system presents data; CE Systems and the commerce services own records, prices, stock, permissions and workflows.
 - **Simulated data** ([names.md](names.md#demonstration-cue)): a page that shows simulated data starts its main content with a `ce-demo-cue` note in words the application supplies, and so does every frame showing simulated commercial or staff data. Production output leaves the element out; hiding it is not enough.
