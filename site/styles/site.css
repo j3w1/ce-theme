@@ -140,7 +140,7 @@ pre { overflow: auto; margin: 0; padding: var(--ce-space-24); font-size: var(--c
 .demo-prices .ce-price { font-size: clamp(40px,5vw,64px); }
 .demo-label { font-size: var(--ce-font-size-xs); color: var(--ce-color-text-muted); margin-bottom: var(--ce-space-20); }
 .code-specimens { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-24); }
-.price-contract { border-left: 4px solid var(--ce-color-brand-yellow); padding: var(--ce-space-20) var(--ce-space-24); background: var(--ce-color-surface-subtle); margin-block: var(--ce-space-24) var(--ce-space-48); }
+.price-contract { border-left: var(--ce-stroke-heavy) solid var(--ce-color-brand-yellow); padding: var(--ce-space-20) var(--ce-space-24); background: var(--ce-color-surface-subtle); margin-block: var(--ce-space-24) var(--ce-space-48); }
 .price-contract p { margin: 0; }
 .inverse-demo { padding: var(--ce-space-32); background: var(--ce-color-surface-inverse); color: var(--ce-color-text-inverse); }
 .inverse-demo .ce-price { font-size: clamp(48px,7vw,80px); }
