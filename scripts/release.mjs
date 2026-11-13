@@ -32,7 +32,8 @@ export function contents(file) {
   } finally { rmSync(dir, { recursive: true, force: true }); }
 }
 
-export function release({ gh, file, repo, commit, workflow, run, server = 'https://github.com' }) {
+export function release({ gh, file, repo, commit, workflow, run, server = 'https://github.com',
+  delay = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms) }) {
   const [asset, version] = basename(file).match(/^casaelida-vue-(\d+\.\d+\.\d+)\.tgz$/) ?? fail(`${file} is not a casaelida-vue-X.Y.Z.tgz package file.`);
   const tag = `vue-v${version}`, url = `${server}/${repo}/releases/download/${tag}/${asset}`, validated = sha256(readFileSync(file));
   const api = (path) => JSON.parse(gh(['api', ...path]));
@@ -45,18 +46,28 @@ export function release({ gh, file, repo, commit, workflow, run, server = 'https
     return type === 'commit' ? sha : fail(`Tag ${tag} points to a ${type}, not a commit.`);
   };
   const work = mkdtempSync(join(tmpdir(), 'ce-release-'));
-  // The published asset, downloaded and checked against the release's attestation.
+  // Download once; verification stays read-only and never repeats a publication effect.
   const download = () => {
     gh(['release', 'download', tag, '--pattern', asset, '--dir', work]);
+    return join(work, asset);
+  };
+  const verify = () => {
     gh(['release', 'verify', tag]);
     gh(['release', 'verify-asset', tag, join(work, asset)]);
-    return join(work, asset);
   };
   // After this run published: the tag is this commit and the public file is the validated one.
   const confirm = (state) => {
     const tagged = peel();
     if (tagged !== commit) fail(`Tag ${tag} resolves to ${tagged}, not to this run's commit ${commit}.`);
-    if (sha256(readFileSync(download())) !== validated) fail(`The published ${asset} is not the validated file (sha256 ${validated}).`);
+    const shipped = download();
+    if (sha256(readFileSync(shipped)) !== validated) fail(`The published ${asset} is not the validated file (sha256 ${validated}).`);
+    // Only this run's newly published, positively matched tag and file may await readiness.
+    for (let attempt = 1; ; attempt++) {
+      try { verify(); break; } catch (error) {
+        if (attempt >= 6 || error.stderr?.toString().trim() !== `no attestations for tag ${tag} (sha1:${commit})`) throw error;
+        delay(5000);
+      }
+    }
     return { state, tag, version, url, sha256: validated, commit };
   };
   try {
@@ -65,7 +76,9 @@ export function release({ gh, file, repo, commit, workflow, run, server = 'https
     const published = releases.find((item) => !item.draft);
     if (published) {
       const original = tagged ?? fail(`Release ${tag} is published but its tag cannot be read.`);
-      const shipped = download(), was = contents(shipped), now = contents(file);
+      const shipped = download();
+      verify();
+      const was = contents(shipped), now = contents(file);
       const differ = [...new Set([...was.keys(), ...now.keys()])].filter((path) => was.get(path) !== now.get(path)).sort();
       if (differ.length) fail(`Shipped contents changed without a version bump: ${differ.join(', ')} differ from the published ${tag}. Release them as a new version of packages/vue.`);
       return { state: 'published', tag, version, url, sha256: sha256(readFileSync(shipped)), commit: original };
@@ -97,7 +110,14 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const repo = need('GH_REPO'), server = need('GITHUB_SERVER_URL');
   const gh = (args) => {
     console.log(`$ gh ${args.join(' ')}`);
-    const out = execFileSync('gh', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'], maxBuffer: 64 << 20 });
+    let out;
+    try {
+      out = execFileSync('gh', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 64 << 20 });
+    } catch (error) {
+      // Retain gh's evidence on stderr and on the original error for the narrow readiness check.
+      if (error.stderr) process.stderr.write(error.stderr);
+      throw error;
+    }
     if (args[0] !== 'api') process.stdout.write(out);
     return out;
   };
