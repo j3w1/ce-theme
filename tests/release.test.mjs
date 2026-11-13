@@ -38,7 +38,7 @@ function github({ releases = [], tag = null, published = file, fails, verifyErro
     return '';
   };
   const writes = () => calls.filter(([command, sub]) => command === 'release' && ['create', 'upload', 'edit', 'delete'].includes(sub));
-  return { gh, calls, writes, delays, run: () => release({ gh, delay: (ms) => delays.push(ms), file, repo: 'j3w1/ce-theme', commit: COMMIT, workflow: WORKFLOW, run: RUN }) };
+  return { gh, calls, writes, delays, run: (options) => release({ gh, delay: (ms) => delays.push(ms), file, repo: 'j3w1/ce-theme', commit: COMMIT, workflow: WORKFLOW, run: RUN, ...options }) };
 }
 const published = { tag_name: TAG, draft: false };
 const draft = (changes = {}) => ({ tag_name: TAG, draft: true, author: { login: 'github-actions[bot]' }, target_commitish: COMMIT, body: own('x'), assets: [{ name: 'casaelida-vue-0.2.0.tgz' }], ...changes });
@@ -187,4 +187,33 @@ test('state 1 never retries readiness; tag/hash/download failures never reach at
     assert.deepEqual(fake.delays, []);
     assert.equal(fake.writes().length, 1);
   }
+
+// A rollback run (#9) is verify-only: it passes only for an already published release and never writes one.
+test('verify-only: a published release is verified and nothing is written', () => {
+  const run = github({ releases: [published], tag: OLDER, published: pack(FILES, 2000) });
+  const result = run.run({ verifyOnly: true });
+  assert.equal(result.state, 'published');
+  assert.ok(verified(run.calls));
+  assert.deepEqual(run.writes(), []);
+});
+
+test('verify-only: no release, a recoverable draft or a failed read writes nothing and fails', () => {
+  for (const [label, setup] of [
+    ['no release', {}],
+    ['own recoverable draft', { releases: [draft()] }],
+    ['failed read', { releases: [published], fails: '/releases?' }],
+  ]) {
+    const run = github(setup);
+    assert.throws(() => run.run({ verifyOnly: true }), /verify-only|HTTP 502/, label);
+    assert.deepEqual(run.writes(), [], label);
+  }
+});
+
+test('verify-only refuses every release write at the gh boundary, and is chosen by the event of the run', async () => {
+  const calls = [];
+  const gh = (args) => { calls.push(args); if (args.join(' ').includes('/releases?')) return JSON.stringify([[]]); return JSON.stringify([]); };
+  assert.throws(() => release({ gh, file, repo: 'j3w1/ce-theme', commit: COMMIT, workflow: WORKFLOW, run: RUN, verifyOnly: true }), /verify-only/);
+  assert.ok(!calls.some(([command, sub]) => command === 'release' && ['create', 'upload', 'edit', 'delete'].includes(sub)));
+  const source = readFileSync(new URL('../scripts/release.mjs', import.meta.url), 'utf8');
+  assert.match(source, /verifyOnly: need\('GITHUB_EVENT_NAME'\) !== 'push'/);
 });

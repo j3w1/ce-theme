@@ -7,6 +7,8 @@
 //   2. Nothing: one `gh release create` (it drafts, uploads and publishes), then check the tag, the asset and its attestation.
 //   3. A draft: recover only this workflow's own draft for this commit, holding at most its one asset. Any other: stop.
 //   4. A tag without a release: stop. An orphan tag is never adopted.
+// Verify-only (any run whose event is not a push to main, such as a rollback dispatch, #9): only state 1 passes. Every
+// release write (create, upload, edit, delete) is refused, so nothing is ever created or changed, whatever the reads find.
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { appendFileSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
@@ -32,8 +34,10 @@ export function contents(file) {
   } finally { rmSync(dir, { recursive: true, force: true }); }
 }
 
-export function release({ gh, file, repo, commit, workflow, run, server = 'https://github.com',
-  delay = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms) }) {
+export function release({ gh: command, file, repo, commit, workflow, run, server = 'https://github.com',
+  delay = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms), verifyOnly = false }) {
+  const writes = (args) => args[0] === 'release' && ['create', 'upload', 'edit', 'delete'].includes(args[1]);
+  const gh = (args) => (verifyOnly && writes(args) ? fail(`A verify-only run never writes a release (refused: gh ${args.slice(0, 3).join(' ')}).`) : command(args));
   const [asset, version] = basename(file).match(/^casaelida-vue-(\d+\.\d+\.\d+)\.tgz$/) ?? fail(`${file} is not a casaelida-vue-X.Y.Z.tgz package file.`);
   const tag = `vue-v${version}`, url = `${server}/${repo}/releases/download/${tag}/${asset}`, validated = sha256(readFileSync(file));
   const api = (path) => JSON.parse(gh(['api', ...path]));
@@ -83,6 +87,7 @@ export function release({ gh, file, repo, commit, workflow, run, server = 'https
       if (differ.length) fail(`Shipped contents changed without a version bump: ${differ.join(', ')} differ from the published ${tag}. Release them as a new version of packages/vue.`);
       return { state: 'published', tag, version, url, sha256: sha256(readFileSync(shipped)), commit: original };
     }
+    if (verifyOnly) fail(`A verify-only run needs ${tag} published, and it is not (${releases.length ? 'only a draft exists' : 'no release exists'}). Nothing is created or changed.`);
     if (!releases.length) {
       if (tagged) fail(`Tag ${tag} exists without a release (it resolves to ${tagged}). An orphan tag is never adopted: report it.`);
       gh(['release', 'create', tag, file, '--target', commit, '--title', `@casaelida/vue ${version}`, '--notes', notes({ url, sha: validated, asset, workflow, commit, run })]);
@@ -124,6 +129,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const result = release({
     gh, repo, server, file: process.argv[2] ?? fail('Usage: node scripts/release.mjs casaelida-vue-X.Y.Z.tgz'),
     commit: need('GITHUB_SHA'), workflow: need('GITHUB_WORKFLOW'), run: `${server}/${repo}/actions/runs/${need('GITHUB_RUN_ID')}`,
+    // Only a push to main (or GitHub's native re-run of one, which keeps the event) may publish.
+    verifyOnly: need('GITHUB_EVENT_NAME') !== 'push',
   });
   appendFileSync(need('GITHUB_OUTPUT'), `url=${result.url}\nsha256=${result.sha256}\n`);
   appendFileSync(need('GITHUB_STEP_SUMMARY'), `### @casaelida/vue ${result.version}: ${result.state}\n\n- Release: ${server}/${repo}/releases/tag/${result.tag}\n`

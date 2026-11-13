@@ -7,6 +7,7 @@ import { ROUTES } from './routes.mjs';
 // for at most five minutes in total, then counts. Every request is aborted at that deadline, so nothing is accepted after it.
 const BUDGET = 5 * 60_000;
 const PAUSE = 15_000;
+const SPENT = 'the five-minute budget ran out';
 
 export default async function waitForDeploy() {
   const site = new URL(process.env.CE_SITE_URL.replace(/\/?$/, '/'));
@@ -15,7 +16,7 @@ export default async function waitForDeploy() {
   const deadline = Date.now() + BUDGET;
   const get = async (url) => {
     const left = deadline - Date.now();
-    if (left <= 0) throw new Error('the five-minute budget ran out');
+    if (left <= 0) throw new Error(SPENT);
     const response = await fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(left) });
     return { status: response.status, text: await response.text() };
   };
@@ -58,7 +59,8 @@ export default async function waitForDeploy() {
       if (waiting === undefined) return;
       last = waiting;
     } catch (error) {
-      last = error.name === 'TimeoutError' || error.name === 'AbortError' ? 'a request reached the deadline' : error.message;
+      // The last reason that says what was not served yet is kept; running out of time is not one.
+      if (error.message !== SPENT) last = error.name === 'TimeoutError' || error.name === 'AbortError' ? 'a request reached the deadline' : error.message;
     }
     const left = deadline - Date.now();
     if (left <= 0) throw new Error(`${site.href} did not serve the expected deploy within five minutes (last: ${last}).`);
