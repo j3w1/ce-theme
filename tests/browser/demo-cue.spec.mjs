@@ -2,17 +2,33 @@ import { readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-// CR-03: the DemoCue design-system card rendered in a real browser with the generated tokens and recipes, as the design
-// system's viewer loads them. Nothing here adds CSS beyond the root text size of each case.
+// CR-03: the DemoCue design-system card rendered in a real browser with the supplied Inter files and the generated tokens and
+// recipes, as the design system's viewer loads them. Nothing here adds CSS beyond the root text size of each case. The card is
+// served from a stand-in origin so that recipes/fonts.css finds the Inter files at ../fonts/inter/.
 const CUE = 'Demostración — datos y operaciones simulados';
-const css = readFileSync('exports/tokens.css', 'utf8') + readFileSync('exports/recipes.css', 'utf8');
+const ORIGIN = 'http://demo-cue.test';
+const css = readFileSync('recipes/fonts.css', 'utf8') + readFileSync('exports/tokens.css', 'utf8') + readFileSync('exports/recipes.css', 'utf8');
 const card = readFileSync('exports/design-system/project/components/DemoCue/preview.html', 'utf8');
 
 async function open(page, { width, text = 1, scope = true }) {
   await page.setViewportSize({ width, height: 900 });
   let html = card.replace('<meta charset="utf-8">', `<meta charset="utf-8"><style>${css}</style><style>html { font-size: ${text * 100}%; }</style>`);
   if (!scope) html = html.replace('class="ce-scope stage"', 'class="stage"');
-  await page.setContent(html);
+  await page.route(`${ORIGIN}/**`, (route) => {
+    const { pathname } = new URL(route.request().url());
+    if (pathname === '/recipes/card.html') return route.fulfill({ contentType: 'text/html; charset=utf-8', body: html });
+    const font = pathname.match(/^\/fonts\/inter\/(Inter-[A-Za-z]+\.woff2)$/);
+    if (font) return route.fulfill({ contentType: 'font/woff2', body: readFileSync(`fonts/inter/${font[1]}`) });
+    return route.fulfill({ status: 404, body: '' });
+  });
+  await page.goto(`${ORIGIN}/recipes/card.html`);
+  // Measure only once the bold Inter face that draws the cue has loaded.
+  const loaded = await page.evaluate(async () => {
+    await document.fonts.load('700 1em Inter');
+    await document.fonts.ready;
+    return [...document.fonts].filter((face) => face.family.replaceAll('"', '') === 'Inter' && face.weight === '700').map((face) => face.status);
+  });
+  expect(loaded).toEqual(['loaded']);
 }
 
 const measure = (page) => page.evaluate(() => {
@@ -67,7 +83,7 @@ for (const width of [390, 768, 1440]) {
         expect(m.lines).toBeGreaterThan(1);
         expect(m.cue.w).toBeLessThanOrEqual(m.main.w + 0.5);
       }
-      if (width === 390 && text > 1) expect(m.lines).toBeGreaterThan(1);
+      if (width === 390) expect(m.lines).toBeGreaterThan(1);
       if (width === 1440 && text === 1) expect(m.cue.w).toBeLessThan(m.main.w / 2);
       // Never overlaps the page header that follows it.
       expect(m.cue.b).toBeLessThanOrEqual(m.header.t + 0.5);
