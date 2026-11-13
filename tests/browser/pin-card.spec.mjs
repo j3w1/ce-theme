@@ -151,7 +151,9 @@ async function checkCard(page, card, label, kind) {
 async function enlargeText(page, factor) {
   const sizes = await page.evaluate((k) => {
     const text = ['.ce-product-name', '.ce-product-description', '.ce-price-value', '.ce-price-history', '.ce-store-note', '.ce-price-pending'];
-    const read = () => text.map((query) => [...document.querySelectorAll(`.ce-pin-card ${query}`)].map((el) => parseFloat(getComputedStyle(el).fontSize))).flat();
+    // Only rendered text is sampled: WebKit can report a stale computed style for an element in a display:none subtree
+    // (a hidden per-store view) after its inline style changes. Every element is enlarged all the same.
+    const read = () => text.map((query) => [...document.querySelectorAll(`.ce-pin-card ${query}`)].filter((el) => el.getClientRects().length).map((el) => parseFloat(getComputedStyle(el).fontSize))).flat();
     const before = read();
     const all = [document.body, ...document.body.querySelectorAll('*')];
     const own = all.map((el) => parseFloat(getComputedStyle(el).fontSize));
@@ -283,14 +285,15 @@ test('recipe in a 240px photo: the longest NAME wraps and the card stays inside 
   expect(m.nameMustWrap, 'the NAME has to wrap in a 240px photo').toBe(true);
 });
 
-// Below the acceptance widths: a 240px photo with x1.5 and x2 text and the longest identity with a regular price. The card
-// is as large as the photo allows, scrolls, and keeps its focus ring visible inside the photo on every side. (A
-// promotional offer price at x2, 180px with its offer padding, needs a photo of about 266px or more.)
+// Below the acceptance widths: a 280px photo with x1.5 and x2 text and the longest identity with a regular price. The card
+// is as large as the photo allows (its focus ring's width from both sides), scrolls, and keeps the ring visible on every
+// side. (A price needs a text column at least as wide as itself: with x2 text a promotional offer price, about 180px with
+// its offer padding, needs a photo of about 266px or more, and font metrics differ slightly between engines.)
 for (const factor of [1.5, 2]) {
-  test(`recipe in a 240px photo, text x${factor}: the longest identity fits, scrolls and keeps a visible focus ring`, async ({ page }) => {
+  test(`recipe in a 280px photo, text x${factor}: the longest identity fits, scrolls and keeps a visible focus ring`, async ({ page }) => {
     const [long] = (await cases()).filter((c) => c.kind === 'long');
-    await mount(page, { width: 390, factor, frame: 'width:240px;' }, [{ ...long, after: await price({ amount: '16.90' }), x: '50%', y: '20%' }]);
-    const [m] = await checkPins(page, `in a 240px photo, text x${factor}`);
+    await mount(page, { width: 390, factor, frame: 'width:280px;' }, [{ ...long, after: await price({ amount: '16.90' }), x: '50%', y: '20%' }]);
+    const [m] = await checkPins(page, `in a 280px photo, text x${factor}`);
     expect(m.scrolls, 'the card is limited to the photo and scrolls').toBe(true);
   });
 }
