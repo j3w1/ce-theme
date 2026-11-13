@@ -62,7 +62,8 @@ Presentation for conversation interfaces. Delivery, assignment, authorization an
 | Dialog, drawer, menu, tooltip | `<dialog>`, `popover` | Tested | Dialogs return focus to the control that opened them. Menu and tooltip positioning is left to the application. |
 | Notices, toast, spinner, skeleton, empty state, progress, save state | `interface.css` | Implemented | |
 | Demonstration cue (DemoCue) | `ce-demo-cue` | Tested | The words come from the consumer, with `role="note"`; production output leaves the element out. Example: the `DemoCue` design-system card. Browser tests render the card at 390, 768 and 1440 px with text at 100%, 150% and 200% (wraps, stays inside its container, never overlaps the page header), run axe and check that the cue comes first in the main content; a unit test checks the recipe holds no text and no raw colour and that every example uses the canon wording. See [names.md](names.md#demonstration-cue). |
-| Status pills and availability | `ce-pill`, `ce-status`, `ce-stock` | Implemented | Always text plus colour. |
+| Status pills | `ce-pill`, `ce-status` | Implemented | Always text plus colour. |
+| Availability line (StockLine) | `ce-stock` with `data-state` `available`, `limited`, `unavailable`, `unknown`, `pending` | Tested | Always words plus a dot; the list is named «Disponibilidad». Browser tests render the five states at 390, 768 and 1440 px with text at 100%, 150% and 200% (the words wrap, the dot stays on the first line, nothing overflows), compare the dots (unknown equals no `data-state`; only `unavailable` is a ring) and read the words with forced colours and in greyscale. A unit test checks every sample's wording against its state and the demonstration fixtures. Screen-reader reading is not run. See [names.md](names.md#stockline). |
 | Icons | `site/data/icons.mjs` (30 outlined icons) | Implemented | Social platforms are text links, not their marks. |
 
 ## Retail navigation and discovery

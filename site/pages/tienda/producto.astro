@@ -4,7 +4,7 @@ import Icon from '../../components/Icon.astro';
 import Price from '../../components/Price.astro';
 import StoreProducts from '../../components/StoreProducts.astro';
 import { productView } from '../../../recipes/product.mjs';
-import { catalogue, stores, stockText } from '../../data/store.mjs';
+import { catalogue, stores, stockLine } from '../../data/store.mjs';
 const item = catalogue[0];
 const view = productView(item);
 const related = catalogue.slice(1);
@@ -42,8 +42,8 @@ const related = catalogue.slice(1);
         </div>
         <ul class="ce-fulfilment" aria-label="Formas de recibir">
           <li><Icon name="store" /><p class="ce-fulfilment-title">Retiro en tienda</p>
-            {stores.map((store) => <ul class="ce-stock" data-store-view={store.id} hidden={store.id !== 'tacna'}><li data-state={item.stock[store.id]}>{stockText[item.stock[store.id]](store.name)}</li></ul>)}
-            <ul class="ce-stock" data-store-view="ninguna" hidden><li data-state="unknown">Elige una tienda para ver disponibilidad</li></ul>
+            {stores.map((store) => { const line = stockLine(item, store); return <ul class="ce-stock" aria-label="Disponibilidad" data-store-view={store.id} hidden={store.id !== 'tacna'}><li data-state={line.state}>{line.text}</li></ul>; })}
+            <p class="ce-store-note" data-store-view="ninguna" hidden>Elige una tienda para ver disponibilidad.</p>
             <button class="ce-link" type="button" data-ce-open="elegir-tienda" style="justify-self:start;font-size:var(--ce-font-size-sm)">Cambiar tienda</button>
           </li>
           <li><Icon name="truck" /><p class="ce-fulfilment-title">Envío a domicilio</p><p class="ce-store-note">Revisa cobertura y costo al finalizar tu compra.</p></li>

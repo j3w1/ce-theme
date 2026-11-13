@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Implemented in CE Theme by pull request [#18](https://github.com/j3w1/ce-theme/pull/18): the explicit `unknown` and `pending` states of `ce-stock`, the wording contract in `docs/names.md` (“StockLine”), the accessible name and the unknown samples. Decisions 1 and 5 were decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)); decisions 2 to 4 are j3w1's X-7 and X-9. Sections 1 to 7 are the proposal as checked on 5 November 2026; its evidence was not re-run
 
 # CR-06 · Availability line (`ce-stock` / StockLine): states, wording and the unknown state
 
@@ -89,6 +89,8 @@ To run when the repository work happens (not run here):
 4. Forced-colours and greyscale view: states stay distinguishable by their words.
 5. Screen reader reading of the list with and without `aria-label`: **not run, to schedule**.
 
+In pull request #18, checks 1, 2 and 4 are browser tests (`tests/browser/availability.spec.mjs`) and check 3 is a unit test (`tests/availability.test.mjs`); CE Theme has no Tienda B, so check 3 renders the canon fixtures through the reference site's own store fixture renderer. Check 5 is still not run.
+
 ## 7. Risks and what it does not change
 
 - Almost no visual change; the risk is in the documents: the wording table becomes the reference for CE Meta and CE Radio as well.
@@ -98,8 +100,8 @@ To run when the repository work happens (not run here):
 
 ## 8. Owner decisions needed
 
-1. Approve the wording set, especially «Disponibilidad por confirmar en {tienda}», as the CE Theme default for "unknown".
+1. Decided (CR-06 selection 1, 2026-11-13: the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; [issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the wording table of section 4 is approved, including «Disponibilidad por confirmar en {tienda}» for unknown, stale, conflicting and missing readings and «Consultando disponibilidad…» while pending.
 2. Decided (X-9, 2026-11-06): «Pocas unidades» and «Agotado» stay documented in CE Theme as confirmed states (supplied readings) with their samples, not as scenario-only states; eligibility stays with the application or service.
 3. Decided (X-7, 2026-11-06): `aria-label="Disponibilidad"` is required on the availability list, as a recipe-level rule.
 4. Decided (X-9, 2026-11-06): the two samples (ProductCard 4th card, StoreContext "Sin precio en la tienda") stay as confirmed readings (valid: price and availability are supplied separately; the test in acceptance check 3 accepts them when the fixture names the reading). They are not replaced by the unknown wording.
-5. Future of `ce-availability`: keep, merge into `ce-stock`, or retire (recorded here, not proposed).
+5. Decided (CR-06 selection 5, 2026-11-13: the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; same comment): `ce-availability` stays as it is for now; it is neither merged into `ce-stock` nor retired in this request.

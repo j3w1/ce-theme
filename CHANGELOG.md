@@ -32,6 +32,13 @@ SEAL #7 batch B1 (ce-theme#8).
 - `CEMessageList` keeps a reader who is at the newest message there in WebKit when content inside a message re-renders. WebKit lays the change out in a shorter intermediate state and clamps the scroll position while every size ends as it was. The list reads the position just before the first update of a render flush and puts a reader who was at the newest message back after it, before the clamp is reported as a scroll. A reader in history is still never moved.
 - `/mensajeria/`: in WebKit, a composing reader again moves to the thread view when the window narrows or the text grows. The example reads “narrow” from its panes grid instead of the Back button, whose container-query style WebKit leaves stale inside the hidden thread pane.
 
+### Changed: availability line (CR-06, ce-theme#11)
+
+- `ce-stock` (StockLine) names its documented states in the CSS: `unknown`, which an item with no `data-state` looks like, and `pending` keep the neutral dot, and `unavailable` stays the only ring. Nothing looks different.
+- The wording contract is in the StockLine section of `docs/names.md`: «Disponibilidad por confirmar en {tienda}» for an unknown, stale, conflicting or missing reading, «Consultando disponibilidad…» while it is read, and «Pocas unidades» and «Agotado» only from a confirmed reading. With no store chosen there is no availability line. The list is named `aria-label="Disponibilidad"` in every sample and reference page.
+- The ProductCard and StoreContext cards gain an unknown sample beside the confirmed ones; StoreContext also shows the pending state. `/tienda/producto/` shows a store note instead of an availability line when no store is chosen. `ce-availability` is unchanged.
+- Tests: `tests/availability.test.mjs` (wording, accessible name, the canon fixtures, supplied readings) and `tests/browser/availability.spec.mjs` (the five states at three widths and three text sizes, the dots, forced colours and greyscale).
+
 ## Unreleased — 2026-10-30 (pending owner review)
 
 ### Added

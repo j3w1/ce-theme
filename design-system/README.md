@@ -19,7 +19,7 @@ Reference sections bundled with this system: `apply-ce-theme.md` (start here whe
   - `productView()` applies these rules to supplied values.
 - **Information order:** NAME → Description → specifications → price → availability. The code badge is optional on retail cards; internal tools, labels and campaign information cards show it. Show only fields the data supplies.
 - **Buttons say what happens:** “Ver productos”, “Añadir al carrito”, “Usar esta tienda”. Errors explain how to continue.
-- **Availability is per store, in words:** “Disponible en Tacna”, “Pocas unidades en Arequipa”, “Agotado en Arequipa”.
+- **Availability is per store, in words:** “Disponible en Tacna”, “Pocas unidades en Arequipa”, “Agotado en Arequipa”, and “Disponibilidad por confirmar en Tacna” whenever the reading is unknown, stale, conflicting or missing. Unknown availability is never “Agotado”.
 - **Product codes are strings.**
   - `CE26061509`, `7730744292227` and `CE26031111R12R` keep every character, case and leading zero.
   - Never format a code as a number, split its suffixes, truncate it or replace it with a NAME.

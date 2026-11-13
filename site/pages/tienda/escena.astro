@@ -4,7 +4,7 @@ import Icon from '../../components/Icon.astro';
 import Price from '../../components/Price.astro';
 import Pin from '../../components/Pin.astro';
 import { productView } from '../../../recipes/product.mjs';
-import { catalogue, stockText } from '../../data/store.mjs';
+import { catalogue, stores, stockLine } from '../../data/store.mjs';
 // Pin positions are supplied with the scene (percentages of the image). The web scene uses hover pins; the letters A, B, C belong to media that cannot hover.
 const tags = [
   { letter: 'A', item: catalogue[0], x: '20%', y: '40%' },
@@ -34,8 +34,7 @@ const tags = [
               <span data-store-view="tacna"><Price amount={item.prices.tacna} previousAmount={item.previous?.tacna} discountLabel={item.discount?.tacna} /></span>
               <span data-store-view="arequipa" hidden>{item.prices.arequipa ? <Price amount={item.prices.arequipa} /> : <span class="ce-store-note">Precio no disponible en Arequipa.</span>}</span>
               <span data-store-view="ninguna" hidden class="ce-store-note">Elige tu tienda para ver el precio.</span>
-              <ul class="ce-stock" data-store-view="tacna"><li data-state={item.stock.tacna}>{stockText[item.stock.tacna]('Tacna')}</li></ul>
-              <ul class="ce-stock" data-store-view="arequipa" hidden><li data-state={item.stock.arequipa}>{stockText[item.stock.arequipa]('Arequipa')}</li></ul>
+              {stores.map((store) => { const line = stockLine(item, store); return <ul class="ce-stock" aria-label="Disponibilidad" data-store-view={store.id} hidden={store.id !== 'tacna'}><li data-state={line.state}>{line.text}</li></ul>; })}
               <button class="ce-button ce-button--secondary" type="button"><Icon name="bag-plus" size={20} />Añadir al carrito</button>
             </div>
           </li>
