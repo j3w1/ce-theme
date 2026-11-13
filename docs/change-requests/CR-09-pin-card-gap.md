@@ -75,7 +75,7 @@ Recipe: `ce-pin-text` (existing; no new name).
 }
 ```
 
-`placePins()` in `behaviors.mjs` keeps every card the width of its focus ring (`stroke.focus` at `stroke.offset`, 5px) inside the photo's edges, so the ring is always visible, and limits a card that is taller than that room to it, so the card scrolls inside the photo; the card is the focusable link, so keyboard users scroll it too. `enhancePins()` also places the cards again once the fonts have loaded. A card away from the photo's edges is placed exactly as before; one that would come closer to an edge than its focus ring moves in by at most that width. Below the acceptance widths a limit remains: with x2 text, a promotional offer price (64px with its offer padding, about 180px) needs a photo of about 266px or more.
+`placePins()` in `behaviors.mjs` keeps every card the width of its focus ring (`stroke.focus` at `stroke.offset`: 5px by default, measured as the browser resolves the card's tokens, so tokens set in `rem` or `calc()` count too) inside the photo's edges, so the ring is always visible, and limits a card that is taller than that room to it, so the card scrolls inside the photo; the card is the focusable link, so keyboard users scroll it too. `enhancePins()` also places the cards again once the fonts have loaded. A card away from the photo's edges is placed exactly as before; one that would come closer to an edge than its focus ring moves in by at most that width. Below the acceptance widths a limit remains: with x2 text, a promotional offer price (64px with its offer padding, about 180px) needs a photo of about 266px or more.
 
 ## 5. Accessibility and invariants it must keep
 

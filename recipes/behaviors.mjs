@@ -157,6 +157,16 @@ export function enhanceMarkers(root = document) {
   }
 }
 
+// How far a card's focus ring reaches outside it (stroke.focus at stroke.offset), in px as the browser resolves the
+// card's own tokens (rem, calc and overrides included); the inline value is restored before anything paints.
+function focusRingReach(card) {
+  const inline = card.style.outlineOffset;
+  card.style.outlineOffset = 'calc(var(--ce-stroke-focus) + var(--ce-stroke-offset))';
+  const reach = parseFloat(getComputedStyle(card).outlineOffset) || 0;
+  card.style.outlineOffset = inline;
+  return Math.max(0, reach);
+}
+
 /** Web pins: a .ce-pin shows its card on hover and focus in CSS; this adds tap-to-open for touch (aria-expanded on the dot),
  * Escape and outside-tap to close, one open card per photo, and keeps each card inside its frame by flipping it
  * (ce-pin--start, ce-pin--above) when the side it would open on has no room. A card taller than the photo (large text
@@ -167,8 +177,7 @@ export function placePins(frame, { gap = 20, inset = 14 } = {}) {
   for (const pin of frame.querySelectorAll('.ce-pin')) {
     const card = pin.querySelector('.ce-pin-card');
     if (!card) continue;
-    const style = getComputedStyle(card);
-    const ring = (parseFloat(style.getPropertyValue('--ce-stroke-focus')) || 0) + (parseFloat(style.getPropertyValue('--ce-stroke-offset')) || 0);
+    const ring = focusRingReach(card);
     const room = box.height - 2 * ring;
     card.style.maxHeight = '';
     const limited = card.getBoundingClientRect().height > room;

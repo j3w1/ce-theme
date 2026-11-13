@@ -51,6 +51,8 @@ function measure(card) {
     frame: { left: frame.left, right: frame.right, top: frame.top, bottom: frame.bottom },
     overflow: spill > 0 || text.scrollWidth > text.clientWidth + 1,
     scrolls: card.scrollHeight > card.clientHeight + 1,
+    // The photo clips (overflow: hidden) but can still be scrolled by focus; a scrolled photo would shift every card.
+    photoScrolled: card.closest('.ce-tagged-media').scrollTop !== 0 || card.closest('.ce-tagged-media').scrollLeft !== 0,
     overflowY: getComputedStyle(card).overflowY,
   };
 }
@@ -67,11 +69,20 @@ async function focusRingInside(page, card, label) {
   await page.keyboard.press('Shift');
   await card.focus();
   const r = await card.evaluate((el) => {
+    // The tokens as the browser resolves them for this card (rem, calc and overrides included).
+    const probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;visibility:hidden;width:var(--ce-stroke-focus);height:var(--ce-stroke-offset)';
+    el.append(probe);
+    const tokens = { width: probe.getBoundingClientRect().width, offset: probe.getBoundingClientRect().height };
+    probe.remove();
     const s = getComputedStyle(el), c = el.getBoundingClientRect(), f = el.closest('.ce-tagged-media').getBoundingClientRect();
     const ring = parseFloat(s.outlineOffset) + parseFloat(s.outlineWidth);
-    return { style: s.outlineStyle, width: s.outlineWidth, offset: s.outlineOffset, left: c.left - ring - f.left, right: f.right - c.right - ring, top: c.top - ring - f.top, bottom: f.bottom - c.bottom - ring };
+    return { style: s.outlineStyle, width: parseFloat(s.outlineWidth), offset: parseFloat(s.outlineOffset), tokens, left: c.left - ring - f.left, right: f.right - c.right - ring, top: c.top - ring - f.top, bottom: f.bottom - c.bottom - ring };
   });
-  expect({ style: r.style, width: r.width, offset: r.offset }, `${label} focus ring`).toEqual({ style: 'solid', width: '2px', offset: '3px' });
+  expect(r.style, `${label} focus ring style`).toBe('solid');
+  expect(r.tokens.width, `${label} stroke.focus resolves`).toBeGreaterThan(0);
+  near(r.width, r.tokens.width, `${label} focus ring width is stroke.focus`);
+  near(r.offset, r.tokens.offset, `${label} focus ring offset is stroke.offset`);
   for (const side of ['left', 'right', 'top', 'bottom']) expect(r[side], `${label} focus ring ${side} edge inside the photo`).toBeGreaterThanOrEqual(-0.5);
 }
 // The focus ring is painted on every side: a 1px strip through the middle of the outline band differs between the
@@ -94,15 +105,20 @@ async function focusRingPainted(page, card) {
 }
 const PAINTED = { left: true, right: true, top: true, bottom: true };
 // A card limited to the photo's height is reachable to its end from the keyboard: the card is the focused link.
+// Native keyboard scrolling may animate, so each ArrowDown must move the card (or reach its end) within a bounded wait,
+// and the end is checked after the last key.
 async function keyboardReachesEnd(page, card) {
   await page.keyboard.press('Shift');
   await card.focus();
-  for (let press = 0; press < 30; press += 1) {
-    const { top, max } = await card.evaluate((el) => ({ top: el.scrollTop, max: el.scrollHeight - el.clientHeight }));
-    if (top >= max - 1) return true;
+  const read = () => card.evaluate((el) => ({ top: el.scrollTop, max: el.scrollHeight - el.clientHeight }));
+  let state = await read();
+  for (let press = 0; press < 40 && state.top < state.max - 1; press += 1) {
+    const before = state.top;
     await page.keyboard.press('ArrowDown');
+    await expect.poll(async () => { state = await read(); return state.top > before + 0.5 || state.top >= state.max - 1; }, { message: 'ArrowDown scrolls the focused card', timeout: 3000 }).toBe(true);
   }
-  return false;
+  await expect.poll(async () => { state = await read(); return state.top >= state.max - 1; }, { message: 'the keyboard reaches the end of the card', timeout: 3000 }).toBe(true);
+  return true;
 }
 async function checkCard(page, card, label, kind) {
   await expect(card).toBeVisible();
@@ -113,6 +129,7 @@ async function checkCard(page, card, label, kind) {
   if (m.history !== null) expect(m.history, `${label} promotional history inside its block`).toBe(true);
   if (m.nameMustWrap) expect(m.nameLines, `${label} NAME wraps`).toBeGreaterThan(1);
   expect(m.overflow, `${label} overflow`).toBe(false);
+  expect(m.photoScrolled, `${label} the photo is not scrolled`).toBe(false);
   inside(m, label);
   await focusRingInside(page, card, label);
   if (m.scrolls) {
@@ -220,9 +237,9 @@ async function cases() {
 }
 const pinMarkup = (c, i) => `<div class="ce-pin" style="--ce-x:${c.x};--ce-y:${c.y}"><button class="ce-pin-dot" type="button" aria-expanded="false" aria-controls="p${i}"><span class="ce-sr-only">Ver ${c.name}, ${c.description}</span></button><a class="ce-pin-card" id="p${i}" href="#p${i}" data-kind="${c.kind}"><div class="ce-pin-text"><span class="ce-product-name">${c.name}</span><span class="ce-product-description">${c.description}</span>${c.after}</div>${chevron}</a></div>`;
 // The text is enlarged before enhancePins() places the cards, as when a reader's setting is on when the page loads.
-async function mount(page, { width, factor = 1, frame = '' }, list) {
+async function mount(page, { width, factor = 1, frame = '', scope = '' }, list) {
   await page.setViewportSize({ width, height: 900 });
-  await page.setContent(`<!doctype html><html lang="es"><head><style>${css}body{margin:0}</style></head><body><main class="ce-scope"><div class="ce-tagged-media" id="frame" style="${frame}aspect-ratio:4/3;background:var(--ce-color-surface-subtle)">${list.map(pinMarkup).join('')}</div></main></body></html>`);
+  await page.setContent(`<!doctype html><html lang="es"><head><style>${css}body{margin:0}</style></head><body><main class="ce-scope" style="${scope}"><div class="ce-tagged-media" id="frame" style="${frame}aspect-ratio:4/3;background:var(--ce-color-surface-subtle)">${list.map(pinMarkup).join('')}</div></main></body></html>`);
   await page.evaluate(async () => { await Promise.all([400, 600, 700, 800].map((weight) => document.fonts.load(`${weight} 16px Inter`))); });
   expect(await page.evaluate(() => document.fonts.check('700 16px Inter') && document.fonts.check('800 16px Inter')), 'the Inter files are in use').toBe(true);
   if (factor !== 1) await enlargeText(page, factor);
@@ -272,6 +289,29 @@ for (const factor of [1.5, 2]) {
     const [m] = await checkPins(page, `in a 240px photo, text x${factor}`);
     expect(m.scrolls, 'the card is limited to the photo and scrolls').toBe(true);
   });
+}
+
+// A consumer may set the focus tokens in other units: the ring must still stay visible inside the photo. Pins at the
+// corners of the 8% safety margin and the longest identity put cards against the clamp on every side.
+const OVERRIDES = { rem: '--ce-stroke-focus:.125rem;--ce-stroke-offset:.1875rem;', calc: '--ce-stroke-focus:calc(1px + 1px);--ce-stroke-offset:calc(2px + 1px);' };
+for (const [unit, scope] of Object.entries(OVERRIDES)) {
+  for (const [width, factor, frame] of [[390, 1, ''], [390, 2, ''], [390, 2, 'width:280px;']]) {
+    test(`recipe with ${unit} focus tokens at ${frame ? '280px photo' : `${width}px`}, text x${factor}: the focus ring stays visible inside the photo`, async ({ page }) => {
+      const all = await cases();
+      const long = all.find((c) => c.kind === 'long');
+      const list = frame ? [{ ...long, after: await price({ amount: '16.90' }), x: '92%', y: '8%' }] : [{ ...all[0], x: '8%', y: '8%' }, { ...all[1], x: '92%', y: '8%' }, { ...long, x: '92%', y: '92%' }];
+      await mount(page, { width, factor, frame, scope }, list);
+      const results = await checkPins(page, `${unit} tokens, ${frame || `${width}px`}, text x${factor}`);
+      for (const [index, m] of results.entries()) {
+        if (!m.scrolls) {
+          const card = page.locator('#frame .ce-pin-card').nth(index);
+          await page.locator('#frame .ce-pin-dot').nth(index).click();
+          await settle(card);
+          expect(await focusRingPainted(page, card), `${unit} tokens card ${index} focus ring painted`).toEqual(PAINTED);
+        }
+      }
+    });
+  }
 }
 
 test('recipe source: the pin text spacing is written from the ProductStack tokens only', () => {
