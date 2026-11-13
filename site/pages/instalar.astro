@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { url } from '../url.mjs';
-import { foundationVersion, vueAsset, vuePeer, vueVersion } from '../version.mjs';
+import { foundationVersion, vueAsset, vuePeer, vueRelease, vueVersion } from '../version.mjs';
 import * as readme from '../../packages/vue/README.md';
 // The install procedure is B1's text, the "Install" section of the package README that ships inside the package file. This
 // page shows that section as it is, with the current version's real file, instead of keeping a second version of it.
@@ -19,7 +19,7 @@ const entry = `import '@casaelida/vue/styles.css';\nimport { CEButton } from '@c
     <section class="section install-page" aria-labelledby="version-actual">
       <h2 id="version-actual">Versión {vueVersion}</h2>
       <dl class="reference-api">
-        <dt>Archivo del paquete</dt><dd><a class="ce-link" href={vueAsset}>casaelida-vue-{vueVersion}.tgz</a>, el recurso de la versión <code>vue-v{vueVersion}</code> en GitHub Releases. Una versión publicada nunca cambia.</dd>
+        <dt>Archivo del paquete</dt><dd><a class="ce-link" href={vueAsset}>casaelida-vue-{vueVersion}.tgz</a>, el recurso de la versión <a class="ce-link" href={vueRelease}><code>vue-v{vueVersion}</code></a> en GitHub Releases, cuyas notas dan el sha256 del archivo. Una versión publicada nunca cambia.</dd>
         <dt>Vue</dt><dd>Dependencia par <code>{vuePeer}</code>: la aplicación instala Vue y el paquete no incluye otro.</dd>
         <dt>Dos versiones</dt><dd>La aplicación fija la versión del paquete, {vueVersion}. La base de esta página (tokens, recetas y descargas) tiene su propia versión, {foundationVersion}. Cada versión del paquete se construye desde una revisión de este repositorio y lleva los estilos de la base de esa revisión, así que una aplicación Vue no fija la base por separado. El pie de cada página dice desde qué revisión se construyó este sitio.</dd>
       </dl>

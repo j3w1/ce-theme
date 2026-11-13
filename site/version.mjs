@@ -9,5 +9,6 @@ export const commitUrl = `https://github.com/j3w1/ce-theme/commit/${commit}`;
 export const foundationVersion = foundation.version;
 export const vueVersion = vue.version;
 export const vuePeer = vue.peerDependencies.vue;
-/** The B1-release asset of this package version on GitHub Releases. */
+/** The release of this package version on GitHub Releases, and its asset. */
+export const vueRelease = `https://github.com/j3w1/ce-theme/releases/tag/vue-v${vue.version}`;
 export const vueAsset = `https://github.com/j3w1/ce-theme/releases/download/vue-v${vue.version}/casaelida-vue-${vue.version}.tgz`;

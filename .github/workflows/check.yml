@@ -3,10 +3,19 @@ name: Foundation checks and release
 # validate checks every branch push and pull request and packs ONE package file. On a push to main, or GitHub's native
 # re-run of one, publish releases that file once as the immutable GitHub Release vue-vX.Y.Z (or verifies the release
 # that exists, scripts/release.mjs), and prove installs it from its public URL. SEAL #7 B1-release, #10.
+# Then deploy publishes to GitHub Pages the site validate checked in the same run (SEAL #7 B2, #9; docs/hosting.md).
 on:
   push:
     branches: ['**']
   pull_request:
+  # Rollback (docs/hosting.md): run on main with a commit that GitHub Pages already served. The run checks out that commit,
+  # runs the same jobs, verifies its already published package version and deploys its site.
+  workflow_dispatch:
+    inputs:
+      rollback_commit:
+        description: A full commit SHA with an earlier successful github-pages deployment
+        required: true
+        type: string
 
 permissions: {}
 
@@ -18,13 +27,35 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: read
+      deployments: read
     outputs:
       version: ${{ steps.pack.outputs.version }}
       artifact-id: ${{ steps.upload.outputs.artifact-id }}
+      pages-artifact: github-pages-attempt-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          ref: ${{ inputs.rollback_commit }}
+      # A rollback deploys only a commit that GitHub Pages already served, and only verifies its published version, so
+      # publish never creates a release from it.
+      - name: Check the rollback commit
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          COMMIT: ${{ inputs.rollback_commit }}
+        run: |
+          [[ $GITHUB_REF == refs/heads/main ]] || { echo "::error::A rollback runs on main, not $GITHUB_REF."; exit 1; }
+          [[ $COMMIT =~ ^[0-9a-f]{40}$ && $(git rev-parse HEAD) == "$COMMIT" ]] || { echo "::error::rollback_commit must be a full 40-character commit SHA, checked out exactly."; exit 1; }
+          served=
+          for id in $(gh api "repos/$GH_REPO/deployments?environment=github-pages&sha=$COMMIT&per_page=100" --jq '.[].id'); do
+            if gh api "repos/$GH_REPO/deployments/$id/statuses?per_page=100" --jq '.[].state' | grep -qx success; then served=$id; break; fi
+          done
+          [[ -n $served ]] || { echo "::error::$COMMIT has no earlier successful github-pages deployment."; exit 1; }
+          version=$(node -p 'require("./packages/vue/package.json").version')
+          [[ $(gh release view "vue-v$version" --json isDraft --jq .isDraft) == false ]] || { echo "::error::vue-v$version is not a published release, so a rollback to $COMMIT cannot only verify it."; exit 1; }
+          echo "Rollback to $COMMIT: github-pages deployment $served succeeded earlier; vue-v$version is published."
       - uses: pnpm/action-setup@v4
         with:
           version: 12.14.0
@@ -34,6 +65,13 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
+      # The output checks (#9 R2, R5) read the dist/ that `pnpm check` built; on main that exact dist/ is the Pages artifact.
+      - run: pnpm test:dist
+      - uses: actions/upload-pages-artifact@v5
+        if: github.repository == 'j3w1/ce-theme' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        with:
+          name: github-pages-attempt-${{ github.run_attempt }}
+          path: dist
       # The one package file of this run, packed from the build that `pnpm check` made.
       - id: pack
         run: |
@@ -68,7 +106,7 @@ jobs:
   # The only job with a write token. It installs, builds and tests nothing: it releases the file validate proved.
   publish:
     needs: validate
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'j3w1/ce-theme'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' && github.repository == 'j3w1/ce-theme'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -84,6 +122,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          ref: ${{ inputs.rollback_commit }}
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -113,6 +152,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          ref: ${{ inputs.rollback_commit }}
       - uses: pnpm/action-setup@v4
         with:
           version: 12.14.0
@@ -132,3 +172,48 @@ jobs:
           name: prove-results-attempt-${{ github.run_attempt }}
           path: test-results/
           retention-days: 7
+
+  # Only the tip of main deploys, so a build that waited behind a newer push never replaces it; a rollback run is exempt.
+  # The decision runs in a job without an environment, so a skipped deploy records no github-pages deployment.
+  pages-gate:
+    needs: [validate, publish, prove]
+    if: github.repository == 'j3w1/ce-theme' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+      queue: max
+    outputs:
+      deploy: ${{ steps.tip.outputs.deploy }}
+    steps:
+      - id: tip
+        run: |
+          if [[ $GITHUB_EVENT_NAME == workflow_dispatch ]]; then echo "deploy=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          tip=$(git ls-remote --exit-code "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" refs/heads/main | cut -f1)
+          if [[ $tip == "$GITHUB_SHA" ]]; then echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else echo "::notice::main is now at $tip; this build of $GITHUB_SHA does not deploy."; echo "deploy=false" >> "$GITHUB_OUTPUT"; fi
+
+  # The only job with Pages write and an OIDC token. It deploys the dist/ that validate checked and uploaded in this run, and
+  # runs only after publish and prove passed, so the site always documents a public, installable version.
+  deploy:
+    needs: [validate, publish, prove, pages-gate]
+    if: needs.pages-gate.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
+        with:
+          artifact_name: ${{ needs.validate.outputs.pages-artifact }}
