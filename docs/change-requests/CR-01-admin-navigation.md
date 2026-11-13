@@ -116,7 +116,8 @@ Wrap rule, an implementation decision by the repository lead, decided under j3w1
 
 - Every consumer of `ce-module-nav` is affected, not only CE Systems. Other consumers (the CE Radio admin card, CE Meta, CE Meta App) were **not inspected**. Under F1 a default-density consumer's links grow from 40px to 44px; under F2 nothing changes at default or compact density, touch shells grow to 56px.
 - The 9 boards at 40px and the 31 at 44px at 1440 would no longer be identical to the new recipe; they keep their local overrides, and fourteen boards their inline `--ce-control`, as part of the frozen snapshot (X-3); new boards use the new recipe and carry no override (section 4.1 gives the per-formula effect of removing each).
-- Not changed: the 240px column, colours, the inset current bar, `ce-app-bar`, search, store select, role pill, page header, data table.
+- Not changed: the 240px column, colours, the inset current bar, the `ce-app-bar` rule, search, store select, role pill, page header, data table.
+- Measured while implementing (Chromium, the AppShell card with the generated tokens and recipes, against the recipes before this change): the brand's new minimum height raises the rendered `ce-app-bar` wherever the brand is the tallest item in its row. A bar holding only the brand grows from 56px to 61px with no density and in compact, and to 73px in touch. On the card at 390px, where the brand sits on its own wrapped row, the bar grows by 16px (28px in touch). At 768px and wider the card's bar is unchanged (67, 65 and 73px at 1280px).
 - Observed, not requested: the `h2` group headings sit before the page `h1` in document order and disappear below 1024px.
 
 ## 8. Owner decisions needed

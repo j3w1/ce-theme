@@ -41,7 +41,7 @@ Each request is one pull request unless noted. The order follows the dependencie
 | 4 | **CR-08 with CR-04** cart line | CR-08 is written for CR-04's anatomy and CR-08 says so; CR-04 depends on CR-06 (step 2). One pull request, two documents |
 | 5 | **CR-05** store-context bar | Needs the interpretation confirmed first (its decision 1); composes `ce-store-note`, which the CR-04 cart page also shows, so it reads better after step 4 |
 | 6 | **CR-02** state-sheet frame | After CR-03 (step 1). The frame goes in the documentation kit (X-4), so it touches no recipe and can also move up to directly after step 1 |
-| 7 | **CR-01** admin navigation | Independent, but every consumer of `ce-module-nav` changes (CE Radio and CE Meta were not inspected); needs the F1 / F2 / F0 decision |
+| 7 | **CR-01** admin navigation | Independent, but every consumer of `ce-module-nav` changes (CE Radio and CE Meta were not inspected); F1 was chosen (its section 8) |
 | 8 | **CR-07** shopping-action rule | Reverses the behaviour rule of a decision j3w1 recorded (the copy «Añadir al carrito» stands, X-6); the copy question is closed, so only the behaviour row is written in `decisions.md`; largest documentation change (recipe, guideline, preview, registry, coverage, decisions row). Last, so the smaller requests are not held by it |
 
 If only one batch is possible: steps 1 to 4 (CR-03, CR-06, CR-09, CR-10, CR-08, CR-04) are internally consistent and leave the rest untouched.
