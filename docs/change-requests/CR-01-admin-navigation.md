@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Decided (section 8: the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; j3w1 can veto any of them). Implemented in CE Theme source by the CR-01 pull request; the frozen boards are not changed
 
 # CR-01 · Admin navigation (`ce-module-nav`): one module list, density-aware targets
 
@@ -95,7 +95,7 @@ Effect on the 66 boards if they were re-synchronised (they are not: the boards a
 | Targets | Staff navigation: 44px (F1, `--ce-size-target-public`) or 40px (F2); the staff floor recorded by the workbench audit is 32px. The 44px public-target rule (R-10) is public-only |
 | Text and icons | Visible label on every link; icons `aria-hidden` |
 | NAME / Description / specs, CE codes, prices | Not applicable (no product identity in the navigation) |
-| Text x1.5 and x2 | Long labels («Tiendas y etiquetas», «Acceso y auditoría») wrap inside the 240px column; heights are `min-height`, so wrapping cannot clip |
+| Text x1.5 and x2 | Long labels («Tiendas y etiquetas», «Acceso y auditoría») wrap inside the 240px column; heights are `min-height`, so wrapping cannot clip. Single words that do not fit (at x2) break with `overflow-wrap: anywhere`; see section 6 |
 
 ## 6. Acceptance checks
 
@@ -108,17 +108,24 @@ To run when the repository work happens (not run here):
 5. Text x1.5, x2 at 240px: no overflow.
 6. Screen reader walk of the nav and of the hidden group headings at narrow widths: **not run, to schedule**.
 
+In the repository, checks 1 to 5 are browser tests in `tests/browser/app-shell.spec.mjs`. They run on the AppShell design-system card, rendered with only the shipped fonts, tokens and recipes, in Chromium and, in hosted CI, WebKit. Check 6 is not run: to schedule. No screen-reader or real-device result is claimed.
+
+Wrap rule, an implementation decision by the repository lead, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed: before it, at text x2 (root font size 200%) the words that cannot wrap («Disponibilidad», «Publicaciones», the heading «Administración») gave the nav's grid track a 268px min-content. Every link was then 268px wide and the 240px column scrolled (scrollWidth 280px, clientWidth 239px; measured in Chromium on the AppShell card with the generated tokens and recipes); x1.5 fitted. `overflow-wrap: anywhere` on the existing `.ce-module-nav h2` and `.ce-module-nav a` rules is the smallest change that meets check 5 and section 5's statement that labels wrap inside the column. It adds no class, API or global wrapping rule, does not apply to CE codes or prices, and waives no acceptance.
+
+Icon rule, a second implementation decision by the repository lead, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed: the wrap rule lowers each link's min-content, so at text x2 an `svg` icon beside a label that wraps shrank below its declared 18px. Measured in Chromium on the card without the rule: at x2 six icons were 11.7 to 17.1px wide, and at x1.5 three were 15.0 to 16.2px (the x1.5 shrink in two-word links predates the wrap rule). The x1.5 and x2 tests fail without the rule. `.ce-module-nav a > svg { flex: none; }` keeps the supplied icon size. It is a bounded correction inside the module nav, not a new class, API or minimum width. The x1.5 and x2 tests assert the rendered font sizes, the 18px icons, wrapping and no overflow.
+
 ## 7. Risks and what it does not change
 
 - Every consumer of `ce-module-nav` is affected, not only CE Systems. Other consumers (the CE Radio admin card, CE Meta, CE Meta App) were **not inspected**. Under F1 a default-density consumer's links grow from 40px to 44px; under F2 nothing changes at default or compact density, touch shells grow to 56px.
 - The 9 boards at 40px and the 31 at 44px at 1440 would no longer be identical to the new recipe; they keep their local overrides, and fourteen boards their inline `--ce-control`, as part of the frozen snapshot (X-3); new boards use the new recipe and carry no override (section 4.1 gives the per-formula effect of removing each).
-- Not changed: the 240px column, colours, the inset current bar, `ce-app-bar`, search, store select, role pill, page header, data table.
+- Not changed: the 240px column, colours, the inset current bar, the `ce-app-bar` rule, search, store select, role pill, page header, data table.
+- Measured while implementing (Chromium, the AppShell card with the generated tokens and recipes, against the recipes before this change): the brand's new minimum height raises the rendered `ce-app-bar` wherever the brand is the tallest item in its row. A bar holding only the brand grows from 56px to 61px with no density and in compact, and to 73px in touch. On the card at 390px, where the brand sits on its own wrapped row, the bar grows by 16px (28px in touch). At 768px and wider the card's bar is unchanged (67, 65 and 73px at 1280px).
 - Observed, not requested: the `h2` group headings sit before the page `h1` in document order and disappear below 1024px.
 
 ## 8. Owner decisions needed
 
-1. Link height rule: F1 (44px floor), F2 (40px, existing token) or F0 (no change). Recommended: F1. Still open. X-1 (decided 2026-11-06) settles only how a 44px floor is written: F1 uses `--ce-size-target-public`, never a literal 44px.
-2. Touch shells: 56px for every touch board? Twelve touch boards use 48px today (nine tablet, three phone); two of the tablets (Adm11Tableta, Adm11TabletaP2) reach 48px through an inline `--ce-control: 48px` that only a markup change removes.
-3. Icons: add twelve to CE Theme or leave them to the application?
-4. Is the module list itself a CE Theme example only (recommended), or a rule for every CE Systems build? CE Systems is planned to be rebuilt in `j3w1/casaelida.com`; its module list is its own decision.
-5. Accept the stricter `aria-current="page"` selector.
+1. Link height rule: F1 (44px floor), F2 (40px, existing token) or F0 (no change). Recommended: F1. X-1 (decided 2026-11-06) settles only how a 44px floor is written: F1 uses `--ce-size-target-public`, never a literal 44px. **Decided (2026-11-13, the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; [#11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): F1**, the documented density formula with the 44px floor from `--ce-size-target-public`.
+2. Touch shells: 56px for every touch board? Twelve touch boards use 48px today (nine tablet, three phone); two of the tablets (Adm11Tableta, Adm11TabletaP2) reach 48px through an inline `--ce-control: 48px` that only a markup change removes. **Decided (2026-11-13, the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; [#11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)):** new touch-shell examples use the existing 56px touch density, without local 48px overrides. The frozen boards and their inline overrides are preserved, not rewritten.
+3. Icons: add twelve to CE Theme or leave them to the application? **Decided (2026-11-13, the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; [#11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)):** module icons remain supplied by the consuming application. No twelve-icon asset set is added; the reference example reuses existing suitable CE Theme icons.
+4. Is the module list itself a CE Theme example only (recommended), or a rule for every CE Systems build? CE Systems is planned to be rebuilt in `j3w1/casaelida.com`; its module list is its own decision. **Decided (2026-11-13, the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; [#11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)):** the module list is a CE Theme example, not a mandatory module inventory for every CE Systems build. The application owns its navigation data.
+5. Accept the stricter `aria-current="page"` selector. **Decided (2026-11-13, the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; [#11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)):** accepted. The current non-colour cue, the focus ring and exactly one current-page link stay.

@@ -1,6 +1,22 @@
 # Changelog
 
-## @casaelida/vue 0.2.1 — 2026-11-13 (unreleased)
+## @casaelida/vue 0.3.0 — 2026-11-13 (unreleased)
+
+CR-01, admin navigation (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed.
+
+### Changed
+
+- `ce-module-nav` links and `ce-app-brand` follow density with the public-target floor: `min-height: max(var(--ce-size-target-public), var(--ce-control, 0px))`. That is 44px with no density and in compact, and 56px in touch; before, the links were 40px at every density and the brand had no minimum. Every consumer's module links grow. The brand also raises `ce-app-bar` where it is the tallest item in the bar, for example a bar holding only the brand (56px before, 61px now and 73px in touch).
+- Only `aria-current="page"` draws the current module link; any other value, including `"false"`, draws an ordinary link.
+- Module group headings and links wrap inside the 240px column at larger text (`overflow-wrap: anywhere`), and a link's `svg` icon keeps its supplied size (`flex: none`).
+
+### Added
+
+- The AppShell card's seven-group, seventeen-link module example, using existing CE Theme icons, and the module navigation rules in its guideline. The application supplies its modules and their icons.
+- `tests/browser/app-shell.spec.mjs` covers CR-01 acceptance 1 to 5 on the generated card. The screen-reader walk (acceptance 6) has not been run and is still to be scheduled.
+- The CR-01 records: `docs/decisions.md` (with the rule for selections made under the #11 delegation), `docs/coverage.md`, the `ModuleNav` rule, CR-01 and `docs/workbench.md`.
+
+## @casaelida/vue 0.2.1 — 2026-11-13 (`vue-v0.2.1`)
 
 A patch for CR-06, the availability line (ce-theme#11): the packaged recipes name the availability states `unknown` and `pending`, with the same look, and the wording and accessible name are documented. The components are unchanged.
 

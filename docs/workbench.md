@@ -63,7 +63,7 @@ python3 -I tools/build_scope.py <scope> kit
 
 The workbench uses a copy of CE Theme that is deliberately not re-synchronised from here. Where the boards needed something CE Theme does not provide, or contradicts, the finding is a change request rather than an edit:
 
-- [Change requests](change-requests/README.md): CR-01 to CR-10, each a proposal with evidence, a proposed change, acceptance checks and owner decisions. They are proposals only. Nothing in them is applied, and they approve no business rule.
+- [Change requests](change-requests/README.md): CR-01 to CR-10, each written as a proposal with evidence, a proposed change, acceptance checks and owner decisions. Each request's status line says whether it is implemented in CE Theme; none approves a business rule.
 - [Design canon](design-canon.md): the workbench's own rules for its simulated boards.
 
 A change request becomes part of CE Theme only through a normal pull request that follows [the workflow](workflow.md): the owner decides, the change is made in tokens, recipes or components, generated files are regenerated, and the checks in `AGENTS.md` pass. The boards keep their local patches until an owner-approved re-synchronisation task.

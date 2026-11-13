@@ -8,7 +8,7 @@ Standard names for navigation and tools: **Breadcrumbs** (Ruta de navegación), 
 - **SiteNav** · Navegación principal: `ce-site-nav`. The main sections of the store.
 - **SearchField** · Buscador: `ce-search`. The product search field.
 - **CategoryTile** · Categoría con foto: `ce-category-tile`. A photo tile with a label that links to a category.
-- **ModuleNav** · Navegación de módulos: `ce-module-nav`. The side navigation of CE apps, grouped by module.
+- **ModuleNav** · Navegación de módulos: `ce-module-nav`. The side navigation of CE apps, grouped by module. The application supplies the modules and their icons; one link marks the current page, and the link height follows density.
 - **PageHeader** · Encabezado de página: `ce-page-header`. The title of a tool page with its main actions.
 - **DataTable** · Tabla de datos: `ce-data-table`. Dense, sortable table for tools; numbers right-aligned.
 - **BulkBar** · Barra de selección: `ce-bulk-bar`. Appears when rows are selected, with actions for the selection.
