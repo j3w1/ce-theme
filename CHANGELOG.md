@@ -1,18 +1,22 @@
 # Changelog
 
+## @casaelida/vue 0.3.2 (unreleased)
+
+CR-09, the pin-card spacing and fit (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version (the `placePins()` reference behaviour in `recipes/behaviors.mjs` changes too, but it is not in the package); it follows 0.3.0 (CR-01) and 0.3.1 (CR-10) in the release order. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed, with the fit as decision 3, decided under the same standing delegation (Supervisor confirmation, 2026-11-13 13:22), not j3w1-typed.
+
+### Changed
+
+- The pin card follows the ProductStack. NAME and Description are 2px apart (`size.product.gap-identity`, was 4px), and the price block, or the store note or pending-price message in its place, starts 8px under the Description from `size.product.gap-note` (the store note and pending-price message were 4px). Every card stays the width of its focus ring inside its photo's edges, so the ring is never clipped; with large text the card is never wider than its photo, and a card taller than its photo is limited to the photo's height by `placePins()` and scrolls instead of being clipped; `enhancePins()` places the cards again once the fonts have loaded. No markup, type scale, price or API change; `tests/browser/pin-card.spec.mjs` measures it, with text at x1, x1.5 and x2.
+
 ## Unreleased
 
-CR-03, the demonstration cue, and CR-09, the pin-card spacing and fit (ce-theme#11).
+CR-03, the demonstration cue (ce-theme#11).
 
 ### Added
 
 - `ce-demo-cue` in `recipes/interface.css`, the standard name `DemoCue` (Aviso de demostración) and its design-system card: one bordered block note from tokens, with the 2px border reusing `stroke.focus`. It holds no text; the consumer supplies the words and `role="note"`, and production output leaves it out. No Vue component.
 - The usage rules in `docs/names.md` (“Demonstration cue”), `docs/apply-ce-theme.md`, `docs/usage.md` and `docs/coverage.md`, and the decision in `docs/decisions.md`.
 - `tests/demo-cue.test.mjs` (no text and no raw colour in the recipe; canon wording in every example) and `tests/browser/demo-cue.spec.mjs` (390, 768 and 1440 px at 100%, 150% and 200% text; axe; reading order).
-
-### Changed
-
-- CR-09 (ce-theme#11): the pin card follows the ProductStack. NAME and Description are 2px apart (`size.product.gap-identity`, was 4px), and the price block, or the store note or pending-price message in its place, starts 8px under the Description from `size.product.gap-note` (the store note and pending-price message were 4px). Every card stays the width of its focus ring inside its photo's edges, so the ring is never clipped; with large text the card is never wider than its photo, and a card taller than its photo is limited to the photo's height by `placePins()` and scrolls instead of being clipped; `enhancePins()` places the cards again once the fonts have loaded. No markup, type scale, price or API change; `tests/browser/pin-card.spec.mjs` measures it, with text at x1, x1.5 and x2.
 
 ## @casaelida/vue 0.2.0 — 2026-11-12 (unreleased)
 

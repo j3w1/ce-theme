@@ -1,6 +1,6 @@
 {
   "name": "@casaelida/vue",
-  "version": "0.2.0",
+  "version": "0.3.2",
   "private": true,
   "type": "module",
   "description": "Casa Elida Vue 3 components with their foundation styles and the Inter fonts. Import @casaelida/vue/styles.css once in the application.",
