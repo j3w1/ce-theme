@@ -1,18 +1,30 @@
-name: Foundation checks
+name: Foundation checks and release
 
+# validate checks every branch push and pull request and packs ONE package file. On a push to main, or GitHub's native
+# re-run of one, publish releases that file once as the immutable GitHub Release vue-vX.Y.Z (or verifies the release
+# that exists, scripts/release.mjs), and prove installs it from its public URL. SEAL #7 B1-release, #10.
 on:
   push:
+    branches: ['**']
   pull_request:
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
-  check:
+  validate:
+    # The status check that main's ruleset requires is named `check`.
+    name: check
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.pack.outputs.version }}
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: pnpm/action-setup@v4
         with:
           version: 12.14.0
@@ -22,22 +34,85 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
+      # The one package file of this run, packed from the build that `pnpm check` made.
+      - id: pack
+        run: |
+          version=$(node -p 'require("./packages/vue/package.json").version')
+          [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::packages/vue version '$version' is not X.Y.Z"; exit 1; }
+          mkdir "$RUNNER_TEMP/package"
+          pnpm --dir packages/vue pack --pack-destination "$RUNNER_TEMP/package"
+          cd "$RUNNER_TEMP/package"
+          [[ $(ls) == "casaelida-vue-$version.tgz" ]] || { echo "::error::pnpm pack must write exactly casaelida-vue-$version.tgz"; exit 1; }
+          sha256sum "casaelida-vue-$version.tgz" > "casaelida-vue-$version.tgz.sha256"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
       - run: pnpm exec playwright install --with-deps chromium webkit
       # CI is set, so both the chromium and the webkit projects run; neither may fail.
       - run: pnpm test:browser
+      # The clean install proof of that exact file.
+      - run: node tests/consumer/run.mjs --package "$RUNNER_TEMP/package/casaelida-vue-$VERSION.tgz"
+        env:
+          VERSION: ${{ steps.pack.outputs.version }}
+      - id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: casaelida-vue-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/package/
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: browser-results
+          name: test-results-attempt-${{ github.run_attempt }}
           path: test-results/
           retention-days: 7
 
-  # The clean install proof: the packed @casaelida/vue installed into an empty app outside the checkout.
-  consumer:
+  # The only job with a write token. It installs, builds and tests nothing: it releases the file validate proved.
+  publish:
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'j3w1/ce-theme'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      attestations: read
+    concurrency:
+      group: publish-casaelida-vue-${{ needs.validate.outputs.version }}
+      cancel-in-progress: false
+    outputs:
+      url: ${{ steps.release.outputs.url }}
+      sha256: ${{ steps.release.outputs.sha256 }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.validate.outputs.artifact-id }}
+          path: ${{ runner.temp }}/package
+          merge-multiple: true
+      - run: cd "$RUNNER_TEMP/package" && sha256sum --check --strict "casaelida-vue-$VERSION.tgz.sha256"
+        env:
+          VERSION: ${{ needs.validate.outputs.version }}
+      - id: release
+        run: node scripts/release.mjs "$RUNNER_TEMP/package/casaelida-vue-$VERSION.tgz"
+        env:
+          VERSION: ${{ needs.validate.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+
+  # The clean install proof against the public release URL: a fresh store, no credentials, no token near pnpm.
+  prove:
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: pnpm/action-setup@v4
         with:
           version: 12.14.0
@@ -47,10 +122,13 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium webkit
-      - run: pnpm test:consumer
+      - run: node tests/consumer/run.mjs --package "$URL" --sha256 "$SHA256"
+        env:
+          URL: ${{ needs.publish.outputs.url }}
+          SHA256: ${{ needs.publish.outputs.sha256 }}
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: consumer-results
+          name: prove-results-attempt-${{ github.run_attempt }}
           path: test-results/
           retention-days: 7

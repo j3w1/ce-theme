@@ -28,3 +28,10 @@ Read [docs/workflow.md](../../docs/workflow.md) first: Claude Design → approve
 - Replaces hand-written markup on an existing showcase page with the component where that page already shows the recipe. It does not add showcase pages. The exceptions are `/mensajeria/`, the messaging example j3w1 approved specifically (see `docs/decisions.md`, “Showcase exception”), and the pages SEAL #7 asks for, B2's install and version page and its component reference (“Showcase exception (SEAL #7)”); every other new page needs j3w1's explicit request.
 - Never publishes the package or deploys the site: the B1-release workflow and B2's site workflow do that from merged `main`.
 - Passes `pnpm check`, `pnpm test:browser` and `pnpm test:consumer` from the repository root. A change to the packed files updates the expected list in `tests/consumer/run.mjs`.
+
+## A release
+
+- A version is released by merging into `main` a change of the `version` in `packages/vue/package.json`, with its `CHANGELOG.md` entry. The B1-release workflow (`.github/workflows/check.yml`) then publishes the one package file its `validate` job built, packed and proved, as `casaelida-vue-X.Y.Z.tgz` on the immutable release `vue-vX.Y.Z` with its sha256 in the notes, and its `prove` job installs it from the public URL. `scripts/release.mjs` decides what the `publish` job does.
+- Every later push to `main` verifies the published file and compares its unpacked contents with the new build. A change inside the package without a new version fails that run ("shipped contents changed without a version bump"); release it as a new version. Changes outside the package publish nothing.
+- A published file is never replaced. A bad version is corrected only by a new version.
+- A failed or interrupted run is repeated with GitHub's native re-run of that run. Nobody pushes a `vue-v` tag or creates a release by hand.

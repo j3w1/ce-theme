@@ -19,6 +19,15 @@ test('@casaelida/vue exports its styles as a side effect, keeps Vue a peer and s
   assert.doesNotMatch(await read('packages/vue/README.md'), /still an owner decision/);
 });
 
+test('the package README and docs/apply-ce-theme.md name the release URL pattern and the Releases page', async () => {
+  for (const file of ['packages/vue/README.md', 'docs/apply-ce-theme.md']) {
+    const text = await read(file);
+    assert.ok(text.includes('https://github.com/j3w1/ce-theme/releases/download/vue-v<version>/casaelida-vue-<version>.tgz'), file);
+    assert.ok(text.includes('[Releases page](https://github.com/j3w1/ce-theme/releases)'), file);
+    assert.doesNotMatch(text, /No release is published yet|once releases are published/, file);
+  }
+});
+
 test('styles.css is built from the tokens, recipes and fonts, with font URLs inside the package', async () => {
   const files = await packageFiles();
   const css = files.get('styles.css');
