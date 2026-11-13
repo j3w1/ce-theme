@@ -112,7 +112,8 @@ Presentation for conversation interfaces. Delivery, assignment, authorization an
 
 | Pattern | Recipe | Status | Notes |
 | --- | --- | --- | --- |
-| Bag with lines, quantity, remove, summary | `ce-cart`, `ce-cart-line`, `ce-order-summary`, `ce-summary` | Implemented | Amounts are supplied by the commerce service; the interface never totals them. |
+| Cart lines: identity, supplied amount-or-note, availability, quantity and remove | `ce-cart-lines`, `ce-cart-line`, `ce-cart-line-body`, `ce-cart-line-actions` | Tested | CR-04/08: existing anatomy with ProductStack distances; optional fields and eleven static supplied-state scenarios in the Cart card. `tests/browser/cart-line.spec.mjs` measures 390/768/1440px at actual computed text factors 1/1.5/2 with shipped Inter (including px/rem descendants), gaps, fit/overlap, 44px targets, focus, keyboard traversal, click isolation and axe. Screen-reader pending/failed pass: not run, to schedule. No arithmetic or live commerce behaviour. |
+| Cart layout and order summary | `ce-cart`, `ce-order-summary`, `ce-summary` | Implemented | Amounts are supplied by the commerce service; the interface never totals them. Compact summary lines, steps and choice cards are outside CR-04/08. |
 | Checkout steps and fulfilment choice | `ce-steps`, `ce-choice-cards` | Implemented | **Needs input:** delivery coverage, costs, payment methods and their providers. |
 | Favourites | `aria-pressed` heart, favourites section | Implemented | Persistence belongs to the account service. |
 | Sign in / create account | `ce-auth`, `ce-divider` | Implemented | **Needs input:** identity provider, password rules, social sign-in. |

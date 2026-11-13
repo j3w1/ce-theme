@@ -33,6 +33,12 @@ The price follows the specs at the same gap on every card. Never push it to the 
 
 The **CECode** (Código CE) is white bold text on ink with tabular figures, padding 0.3em × 0.35em and a 2px corner (`radius.code`). It is always one line: `white-space: nowrap`, no hyphenation, no wrapping, in every context; the container gives it room, never the other way round. Sizes: `ce-code--sm` 12px for dense tables, default 14px for cards, lists and tools, `ce-code--lg` 16px for product pages, 3mm on the gondola label and 26px on the share card. The code is a string, never a number.
 
+## Cart line
+
+The **Cart** composition uses the ProductStack in `ce-cart-line-body`: optional CECode, linked NAME/Description, optional specifications, supplied line amount or missing/pending-price explanation, optional StockLine, then quantity/remove controls. These are existing recipes, not a new Vue component or behaviour API. Remove stays `button.ce-link`, named «Quitar {NAME} del carrito» and at least `size.target.public` (44px); the product link and quantity input have real 44px targets too. The decorative image has empty alt when the adjacent link names the product.
+
+Code→heading 8px, NAME→Description 2px, heading→specs 2px, specs→amount-or-note 12px, amount-or-note→StockLine 8px, StockLine→controls 12px, controls→pending/failed save message 8px. With optional fields absent, the next present part keeps its semantic offset (amount-or-note remains 12px after the heading, controls 12px after amount-or-note without a StockLine). Unbroken codes get intrinsic room; the body may reflow below the image. No uniform-gap or frozen-board patch belongs in new markup. Availability follows [StockLine](#stockline), independently of price. The application supplies amounts, quantity limits, eligibility and all states; it owns operations and totals. See the [Cart guideline](https://github.com/j3w1/ce-theme/blob/main/design-system/components/Cart/README.md) for eleven supplied-state scenarios and unrun screen-reader checks.
+
 ## Price styles and the price basis
 
 - **Currency styles.** The default **CurrencyBaseline** (S/ en línea base) sets a small S/ on the baseline of the figures. The second option is **CurrencyJoined** (S/ unido), where S/ has the size of the figures and is attached to them (`ce-price--joined`). **CurrencyRaised** (S/ elevado, `ce-price--raised`) stays a supported variant.
@@ -132,6 +138,7 @@ Generated from `recipes/names.mjs` by `pnpm generate`; do not edit between the m
 | Id | Nombre CE | Recipe | Vue | Rule |
 | --- | --- | --- | --- | --- |
 | `ProductCard` | Tarjeta de producto | `ce-product` | — | Photo, then the ProductStack. No borders, shadows or rounded corners. |
+| `Cart` | Carrito | `ce-cart`, `ce-cart-lines`, `ce-cart-line`, `ce-cart-line-body`, `ce-cart-line-actions` | — | Optional unbroken code, linked NAME/Description and specs, supplied line amount or note, StockLine, then quantity and remove as button.ce-link named Quitar … del carrito. ProductStack gaps 8/2/2/12/8, then 12 to controls and 8 to save text. All values and states are supplied; no arithmetic or controller. |
 | `AddToCart` | Añadir al carrito | `ce-product-add`, `ce-icon-button--action` | — | On hover-capable screens an icon button appears on card hover or focus; on touch and narrow screens a full-width button sits at the bottom of the card. |
 | `ProductCallout` | Tarjeta flotante | `ce-callout` | — | White floating card with a photo, identity and price for editorial pieces. |
 | `Mosaic` | Mosaico | `ce-mosaic` | — | Editorial grid of tiles; one large tile, one wide, two small. |

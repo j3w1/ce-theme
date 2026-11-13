@@ -6,6 +6,8 @@ Ten documents, CR-01 to CR-10, each proposing one change to **CE Theme**, Casa E
 
 All requests were checked against the same copy of the design system: CE Theme — Design System artifact version `1793881448-c98f` (design-system.json re-synced to `j3w1/ce-theme@e8b8d7a8`; `components/bundle.css` sha256 `de102fad7d927541e3c31c2c30dd770fa0d0fca3b4000a84a9e5bfcb7353ed06`). CE Theme files are named by their project path (`components/bundle.css`, `names.md`, `decisions.md`, `tokens.css`, `coverage.md`, `README.md`, `components/<Name>/README.md`). Boards are named by their board name (`Pub10Bolsa`, `Adm01Estados`); the local canon is `templates/CANON.md` (R-01 to R-21). Board names are the file names of the frozen boards (X-3) and are not renamed: a name such as `Pub10Bolsa` is an identifier, not copy, and the proposals never use it as a name or a string.
 
+The combined CR-04/CR-08 anatomy and spacing are implemented in source; their status/outcomes record the delegated selections and remaining merge/release proof. The historical proposal index and board measurements below remain dated evidence.
+
 ## Evidence tags
 
 CR-08 defines the four tags that every request uses; quoted from it: "**[A]** read in the CE Theme artifact; **[S]** static scan of the board files (read-only scripts); **[R]** measured in a rendered board (Chromium, boards served read-only from the workbench; vertical distances between element boxes); **[H]** measured in a scratch harness outside the workbench that loads only the shared `tokens.css` and `bundle.css` (no overrides)."

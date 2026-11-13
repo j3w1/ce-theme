@@ -266,10 +266,22 @@
 .ce-steps > li:not([aria-current]) .ce-step-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .ce-cart { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ce-space-32); }
 .ce-cart-lines { margin: 0; padding: 0; list-style: none; }
-.ce-cart-line { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: var(--ce-space-16); padding-block: var(--ce-space-24); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
-.ce-cart-line > img { width: 88px; height: 88px; object-fit: contain; }
-.ce-cart-line-body { display: grid; align-content: start; gap: var(--ce-space-8); min-width: 0; }
-.ce-cart-line-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ce-space-12); margin-top: var(--ce-space-8); }
+.ce-cart-line { position: relative; display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--ce-space-16); padding-block: var(--ce-space-24); border-bottom: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
+.ce-cart-line > img { flex: none; width: 88px; height: 88px; object-fit: contain; }
+/* The intrinsic body basis lets an unbroken code move below the image when it needs the full line. */
+.ce-cart-line-body { flex: 1 1 min-content; display: grid; align-content: start; gap: 0; min-width: 0; }
+.ce-cart-line-body > .ce-code { justify-self: start; margin-bottom: var(--ce-size-product-gap-code); }
+.ce-cart-line-body > .ce-product-specs { margin-top: var(--ce-size-product-gap-identity); }
+.ce-cart-line-body > :is(.ce-price-block, .ce-store-note, .ce-price-pending) { margin: var(--ce-size-product-gap-price) 0 0; }
+.ce-cart-line-body > .ce-stock { margin-top: var(--ce-size-product-gap-note); }
+.ce-cart-line-body > .ce-cart-line-actions { margin-top: var(--ce-space-12); }
+.ce-cart-line-body > :is(.ce-save-state, .ce-notice) { margin: var(--ce-space-8) 0 0; }
+.ce-cart-line .ce-product-link { position: relative; min-height: var(--ce-size-target-public); justify-content: center; }
+.ce-cart-line-body [aria-busy="true"] { cursor: progress; }
+.ce-cart-line-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-12); }
+.ce-cart-line-actions .ce-quantity input { min-width: var(--ce-size-target-public); min-height: var(--ce-size-target-public); width: 4ch; }
+.ce-cart-line-actions .ce-quantity input:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: var(--ce-stroke-offset); }
+.ce-cart-line button.ce-link { min-width: var(--ce-size-target-public); min-height: var(--ce-size-target-public); }
 .ce-cart-line .ce-price { font-size: 28px; }
 .ce-order-summary { display: grid; align-content: start; gap: var(--ce-space-16); padding: var(--ce-space-24); background: var(--ce-color-surface-subtle); }
 .ce-order-summary h2 { margin: 0; font-size: var(--ce-font-size-lead); }
@@ -359,7 +371,6 @@
   .ce-gallery > :first-child:nth-last-child(odd) { grid-column: 1 / -1; }
   .ce-gallery-status { display: none; }
   .ce-steps > li .ce-step-label { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; }
-  .ce-cart-line { grid-template-columns: 128px minmax(0, 1fr); }
   .ce-cart-line > img { width: 128px; height: 128px; }
   .ce-locator { grid-template-columns: minmax(280px, 1fr) minmax(0, 1.4fr); align-items: start; }
   .ce-footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

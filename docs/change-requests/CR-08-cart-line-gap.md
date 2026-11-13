@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Implemented in CE Theme source with the combined CR-04/CR-08 content PR; merge and immutable @casaelida/vue 0.5.0 delivery pending. Historical proposal/evidence below is preserved; implemented outcomes follow section 8.
 
 # CR-08 · Cart-line spacing follows the ProductStack
 
@@ -92,3 +92,13 @@ To run when the repository work happens (not run here, except where marked):
 1. Price to availability: 8px (ProductStack; Pub08Cambio, Proto01Compra) or 12px (Pub10 family, 6 boards named above)? Recommended: 8px. And availability to controls: 12px or 8px? Recommended: 12px.
 2. Decided (X-5, 2026-11-06): the ProductStack applies to cards, lists, details and tools, which covers cart lines ("lists" in `names.md`).
 3. Submit with CR-04 (recommended) or first, with the compatibility note above.
+
+### Implemented outcomes (2026-11-13)
+
+Every new selection here is **“decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed.”** j3w1 can veto. [Canonical selections](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160); X-1–X-9 stand. The proposal above records its historical source, not additional implemented API.
+
+1. Price-or-note→availability 8px; availability→controls 12px; controls→pending/failed save message 8px, implemented with existing tokens. Code→heading 8px, NAME→Description 2px, heading→specs 2px, specs→price-or-note 12px. Optional code/specs/availability and pending-price cases keep semantic offsets without a uniform gap.
+2. X-5 remains confirmed: ProductStack covers cart lines.
+3. Ships with CR-04 in the same content PR, after the actually delivered CR-06 PR #18 / `b32b1224ebe9a0e7f8dfb9e0d90a828aedd31c72` and immutable `vue-v0.2.1`, whose public two-browser consumer proof passed. Its wording/aria contract is reused directly.
+
+`recipes/retail.css`, the Cart guideline/preview and reference cart use the direct-child anatomy. `tests/browser/cart-line.spec.mjs` measures section 6 at 390/768/1440px and computed text factors 1/1.5/2, including shipped Inter and px/rem descendants, optional fields, targets, keyboard/focus, clicks and axe. Screen-reader pass is **not run, to schedule**. Observed checks are recorded separately in the Pod objective. Frozen boards and their local patches remain untouched; new examples copy none of those patches.

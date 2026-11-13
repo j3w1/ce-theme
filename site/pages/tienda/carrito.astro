@@ -4,42 +4,44 @@ import Icon from '../../components/Icon.astro';
 import Price from '../../components/Price.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { productView } from '../../../recipes/product.mjs';
-import { catalogue } from '../../data/store.mjs';
+import { catalogue, stores, stockLine, stockListAttributes } from '../../data/store.mjs';
 // Line and order amounts are supplied by the commerce service as decimal strings; the page never computes them.
 const lines = [
-  { item: catalogue[0], quantity: 2, lineAmount: '13.00' },
-  { item: catalogue[3], quantity: 1, lineAmount: '8.50' },
+  { item: catalogue[0], quantity: '2', lineAmount: '13.00' },
+  { item: catalogue[3], quantity: '1', lineAmount: '8.50' },
 ];
 const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
 ---
-<Store title="Tu bolsa" description="Bolsa y pago de demostración con retiro en tienda o envío.">
+<Store title="Tu carrito" description="Carrito y pago de demostración con retiro en tienda o envío.">
   <div class="ce-container">
-    <h1 class="store-page-title">Tu bolsa</h1>
+    <h1 class="store-page-title">Tu carrito</h1>
     <ol class="ce-steps" aria-label="Pasos de compra" style="margin-bottom:var(--ce-space-32)">
-      <li aria-current="step"><span class="ce-step-label">Bolsa</span></li>
+      <li aria-current="step"><span class="ce-step-label">Carrito</span></li>
       <li><span class="ce-step-label">Entrega</span></li>
       <li><span class="ce-step-label">Pago</span></li>
     </ol>
     <div class="ce-cart">
       <div>
         <p class="ce-store-note">Comprando en <strong data-store-name>Tacna</strong>. Los precios pueden variar en otra tienda.</p>
-        <ul class="ce-cart-lines" aria-label="Productos en tu bolsa">
+        <ul class="ce-cart-lines" aria-label="Productos en tu carrito">
           {lines.map(({ item, quantity, lineAmount }, index) => { const view = productView(item); return (
             <li class="ce-cart-line">
               <img src={view.image} alt="" width="128" height="128" />
               <div class="ce-cart-line-body">
+                <span class="ce-code">{view.code}</span>
                 <h2 class="ce-product-heading" style="--ce-product-text:1rem"><a class="ce-product-link" href="/tienda/producto/"><span class="ce-product-name">{view.name}</span><span class="ce-product-description">{view.description}</span></a></h2>
                 <p class="ce-product-specs">{view.specs.join(', ')}</p>
-                <span class="ce-code" style="justify-self:start">{view.code}</span>
+                <div class="ce-price-block" role="group" aria-label="Importe de la línea"><Price amount={lineAmount} /></div>
+                {stores.map((store) => { const line = stockLine(item, store); return <ul class="ce-stock" data-store-view={store.id} {...stockListAttributes([line])}><li data-state={line.state}>{line.text}</li></ul>; })}
                 <div class="ce-cart-line-actions">
-                  <div class="ce-quantity"><button type="button" aria-label={`Quitar uno de ${view.name}`}><Icon name="minus" size={18} /></button><label class="ce-sr-only" for={`cantidad-${index}`}>{`Cantidad de ${view.name}`}</label><input id={`cantidad-${index}`} type="number" inputmode="numeric" min="1" max="20" value={quantity} /><button type="button" aria-label={`Agregar uno de ${view.name}`}><Icon name="plus" size={18} /></button></div>
-                  <Price amount={lineAmount} />
-                  <button class="ce-link" type="button"><Icon name="trash" size={18} /> Quitar</button>
+                  <div class="ce-quantity" role="group" aria-label={`Cantidad de ${view.name}`}><button type="button" aria-label={`Reducir cantidad de ${view.name}`} disabled={quantity === '1'} aria-describedby={quantity === '1' ? 'nota-min' : undefined}><Icon name="minus" size={18} /></button><label class="ce-sr-only" for={`cantidad-${index}`}>{`Cantidad de ${view.name}`}</label><input id={`cantidad-${index}`} type="number" inputmode="numeric" min="1" max="20" value={quantity} /><button type="button" aria-label={`Aumentar cantidad de ${view.name}`}><Icon name="plus" size={18} /></button></div>
+                  <button class="ce-link" type="button"><Icon name="trash" size={18} /> Quitar<span class="ce-sr-only"> {view.name} del carrito</span></button>
                 </div>
               </div>
             </li>
           ); })}
         </ul>
+        <p id="nota-min" class="ce-field-note">La cantidad mínima de estos ejemplos es 1. Escenario: TALEN tiene pocas unidades confirmadas en Tacna.</p>
 
         <section aria-labelledby="entrega" style="margin-top:var(--ce-space-40)">
           <h2 id="entrega" style="font-size:var(--ce-font-size-title)">¿Cómo quieres recibirlo?</h2>
