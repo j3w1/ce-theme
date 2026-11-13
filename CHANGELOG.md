@@ -1,19 +1,26 @@
 # Changelog
 
+## @casaelida/vue 0.3.3 — 2026-11-13 (unreleased)
+
+CR-05, the in-page store line (ce-theme#11). The packaged recipes gain the StoreBar rules; the components are unchanged.
+
+### Added
+
+- The standard name `StoreBar` (Barra de tienda): the in-page store line is a `ce-store-note` whose action is a `ce-link`, with no class of its own. In `recipes/retail.css`, every `ce-link` inside a `ce-store-note` reaches `--ce-size-target-public` (44px), including a link inside a sentence, whose row grows to 44px. A pending bar (`aria-busy="true"`) shows the progress cursor. Its four states and wording are in the StoreContext guideline and card. Also added: a coverage row, the decision in `docs/decisions.md` and `tests/browser/store-bar.spec.mjs`.
+
+### Changed
+
+- The Cart card and the storefront cart name their store with the StoreBar («Importes en …»), and the storefront home, listing, product and scene pages gain it («Precios y disponibilidad de …», «Tienda: sin elegir»). The storefront cart's amounts are now per store, with no amount when no store is chosen; the home page's promotion tile shows its offer price only for the store that supplies it.
+
 ## Unreleased
 
-CR-03, the demonstration cue, and CR-05, the in-page store line (ce-theme#11).
+CR-03, the demonstration cue (ce-theme#11).
 
 ### Added
 
 - `ce-demo-cue` in `recipes/interface.css`, the standard name `DemoCue` (Aviso de demostración) and its design-system card: one bordered block note from tokens, with the 2px border reusing `stroke.focus`. It holds no text; the consumer supplies the words and `role="note"`, and production output leaves it out. No Vue component.
 - The usage rules in `docs/names.md` (“Demonstration cue”), `docs/apply-ce-theme.md`, `docs/usage.md` and `docs/coverage.md`, and the decision in `docs/decisions.md`.
 - `tests/demo-cue.test.mjs` (no text and no raw colour in the recipe; canon wording in every example) and `tests/browser/demo-cue.spec.mjs` (390, 768 and 1440 px at 100%, 150% and 200% text; axe; reading order).
-- The standard name `StoreBar` (Barra de tienda): the in-page store line is a `ce-store-note` whose action is a `ce-link`, with no class of its own. In `recipes/retail.css`, every `ce-link` inside a `ce-store-note` reaches `--ce-size-target-public` (44px), including a link inside a sentence, whose row grows to 44px. A pending bar (`aria-busy="true"`) shows the progress cursor. Its four states and wording are in the StoreContext guideline and card. Also added: a coverage row, the decision in `docs/decisions.md` and `tests/browser/store-bar.spec.mjs`.
-
-### Changed
-
-- The Cart card and the storefront cart name their store with the StoreBar («Importes en …»), and the storefront home, listing, product and scene pages gain it («Precios y disponibilidad de …», «Tienda: sin elegir»). The storefront cart's amounts are now per store, with no amount when no store is chosen; the home page's promotion tile shows its offer price only for the store that supplies it.
 
 ## @casaelida/vue 0.2.0 — 2026-11-12 (unreleased)
 
