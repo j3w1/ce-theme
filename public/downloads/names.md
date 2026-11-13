@@ -63,7 +63,7 @@ The **CECode** (Código CE) is white bold text on ink with tabular figures, padd
 - **Production.** Production output does not contain the element at all. Hiding it with CSS, the `hidden` attribute or `aria-hidden` is not enough. The recipe cannot tell a forgotten cue on real data; leaving it out is the application's job.
 - **Look.** Words and a 2px ink border that reuses the focus stroke (`stroke.focus`); no colour carries the meaning. Small bold text at the heading line height, as wide as its words and never wider than its container, inside which it wraps.
 
-The boards of the frozen design-workbench snapshot keep their own local drawings of the cue; new boards and examples use this recipe. The decisions behind these rules are in [decisions.md](decisions.md) (“Demonstration cue”).
+The boards of the frozen design-workbench snapshot keep their own local drawings of the cue; new boards and examples use this recipe. The decisions behind these rules are in [decisions.md](https://github.com/j3w1/ce-theme/blob/main/docs/decisions.md) (“Demonstration cue”).
 
 ## StockLine
 
