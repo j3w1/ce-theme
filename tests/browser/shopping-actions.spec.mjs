@@ -62,7 +62,7 @@ async function pointAt(page, locator, { tap = false, x, y } = {}) {
 // Which control each click reached. Link activation is counted where it happens, so nothing depends on when the URL changes.
 const trackClicks = (page) => page.evaluate(() => {
   window.clicks = [];
-  const name = (el) => (el.matches('.ce-product-link') ? 'product' : el.matches('.ce-product-media > a') ? 'photo' : el.matches('.ce-variant-thumbs a') ? 'variant' : el.type === 'checkbox' ? 'compare' : el.id);
+  const name = (el) => (el.matches('.ce-product-link') ? 'product' : el.matches('.ce-product-media > a[aria-hidden="true"]') ? 'photo' : el.matches('.ce-variant-thumbs a') ? 'variant' : el.type === 'checkbox' ? 'compare' : el.id);
   for (const el of document.querySelectorAll('.ce-product :is(a, button, input, select, textarea, summary)')) el.addEventListener('click', () => window.clicks.push(name(el)));
 });
 const takeClicks = (page) => page.evaluate(() => window.clicks.splice(0));
@@ -77,6 +77,8 @@ test('acceptance 1: at 1440 a resting card shows no purchase control, and the ac
   await page.goto(LISTING);
   const product = firstCard(page);
   await page.mouse.move(0, 0);
+  // The reveal is an opacity transition: wait for the resting state before reading what is visible.
+  await expect(product.locator(QUICK)).toHaveCSS('opacity', '0');
   expect(await visibleButtons(product)).toEqual([]);
   await expect(product.locator('.ce-product-media button, .ce-product-add')).toHaveCount(0);
   await expect(product.getByRole('button', { name: /favoritos/ })).toHaveCount(0);
@@ -86,6 +88,7 @@ test('acceptance 1: at 1440 a resting card shows no purchase control, and the ac
   // Keyboard focus inside the card shows the same, and nothing else.
   await page.mouse.move(0, 0);
   await product.locator('.ce-product-link').focus();
+  await expect(product.locator(QUICK)).toHaveCSS('opacity', '1');
   expect(await visibleButtons(product)).toEqual(['Añadir MENE, Taza de Vidrio Resistente al Calor al carrito']);
   // Every card on the page: no favourite in the media box and no full-width add button.
   await expect(page.locator('.ce-product-media button')).toHaveCount(0);
@@ -158,11 +161,13 @@ test('acceptance 1: on touch and narrow screens the card is one link, and its ot
 });
 
 // Every native control type the whole-card link keeps separate (a[href], button, input with its label, select, textarea, summary),
-// in one card: each takes its own pointer or touch press and keeps its place in the keyboard order. Custom role="button" elements
+// in one card: each takes its own pointer or touch press and keeps its place in the keyboard order. The photo box holds a button and
+// a link of its own before the photo's link; the recipe sizes every direct photo-box link like the photo, so this fixture gives its
+// own link a control's size and corner inline. Custom role="button" elements
 // and controls inside an ancestor with its own stacking context are outside what the recipe keeps separate (see the guideline).
 const controlsCard = `<article class="ce-product" style="width:300px">
   <label class="ce-check ce-product-select"><input type="checkbox" />Comparar</label>
-  <div class="ce-product-media"><button class="ce-icon-button ce-icon-button--small" type="button" id="marca" aria-label="Marcar MENE">${ICON}</button><a href="#producto" tabindex="-1" aria-hidden="true"><span class="ce-media-missing">Foto no disponible</span></a></div>
+  <div class="ce-product-media"><button class="ce-icon-button ce-icon-button--small" type="button" id="marca" aria-label="Marcar MENE">${ICON}</button><a class="ce-icon-button ce-icon-button--small" href="#detalle" id="detalle-enlace" aria-label="Ver el detalle de MENE" style="width:40px;height:40px;left:0;right:auto">${ICON}</a><a href="#producto" tabindex="-1" aria-hidden="true"><span class="ce-media-missing">Foto no disponible</span></a></div>
   <div class="ce-product-info">
     <div class="ce-product-row"><h3 class="ce-product-heading"><a class="ce-product-link" href="#producto"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio</span></a></h3></div>
     <p class="ce-product-specs">vidrio borosilicato, 250ml</p>
@@ -179,8 +184,8 @@ async function checkControls(page, tap) {
   // Keyboard: the document order, with the photo's own link out of it.
   await page.locator('#antes').focus();
   const order = [];
-  for (let step = 0; step < 8; step += 1) { await page.keyboard.press('Tab'); order.push(await page.evaluate(() => { const el = document.activeElement; return el.matches('.ce-product-link') ? 'product' : el.matches('.ce-variant-thumbs a') ? 'variant' : el.type === 'checkbox' ? 'compare' : el.id; })); }
-  expect(order).toEqual(['compare', 'marca', 'product', 'variant', 'cantidad', 'nota', 'detalles', 'tarea']);
+  for (let step = 0; step < 9; step += 1) { await page.keyboard.press('Tab'); order.push(await page.evaluate(() => { const el = document.activeElement; return el.matches('.ce-product-link') ? 'product' : el.matches('.ce-variant-thumbs a') ? 'variant' : el.type === 'checkbox' ? 'compare' : el.id; })); }
+  expect(order).toEqual(['compare', 'marca', 'detalle-enlace', 'product', 'variant', 'cantidad', 'nota', 'detalles', 'tarea']);
   await page.locator('#antes').focus();
   // Pointer or touch: each control takes its own press, the product link takes none of them.
   await pointAt(page, page.locator('.ce-product-select'), { tap });
@@ -203,6 +208,10 @@ async function checkControls(page, tap) {
   await pointAt(page, page.locator('#tarea'), { tap });
   expect(await takeClicks(page)).toEqual(['tarea']);
   await expect(page).toHaveURL(/card\.html$/);
+  // The photo box's own link opens its own destination, not the product.
+  await pointAt(page, page.locator('#detalle-enlace'), { tap });
+  expect(await takeClicks(page)).toEqual(['detalle-enlace']);
+  await expect(page).toHaveURL(/#detalle$/);
   await pointAt(page, page.locator('.ce-variant-thumbs a'), { tap });
   expect(await takeClicks(page)).toEqual(['variant']);
   await expect(page).toHaveURL(/#variante$/);
@@ -210,9 +219,37 @@ async function checkControls(page, tap) {
   expect(await takeClicks(page)).toEqual(['product']);
   await expect(page).toHaveURL(/#producto$/);
 }
+// Keyboard activation of each control under the cover. The select is checked for pointer press and focus only: how its value changes
+// from the keyboard differs between the customizable picker and the native one.
+async function checkKeyboard(page) {
+  await trackClicks(page);
+  const press = async (selector, key) => { await page.locator(selector).focus(); await page.keyboard.press(key); };
+  await press('.ce-product-select input', 'Space');
+  await expect(page.getByRole('checkbox', { name: 'Comparar' })).toBeChecked();
+  expect(await takeClicks(page)).toEqual(['compare']);
+  await press('#marca', 'Enter');
+  await press('#marca', 'Space');
+  expect(await takeClicks(page)).toEqual(['marca', 'marca']);
+  await page.locator('#nota').focus();
+  await page.keyboard.type('Sin tapa');
+  await expect(page.locator('#nota')).toHaveValue('Sin tapa');
+  await press('#detalles', 'Enter');
+  await expect(page.locator('details')).toHaveAttribute('open', '');
+  expect(await takeClicks(page)).toEqual(['detalles']);
+  await press('#tarea', 'Space');
+  expect(await takeClicks(page)).toEqual(['tarea']);
+  await expect(page).toHaveURL(/card\.html$/);
+  for (const [selector, name, destination] of [['#detalle-enlace', 'detalle-enlace', /#detalle$/], ['.ce-product-link', 'product', /#producto$/], ['.ce-variant-thumbs a', 'variant', /#variante$/]]) {
+    await press(selector, 'Enter');
+    expect(await takeClicks(page), selector).toEqual([name]);
+    await expect(page, selector).toHaveURL(destination);
+  }
+}
 test('acceptance 1: at 390 every native control type in a card keeps its own pointer target and keyboard place', async ({ page }) => {
   await open(page, controlsCard, { width: 390 });
   await checkControls(page, false);
+  await open(page, controlsCard, { width: 390 });
+  await checkKeyboard(page);
 });
 
 test.describe('on a touch screen', () => {
