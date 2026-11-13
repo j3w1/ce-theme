@@ -23,3 +23,9 @@ Read `/etc/ce-devbox/AGENTS.md` first. Work in a registered CE task worktree.
 After changes: `pnpm generate`, `pnpm check` (includes the Vue package's typecheck, tests and build), `pnpm test:browser`, `pnpm test:consumer` (the clean install proof of the packed package; it needs the npm registry), and `git diff --check`.
 Browser tests require a compatible Playwright Chromium installation. Locally `pnpm test:browser` runs Chromium and says WebKit was not run; hosted CI runs both. Report unrun checks accurately.
 Publication runs only from merged `main` under SEAL #7: the B1-release workflow publishes the package and B2's site workflow deploys the site; nothing else publishes the package or deploys the site. Design System artifact synchronization (B7) stays possible under its own PES. The repository is public.
+
+## Repository delivery
+
+Use the installed Pod skill to open and track a pull-request objective, record observed proof, obtain independent review and deliver the reviewed, green candidate with `pod deliver`. Before delivery run `pnpm generate`, `pnpm check`, `pnpm test:browser`, `pnpm test:consumer` and `git diff --check`; required hosted checks must pass on the exact candidate. Report local WebKit as unrun when it was not run; hosted acceptance includes Chromium, WebKit and the consumer proof.
+
+Package publication runs only through the B1-release workflow from merged `main`. Version package-content changes before publication; an existing version must reuse and verify its immutable release asset. Never create or change release tags or assets by hand. Verify the main workflow's existing-release and public-consumer path after a change to release verification.
