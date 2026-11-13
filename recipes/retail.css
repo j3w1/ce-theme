@@ -178,15 +178,17 @@
 .ce-product:hover .ce-product-row > .ce-icon-button--action, .ce-product:focus-within .ce-product-row > .ce-icon-button--action { opacity: 1; }
 /* A card with no Description and no specs under its NAME has no room for the action: the 44px action would reach over the price,
    which starts 12px below the NAME. The optional quick-add is not shown there, and buying stays on the product page. Empty
-   elements count as absent. */
+   elements count as absent; render the Description and specs only when they have text, as productView() gives them (a selector
+   cannot see that an element holds only white space). */
 .ce-product-row:not(:has(.ce-product-description:not(:empty))):not(:has(+ .ce-product-specs:not(:empty))) > .ce-icon-button--action { display: none; }
-/* On touch and narrow screens the whole card opens the product page: the product link covers the card, and every other control in it
-   (variant thumbnails, «Comparar», a list's own task) stays a separate target above it. */
+/* On touch and narrow screens the whole card opens the product page: the product link covers the card, and every other native control
+   in it (variant thumbnails, «Comparar», a list's own task) stays a separate target above it. The photo's own link goes to the same
+   page and stays below, so it never covers a control placed in the photo box. */
 @media (hover: none), (max-width: 639.98px) {
   .ce-product-row > .ce-icon-button--action { display: none; }
   .ce-product { position: relative; }
   .ce-product .ce-product-link::after { position: absolute; inset: 0; content: ''; }
-  .ce-product :where(a[href], button, input, select, textarea, label, summary):where(:not(.ce-product-link)) { position: relative; z-index: 1; }
+  .ce-product :where(a[href], button, input, select, textarea, label, summary):where(:not(.ce-product-link, .ce-product-media > a)) { position: relative; z-index: 1; }
 }
 /* The 44px quick action is taller than a NAME with a one-line Description, so it is taken out of the row's height: the ProductStack
    gaps and the price stay where they are with or without it. Its column stays clear: the heading, the line that follows the row and,

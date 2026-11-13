@@ -41,7 +41,7 @@ async function open(page, body, { width = 1440, root = '100%', extra = '', dir =
 const priceHtml = (amount) => `<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Precio actual: ${amount} soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">${amount}</span></span></span></div>`;
 const card = ({ name = 'MENE', description = 'Taza de Vidrio', specs = 'vidrio borosilicato, 250ml', amount = '12.5', note = false, quickAdd = true, legacy = false, extras = false, width = 300, style = '', empty = false } = {}) => `<article class="ce-product" style="width:${width}px;${style}">
   ${extras ? '<label class="ce-check ce-product-select"><input type="checkbox" />Comparar</label>' : ''}
-  <div class="ce-product-media"><a href="#producto" tabindex="-1" aria-hidden="true"><span class="ce-media-missing">Foto no disponible</span></a></div>
+  <div class="ce-product-media">${extras ? `<button class="ce-icon-button ce-icon-button--small" type="button" id="marca" aria-label="Marcar ${name}">${ICON}</button>` : ''}<a href="#producto" tabindex="-1" aria-hidden="true"><span class="ce-media-missing">Foto no disponible</span></a></div>
   <div class="ce-product-info">
     <div class="ce-product-row"><h3 class="ce-product-heading"><a class="ce-product-link" href="#producto"><span class="ce-product-name">${name}</span>${description ? `<span class="ce-product-description">${description}</span>` : empty ? '<span class="ce-product-description"></span>' : ''}</a></h3>${quickAdd ? `<button class="ce-icon-button ce-icon-button--action ce-icon-button--small" type="button" aria-label="Añadir ${name} al carrito">${ICON}</button>` : ''}</div>
     ${specs ? `<p class="ce-product-specs">${specs}</p>` : empty ? '<p class="ce-product-specs"></p>' : ''}
@@ -59,6 +59,13 @@ async function pointAt(page, locator, { tap = false, x, y } = {}) {
   const point = [x?.(box) ?? box.x + box.width / 2, y?.(box) ?? box.y + box.height / 2];
   if (tap) await page.touchscreen.tap(...point); else await page.mouse.click(...point);
 }
+// Which control each click reached. Link activation is counted where it happens, so nothing depends on when the URL changes.
+const trackClicks = (page) => page.evaluate(() => {
+  window.clicks = [];
+  const name = (el) => (el.matches('.ce-product-link') ? 'product' : el.matches('.ce-product-media > a') ? 'photo' : el.matches('.ce-variant-thumbs a') ? 'variant' : el.type === 'checkbox' ? 'compare' : el.id);
+  for (const el of document.querySelectorAll('.ce-product :is(a, button, input)')) el.addEventListener('click', () => window.clicks.push(name(el)));
+});
+const takeClicks = (page) => page.evaluate(() => window.clicks.splice(0));
 // Every button in a card that a person can see: rendered, not transparent.
 const visibleButtons = (locator) => locator.evaluate((root) => [...root.querySelectorAll('button')].filter((el) => {
   const box = el.getBoundingClientRect();
@@ -115,29 +122,39 @@ test('acceptance 1: at 390 the empty space of a card opens the product page, and
 
 test('acceptance 1: on touch and narrow screens the card is one link, and its other controls stay separate in their own order', async ({ page }) => {
   await open(page, card({ extras: true, quickAdd: true }), { width: 390 });
-  await page.evaluate(() => { window.tasks = 0; document.querySelector('#tarea').addEventListener('click', () => { window.tasks += 1; }); });
+  await trackClicks(page);
   await expect(page.locator(QUICK)).toBeHidden();
-  // Keyboard order is the document order: «Comparar», the product link, the variant link, the list's own task.
+  // Keyboard order is the document order: «Comparar», the control in the photo box, the product link, the variant link, the task.
   await page.locator('#antes').focus();
   const order = [];
-  for (let step = 0; step < 4; step += 1) { await page.keyboard.press('Tab'); order.push(await page.evaluate(() => document.activeElement.closest('label')?.textContent.trim() ?? document.activeElement.textContent.trim())); }
-  expect(order).toEqual(['Comparar', 'MENETaza de Vidrio', 'NOME', 'Quitar de favoritos']);
-  await page.getByRole('checkbox', { name: 'Comparar' }).click();
+  for (let step = 0; step < 5; step += 1) { await page.keyboard.press('Tab'); order.push(await page.evaluate(() => document.activeElement.closest('label')?.textContent.trim() ?? document.activeElement.getAttribute('aria-label') ?? document.activeElement.textContent.trim())); }
+  expect(order).toEqual(['Comparar', 'Marcar MENE', 'MENETaza de Vidrio', 'NOME', 'Quitar de favoritos']);
+  // Each separate control takes its own click, at the point a person would press it, and the product link takes none of them.
+  await pointAt(page, page.locator('.ce-product-select input'));
   await expect(page.getByRole('checkbox', { name: 'Comparar' })).toBeChecked();
-  await page.locator('#tarea').click();
-  expect(await page.evaluate(() => window.tasks)).toBe(1);
-  expect(new URL(page.url()).hash).toBe('');
-  await page.locator('.ce-variant-thumbs a').click();
-  expect(new URL(page.url()).hash).toBe('#variante');
-  for (const selector of ['.ce-product-specs', '.ce-price-block', '.ce-stock', '.ce-product-media']) {
+  expect(await takeClicks(page)).toEqual(['compare']);
+  // A control placed before the photo's own link in the photo box stays on top of it.
+  await pointAt(page, page.locator('#marca'));
+  expect(await takeClicks(page)).toEqual(['marca']);
+  await pointAt(page, page.locator('#tarea'));
+  expect(await takeClicks(page)).toEqual(['tarea']);
+  await expect(page).toHaveURL(/card\.html$/);
+  await pointAt(page, page.locator('.ce-variant-thumbs a'));
+  expect(await takeClicks(page)).toEqual(['variant']);
+  await expect(page).toHaveURL(/#variante$/);
+  // Every ordinary part of the card is the product link.
+  for (const selector of ['.ce-product-specs', '.ce-price-block', '.ce-stock', '.ce-product-media .ce-media-missing']) {
     await page.evaluate(() => { history.replaceState(null, '', location.pathname); });
     await pointAt(page, page.locator(selector));
-    expect(new URL(page.url()).hash, selector).toBe('#producto');
+    expect(await takeClicks(page), selector).toEqual(['product']);
+    await expect(page, selector).toHaveURL(/#producto$/);
   }
   // On a hover-capable desktop the card keeps its separate photo and identity links and its quick-add.
   await open(page, card({ extras: true }), { width: 1440 });
+  await trackClicks(page);
   await pointAt(page, page.locator('.ce-product-specs'));
-  expect(new URL(page.url()).hash).toBe('');
+  expect(await takeClicks(page)).toEqual([]);
+  await expect(page).toHaveURL(/card\.html$/);
 });
 
 test.describe('on a touch screen', () => {
@@ -152,14 +169,19 @@ test.describe('on a touch screen', () => {
     await pointAt(page, product.locator('.ce-product-specs'), { tap: true });
     await expect(page).toHaveURL(PRODUCT);
   });
-  test('acceptance 1: under (hover: none) a tap on the price opens the product page; a variant tap stays the variant', async ({ page }) => {
+  test('acceptance 1: under (hover: none) a tap on the price opens the product page; a variant or photo-box control tap stays its own', async ({ page }) => {
     await open(page, card({ extras: true }));
     test.skip(!(await page.evaluate(() => matchMedia('(hover: none)').matches)), 'This browser does not emulate (hover: none) for a touch context.');
+    await trackClicks(page);
     await expect(page.locator(QUICK)).toBeHidden();
-    await page.locator('.ce-variant-thumbs a').tap();
-    expect(new URL(page.url()).hash).toBe('#variante');
+    await pointAt(page, page.locator('#marca'), { tap: true });
+    expect(await takeClicks(page)).toEqual(['marca']);
+    await pointAt(page, page.locator('.ce-variant-thumbs a'), { tap: true });
+    expect(await takeClicks(page)).toEqual(['variant']);
+    await expect(page).toHaveURL(/#variante$/);
     await pointAt(page, page.locator('.ce-price-block'), { tap: true });
-    expect(new URL(page.url()).hash).toBe('#producto');
+    expect(await takeClicks(page)).toEqual(['product']);
+    await expect(page).toHaveURL(/#producto$/);
   });
   test('acceptance 2b: under (hover: none) a leftover ce-product-add stays hidden', async ({ page }) => {
     await open(page, card({ legacy: true }));

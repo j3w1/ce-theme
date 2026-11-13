@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { NAMES } from '../recipes/names.mjs';
 import { icons } from '../site/data/icons.mjs';
+import { productView } from '../recipes/product.mjs';
 
 // CR-07, the shopping-action rule: the records, the registry and the recipe source that its browser checks
 // (tests/browser/shopping-actions.spec.mjs) cannot see. Acceptance 5 in docs/change-requests/CR-07-shopping-action-rule.md.
@@ -70,4 +71,19 @@ test('the cart is «carrito» and cart in the sources; the icons keep their draw
     const text = (await read(file)).replace(/brand-tote-bag\.png/g, '');
     assert.doesNotMatch(text, /«?\b[Bb]olsa\b|\bbag\b|bag-plus|add-to-bag|AddToBag/, `${file} names the cart a bag`);
   }
+});
+
+test('markup contract: blank or whitespace-only Description and specs are not rendered, so a card stays a NAME-only card', async () => {
+  // A selector cannot tell an element holding only white space from text, so the recipe's NAME-only rule relies on the Description and
+  // specs being rendered only when they have text. productView() gives them so, and the reference card renders only what it returns.
+  for (const blank of ['', ' ', '   ', '\n\t ']) {
+    const view = productView({ name: 'MENE', description: blank, specs: [blank, blank] });
+    assert.equal(view.description, undefined, `description ${JSON.stringify(blank)}`);
+    assert.deepEqual(view.specs, [], `specs ${JSON.stringify(blank)}`);
+  }
+  const card = await read('site/components/ProductCard.astro');
+  assert.match(card, /\{view\.description && <span class="ce-product-description">\{view\.description\}<\/span>\}/);
+  assert.match(card, /\{view\.specs\.length > 0 && <p class="ce-product-specs">/);
+  const retail = await read('recipes/retail.css');
+  assert.match(retail, /\.ce-product-row:not\(:has\(\.ce-product-description:not\(:empty\)\)\):not\(:has\(\+ \.ce-product-specs:not\(:empty\)\)\) > \.ce-icon-button--action \{ display: none; \}/);
 });
