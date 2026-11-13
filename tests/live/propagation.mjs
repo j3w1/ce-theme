@@ -66,8 +66,12 @@ export default async function waitForDeploy() {
       if (waiting === undefined) throw new Error(SPENT);
       last = waiting;
     } catch (error) {
-      // The last reason that says what was not served yet is kept; running out of time is not one.
-      if (error.message !== SPENT) last = error.name === 'TimeoutError' || error.name === 'AbortError' ? 'a request reached the deadline' : error.message;
+      // The last reason that says what was not served yet is kept: running out of time is not one, and a request cut off at the
+      // deadline is added to the earlier reason instead of replacing it.
+      if (error.message !== SPENT) {
+        const cutOff = error.name === 'TimeoutError' || error.name === 'AbortError';
+        last = !cutOff ? error.message : last === 'no answer' ? 'a request reached the deadline' : `${last}; then a request reached the deadline`;
+      }
     }
     const left = deadline - Date.now();
     if (left <= 0) throw new Error(`${site.href} did not serve the expected deploy within five minutes (last: ${last}).`);
