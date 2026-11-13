@@ -119,10 +119,18 @@ const PAGES = [
 ];
 const storeBar = (page) => page.locator('main .ce-store-note:visible').filter({ has: page.locator(':scope > .ce-link') });
 const lead = (page) => storeBar(page).locator(':scope > span:visible');
-const visibleAmounts = (page) => page.locator('main').evaluate((main) => ({
-  prices: [...main.querySelectorAll('.ce-price')].filter((el) => el.offsetParent !== null).length,
-  text: /S\/\s*\d/.test(main.innerText),
-}));
+// Store-supplied amounts that are shown: rendered prices, and plain-text amounts such as a cart total. The home page's
+// price-band links («Hasta S/5», `ce-price-points`) name a price range, not a store's price; they are counted apart (`bands`)
+// so the test states exactly what it leaves out.
+const visibleAmounts = (page) => page.locator('main').evaluate((main) => {
+  const store = (el) => !el.closest('.ce-price-points');
+  const shown = (el) => el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden';
+  const prices = [...main.querySelectorAll('.ce-price')].filter((el) => el.offsetParent !== null);
+  const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT);
+  let text = false;
+  for (let node = walker.nextNode(); node && !text; node = walker.nextNode()) text = store(node.parentElement) && shown(node.parentElement) && /S\/\s*\d/.test(node.textContent);
+  return { prices: prices.filter(store).length, text, bands: prices.length - prices.filter(store).length };
+});
 // The visible amounts in the cart: each line's price, the subtotal and the total.
 const cartAmounts = (page) => page.locator('main').evaluate((main) => {
   const shown = (selector) => [...main.querySelectorAll(selector)].filter((el) => el.offsetParent !== null);
@@ -177,13 +185,13 @@ for (const [route, words] of PAGES) {
     if (route === '/tienda/carrito/') expect(await cartAmounts(page)).toEqual(AREQUIPA);
   });
 
-  test(`${route} without a store: «Tienda: sin elegir» with «Elegir tienda», and no amount on the page`, async ({ page }) => {
+  test(`${route} without a store: «Tienda: sin elegir» with «Elegir tienda», and no store-supplied amount on the page`, async ({ page }) => {
     await page.goto(`${route}?tienda=ninguna`);
     await expect(storeBar(page)).toHaveCount(1);
     await expect(lead(page)).toHaveText('Tienda: sin elegir');
     const action = storeBar(page).getByRole('button', { name: 'Elegir tienda' });
     await expect(action).toBeVisible();
-    expect(await visibleAmounts(page)).toEqual({ prices: 0, text: false });
+    expect(await visibleAmounts(page)).toEqual({ prices: 0, text: false, bands: route === '/tienda/' ? 3 : 0 });
     if (route === '/tienda/carrito/') {
       // The no-store messages take the place of each line amount and of the summary.
       await expect(page.locator('.ce-cart-line-actions > .ce-store-note:visible')).toHaveText(['Elige tu tienda para ver el precio.', 'Elige tu tienda para ver el precio.']);
