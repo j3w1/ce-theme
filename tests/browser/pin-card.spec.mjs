@@ -64,10 +64,17 @@ const inside = (m, label) => {
   expect(m.card.top, `${label} top`).toBeGreaterThanOrEqual(m.frame.top - 1);
   expect(m.card.bottom, `${label} bottom`).toBeLessThanOrEqual(m.frame.bottom + 1);
 };
+// Keyboard focus on the card, as the repository's focus tests reach it in Chromium and WebKit: back to the dot and Tab
+// onto the card, so :focus-visible comes from keyboard navigation (WebKit does not show it for script focus after a click).
+async function keyboardFocus(page, card) {
+  await card.focus();
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Tab');
+  await expect(card).toBeFocused();
+}
 // Keyboard focus on the card: its outline (stroke.focus at stroke.offset) must lie inside the photo, which clips.
 async function focusRingInside(page, card, label) {
-  await page.keyboard.press('Shift');
-  await card.focus();
+  await keyboardFocus(page, card);
   const r = await card.evaluate((el) => {
     // The tokens as the browser resolves them for this card (rem, calc and overrides included).
     const probe = document.createElement('span');
@@ -88,8 +95,7 @@ async function focusRingInside(page, card, label) {
 // The focus ring is painted on every side: a 1px strip through the middle of the outline band differs between the
 // focused and the unfocused card (the photo would clip a ring outside it, and both strips would then be equal).
 async function focusRingPainted(page, card) {
-  await page.keyboard.press('Shift');
-  await card.focus();
+  await keyboardFocus(page, card);
   const bands = await card.evaluate((el) => {
     const s = getComputedStyle(el), c = el.getBoundingClientRect();
     const mid = parseFloat(s.outlineOffset) + parseFloat(s.outlineWidth) / 2;
@@ -108,8 +114,7 @@ const PAINTED = { left: true, right: true, top: true, bottom: true };
 // Native keyboard scrolling may animate, so each ArrowDown must move the card (or reach its end) within a bounded wait,
 // and the end is checked after the last key.
 async function keyboardReachesEnd(page, card) {
-  await page.keyboard.press('Shift');
-  await card.focus();
+  await keyboardFocus(page, card);
   const read = () => card.evaluate((el) => ({ top: el.scrollTop, max: el.scrollHeight - el.clientHeight }));
   let state = await read();
   for (let press = 0; press < 40 && state.top < state.max - 1; press += 1) {
@@ -205,10 +210,8 @@ test('scene: open pin cards, also one limited to the photo, have no accessibilit
   await page.goto('/tienda/escena/');
   const pin = page.locator('#escena-cocina .ce-pin').first();
   await pin.locator('.ce-pin-dot').focus();
-  await page.keyboard.press('Shift');
   const card = pin.locator('.ce-pin-card');
-  await card.focus();
-  await expect(card).toBeFocused();
+  await keyboardFocus(page, card);
   const ring = await card.evaluate((el) => { const s = getComputedStyle(el); return { width: s.outlineWidth, style: s.outlineStyle, offset: s.outlineOffset }; });
   expect(ring).toEqual({ width: '2px', style: 'solid', offset: '3px' });
   expect((await pin.locator('.ce-pin-chevron').boundingBox()).width).toBeCloseTo(44, 0);
