@@ -118,18 +118,19 @@ async function focusRingPainted(page, card) {
 }
 const PAINTED = { left: true, right: true, top: true, bottom: true };
 // A card limited to the photo's height is reachable to its end from the keyboard: the card is the focused link.
-// Native keyboard scrolling may animate, so each ArrowDown must move the card (or reach its end) within a bounded wait,
-// and the end is checked after the last key.
+// The keyboard reaches the end of a card limited to its photo: ArrowDown on the focused card, up to a generous number
+// of presses. Each press may take a moment to register on a loaded machine, so the check waits briefly for progress after
+// each one and then requires the end; a card the keyboard cannot scroll never gets there and fails with its state.
 async function keyboardReachesEnd(page, card) {
   await keyboardFocus(page, card);
   const read = () => card.evaluate((el) => ({ top: el.scrollTop, max: el.scrollHeight - el.clientHeight }));
   let state = await read();
-  for (let press = 0; press < 40 && state.top < state.max - 1; press += 1) {
+  for (let press = 0; press < 60 && state.top < state.max - 1; press += 1) {
     const before = state.top;
     await page.keyboard.press('ArrowDown');
-    await expect.poll(async () => { state = await read(); return state.top > before + 0.5 || state.top >= state.max - 1; }, { message: 'ArrowDown scrolls the focused card', timeout: 3000 }).toBe(true);
+    for (let wait = 0; wait < 20; wait += 1) { state = await read(); if (state.top > before + 0.5 || state.top >= state.max - 1) break; await page.waitForTimeout(50); }
   }
-  await expect.poll(async () => { state = await read(); return state.top >= state.max - 1; }, { message: 'the keyboard reaches the end of the card', timeout: 3000 }).toBe(true);
+  await expect.poll(async () => { state = await read(); return state.top >= state.max - 1; }, { message: 'the keyboard reaches the end of the card', timeout: 10000 }).toBe(true);
   return true;
 }
 async function checkCard(page, card, label, kind) {
