@@ -23,7 +23,7 @@ SEAL #7 batch B1 (ce-theme#8).
 
 ### Changed
 
-- CR-09 (ce-theme#11): the pin card follows the ProductStack. NAME and Description are 2px apart (`size.product.gap-identity`, was 4px), and the price block, or the store note or pending-price message in its place, starts 8px under the Description from `size.product.gap-note` (the store note and pending-price message were 4px). No markup, price or API change; `tests/browser/pin-card.spec.mjs` measures it.
+- CR-09 (ce-theme#11): the pin card follows the ProductStack. NAME and Description are 2px apart (`size.product.gap-identity`, was 4px), and the price block, or the store note or pending-price message in its place, starts 8px under the Description from `size.product.gap-note` (the store note and pending-price message were 4px). With large text the card is never wider than its photo (`min-width: min(11rem, 100cqw)`), and a card taller than its photo is limited to the photo's height by `placePins()` and scrolls instead of being clipped; `enhancePins()` places the cards again once the fonts have loaded. No markup, type scale, price or API change; `tests/browser/pin-card.spec.mjs` measures it, with text at x1, x1.5 and x2.
 - The package and the foundation share one version, 0.2.0. Installation, upgrade and rollback by one pinned package file are documented in the package README and `docs/apply-ce-theme.md`.
 - Browser tests use their own port and never an existing server. CI installs and runs Chromium and WebKit; a local run says WebKit was not run.
 - `docs/decisions.md` records the SEAL #7 revisions of “Workflow”, “Delivery”, “Application identities” and “Showcase exception”, and three Step 4B decisions; `AGENTS.md`, `docs/workflow.md` and `packages/vue/CONTRIBUTING.md` follow them.

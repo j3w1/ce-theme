@@ -1,4 +1,4 @@
-Status: Decided on 2026-11-13 by the repository lead's selection, “decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed” ([issue #11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)); implemented in CE Theme source by the CR-09 pull request; the frozen boards are unchanged (X-3)
+Status: Decided on 2026-11-13 by the repository lead's selection, “decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed”, with the pin-card fit added as decision 3, “decided under the same standing delegation (Supervisor confirmation, 2026-11-13 13:22), not j3w1-typed” ([issue #11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)); implemented in CE Theme source by the CR-09 pull request; the frozen boards are unchanged (X-3)
 
 # CR-09 · Pin-card text uses the 2px identity gap
 
@@ -65,6 +65,14 @@ Recipe: `ce-pin-text` (existing; no new name).
   <span class="ce-pin-chevron" aria-hidden="true">…</span></a>
 ```
 
+**Fit with large text (decision 3).** The section 6 checks with text enlarged x1.5 and x2 showed a defect that predates this request: the card's `min-width: 11rem` could make it wider than a small photo, and a card taller than its photo was clipped by `ce-tagged-media`. The correction keeps the type scale, the identity and the markup, and adds no public API:
+
+```css
+.ce-pin-card { min-width: min(11rem, 100cqw); overflow: hidden auto; overscroll-behavior: contain; }
+```
+
+`placePins()` in `behaviors.mjs` limits a card that is taller than its photo to the photo's height, so the card scrolls inside the photo; the card is the focusable link, so keyboard users scroll it too. `enhancePins()` also places the cards again once the fonts have loaded. A card that fits is placed exactly as before.
+
 ## 5. Accessibility and invariants it must keep
 
 | Invariant | Applies? |
@@ -88,7 +96,7 @@ To run when the repository work happens (not run here, except where marked):
 
 - Pin cards become about 2px shorter (and about 2px more where a note takes the price offset): the "flip above" placement in `enhancePins()` depends on card height; to verify in the repository tests (not seen).
 - The 77 boards keep their local patches as part of the frozen snapshot (X-3); there is no re-synchronisation pass. A board that combined the new recipe with its patches would find `.ce-pin-card .ce-pin-text{gap:2px}` harmless (same value) and the 17 boards' `margin-top: 6px` equal to the new computed value.
-- Not changed: card width limits, padding (12px 16px), price size (32px in the pin), chevron cell, hover and focus behaviour.
+- Not changed: padding (12px 16px), price size (32px in the pin), chevron cell, hover and focus behaviour. The card's width limits are unchanged except that, with decision 3, its minimum width never exceeds its photo (section 4).
 - Related, not proposed here: boards add `.ce-pin-card .ce-store-note { font-size: 13px }` and `.ce-pin-card .ce-skeleton { width: 72px; height: 24px }` (7 boards each). These are raw values for pin states.
 
 ## 8. Owner decisions needed
@@ -98,4 +106,7 @@ To run when the repository work happens (not run here, except where marked):
 2. Keep the pin card's price at 8px under the Description (current recipe and boards) or move it to 12px like a card with specs? Recommended: keep 8px (no specs in the pin).
    **Decided (2026-11-13, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed):** keep 8px, for a pin without specifications; NAME to Description becomes the existing 2px identity gap.
 
-These are the repository lead's selections in [issue #11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160), using this request's recommendations; j3w1 can veto either. The section 6 checks are `tests/browser/pin-card.spec.mjs` in the repository.
+3. *Added after the section 6 checks:* fix the pin-card fit, sizing and overflow defect that acceptance 3 and 4 exposed, inside this request.
+   **Decided (2026-11-13, decided under the same standing delegation (Supervisor confirmation, 2026-11-13 13:22), not j3w1-typed):** fix it here, preserving product identity, type scale, accessibility and the existing public API; the acceptance stays unchanged, with no waiver.
+
+These are the repository lead's selections in [issue #11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160), using this request's recommendations; j3w1 can veto any of them. The section 6 checks are `tests/browser/pin-card.spec.mjs` in the repository.

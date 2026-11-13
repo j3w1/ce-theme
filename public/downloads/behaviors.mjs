@@ -159,13 +159,17 @@ export function enhanceMarkers(root = document) {
 
 /** Web pins: a .ce-pin shows its card on hover and focus in CSS; this adds tap-to-open for touch (aria-expanded on the dot),
  * Escape and outside-tap to close, one open card per photo, and keeps each card inside its frame by flipping it
- * (ce-pin--start, ce-pin--above) when the side it would open on has no room. */
+ * (ce-pin--start, ce-pin--above) when the side it would open on has no room. A card taller than the photo (large text
+ * on a small photo) is limited to the photo's height, and the card scrolls. */
 export function placePins(frame, { gap = 20, inset = 14 } = {}) {
   const box = frame.getBoundingClientRect();
   for (const pin of frame.querySelectorAll('.ce-pin')) {
     const card = pin.querySelector('.ce-pin-card');
     if (!card) continue;
-    const { offsetWidth: width, offsetHeight: height } = card;
+    card.style.maxHeight = '';
+    const width = card.offsetWidth;
+    const height = Math.min(card.offsetHeight, box.height);
+    if (height < card.offsetHeight) card.style.maxHeight = `${box.height}px`;
     const at = pin.getBoundingClientRect();
     const start = at.left + width - inset > box.right;
     const above = at.top + gap + height > box.bottom && (at.top - gap - height >= box.top || at.top - box.top > box.bottom - at.top);
@@ -199,6 +203,7 @@ export function enhancePins(root = document) {
     frame.addEventListener('keydown', (event) => { if (event.key === 'Escape') { const open = pins.find((pin) => pin.hasAttribute('data-open')); close(); open?.querySelector('.ce-pin-dot').focus(); } });
     placePins(frame);
     if (typeof ResizeObserver === 'function') new ResizeObserver(() => placePins(frame)).observe(frame);
+    document.fonts?.ready.then(() => placePins(frame));
   }
 }
 
