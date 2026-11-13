@@ -214,7 +214,7 @@ Implemented with the kit:
   - every declaration holds only `--ce-` tokens and CSS keywords, and the one media query is the bundle's `639.98px`;
   - every selector starts from a kit class and reaches only kit classes, `.ce-demo-cue` and `.ce-badge`;
   - the kit is absent from the recipe sources, `exports/recipes.css`, `bundle.css`, the `@casaelida/vue` styles, the registry and the Components view;
-  - every shipped frame is named by a heading title, with a decorative marker of one or two characters, an English label and no inline style;
+  - every shipped frame is named by a heading title, with a decorative marker of one or two characters, an English label, no inline style on the kit's own elements and no empty `style` attribute anywhere in a frame (a fragment keeps the consumer inputs its recipes document);
   - every frame starts its body with the canon cue, unless the sheet's notes name it as exempt;
   - sheets link the kit after the bundle.
 - **Checks 1 and 2** are `tests/browser/state-frame.spec.mjs`, run on a synthetic sheet, `tests/fixtures/state-frame-sheet.html`. Its eight frames cover a lettered card, the «Escenario» badge, a route shell exempt from the cue, a staff record, a two-character marker on a wide frame, the band, and frames inside a group. The sheet is tested at 390, 768 and 1440 px with text at 100%, 150% and 200%. Text is enlarged the way a reader's text-size setting does it: every font size grows, including px sizes such as the 28px cart price, and so does the root size. The test checks:
@@ -258,20 +258,23 @@ Implemented with the kit:
     - Text grows by the factor in every case.
     - No label, title or note overflows, and every marker is 28px tall with its characters inside it.
     - The selection box of a title's first line, at the heading line height of 1.2, starts up to 1px above the label's text column. That is Chromium's selection rectangle, not painted ink.
-  - **The failures are the boards' own:**
-    - The 1440px boards overflow the page at 390 and 768 px by the same amount with and without the kit.
-    - Two fragments overflow their frames, and overflow by the same amount on their own: Pub06Estados at 390 and 768 px, where the board's grid leaves the frame body 125px wide at 390px and 193px at 768px, and the long-string phone replica of Pub20Largos at 150% and 200% text.
-  - **Fragment comparisons.** Of the 900 comparisons:
-    - 647 are identical in boxes and pixels.
-    - 202 differ because the standalone copy lacks the board's own ancestor rules, for example `.ce-app-main p { margin: 0 }` and `.lg-wrap h2 { line-height: 1.25 }`.
-    - 39 differ only in pixels, with identical boxes and computed styles.
-    - 12 are fragments that overflow on their own.
+  - **Where check 1 does not hold, the boards behave the same with and without the kit.** These cases stay unmet for those frozen boards; the kit's own label, title, note and marker stay inside in every case.
+    - **Page overflow, 55 of 108 cases.** Nine 1440px boards keep their 1440px page at 390 and 768 px, with 1050px and 672px of overflow, frozen and rebuilt alike. Pub06Estados at 390px with 200% text overflows by 5px frozen and 3px rebuilt.
+    - **Frame overflow, 11 of 108 cases.** In each, the fragment is wider than the frame body and overflows a plain block of the same width by the same amount:
+      - Pub06Estados at 390 and 768 px: its grid gives frame 1 a zero-width cell, with a body 124.7px wide at 390px and 100% text, 108.7px at 768px and 100% text, and 193.4px at 768px and 200% text.
+      - The long-string phone replica of Pub20Largos (frame 4), at 150% and 200% text.
+  - **Fragment preservation, compared in the same rebuilt page.** Each fragment is measured in its frame. It is then moved into a plain `section` that takes the frame's place, with the frame's width, the body's insets and the same board ancestors, and measured again. Boxes are compared to 0.02px, every computed property of every element and pseudo-element is compared, and so are the pixels of the same clip, each taken once two screenshots agree.
+    - 836 of the 900 comparisons are identical in boxes, styles and pixels.
+    - 32 (Pub03Estados, Pub06Estados, Pub09Estados, Pub14EstadosMovil, Pub20Estados) differ only in the last captured pixel row, where the frame body's padding paints the canvas and the plain block has ended. With 1px of bottom padding on the plain block they are byte-identical.
+    - 30 (Pub06Estados at 390 and 768 px) cannot be matched with padding, because the board's grid gives the frame a zero-width cell that its body overflows. Given the body's content width, the plain block matches them in boxes, styles and pixels.
+    - 2 (Adm15Estados frame 6 at 390 and 768 px, 100% text) differ between two screenshots of the same framed state, and are identical on a fresh reload.
+    - The Chrome DevTools Protocol finds no rule of the kit's stylesheet matching any of the 36,630 fragment elements audited.
 
-    No difference was traced to the kit.
+    These are observations under matched conditions, and no kit cause was found. The 64 comparisons that were not identical at first are explained by the comparison itself (the plain block's last row and width) or by a screenshot that differed from itself. An earlier comparison against a separate page without the board's ancestors differed in 253 of the 900 comparisons, and is superseded by this one.
 
 The acceptance checks found two corrections to the rule in section 4.1. The repository lead accepted both under the same standing delegation, not j3w1-typed, and j3w1 may veto them. Measured in Chromium with the supplied Inter files:
 
-- **The marker.** As proposed (`width` and `height` 28px, with the inherited 1.5 line height), characters at 200% text leave the marker. Two characters measure 33.0 to 33.7px across the 28px circle. Every marker's ink also sits 3px below the circle, because a line box taller than the marker is start-aligned instead of centred. The kit uses `min-width: var(--ce-size-marker)`, `padding-inline: var(--ce-space-4)` and `line-height: var(--ce-font-line-tight)`. Every marker is 28 × 28px at 100% text and stays 28px tall; it widens into a pill only when enlarged characters need the room, as Variant J's marker already did.
+- **The marker.** As proposed (`width` and `height` 28px, with the inherited 1.5 line height), characters at 200% text leave the marker. Two characters measure 33.0 to 33.7px across the 28px circle. Every marker's ink also sits 3px below the circle, because a line box taller than the marker is start-aligned instead of centred. The kit uses `min-width: var(--ce-size-marker)`, `padding-inline: var(--ce-space-4)` and `line-height: var(--ce-font-line-tight)`. Every marker stays 28px tall. It is 28px wide while its characters and inline padding fit, which holds for single letters and numbers and for `10` at 100% text, and it widens into a pill whenever they need more, at any text size: `WW` is 38px wide at 100% text. Variant J's marker already behaved this way.
 - **The body.** As proposed (`display: grid` with a 16px gap), a fragment does not lay out as it does on its own. A grid item shrink-wraps when its margins are `auto`: the `ce-empty` route shell is 370px wide in the frame and 420px on its own at 768 and 1440 px. A grid item also keeps its children's margins inside it: a staff record header fragment is 316.97px tall in the frame and 292.97px on its own. The kit's body is ordinary block flow (`display: flow-root`), and the cue keeps its 16px gap through `margin-block-end`.
 
 Registry: `StateFrame` is named only in the kit's documentation (`design-system/doc-kit/README.md`); `recipes/names.mjs` and `names.md` do not list it.
