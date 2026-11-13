@@ -38,6 +38,11 @@
 .ce-record-header > img { width: 64px; height: 64px; object-fit: contain; border: var(--ce-stroke-thin) solid var(--ce-color-border-default); }
 .ce-record-title { display: grid; gap: var(--ce-space-4); min-width: 0; }
 .ce-record-title :is(h1, h2) { margin: 0; font-size: var(--ce-font-size-title); line-height: var(--ce-font-line-heading); }
+/* A title with product identity follows the ProductStack: the identity heading and its specs are direct children of the title;
+   their margins add to the 4px gap (code or code row to heading 8px, heading to specs 2px). A title without them keeps 4px. */
+.ce-record-title > .ce-product-heading { margin-top: calc(var(--ce-size-product-gap-code) - var(--ce-space-4)); }
+.ce-record-title > .ce-product-heading:first-child { margin-top: 0; }
+.ce-record-title > .ce-product-specs { margin-top: calc(var(--ce-size-product-gap-identity) - var(--ce-space-4)); }
 .ce-record-meta { display: flex; flex-wrap: wrap; gap: var(--ce-space-4) var(--ce-space-16); color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); }
 .ce-pill { display: inline-flex; align-items: center; gap: var(--ce-space-4); padding: 2px var(--ce-space-8); border-radius: var(--ce-radius-pill); background: var(--ce-color-surface-subtle); color: var(--ce-color-text-primary); font-size: var(--ce-font-size-xs); font-weight: var(--ce-font-weight-bold); white-space: nowrap; }
 .ce-pill::before { width: 8px; height: 8px; content: ''; border-radius: var(--ce-radius-pill); background: currentColor; }
