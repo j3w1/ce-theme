@@ -1,5 +1,15 @@
 # Changelog
 
+## @casaelida/vue 0.3.1 — 2026-11-13 (unreleased)
+
+CR-10, the record title with product identity (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version. Decisions 2 and 3 are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; decision 4 is the lead's decision under the same standing delegation, not j3w1-typed.
+
+### Changed
+
+- `ce-record-title` in `recipes/workspace.css` (CR-10): a direct-child `ce-product-heading` sits 8px below the code or the row that holds it, and a direct-child `ce-product-specs` 2px below the heading, from the `size.product` and `space` tokens. The 4px grid gap stays, so a title without them is unchanged; no selector reaches an identity nested inside a heading.
+- `ce-record-header` (CR-10): thumbnail, title and status share one wrapping line. The title is never narrower than its one-line code, and where the line has no room the status moves to the next line instead of covering the title. Markup and classes are unchanged.
+- The RecordEditor sample draws the identity heading instead of a run-in title. The RecordEditor README, `docs/decisions.md`, `docs/coverage.md` and CR-10 record the rules; `tests/browser/record-title.spec.mjs` measures CR-10's acceptance (390, 768 and 1440 px at 100%, 150% and 200% text, in a page-wide title and in a record header).
+
 ## @casaelida/vue 0.3.0 — 2026-11-13 (unreleased)
 
 CR-01, admin navigation (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed.
