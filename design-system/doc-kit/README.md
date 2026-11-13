@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="doc-kit/state-frame.css">
 ```
 
-Wrap the sheet in `class="ce-scope"`, as every CE Theme region. The kit reads only `--ce-` tokens and styles only its own `ce-state-frame` classes. It places the bundle's `ce-demo-cue` and `ce-badge` inside them and restyles nothing else, so a sheet that loads it renders every recipe exactly as before. The bundle never references the kit.
+The kit needs a bundle that has the `size.marker` and `stroke.heavy` tokens and `ce-demo-cue`, so the frozen workbench boards' copy of the bundle (5 November 2026) cannot load it as it is. Wrap the sheet in `class="ce-scope"`, as every CE Theme region. The kit reads only `--ce-` tokens and styles only its own `ce-state-frame` classes. It places the bundle's `ce-demo-cue` and `ce-badge` inside them and restyles nothing else, so a sheet that loads it renders every recipe exactly as before. The bundle never references the kit.
 
 ## Anatomy
 
@@ -50,7 +50,7 @@ Wrap the sheet in `class="ce-scope"`, as every CE Theme region. The kit reads on
 - **The marker is decorative** (`aria-hidden="true"`): the title carries the name. It holds one or two characters, never a word or a status. The inverse rectangular tag of earlier staff sheets, the info pill marker and every other tag are retired in new sheets; there is no tag modifier.
 - **«Escenario»** is the existing `ce-badge` inside the title, as a word, never a colour and never only in the notes.
 - **Language.** The label is English documentation on a Spanish page: `lang="en"` on the label's text column, `lang="es"` on the badge and on any Spanish string quoted in the note. The fragment is Spanish interface.
-- **The body never scales its fragment.** No `zoom`, no `transform`, no reduced copy: the fragment uses the ordinary recipes at their real size. The body is ordinary block flow, so the fragment lays out exactly as it does on its own in a block of the same width; the cue keeps 16px above it. Put the fragment in one element after the cue.
+- **The body never scales its fragment.** No `zoom`, no `transform`, no reduced copy: the fragment uses the ordinary recipes at their real size. The body is ordinary block flow, so the fragment lays out exactly as it does on its own in a block of the same width; the cue keeps 16px above it. Put the fragment in one element after the cue. The sheet's own grid gives a fixed-width fragment room: a 390px phone replica on a desktop sheet needs a frame 440px wide (24px of body padding on each side and the 1px borders), because the body padding follows the page width, not the frame's.
 - **The demonstration cue in every frame with simulated data.** When the fragment shows simulated commercial or staff data (a price, an amount, an availability line, an order, a case, a store or a staff record), the first child of its `ce-state-frame-body` is `<p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>`, in those exact words. A cue above the frames may be added for the whole sheet, but it never counts as a frame's cue.
 - **The named exemption.** A frame with no simulated data (a route shell, a documentation-only fragment) may leave the cue out only when the sheet's notes name it. Write the exemption in the notes as a list after the sentence “Exempt from the demonstration cue (no simulated data):”, one item per frame, each the frame's title without its badge:
 
