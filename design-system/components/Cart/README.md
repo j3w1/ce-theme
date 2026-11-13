@@ -14,11 +14,11 @@ The cart and checkout: product lines with supplied quantities, line amounts and 
 6. `ce-cart-line-actions`: quantity group, then `button.ce-link` for remove. Price is above this row.
 7. Optional `ce-save-state` or `ce-notice` describing pending or failed updates in words.
 
-Distances: code→heading 8px; NAME→Description 2px; heading→specs 2px; specs (or heading when absent)→amount-or-note 12px; amount-or-note→availability 8px; availability (or amount-or-note when absent)→controls 12px; controls→save-state/notice 8px. These use existing ProductStack/space tokens, without a uniform grid gap. The image remains 88px below 640px and 128px from 640px, line padding 24px per side, price type 28px.
+Distances: code→heading 8px; NAME→Description 2px; heading→specs 2px; specs (or heading when absent)→amount-or-note 12px; amount-or-note→availability 8px; availability (or amount-or-note when absent)→controls 12px; controls→save-state/notice 8px. These use existing ProductStack/space tokens, without a uniform grid gap. The image remains 88px below 640px and 128px from 640px, line padding 24px top and bottom, price type 28px.
 
 ## Controls and accessibility
 
-The product link is a real minimum 44px high box, so no enlarged overlay can steal quantity/remove clicks. Quantity buttons, input and remove have at least the public 44px target. Keep native buttons, a labelled input and `role="group" aria-label="Cantidad de MENE"`. Remove's name is «Quitar MENE del carrito», with product identity in `ce-sr-only` if only «Quitar» is visible. The order is product link, minus, input, plus, remove in both DOM and keyboard traversal; disabled controls are skipped normally. Focus rings use the existing 2px stroke and 3px offset, including the input.
+The product link keeps its content height for exact ProductStack distances. A centred pseudo-element gives it a minimum 44px hit area; it must never reach a quantity/remove control. Browser acceptance measures the visible identity boxes and hit-tests the expanded area. Quantity buttons, input and remove have at least the public 44px target. Keep native buttons, a labelled input and `role="group" aria-label="Cantidad de MENE"`. Remove's name is «Quitar MENE del carrito», with product identity in `ce-sr-only` if only «Quitar» is visible. The order is product link, minus, input, plus, remove in both DOM and keyboard traversal; disabled controls are skipped normally. Focus rings use the existing 2px stroke and 3px offset, including the input.
 
 Explain disabled controls with visible supplied text and `aria-describedby`. Show the last acknowledged quantity and amount during a pending change, with `aria-busy="true"` on the quantity group; do not announce every availability render. Live announcements and Enter/Escape behaviour belong to the application. No nested interactive elements.
 
@@ -38,9 +38,9 @@ The preview is illustrative static HTML, not a controller. Each simulated frame 
 | Blocked quote / unknown availability | Missing-price explanation, «Disponibilidad por confirmar en {tienda}», no total or enabled continuation inferred by the recipe. |
 | Expired quote | Explain expiry and show only amounts/actions the response permits. |
 | Offline | Say offline and identify any last confirmed values; no fresh availability claim. |
-| Removal with short undo | Supplied removal announcement and «Deshacer»; application supplies its short availability period and restores a supplied response. |
+| Removal with short undo | Supplied removal announcement and «Deshacer»; application supplies its short undo period and restores a supplied response. |
 
-The consumer owns numeric-string identifiers, decimal-string amounts, quantity limits, availability, eligibility, state transitions, undo timing and all totals. Never multiply quantity by a unit price or sum lines; never invent discounts, stock thresholds, reservations or default availability.
+The consumer owns numeric-string identifiers, decimal-string amounts, quantity limits, availability, eligibility, state transitions, undo timing and all totals. Say which store the cart is priced in. Never compute totals, taxes or discounts. Never multiply quantity by a unit price or sum lines; never invent discounts, stock thresholds, reservations or default availability.
 
 ## Other classes
 

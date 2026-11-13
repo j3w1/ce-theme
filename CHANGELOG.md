@@ -5,7 +5,7 @@
 Combined CR-04/CR-08 (Refs #11; #11 stays open): the packed cart styles and documented consumer composition change together. No Vue API is added.
 
 - Cart anatomy: optional code, linked identity/specifications, supplied line amount or note, actual CR-06 availability, quantity/remove, optional save-state/notice. Remove stays `button.ce-link` with «Quitar … del carrito».
-- Explicit token distances replace the uniform gap: 8/2/2/12/8px through availability, 12px to controls and 8px to save text. Unbroken codes get intrinsic room; links, quantity inputs and remove have real 44px targets and visible focus. Image sizes, padding and price scale stay.
+- Explicit token distances replace the uniform gap: 8/2/2/12/8px through availability, 12px to controls and 8px to save text. Unbroken codes get intrinsic room; links have a minimum 44px hit area without changing visible gaps; quantity inputs and remove have 44px targets and visible focus. Image sizes, padding and price scale stay.
 - Cart guideline and preview document eleven supplied states without arithmetic or live commerce logic; the reference cart adopts the anatomy. Focused browser acceptance covers actual Inter/text enlargement, optional/state cases, layout, keyboard, click isolation and axe. Screen-reader pass: not run, to schedule.
 - Decisions preserve historical rows and record the delegated selections. Frozen boards/local patches and the separate foundation version 0.2.0 stay unchanged.
 

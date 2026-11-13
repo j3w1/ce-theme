@@ -41,7 +41,11 @@ for (const width of [390, 768, 1440]) for (const factor of [1, 1.5, 2]) {
       const rect = (el) => { const r = el.getBoundingClientRect(); return { left:r.left, right:r.right, top:r.top, bottom:r.bottom, width:r.width, height:r.height }; };
       const body = line.querySelector('.ce-cart-line-body');
       const children = [...body.children].filter((el) => !el.hidden);
-      const gaps = children.slice(1).map((el, i) => ({ from:children[i].className, to:el.className, gap:rect(el).top - rect(children[i]).bottom }));
+      // Measure the actual identity text boxes, so padding/min-height on the heading/link cannot fake the gaps.
+      const edge = (el, first) => el.matches('.ce-product-heading')
+        ? rect(first ? el.querySelector('.ce-product-name') : el.querySelector('.ce-product-description') ?? el.querySelector('.ce-product-name'))
+        : rect(el);
+      const gaps = children.slice(1).map((el, i) => ({ from:children[i].className, to:el.className, gap:edge(el, true).top - edge(children[i], false).bottom }));
       const name = line.querySelector('.ce-product-name'), description = line.querySelector('.ce-product-description');
       if (description) gaps.push({ from:'NAME', to:'Description', gap:rect(description).top - rect(name).bottom });
       const code = line.querySelector('.ce-code');
@@ -53,13 +57,19 @@ for (const width of [390, 768, 1440]) for (const factor of [1, 1.5, 2]) {
           const r=rect(el);
           return r.width && (r.left < rect(line).left - 0.6 || r.right > rect(line).right + 0.6 || r.top < rect(line).top - 0.6 || r.bottom > rect(line).bottom + 0.6 || (el.matches('.ce-product-name, .ce-product-description, .ce-product-specs') && el.scrollWidth > el.clientWidth + 1)) ? [el.className || el.tagName] : [];
         }),
-        targets:[...line.querySelectorAll('a, button, input')].map((el) => ({ class:el.className || el.tagName, ...rect(el) })),
+        targets:[...line.querySelectorAll('a, button, input')].map((el) => {
+          const box=rect(el), hit=el.matches('a') ? parseFloat(getComputedStyle(el,'::after').height) : box.height;
+          return { class:el.className || el.tagName, ...box, hitHeight:Math.max(box.height,hit) };
+        }),
       };
     }));
     expect(report.length).toBeGreaterThanOrEqual(13);
     for (const row of report) {
       expect(row.spills, row.id).toEqual([]);
       expect(row.body.left >= row.image.right + 15.5 || row.body.top >= row.image.bottom + 15.5, `${row.id}: image/body do not overlap`).toBe(true);
+      if ((width >= 768 && row.id !== 'long-code') || (width === 390 && factor === 1 && ['ordinary','second'].includes(row.id))) {
+        expect(row.body.left, `${row.id}: keep the ordinary side-by-side composition when it fits`).toBeGreaterThanOrEqual(row.image.right + 15.5);
+      }
       expect(row.image.width).toBe(width < 640 ? 88 : 128);
       expect(row.image.height).toBe(row.image.width);
       expect(row.padding).toBe(24);
@@ -75,9 +85,23 @@ for (const width of [390, 768, 1440]) for (const factor of [1, 1.5, 2]) {
       }
       for (const target of row.targets) {
         expect(target.width, `${row.id}: ${target.class} width`).toBeGreaterThanOrEqual(44);
-        expect(target.height, `${row.id}: ${target.class} height`).toBeGreaterThanOrEqual(44);
+        expect(target.hitHeight, `${row.id}: ${target.class} hit height`).toBeGreaterThanOrEqual(44);
       }
     }
+    // Hit-test the whole expanded product target (including top/bottom outside a short identity), and the midpoints of rounded control edges.
+    for (const target of await page.locator('.ce-cart-line :is(a,button,input)').all()) {
+      await target.evaluate((el) => el.scrollIntoView({ block:'center', inline:'nearest' }));
+      const hits=await target.evaluate((el) => {
+        const r=el.getBoundingClientRect(), height=el.matches('a') ? Math.max(r.height,parseFloat(getComputedStyle(el,'::after').height)) : r.height;
+        const top=(r.top+r.bottom-height)/2;
+        const points=el.matches('a')
+          ? [r.left+1,r.right-1].flatMap((x) => [top+1,top+height-1].map((y) => [x,y]))
+          : [[(r.left+r.right)/2,r.top+1],[(r.left+r.right)/2,r.bottom-1],[r.left+1,(r.top+r.bottom)/2],[r.right-1,(r.top+r.bottom)/2]];
+        return points.map(([x,y]) => { const hit=document.elementFromPoint(x,y); return { x,y,correct:hit === el || el.contains(hit) }; });
+      });
+      for (const hit of hits) expect(hit.correct, `target hit ${JSON.stringify(hit)}`).toBe(true);
+    }
+    console.log('Cart measured acceptance', JSON.stringify({ width,factor,lines:report.length,examples:report.filter((row) => ['ordinary','name-only','long-code'].includes(row.id)) }));
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(await page.locator('a a, a button, a input, button a, button button, button input').count()).toBe(0);
     const axe = await new AxeBuilder({ page }).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
@@ -86,8 +110,8 @@ for (const width of [390, 768, 1440]) for (const factor of [1, 1.5, 2]) {
   });
 }
 
-test('keyboard forwards/backwards follows native order, skips disabled controls, and shows every focus ring', async ({ page }) => {
-  await mount(page);
+for (const width of [390,768,1440]) for (const factor of [1,1.5,2]) test(`keyboard at ${width}px text ×${factor} follows native order, skips disabled controls, and shows every focus ring`, async ({ page }) => {
+  await mount(page,width,factor);
   const first = page.locator('[data-line="ordinary"]');
   const sequence = [first.locator('a'), first.getByRole('button', { name:'Reducir cantidad de MENE' }), first.getByRole('spinbutton'), first.getByRole('button', { name:'Aumentar cantidad de MENE' }), first.getByRole('button', { name:'Quitar MENE del carrito', exact:true })];
   await page.locator('#before').focus();
@@ -163,4 +187,44 @@ test('cart changes leave a consumer page and controls outside the cart unchanged
   await page.addStyleTag({ content:css });
   expect(await read()).toEqual(before);
   expect(before[0]).toEqual(['19px','serif','7px','rgb(10, 20, 30)','0px',before[0][5]]);
+});
+
+test('static cart HTML shows one store quote before JavaScript and without JavaScript', async ({ browser, baseURL }) => {
+  const context=await browser.newContext({ javaScriptEnabled:false, baseURL });
+  const page=await context.newPage();
+  try {
+    await page.goto('/tienda/carrito/');
+    await expect(page.locator('.ce-cart-line .ce-price:visible')).toHaveCount(2);
+    await expect(page.locator('.ce-cart-line .ce-stock:visible')).toHaveCount(2);
+    await expect(page.locator('.ce-summary:visible')).toHaveCount(1);
+    await expect(page.locator('.ce-order-summary .ce-button:visible')).toHaveCount(1);
+    for (const node of await page.locator('.ce-cart [data-store-view="arequipa"], .ce-cart [data-store-view="ninguna"]').all()) await expect(node).toBeHidden();
+    expect(await page.locator('.ce-summary:visible dd').allTextContents()).toEqual(['S/21.50','Sin costo','S/21.50']);
+  } finally { await context.close(); }
+});
+
+test('cart quotes and scenario labels follow only the supplied selected store', async ({ page }) => {
+  await page.goto('/tienda/carrito/?tienda=arequipa');
+  expect(await page.locator('.ce-cart-line .ce-price-value:visible').allTextContents()).toEqual(['13.8','8.5']);
+  expect(await page.locator('.ce-summary:visible dd').allTextContents()).toEqual(['S/22.30','Sin costo','S/22.30']);
+  await expect(page.getByText('Escenario: MENE tiene pocas unidades confirmadas en Arequipa.')).toBeVisible();
+  await expect(page.getByText('Escenario: TALEN tiene pocas unidades confirmadas en Tacna.')).toBeHidden();
+  await page.goto('/tienda/carrito/?tienda=ninguna');
+  await expect(page.locator('.ce-cart-line .ce-price:visible, .ce-cart-line .ce-stock:visible, .ce-summary:visible, .ce-order-summary .ce-button:visible')).toHaveCount(0);
+  await expect(page.locator('.ce-cart-line-body > .ce-store-note:visible')).toHaveCount(2);
+  await expect(page.locator('.ce-cart-line')).toHaveCount(2);
+});
+
+test('preview disabled controls reference their supplied reason; the supplied unit-basis example has quantity one', async ({ page }) => {
+  await mount(page);
+  for (const id of ['unavailable','blocked']) {
+    const line=page.locator(`[data-line="${id}"]`);
+    for (const control of await line.locator(':disabled').all()) {
+      await expect(control).toHaveAttribute('aria-describedby',`reason-${id}`);
+      await expect(control).toHaveAccessibleDescription(/El servicio no permite modificar la cantidad de MENE/);
+    }
+  }
+  const basis=page.locator('[data-line="basis"]');
+  await expect(basis.getByRole('spinbutton')).toHaveValue('1');
+  await expect(basis.locator('.ce-price > .ce-sr-only')).toHaveText('Importe de la línea: 6.5 soles cada uno');
 });

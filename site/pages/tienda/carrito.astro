@@ -7,8 +7,8 @@ import { productView } from '../../../recipes/product.mjs';
 import { catalogue, stores, stockLine, stockListAttributes } from '../../data/store.mjs';
 // Line and order amounts are supplied by the commerce service as decimal strings; the page never computes them.
 const lines = [
-  { item: catalogue[0], quantity: '2', lineAmount: { tacna: '13.00', arequipa: '13.80' } },
-  { item: catalogue[3], quantity: '1', lineAmount: { tacna: '8.50', arequipa: '8.50' } },
+  { item: catalogue[0], quantity: '2', min: '1', max: '20', canDecrease: true, lineAmount: { tacna: '13.00', arequipa: '13.80' } },
+  { item: catalogue[3], quantity: '1', min: '1', max: '20', canDecrease: false, lineAmount: { tacna: '8.50', arequipa: '8.50' } },
 ];
 const summaries = [
   { store: 'tacna', subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' },
@@ -27,25 +27,27 @@ const summaries = [
       <div>
         <p class="ce-store-note">Comprando en <strong data-store-name>Tacna</strong>. Los precios pueden variar en otra tienda.</p>
         <ul class="ce-cart-lines" aria-label="Productos en tu carrito">
-          {lines.map(({ item, quantity, lineAmount }, index) => { const view = productView(item); return (
+          {lines.map(({ item, quantity, min, max, canDecrease, lineAmount }, index) => { const view = productView(item); return (
             <li class="ce-cart-line">
               <img src={view.image} alt="" width="128" height="128" />
               <div class="ce-cart-line-body">
                 <span class="ce-code">{view.code}</span>
                 <h2 class="ce-product-heading" style="--ce-product-text:1rem"><a class="ce-product-link" href="/tienda/producto/"><span class="ce-product-name">{view.name}</span><span class="ce-product-description">{view.description}</span></a></h2>
                 <p class="ce-product-specs">{view.specs.join(', ')}</p>
-                {stores.map((store) => <div class="ce-price-block" data-store-view={store.id} role="group" aria-label="Importe de la línea"><Price amount={lineAmount[store.id]} /></div>)}
-                <p class="ce-store-note" data-store-view="ninguna">Elige tu tienda para ver el precio.</p>
-                {stores.map((store) => { const line = stockLine(item, store); return <ul class="ce-stock" data-store-view={store.id} {...stockListAttributes([line])}><li data-state={line.state}>{line.text}</li></ul>; })}
+                {stores.map((store) => <div class="ce-price-block" data-store-view={store.id} hidden={store.id !== 'tacna'} role="group" aria-label="Importe de la línea"><Price amount={lineAmount[store.id]} /></div>)}
+                <p class="ce-store-note" data-store-view="ninguna" hidden>Elige tu tienda para ver el precio.</p>
+                {stores.map((store) => { const line = stockLine(item, store); return <ul class="ce-stock" data-store-view={store.id} hidden={store.id !== 'tacna'} {...stockListAttributes([line])}><li data-state={line.state}>{line.text}</li></ul>; })}
                 <div class="ce-cart-line-actions">
-                  <div class="ce-quantity" role="group" aria-label={`Cantidad de ${view.name}`}><button type="button" aria-label={`Reducir cantidad de ${view.name}`} disabled={quantity === '1'} aria-describedby={quantity === '1' ? 'nota-min' : undefined}><Icon name="minus" size={18} /></button><label class="ce-sr-only" for={`cantidad-${index}`}>{`Cantidad de ${view.name}`}</label><input id={`cantidad-${index}`} type="number" inputmode="numeric" min="1" max="20" value={quantity} /><button type="button" aria-label={`Aumentar cantidad de ${view.name}`}><Icon name="plus" size={18} /></button></div>
+                  <div class="ce-quantity" role="group" aria-label={`Cantidad de ${view.name}`}><button type="button" aria-label={`Reducir cantidad de ${view.name}`} disabled={!canDecrease} aria-describedby={!canDecrease ? 'nota-min' : undefined}><Icon name="minus" size={18} /></button><label class="ce-sr-only" for={`cantidad-${index}`}>{`Cantidad de ${view.name}`}</label><input id={`cantidad-${index}`} type="number" inputmode="numeric" min={min} max={max} value={quantity} /><button type="button" aria-label={`Aumentar cantidad de ${view.name}`}><Icon name="plus" size={18} /></button></div>
                   <button class="ce-link" type="button"><Icon name="trash" size={18} /> Quitar<span class="ce-sr-only"> {view.name} del carrito</span></button>
                 </div>
               </div>
             </li>
           ); })}
         </ul>
-        <p id="nota-min" class="ce-field-note">La cantidad mínima de estos ejemplos es 1. Escenario: TALEN tiene pocas unidades confirmadas en Tacna.</p>
+        <p id="nota-min" class="ce-field-note">La cantidad mínima suministrada para estos ejemplos es 1.</p>
+        <p class="ce-field-note" data-store-view="tacna">Escenario: TALEN tiene pocas unidades confirmadas en Tacna.</p>
+        <p class="ce-field-note" data-store-view="arequipa" hidden>Escenario: MENE tiene pocas unidades confirmadas en Arequipa.</p>
 
         <section aria-labelledby="entrega" style="margin-top:var(--ce-space-40)">
           <h2 id="entrega" style="font-size:var(--ce-font-size-title)">¿Cómo quieres recibirlo?</h2>
@@ -58,13 +60,13 @@ const summaries = [
       </div>
       <aside class="ce-order-summary" aria-labelledby="resumen">
         <h2 id="resumen">Resumen</h2>
-        {summaries.map((summary) => <dl class="ce-summary" data-store-view={summary.store}>
+        {summaries.map((summary) => <dl class="ce-summary" data-store-view={summary.store} hidden={summary.store !== 'tacna'}>
           <div><dt>Subtotal (3 productos)</dt><dd>{summary.subtotal}</dd></div>
           <div><dt>Retiro en tienda</dt><dd>{summary.pickup}</dd></div>
           <div class="ce-summary-total"><dt>Total</dt><dd>{summary.total}</dd></div>
         </dl>)}
-        {stores.map((store) => <a class="ce-button" data-store-view={store.id} href="/tienda/cuenta/">Continuar</a>)}
-        <p class="ce-price-pending" data-store-view="ninguna">Elige tu tienda para ver el resumen.</p>
+        {stores.map((store) => <a class="ce-button" data-store-view={store.id} hidden={store.id !== 'tacna'} href="/tienda/cuenta/">Continuar</a>)}
+        <p class="ce-price-pending" data-store-view="ninguna" hidden>Elige tu tienda para ver el resumen.</p>
         <p class="ce-fine-print">Importes de ejemplo calculados por el servicio de comercio, no por la interfaz.</p>
       </aside>
     </div>
