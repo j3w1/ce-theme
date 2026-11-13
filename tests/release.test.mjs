@@ -75,11 +75,14 @@ test('2. with nothing there, one release create of the validated file at this co
   assert.throws(github({ published: pack({ other: '' }) }).run, /The published casaelida-vue-0\.2\.0\.tgz is not the validated file/);
 });
 
-test("3. this workflow's own draft for this commit is recovered: its one asset replaced, then published", () => {
+test("3. this workflow's own draft for this commit is recovered: its one asset replaced, its notes renewed, then published", () => {
   for (const ownDraft of [draft(), draft({ assets: [] })]) {
     const recovery = github({ releases: [ownDraft] });
-    assert.equal(recovery.run().state, 'recovered');
-    assert.deepEqual(recovery.writes(), [['release', 'upload', TAG, file, '--clobber'], ['release', 'edit', TAG, '--draft=false']]);
+    const result = recovery.run();
+    assert.equal(result.state, 'recovered');
+    // The draft's notes named an earlier file's sha256 (`x`); the published notes name the uploaded file's.
+    const renewed = notes({ url: result.url, sha: result.sha256, asset: 'casaelida-vue-0.2.0.tgz', workflow: WORKFLOW, commit: COMMIT, run: RUN });
+    assert.deepEqual(recovery.writes(), [['release', 'upload', TAG, file, '--clobber'], ['release', 'edit', TAG, '--notes', renewed, '--draft=false']]);
     assert.ok(verified(recovery.calls));
   }
 });

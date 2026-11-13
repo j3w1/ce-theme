@@ -86,7 +86,8 @@ export function release({ gh, file, repo, commit, workflow, run, server = 'https
     ].find(([unsafe]) => unsafe)?.[1];
     if (why) fail(`A draft release for ${tag} exists that this run may not recover: ${why}. It is left untouched; report it.`);
     gh(['release', 'upload', tag, file, '--clobber']);
-    gh(['release', 'edit', tag, '--draft=false']);
+    // Fresh notes: they state the sha256 of the file this run uploaded, not that of an earlier attempt's file.
+    gh(['release', 'edit', tag, '--notes', notes({ url, sha: validated, asset, workflow, commit, run }), '--draft=false']);
     return confirm('recovered');
   } finally { rmSync(work, { recursive: true, force: true }); }
 }
