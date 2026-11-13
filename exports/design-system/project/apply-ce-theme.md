@@ -6,7 +6,7 @@ Entry point for people and agents adopting the Casa Elida design system in anoth
 
 **Vue 3 applications** use `@casaelida/vue`, which carries the whole foundation. See [packages/vue/README.md](https://github.com/j3w1/ce-theme/blob/main/packages/vue/README.md#install).
 
-1. Install one pinned package file with pnpm and commit the lockfile: the release asset `https://github.com/j3w1/ce-theme/releases/download/vue-vX.Y.Z/casaelida-vue-X.Y.Z.tgz` once releases are published, a local `casaelida-vue-X.Y.Z.tgz` until then. Vue `^3.5.0` is a peer: the application installs it.
+1. Install one pinned package file with pnpm and commit the lockfile: the release asset `https://github.com/j3w1/ce-theme/releases/download/vue-vX.Y.Z/casaelida-vue-X.Y.Z.tgz` once releases are published, a local `casaelida-vue-X.Y.Z.tgz`, committed with the application, until then. Vue `^3.5.0` is a peer: the application installs it.
 2. `import '@casaelida/vue/styles.css'` once, in the application entry. It holds Inter (400/600/700/800, OFL), the `--ce-` tokens and the `ce-` recipes, with no global reset.
 3. Wrap the application region in `class="ce-scope"` and render the components (`CEButton`, `CETextField`, `CEPrice`, `CEProductCode`, the messaging components); they emit the same classes as the recipes.
 

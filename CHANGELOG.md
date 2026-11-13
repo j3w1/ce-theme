@@ -16,6 +16,11 @@ SEAL #7 batch B1 (ce-theme#8).
 - Browser tests use their own port and never an existing server. CI installs and runs Chromium and WebKit; a local run says WebKit was not run.
 - `docs/decisions.md` records the SEAL #7 revisions of “Workflow”, “Delivery”, “Application identities” and “Showcase exception”, and three Step 4B decisions; `AGENTS.md`, `docs/workflow.md` and `packages/vue/CONTRIBUTING.md` follow them.
 
+### Fixed (found by the new WebKit project; scope decision by j3w1)
+
+- `CEMessageList` keeps a reader who is at the newest message there in WebKit when content inside a message re-renders. WebKit lays the change out in a shorter intermediate state and clamps the scroll position while every size ends as it was; a mutation observer puts a following reader back before the scroll is reported. A reader in history is still never moved.
+- `/mensajeria/`: in WebKit, a composing reader again moves to the thread view when the window narrows or the text grows. The example reads “narrow” from its panes grid instead of the Back button, whose container-query style WebKit leaves stale inside the hidden thread pane.
+
 ## Unreleased — 2026-10-30 (pending owner review)
 
 ### Added

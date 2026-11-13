@@ -80,16 +80,21 @@ test.describe('standalone attachment group and work status', () => {
   });
 
   // #5: a query container has no width of its own. A parent that sizes its children to their content collapses it to zero
-  // width; the documented fixes give it a definite width: flex: 1 on the component in a flex row, a width on any other
-  // shrink-to-fit parent.
+  // width; the documented fixes give it a definite width: flex: 1 on the component in a flex row (a width on the row is not
+  // enough), a width on any other shrink-to-fit parent.
   test('a shrink-to-fit parent collapses each component, and a definite width restores its layout', async ({ page }) => {
     const components = [
       [CEAttachmentGroup, { items: [1, 2, 3].map(photo), label: '3 fotos' }, '.ce-attachment'],
       [CEWorkStatus, { title: 'Pedido de reposición', steps: STEPS, status: 'Aceptado' }, '.ce-work-step'],
     ];
+    // [collapsing parent, the fixed layout, attributes for the component]
+    const cases = [
+      ['display:flex;width:300px', 'display:flex;width:300px', { style: 'flex:1' }],
+      ...['display:inline-block', 'float:left', 'width:max-content', 'display:table-cell'].map((parent) => [parent, `${parent};width:300px`, {}]),
+    ];
     const width = () => page.evaluate(() => document.querySelector('#host > *').getBoundingClientRect().width);
     for (const [component, props, item] of components) {
-      for (const [parent, fixed, attrs] of [['display:flex;width:300px', 'display:flex;width:300px', { style: 'flex:1' }], ['display:inline-block', 'display:inline-block;width:300px', {}]]) {
+      for (const [parent, fixed, attrs] of cases) {
         await mount(page, parent, await render(component, props));
         expect(await width(), `${parent} collapses ${item}`).toBe(0);
         await mount(page, fixed, await render(component, { ...props, ...attrs }));

@@ -8,7 +8,7 @@ Status: `0.2.0`, private. `private: true` is the publication safeguard: the pack
 
 1. Install one pinned package file with pnpm, and commit `package.json` and `pnpm-lock.yaml`. The lockfile records the file's integrity hash, so every install, including a clean CI checkout, gets the same package and styles.
    - A published version is a GitHub Release asset of `j3w1/ce-theme`: `pnpm add https://github.com/j3w1/ce-theme/releases/download/vue-vX.Y.Z/casaelida-vue-X.Y.Z.tgz`. No release is published yet.
-   - Until then, use a local package file: in a ce-theme checkout at a pinned commit, `pnpm install`, `pnpm build:vue`, then `pnpm pack` in `packages/vue`; copy `casaelida-vue-0.2.0.tgz` into the application and run `pnpm add ./casaelida-vue-0.2.0.tgz`.
+   - Until then, use a local package file: in a ce-theme checkout at a pinned commit, `pnpm install`, `pnpm build:vue`, then `pnpm pack` in `packages/vue`; copy `casaelida-vue-0.2.0.tgz` into the application, run `pnpm add ./casaelida-vue-0.2.0.tgz` and commit the file with the manifest and lockfile: a local file is part of the pin, so a clean checkout needs it. Keep the previous file while it may be needed for a rollback.
 2. Import the styles once, in the application entry: `import '@casaelida/vue/styles.css';`. It holds Inter (400, 600, 700 and 800, with its fonts beside it), the `--ce-` tokens and the `ce-` recipes. It resets nothing: every rule sits under a `ce-` class, and the tokens are custom properties on `:root`.
 3. Wrap the application region in `class="ce-scope"`. Without the styles or the scope the components render unstyled.
 
@@ -51,7 +51,7 @@ They draw conversations and send nothing. The application owns the drafts (`v-mo
 
 **Standalone use of `CEAttachmentGroup` and `CEWorkStatus`.** Neither needs `CEMessageList` or any application CSS to respond to a narrow container: each draws its own query container (`ce-attachment-group` and `ce-work-status`), so the layout follows the component's own width, in a message bubble, a side panel or a plain page, at any text size.
 
-**Give them a definite width.** A query container has no width of its own. In a block-level parent or a grid cell it takes the parent's width (the normal case). A parent that sizes its children to their content, such as a flex row, `inline-flex`, `inline-block`, a float, `width: max-content` or an auto-width table cell, collapses it to zero width, even when that parent has a width. Give the component a definite width there: in a flex row, `flex: 1` (or a `width`) on the component; in any other shrink-to-fit parent, a width on that parent.
+**Give them a definite width.** A query container has no width of its own. In a block-level parent or a grid cell it takes the parent's width (the normal case). In a flex row (`display: flex` or `inline-flex`) a flex item is as wide as its content, so the component collapses to zero width even when the row has a width: give the component `flex: 1` (or a `width`). Any other parent that sizes itself to its content (`inline-block`, a float, `width: max-content`, an auto-width table cell) collapses it too, until that parent gets a width.
 
 ```vue
 <!-- Correct: the flex row gives the component its free width. -->
