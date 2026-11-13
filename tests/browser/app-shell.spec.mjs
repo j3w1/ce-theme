@@ -135,13 +135,18 @@ test('the module nav is the 240px column at 1024px and a scrolling row at 1023px
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-// Acceptance 5: text at x1.5 and x2 in the 240px column; labels wrap inside it and nothing overflows or is clipped.
-for (const scale of ['150%', '200%']) {
-  test(`text at ${scale} stays inside the 240px module column`, async ({ page }) => {
+// Acceptance 5: text at x1.5 and x2 in the 240px column. The text really grows (rendered font sizes are measured at 100% first),
+// labels wrap inside the column, nothing overflows or is clipped, and every icon keeps its declared 18px.
+for (const [scale, ratio] of [['150%', 1.5], ['200%', 2]]) {
+  test(`text at ${scale} stays inside the 240px module column with 18px icons`, async ({ page }) => {
     await openCard(page);
-    const result = await page.evaluate((size) => {
-      document.documentElement.style.fontSize = size;
-      const nav = document.querySelector('.ce-module-nav');
+    const fontSizes = () => page.locator('.ce-module-nav').evaluate((nav) => [...nav.querySelectorAll('h2, a')].map((el) => parseFloat(getComputedStyle(el).fontSize)));
+    const base = await fontSizes();
+    await page.evaluate((size) => { document.documentElement.style.fontSize = size; }, scale);
+    const grown = await fontSizes();
+    expect(grown).toHaveLength(base.length);
+    grown.forEach((size, i) => expect(size).toBeCloseTo(base[i] * ratio, 1));
+    const result = await page.locator('.ce-module-nav').evaluate((nav) => {
       const box = nav.getBoundingClientRect();
       const items = [...nav.querySelectorAll('h2, a')];
       return {
@@ -149,13 +154,17 @@ for (const scale of ['150%', '200%']) {
         navScrolls: nav.scrollWidth > nav.clientWidth,
         outside: items.filter((el) => el.getBoundingClientRect().right > box.right + 0.5).map((el) => el.textContent),
         clipped: items.filter((el) => el.scrollWidth > el.clientWidth + 0.5 || el.scrollHeight > el.clientHeight + 0.5).map((el) => el.textContent),
+        icons: [...nav.querySelectorAll('a > svg')].filter((svg) => {
+          const r = svg.getBoundingClientRect();
+          return Math.abs(r.width - Number(svg.getAttribute('width'))) > 0.5 || Math.abs(r.height - Number(svg.getAttribute('height'))) > 0.5;
+        }).map((svg) => `${svg.parentElement.textContent}: ${svg.getBoundingClientRect().width.toFixed(1)}px`),
         wrapped: ['Tiendas y etiquetas', 'Acceso y auditoría'].map((label) => {
           const link = [...nav.querySelectorAll('a')].find((a) => a.textContent === label);
           return link.getBoundingClientRect().height > parseFloat(getComputedStyle(link).lineHeight) * 1.5;
         }),
       };
-    }, scale);
-    expect(result).toEqual({ width: 240, navScrolls: false, outside: [], clipped: [], wrapped: [true, true] });
+    });
+    expect(result).toEqual({ width: 240, navScrolls: false, outside: [], clipped: [], icons: [], wrapped: [true, true] });
   });
 }
 

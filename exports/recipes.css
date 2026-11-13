@@ -817,6 +817,7 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-module-nav { display: grid; align-content: start; gap: 2px; padding: var(--ce-space-16) var(--ce-space-12); border-right: var(--ce-stroke-thin) solid var(--ce-color-border-default); background: var(--ce-color-surface-subtle); font-size: var(--ce-font-size-sm); }
 .ce-module-nav h2 { margin: var(--ce-space-16) var(--ce-space-12) var(--ce-space-4); color: var(--ce-color-text-muted); font-size: var(--ce-font-size-xs); font-weight: var(--ce-font-weight-bold); letter-spacing: .08em; text-transform: uppercase; overflow-wrap: anywhere; }
 .ce-module-nav a { display: flex; align-items: center; gap: var(--ce-space-12); padding: var(--ce-space-8) var(--ce-space-12); border-radius: var(--ce-radius-small); color: inherit; text-decoration: none; overflow-wrap: anywhere; }
+.ce-module-nav a > svg { flex: none; }
 /* Module and brand links follow density, never below the public target: a density can raise them (touch), never lower them (compact).
    --ce-control is set only by data-ce-density, hence the 0px fallback. */
 .ce-module-nav a, .ce-app-brand { min-height: max(var(--ce-size-target-public), var(--ce-control, 0px)); }
