@@ -95,7 +95,7 @@ function measure() {
     const padding = parseFloat(getComputedStyle(label).paddingRight);
     return {
       title: title.textContent.replace(/\s+/g, ' ').trim(), frame: box(frame), label: box(label), column: box(column), mark: box(mark), ink,
-      markText: mark.textContent, markFont: parseFloat(style.fontSize), padding, oneLine,
+      markText: mark.textContent, markFont: parseFloat(style.fontSize), run: run.width, markPad: parseFloat(style.paddingLeft) + parseFloat(style.paddingRight), padding, oneLine,
       titleHeight: title.getBoundingClientRect().height, titleLine: parseFloat(getComputedStyle(title).lineHeight),
       words: [...lines(title), ...lines(column.querySelector('.ce-state-frame-note'))],
       overflow: { frame: frame.scrollWidth - frame.clientWidth, label: label.scrollWidth - label.clientWidth, column: column.scrollWidth - column.clientWidth },
@@ -103,10 +103,15 @@ function measure() {
   });
 }
 
+// The sheet's own markers (A to E, 1, 2, 10) and, on the same frames, wider valid one- and two-character markers.
+const WIDE = ['W', 'M', 'WW', 'MW', '88', 'H', 'A1', '20'];
 for (const width of WIDTHS) {
   for (const factor of FACTORS) {
-    test(`StateFrame at ${width}px, text x${factor}: no overflow, the label wraps, the marker keeps size.marker and holds its characters`, async ({ page }) => {
-      await open(page, width, factor);
+    for (const marks of [null, WIDE]) {
+    test(`StateFrame at ${width}px, text x${factor}${marks ? ', wide markers' : ''}: no overflow, the label wraps, the marker keeps size.marker and holds its characters`, async ({ page }) => {
+      await open(page, width, 1);
+      if (marks) await page.evaluate((texts) => document.querySelectorAll('.ce-state-frame-mark').forEach((mark, i) => { mark.textContent = texts[i]; }), marks);
+      if (factor !== 1) await enlarge(page, factor);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth), 'no sideways page scroll').toBeLessThanOrEqual(0);
       const frames = await page.evaluate(measure);
       expect(frames).toHaveLength(8);
@@ -122,18 +127,19 @@ for (const width of WIDTHS) {
         }
         // The label wraps when its words do not fit on one line.
         if (m.oneLine > m.column.w + 0.5) expect(m.titleHeight, `${at}: the title wraps`).toBeGreaterThan(m.titleLine * 1.5);
-        // The marker is size.marker tall at every text size and size.marker wide at 100% text; enlarged characters widen
-        // it into a pill instead of leaving it. Its characters' ink stays inside it.
+        // The marker is size.marker tall at every text size. It is size.marker wide unless its characters and inline padding
+        // need more, and then it widens into a pill instead of letting them out: no exact square is assumed.
         expect(m.mark.h, `${at}: marker height`).toBeCloseTo(MARKER, 1);
-        if (factor === 1) expect(m.mark.w, `${at}: marker width`).toBeCloseTo(MARKER, 1);
-        else expect(m.mark.w, `${at}: marker width`).toBeGreaterThanOrEqual(MARKER - 0.05);
+        expect(m.mark.w, `${at}: marker width for "${m.markText}"`).toBeCloseTo(Math.max(MARKER, m.run + m.markPad), 1);
+        // The sheet's own markers all fit the 28px circle at 100% text.
+        if (factor === 1 && !marks) expect(m.mark.w, `${at}: marker "${m.markText}" is a circle`).toBeCloseTo(MARKER, 1);
         expect(m.markFont, `${at}: marker text`).toBeCloseTo(14 * factor, 1);
         expect(m.ink.l, `${at}: marker ink left`).toBeGreaterThanOrEqual(m.mark.l - 0.5);
         expect(m.ink.r, `${at}: marker ink right`).toBeLessThanOrEqual(m.mark.r + 0.5);
         expect(m.ink.t, `${at}: marker ink top`).toBeGreaterThanOrEqual(m.mark.t - 0.5);
         expect(m.ink.b, `${at}: marker ink bottom`).toBeLessThanOrEqual(m.mark.b + 0.5);
-        if (factor === 1) {
-          // At 100% text the marker is a circle; every corner of the ink box lies inside it.
+        if (factor === 1 && m.mark.w < MARKER + 0.05) {
+          // At 100% text a marker as wide as it is tall is a circle; every corner of the ink box lies inside it.
           const cx = (m.mark.l + m.mark.r) / 2;
           const cy = (m.mark.t + m.mark.b) / 2;
           for (const [x, y] of [[m.ink.l, m.ink.t], [m.ink.r, m.ink.t], [m.ink.l, m.ink.b], [m.ink.r, m.ink.b]]) {
@@ -153,6 +159,7 @@ for (const width of WIDTHS) {
         expect(frame.rule).toBe(frame.band ? '4px' : '0px');
       }
     });
+    }
   }
 }
 
