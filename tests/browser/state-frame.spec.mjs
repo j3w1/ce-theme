@@ -172,7 +172,7 @@ const boxesOf = (fragment) => {
   };
 };
 for (const width of WIDTHS) {
-  for (const factor of [1, 2]) {
+  for (const factor of FACTORS) {
     test(`StateFrame at ${width}px, text x${factor}: every fragment is pixel- and box-identical to the same fragment on its own`, async ({ page }) => {
       await open(page, width, factor);
       const count = await page.locator('.ce-state-frame').count();

@@ -131,7 +131,7 @@ const framesOf = (text) => [...text.matchAll(FRAME)].map((start) => {
   return { start, frame: text.slice(start.index, end + close.length) };
 });
 
-test('every frame is named by its heading title, has a decorative one- or two-character marker and English label, and no inline style', async () => {
+test('every frame is named by its heading title, has a decorative one- or two-character marker and English label, and no inline style on its chrome', async () => {
   let frames = 0;
   for (const file of files) {
     const text = await read(file);
@@ -144,7 +144,9 @@ test('every frame is named by its heading title, has a decorative one- or two-ch
       assert.match(frame, /<span class="ce-state-frame-mark" aria-hidden="true">[^<\s]{1,2}<\/span>/, `${where}: marker`);
       assert.match(frame, /<header class="ce-state-frame-label">\s*<span class="ce-state-frame-mark"[^>]*>[^<]*<\/span>\s*<div lang="en">/, `${where}: English label column`);
       for (const [badge] of frame.matchAll(/<span class="ce-badge"[^>]*>/g)) assert.match(badge, /lang="es"/, `${where}: Spanish badge`);
-      assert.doesNotMatch(frame, /\bstyle="/, `${where}: no inline style`);
+      // No inline style on the kit's own chrome; a fragment keeps the consumer inputs its recipes document (--ce-x, …).
+      for (const [tag] of frame.matchAll(/<\w+\b[^>]*\bclass="[^"]*\bce-state-frame[\w-]*[^"]*"[^>]*>/g)) assert.doesNotMatch(tag, /\bstyle=/, `${where}: no inline style on ${tag}`);
+      assert.doesNotMatch(frame, /\bstyle=""/, `${where}: no empty style attribute`);
       assert.doesNotMatch(frame, /ce-state-frame-(?:tag|mark--)/, `${where}: no tag modifier`);
     });
   }
