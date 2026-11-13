@@ -426,6 +426,7 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-store-context[aria-busy="true"]::after { width: 12px; height: 12px; content: ''; border: 2px solid currentColor; border-right-color: transparent; border-radius: var(--ce-radius-pill); animation: ce-retail-spin .8s linear infinite; }
 .ce-store-note { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-4) var(--ce-space-8); margin: 0; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); line-height: var(--ce-font-line-heading); }
 .ce-store-note strong { color: var(--ce-color-text-primary); }
+.ce-store-note .ce-link { display: inline-flex; align-items: center; min-height: var(--ce-size-target-public); }
 .ce-store-note[aria-busy="true"] { cursor: progress; }
 .ce-price-pending { display: grid; gap: var(--ce-space-8); justify-items: start; padding: var(--ce-space-12) var(--ce-space-16); background: var(--ce-color-surface-subtle); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-semibold); line-height: var(--ce-font-line-heading); }
 

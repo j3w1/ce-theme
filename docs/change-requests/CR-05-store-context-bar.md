@@ -107,6 +107,8 @@ To run when the repository work happens (not run here, except where marked):
 4. Keyboard: the action is reachable, shows the focus ring and opens the same dialog as the utility-bar button.
 5. Screen reader announcement of the pending state: **not run, to schedule**.
 
+In the implementation, checks 1, 2 and 4 are browser tests in `tests/browser/store-bar.spec.mjs`. They render the StoreContext card's states with the generated tokens and recipes only, and the storefront cart and listing. Before the rule, the action measured 16.8px at 100% text, 25.2px at x1.5 and 33.6px at x2, at all three widths. Check 3 is the page's rule in the StoreContext guideline, and no example puts an amount beside a pending or no-store bar. Check 5 is still not run.
+
 ## 7. Risks and what it does not change
 
 - `ce-store-note` is also used inside pin cards and product cards for «Precio no disponible en {tienda}»; the new rule only touches a `.ce-link` inside it, so those uses are unaffected. Pin-card spacing is CR-09.

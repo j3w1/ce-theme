@@ -27,10 +27,14 @@ const spill = (bars) => bars.evaluateAll((items) => items.flatMap((bar, index) =
 
 for (const width of WIDTHS) {
   for (const scale of SCALES) {
-    test(`StoreBar states at ${width}px, text ${scale}: no overflow, a long label wraps, the pill never overlaps the label`, async ({ page }) => {
+    test(`StoreBar states at ${width}px, text ${scale}: a 44px action, no overflow, a long label wraps, the pill never overlaps the label`, async ({ page }) => {
       await mountCard(page, width, scale);
       const bars = page.locator('section[aria-label="Barra de tienda"] .ce-store-note');
       await expect(bars).toHaveCount(6);
+      // The action reaches the public target (--ce-size-target-public, 44px); without the rule it is one 1.2 line high.
+      const heights = await bars.locator(':scope > .ce-link').evaluateAll((items) => items.map((el) => el.getBoundingClientRect().height));
+      expect(heights).toHaveLength(4);
+      for (const height of heights) expect(height).toBeGreaterThanOrEqual(44);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(await spill(bars)).toEqual([]);
 
@@ -141,7 +145,7 @@ test('/tienda/categoria/ without a store: «Tienda: sin elegir» with «Elegir t
 });
 
 for (const width of WIDTHS) {
-  test(`storefront StoreBar fits at ${width}px and with larger text`, async ({ page }) => {
+  test(`storefront StoreBar fits at ${width}px and with larger text, with a 44px action`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     for (const route of ['/tienda/carrito/', '/tienda/categoria/', '/tienda/categoria/?tienda=ninguna']) {
       for (const scale of SCALES) {
@@ -150,6 +154,7 @@ for (const width of WIDTHS) {
         const bar = storeBar(page);
         await expect(bar, `${route} ${scale}`).toHaveCount(1);
         expect(await spill(bar), `${route} ${scale}`).toEqual([]);
+        expect(await bar.locator(':scope > .ce-link').evaluate((el) => el.getBoundingClientRect().height), `${route} ${scale}`).toBeGreaterThanOrEqual(44);
       }
     }
   });
