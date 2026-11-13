@@ -28,6 +28,7 @@ jobs:
     permissions:
       contents: read
       deployments: read
+      actions: read
     outputs:
       version: ${{ steps.pack.outputs.version }}
       artifact-id: ${{ steps.upload.outputs.artifact-id }}
@@ -37,8 +38,9 @@ jobs:
         with:
           persist-credentials: false
           ref: ${{ inputs.rollback_commit }}
-      # A rollback deploys only a commit that GitHub Pages already served, and only verifies its published version, so
-      # publish never creates a release from it.
+      # A rollback deploys only a commit that GitHub Pages already served from an ordinary push to main, and only verifies its
+      # published version, so publish never creates a release from it. A rollback run's own deployment is recorded with the
+      # SHA of main's tip (the dispatch), not of the commit it served, so only a push run of that exact commit counts.
       - name: Check the rollback commit
         if: github.event_name == 'workflow_dispatch'
         env:
@@ -50,9 +52,11 @@ jobs:
           [[ $COMMIT =~ ^[0-9a-f]{40}$ && $(git rev-parse HEAD) == "$COMMIT" ]] || { echo "::error::rollback_commit must be a full 40-character commit SHA, checked out exactly."; exit 1; }
           served=
           for id in $(gh api "repos/$GH_REPO/deployments?environment=github-pages&sha=$COMMIT&per_page=100" --jq '.[].id'); do
-            if gh api "repos/$GH_REPO/deployments/$id/statuses?per_page=100" --jq '.[].state' | grep -qx success; then served=$id; break; fi
+            for run in $(gh api "repos/$GH_REPO/deployments/$id/statuses?per_page=100" --jq '.[] | select(.state == "success") | .log_url | capture("/actions/runs/(?<run>[0-9]+)/").run'); do
+              if [[ $(gh api "repos/$GH_REPO/actions/runs/$run" --jq '[.event, .head_branch, .head_sha] | join(" ")') == "push main $COMMIT" ]]; then served=$id; break 2; fi
+            done
           done
-          [[ -n $served ]] || { echo "::error::$COMMIT has no earlier successful github-pages deployment."; exit 1; }
+          [[ -n $served ]] || { echo "::error::$COMMIT has no earlier successful github-pages deployment from a push to main."; exit 1; }
           version=$(node -p 'require("./packages/vue/package.json").version')
           [[ $(gh release view "vue-v$version" --json isDraft --jq .isDraft) == false ]] || { echo "::error::vue-v$version is not a published release, so a rollback to $COMMIT cannot only verify it."; exit 1; }
           echo "Rollback to $COMMIT: github-pages deployment $served succeeded earlier; vue-v$version is published."
@@ -187,6 +191,7 @@ jobs:
       queue: max
     outputs:
       deploy: ${{ steps.tip.outputs.deploy }}
+      attempt: ${{ github.run_attempt }}
     steps:
       - id: tip
         run: |
@@ -196,10 +201,12 @@ jobs:
           else echo "::notice::main is now at $tip; this build of $GITHUB_SHA does not deploy."; echo "deploy=false" >> "$GITHUB_OUTPUT"; fi
 
   # The only job with Pages write and an OIDC token. It deploys the dist/ that validate checked and uploaded in this run, and
-  # runs only after publish and prove passed, so the site always documents a public, installable version.
+  # runs only after publish and prove passed, so the site always documents a public, installable version. A re-run of deploy
+  # alone keeps the gate's answer from an earlier attempt, when main may have moved on, so deploy needs the gate of its own
+  # attempt: re-run all jobs instead.
   deploy:
     needs: [validate, publish, prove, pages-gate]
-    if: needs.pages-gate.outputs.deploy == 'true'
+    if: needs.pages-gate.outputs.deploy == 'true' && needs.pages-gate.outputs.attempt == github.run_attempt
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:

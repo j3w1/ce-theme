@@ -14,8 +14,8 @@ for (const route of ROUTES) {
     expect(response.status()).toBe(200);
     const info = page.locator('.build-info');
     await expect(info).toHaveCount(1);
-    await expect(info).toContainText(`@casaelida/vue ${version}`);
-    await expect(info).toContainText(`commit ${commit.slice(0, 7)}`);
+    // The whole segment, so a longer version with the same start (0.2.10 for 0.2.1) does not match.
+    await expect(info).toContainText(`@casaelida/vue ${version} · commit ${commit.slice(0, 7)}`);
     await expect(info.getByRole('link')).toHaveAttribute('href', `https://github.com/j3w1/ce-theme/commit/${commit}`);
     await page.evaluate(() => document.fonts.ready);
     expect(await page.evaluate(() => [...document.fonts].some((face) => face.family.replace(/["']/g, '') === 'Inter' && face.status === 'loaded'))).toBe(true);

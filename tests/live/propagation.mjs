@@ -1,20 +1,67 @@
-// A first failure waits for GitHub Pages to propagate: the smoke starts once the site serves the expected commit, retrying
-// for at most 5 minutes before the failure counts.
+import { cssUrls, elements, jsImports } from '../dist/output.mjs';
+import { ROUTES } from './routes.mjs';
+
+// GitHub Pages propagation (issue #9 R6): the smoke starts only when everything it reads is served from the new deploy. That
+// covers every route with the expected commit and package version, and every same-site link and resource those pages use:
+// stylesheets and their fonts, scripts and their imports, the island bundles and the downloads. A first failure is retried
+// for at most five minutes in total, then counts. Every request is aborted at that deadline, so nothing is accepted after it.
+const BUDGET = 5 * 60_000;
+const PAUSE = 15_000;
+
 export default async function waitForDeploy() {
-  const site = process.env.CE_SITE_URL.replace(/\/?$/, '/');
+  const site = new URL(process.env.CE_SITE_URL.replace(/\/?$/, '/'));
   const commit = process.env.CE_EXPECT_COMMIT;
-  const deadline = Date.now() + 5 * 60_000;
-  let seen = 'no response';
+  const version = process.env.CE_EXPECT_VERSION;
+  const deadline = Date.now() + BUDGET;
+  const get = async (url) => {
+    const left = deadline - Date.now();
+    if (left <= 0) throw new Error('the five-minute budget ran out');
+    const response = await fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(left) });
+    return { status: response.status, text: await response.text() };
+  };
+  const ours = (url) => url.origin === site.origin && url.pathname.startsWith(site.pathname);
+
+  // One pass: undefined when everything is served from the expected deploy, otherwise what is not yet.
+  async function pass() {
+    const pending = [];
+    const seen = new Set();
+    const add = (value, base) => {
+      let url;
+      try { url = new URL(value, base); } catch { return; }
+      url.hash = '';
+      if (ours(url) && !seen.has(url.href)) { seen.add(url.href); pending.push(url); }
+    };
+    for (const route of ROUTES) {
+      const page = new URL(route, site);
+      const { status, text } = await get(page);
+      if (status !== 200) return `${page.pathname} answers HTTP ${status}`;
+      if (!text.includes(`@casaelida/vue ${version} · commit <a href="https://github.com/j3w1/ce-theme/commit/${commit}">`)) return `${page.pathname} does not show ${version} and commit ${commit.slice(0, 7)} yet`;
+      for (const element of elements(text)) {
+        for (const [name, value] of element.attrs) if (['href', 'src', 'component-url', 'renderer-url', 'before-hydration-url'].includes(name)) add(value, page);
+        if (element.name === 'script' && element.body) for (const specifier of jsImports(element.body)) add(specifier, page);
+      }
+    }
+    while (pending.length) {
+      const url = pending.shift();
+      const { status, text } = await get(url);
+      if (status !== 200) return `${url.pathname} answers HTTP ${status}`;
+      if (url.pathname.endsWith('.css')) for (const ref of cssUrls(text)) add(ref, url);
+      if (/\.m?js$/.test(url.pathname)) for (const specifier of jsImports(text)) add(specifier, url);
+    }
+    return undefined;
+  }
+
+  let last = 'no answer';
   for (;;) {
     try {
-      const response = await fetch(site, { cache: 'no-store' });
-      const html = await response.text();
-      if (response.status === 200 && html.includes(`/commit/${commit}"`)) return;
-      seen = response.status === 200 ? 'HTTP 200 with another commit' : `HTTP ${response.status}`;
+      const waiting = await pass();
+      if (waiting === undefined) return;
+      last = waiting;
     } catch (error) {
-      seen = error.message;
+      last = error.name === 'TimeoutError' || error.name === 'AbortError' ? 'a request reached the deadline' : error.message;
     }
-    if (Date.now() > deadline) throw new Error(`${site} did not serve commit ${commit} within 5 minutes (last seen: ${seen}).`);
-    await new Promise((resolve) => setTimeout(resolve, 15_000));
+    const left = deadline - Date.now();
+    if (left <= 0) throw new Error(`${site.href} did not serve the expected deploy within five minutes (last: ${last}).`);
+    await new Promise((resolve) => setTimeout(resolve, Math.min(PAUSE, left)));
   }
 }

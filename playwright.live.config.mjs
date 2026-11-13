@@ -16,6 +16,8 @@ export default defineConfig({
   testDir: './tests',
   testMatch: ['browser/foundation.spec.mjs', 'browser/messaging.spec.mjs', 'live/live.spec.mjs'],
   grep: [new RegExp(` (?:${ROUTES.map(escape).join('|')}): renders without errors`), /selecting a conversation opens its history/, /live\.spec\.mjs/],
+  // Propagation is waited for before any test (tests/live/propagation.mjs): every route, version line, link and resource the
+  // tests read must come from the expected deploy, within five minutes. After that a failure is a real one, so no retries.
   globalSetup: './tests/live/propagation.mjs',
   fullyParallel: true,
   workers: 2,
