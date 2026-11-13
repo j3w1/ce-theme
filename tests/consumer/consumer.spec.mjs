@@ -40,7 +40,9 @@ const ring = (locator) => locator.evaluate((el) => ({ style: getComputedStyle(el
 async function open(page) {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expect(logOf(page)).toBeVisible();
-  await page.evaluate(() => document.fonts.ready);
+  // FontFaceSet.ready can wait for the document load event in WebKit. Load the faces directly:
+  // the delayed-image case must measure its reserved box before allowing that image to finish.
+  await page.evaluate(() => Promise.all(['400', '600', '700', '800'].map((weight) => document.fonts.load(`${weight} 16px Inter`))));
 }
 
 test('standalone keyboard selection, native tab order and visible focus use the packaged controls', async ({ page }) => {
@@ -55,7 +57,17 @@ test('standalone keyboard selection, native tab order and visible focus use the 
   await expect(logOf(page)).toHaveAttribute('aria-label', 'Mensajes dos');
   await expect(rows.nth(1)).toBeFocused();
   expect(await ring(rows.nth(1))).toEqual({ style: 'solid', width: 2 });
-  await page.keyboard.press('Space'); // reactivation of an already selected row is supported
+  await rows.first().focus();
+  await page.keyboard.press('Space');
+  await expect(rows.first()).toHaveAttribute('aria-current', 'true');
+  await expect(rows.nth(1)).not.toHaveAttribute('aria-current', 'true');
+  await expect(logOf(page)).toHaveAttribute('aria-label', 'Mensajes uno');
+  await expect(rows.first()).toBeFocused();
+  await rows.nth(1).focus();
+  await page.keyboard.press('Space');
+  await expect(rows.nth(1)).toHaveAttribute('aria-current', 'true');
+  await expect(rows.first()).not.toHaveAttribute('aria-current', 'true');
+  await expect(logOf(page)).toHaveAttribute('aria-label', 'Mensajes dos');
   await page.keyboard.press('Tab');
   await expect(logOf(page)).toBeFocused();
   expect(await ring(logOf(page))).toEqual({ style: 'solid', width: 2 });

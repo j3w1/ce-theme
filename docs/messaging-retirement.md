@@ -19,7 +19,7 @@ source, data or credentials are required by this repository or its CI.
 | `site/styles/site.css` messaging block (frozen lines 253–287) | Remove app pane/warehouse/event/scope rules; retain only example layout. Other site styles stay. |
 | `tests/browser/messaging.spec.mjs` | Replace the 67 transferred application scenarios with compact route/selection/composition smoke checks. Keep the selection title phrase used by B2's live smoke. Public contracts are independently retained below. |
 | `tests/messaging.test.mjs` | Retain shared guards; adapt the five mapped static titles below to the reduced example. |
-| `public/references/shelf-gap-fictional.svg`, `public/references/manifest.json` | Keep unchanged: the public AttachmentGroup specimen and generated design-system previews also use this reference. |
+| `public/references/shelf-gap-fictional.svg`, `public/references/manifest.json` | Keep unchanged: the compact composition, public AttachmentGroup specimen and generated design-system previews use this reference. The manifest description's “Reposición · Tacna” usage sentence is historical; provenance, rights and digest remain authoritative. |
 | `packages/vue/`, `recipes/`, tokens, fonts, helpers, names and generated specimens | Keep all public components/contracts and unit tests. No packed content or version changes. The packed README's historical Reposición description awaits a separately versioned package change. |
 
 ## Retained independent component evidence
