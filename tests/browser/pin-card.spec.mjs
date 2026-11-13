@@ -76,12 +76,19 @@ async function keyboardFocus(page, card) {
 async function focusRingInside(page, card, label) {
   await keyboardFocus(page, card);
   const r = await card.evaluate((el) => {
-    // The tokens as the browser resolves them for this card (rem, calc and overrides included).
-    const probe = document.createElement('span');
-    probe.style.cssText = 'position:absolute;visibility:hidden;width:var(--ce-stroke-focus);height:var(--ce-stroke-offset)';
-    el.append(probe);
-    const tokens = { width: probe.getBoundingClientRect().width, offset: probe.getBoundingClientRect().height };
-    probe.remove();
+    // The card's own token values (its cascade, overrides included), resolved to px in an isolated probe.
+    const cs = getComputedStyle(el);
+    const resolve = (value) => {
+      const probe = document.createElement('span');
+      probe.style.cssText = 'all:initial!important;position:absolute!important;display:block!important;visibility:hidden!important;zoom:1!important;height:0!important';
+      probe.style.setProperty('font-size', cs.fontSize, 'important');
+      probe.style.setProperty('width', value, 'important');
+      el.append(probe);
+      const px = probe.getBoundingClientRect().width;
+      probe.remove();
+      return px;
+    };
+    const tokens = { width: resolve(cs.getPropertyValue('--ce-stroke-focus').trim()), offset: resolve(cs.getPropertyValue('--ce-stroke-offset').trim()) };
     const s = getComputedStyle(el), c = el.getBoundingClientRect(), f = el.closest('.ce-tagged-media').getBoundingClientRect();
     const ring = parseFloat(s.outlineOffset) + parseFloat(s.outlineWidth);
     return { style: s.outlineStyle, width: parseFloat(s.outlineWidth), offset: parseFloat(s.outlineOffset), tokens, left: c.left - ring - f.left, right: f.right - c.right - ring, top: c.top - ring - f.top, bottom: f.bottom - c.bottom - ring };
@@ -344,6 +351,23 @@ test('recipe with consumer styles: transitions and inline declarations keep the 
   expect((await inline()).offset, 'inline outline-offset still untouched').toEqual(['var(--ce-stroke-offset)', 'important']);
   await page.locator('#frame .ce-pin-dot').click();
   await checkCard(page, card, 'consumer styles in the full-width photo, text x2', 'long');
+});
+
+// Consumer CSS that reaches inside the card cannot skew the measurement: universal token values with a card-specific
+// override (the card's own ring is 4px at 6px), and a rule aimed at any class-less child span of the card (where a
+// measuring element would be) that changes its width, zoom and transform.
+test('recipe with consumer selectors inside the card: the card’s own focus tokens keep the ring visible', async ({ page }) => {
+  const all = await cases();
+  const long = all.find((c) => c.kind === 'long');
+  const consumerCss = '*{--ce-stroke-focus:2px;--ce-stroke-offset:3px}.ce-pin-card{--ce-stroke-focus:4px;--ce-stroke-offset:6px}'
+    + '.ce-pin-card>span:not([class]){width:1px!important;zoom:3;transform:scale(3);font-size:50px}';
+  await mount(page, { width: 390, factor: 2, consumerCss }, [{ ...all[0], x: '8%', y: '8%' }, { ...all[1], x: '92%', y: '8%' }, { ...long, x: '92%', y: '92%' }]);
+  const results = await checkPins(page, 'consumer selectors, 390px, text x2');
+  for (const [index, m] of results.entries()) {
+    const card = page.locator('#frame .ce-pin-card').nth(index);
+    const ring = await card.evaluate((el) => { const c = el.getBoundingClientRect(), f = el.closest('.ce-tagged-media').getBoundingClientRect(); return Math.min(c.left - f.left, f.right - c.right, c.top - f.top, f.bottom - c.bottom); });
+    if (m.scrolls || ring < 11) expect(ring, `card ${index} keeps its own 10px ring inside the photo`).toBeGreaterThanOrEqual(9.5);
+  }
 });
 
 test('recipe source: the pin text spacing is written from the ProductStack tokens only', () => {

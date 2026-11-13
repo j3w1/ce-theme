@@ -157,14 +157,20 @@ export function enhanceMarkers(root = document) {
   }
 }
 
-// How far a card's focus ring reaches outside it (stroke.focus at stroke.offset), in px as the browser resolves the
-// card's own tokens (rem, calc and overrides included). A hidden probe inside the card takes that length as its width
-// and is removed at once, so no declaration of the card changes and no transition applies.
+// How far a card's focus ring reaches outside it (stroke.focus at stroke.offset), in px. The card's own token values
+// (its cascade, overrides included) are read from its computed style and resolved as the width of a hidden probe inside
+// the card: the values are written into the probe, so nothing it inherits or matches can change them, and its inline
+// !important declarations win over any stylesheet. It sits in the card so the card's zoom and transforms apply to it
+// as to the ring, and it is removed at once; no declaration of the card changes and no transition applies.
 function focusRingReach(card) {
+  const style = getComputedStyle(card);
+  const focus = style.getPropertyValue('--ce-stroke-focus').trim();
+  const offset = style.getPropertyValue('--ce-stroke-offset').trim();
+  if (!focus || !offset) return 0;
   const probe = document.createElement('span');
-  probe.style.cssText = 'position:absolute!important;display:block!important;visibility:hidden!important;box-sizing:content-box!important;'
-    + 'padding:0!important;border:0!important;min-width:0!important;max-width:none!important;height:0!important;'
-    + 'width:calc(var(--ce-stroke-focus) + var(--ce-stroke-offset))!important';
+  probe.style.cssText = 'all:initial!important;position:absolute!important;display:block!important;visibility:hidden!important;zoom:1!important;height:0!important';
+  probe.style.setProperty('font-size', style.fontSize, 'important');
+  probe.style.setProperty('width', `calc(${focus} + ${offset})`, 'important');
   card.append(probe);
   const reach = probe.getBoundingClientRect().width;
   probe.remove();
