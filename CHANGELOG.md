@@ -1,5 +1,29 @@
 # Changelog
 
+## @casaelida/vue 0.4.0 — 2026-11-14 (unreleased)
+
+CR-07, the shopping-action rule (ce-theme#11). The shipped `styles.css` changes how product cards behave, so the package takes a new minor version with a markup migration. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; see `docs/decisions.md`, “Shopping actions (CR-07)”. It follows 0.3.3 (CR-05) in the release order.
+
+### Changed
+
+- Product cards are browse first: no purchase control at rest, no favourite and no full-width button. The optional QuickAdd icon (`ce-icon-button--action` in `ce-product-row`) shows only on the hovered or keyboard-focused card on hover-capable screens from 640px, at 44 × 44 (`--ce-size-target-public`), out of the row's height with its column kept clear, so the ProductStack gaps and the price do not move. It has no transition under reduced motion, and a card with no Description and no specs does not show it: measured with Inter, its unbreakable price starts inside the action's 44px (in a 150px card the digits of S/12.5 ran 1.9px under it; see CR-07 section 6). That refinement is the repository lead's selection under the CR-07 delegation, not j3w1-typed. The Description and specs are rendered only when they contain trimmed text, as `productView()` or the application's equivalent formatting gives them; handwritten whitespace-only elements are not protected (the lead's clarification under the same delegation, not j3w1-typed). Touch and narrow screens add nothing from a card: the whole card opens the product page, and its other native controls (variant thumbnails, «Comparar», a list's own task, a control in the photo box) stay separate. The photo's own link (`aria-hidden`, `tabindex="-1"`) stays under the product link; any other link in the photo box is a separate control.
+- `ce-product-add` is deprecated: it stays `display: none` at every width until consumers remove the element, and no longer shows on touch or narrow screens. Consumers that still render it must remove it from their markup; there is no opt-in variant.
+- The product page keeps one primary «Añadir al carrito» (`AddToCart`, re-scoped in the names registry) and one product-named favourite; the `ProductDetail` card shows the supplied add outcomes in words. CE Theme ships no sticky buy-bar recipe.
+- `docs/decisions.md` supersedes the behaviour of the 2026-10-25 “Add to cart” row and keeps its copy. `QuickAdd` (Añadir rápido) is added to the names registry. The `TaggedMedia` guideline applies the same rule to an open pin card, as documentation only.
+- The remaining “bag”/«Bolsa» cart wording in the guidelines, previews and `/tienda/` pages is now cart/«carrito». The `bag` and `bag-plus` icons are renamed `cart` and `cart-plus`, with the same drawing.
+
+### Migration
+
+- Remove `<button class="ce-button … ce-product-add">` from product cards. It no longer shows anywhere; the deprecated `display: none` rule stays only until consumers have removed it.
+- Remove the favourite button from `ce-product-media` on catalogue cards; keep one product-named favourite on the product page, beside the one primary «Añadir al carrito».
+- A card's optional quick-add is the `ce-icon-button ce-icon-button--action ce-icon-button--small` inside `ce-product-row`, named with the product. It shows only on hover-capable screens from 640px and not on a card with no Description and no specs.
+- Render the Description and specs only when they contain trimmed text (`productView()` or the application's equivalent). On touch and narrow screens the `ce-product-link` covers the card: give the photo's own link `aria-hidden="true"` and `tabindex="-1"`, use native controls for anything else in the card, don't wrap a card control in an element that creates its own stacking context, and don't position an element between the card and its `ce-product-link` (see the ProductCard guideline).
+- Rename the `bag` and `bag-plus` icons to `cart` and `cart-plus` where an application uses the design-system icon files; the drawing is the same.
+
+### Added
+
+- `tests/browser/shopping-actions.spec.mjs` and `tests/shopping-actions.test.mjs` check CR-07's acceptance 1 to 5. The geometry matrix loads the supplied Inter files and measures glyph ink across sixteen card shapes, three card widths, eight asserted text sizes and both writing directions.
+
 ## @casaelida/vue 0.3.3 — 2026-11-14 (unreleased)
 
 CR-05, the in-page store line (ce-theme#11). The packaged recipes gain the StoreBar rules; the components are unchanged. It follows 0.3.2 (CR-09) in the release order.

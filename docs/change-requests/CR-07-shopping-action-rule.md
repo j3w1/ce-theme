@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Implemented in CE Theme by pull request [#24](https://github.com/j3w1/ce-theme/pull/24): the recipe in `recipes/retail.css`, the `ProductCard`, `ProductDetail` and `TaggedMedia` guidelines and previews, `QuickAdd` and the re-scoped `AddToCart` in the names registry, the “Shopping actions (CR-07)” row in `docs/decisions.md`, `docs/coverage.md` and the `/tienda/` reference pages. Decisions 2, 3, 4, 6 and 7 were decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)); j3w1 may veto any of them. The implementation choices recorded under section 6 are the lead's implementation judgment under the same delegation.
 
 # CR-07 · Shopping-action rule: browse first, contextual quick-add, one primary action on the product page
 
@@ -101,9 +101,46 @@ To run when the repository work happens (not run here, except where marked):
 5. `decisions.md`, `names.md`, `names.mjs`, README and card changes in one change; the repository's naming and registry tests (named in the decisions file) pass.
 6. Screen reader and real-phone checks: **not run, to schedule** (the workbench records none).
 
+**Implemented with the recipe.** Checks 1 to 4 are `tests/browser/shopping-actions.spec.mjs`; check 5 is `tests/shopping-actions.test.mjs` with the existing naming and registry tests (`tests/vue-naming.test.mjs`, the generated-file check). Check 6 is still not run: no screen reader, real phone or real hover device was used, and nothing here claims one.
+
+- **Row height (check 2).** Measured in Chromium with the generated CSS: NAME with a one-line Description is 39.19px tall, so the in-flow 44px action of 4.1 grew the row to 44px and moved the specs and the price 4.81px down (Description to specs 6.81px instead of 2px). The lead did not take the negative block margin or a change to check 2. Instead, on hover-capable screens from 640px, the action is positioned at the top inline-end corner of `ce-product-row`, out of the row's height. Its column stays clear: the row, the line that follows it and, with no Description, the line after that keep `--ce-size-target-public` plus the 12px row gap free at the inline end. No class, slot or markup was added.
+- **A card with no room (check 2, measured conflict).** A NAME with no Description and no specs is 18px tall, so the price starts 30px below the row top, inside the action's 44px. A price is one unbreakable line, so no reserved space can move it. Minimal counterexample, with Inter loaded: a 150px card at a 1440px viewport, default text, NAME «MENE», price S/12.5. The digits ran 8.0px × 1.9px under the action, and S/1250.90 ran 8.0 × 44.0px; in a 200px card S/1250.90 ran 8.0 × 6.9px. The full 44 × 44 action, the 12px gap, an unmoved price and no overlap cannot all hold there with the existing markup. The repository lead chose, under the same delegation and not j3w1-typed, not to show the optional quick-add on a card with no Description and no specs, enforced in the recipe at every width. Buying stays on the product page. Empty Description or specs elements count as absent. An element that holds only white space cannot be told from text by any selector (`:empty` does not match it, and `:blank` is not implemented), so it is outside the guarantee. The markup contract is that the Description and specs are rendered only when they contain trimmed text, as `productView()` or the application's equivalent formatting gives them. `productView()` returns no Description and no specs for blank or whitespace-only input, and the reference card renders through it. The recipe does not protect a handwritten element that holds only white space. The repository lead accepted this contract as a clarification under the same delegation, not j3w1-typed; it is not a gap, target or price waiver.
+- **Whole card on touch and narrow screens (check 1).** On `(hover: none)` and below 640px the action is `display: none`, and the `ce-product-link` covers the card through its `::after`. Every other native control in the card (variant thumbnails, «Comparar», a list's own task, a control in the photo box) is lifted above it by a zero-specificity rule, so it keeps its own target and the keyboard order is unchanged. The photo's own link (`aria-hidden="true"`, `tabindex="-1"`), which goes to the same page, is not lifted, so it cannot cover a control placed before it in the photo box. Another link in the photo box is lifted like any other control. Nothing is nested in the link. The tests count which control each click or tap reached, then wait for the URL. Taps and clicks on the photo, identity, specs, price, availability and empty card space open the product page; a variant link, «Comparar», a task button and a control in the photo box keep their own behaviour. One card holds every supported native control type: links (including one in the photo box before the photo's link), a button, a checkbox with its label, a select, a textarea and a summary. The test checks that each takes its own pointer press at 390px and its own tap under `(hover: none)`, and keeps its place in the keyboard order. The keyboard checks: Space toggles the checkbox, Enter and Space activate the buttons, Enter opens the summary and follows each link, and typing edits the textarea. The select is checked for its pointer press and focus only, because its keyboard value change differs between the customizable picker and the native one. Removing the link's `::after` fails these tests, and removing the rule that lifts the other controls leaves them untappable. Limits, written in the ProductCard guideline: native controls only (a custom `role="button"` element is not lifted), no ancestor that creates its own stacking context around a control, and no positioned element between the card and its link.
+- **What the geometry test proves.** The test page loads the supplied Inter files (it checks that the four faces loaded), the generated tokens and the generated recipes. It renders sixteen card shapes in 300, 200 and 150px cards at a 1440px viewport, each with and without the action, in left-to-right and right-to-left. The shapes are:
+  - one- and two-line Descriptions;
+  - no specs, and no specs with a wide price;
+  - no Description, and no Description with a wide price;
+  - NAME only, with a price, a wide price or a store note;
+  - NAME only with empty Description and specs elements, with a price or a wide price;
+  - a store note;
+  - a wide price (S/1250.90);
+  - long text;
+  - unbreakable specs;
+  - a card with a variant link, «Comparar» and a task button.
+
+  It runs eight text sizes, and each run asserts the computed font sizes it names:
+  - default text;
+  - root text at 150% and 200% (the rem-based text grows; the card price is set in px and stays 44px);
+  - every text at ×1.5 and ×2 (root text at 150% and 200%, with the test page setting the px card price to 66 and 88px);
+  - product text set to 24px, 14px and 12px.
+
+  Text under the action is measured as glyph ink (the font's own bounds through `measureText`), so the empty space of a line box or of the font's content area does not count. For each card that can show the action, the test checks:
+  - the action is 44 × 44 at the inline end;
+  - seven points inside it hit the action, and it takes focus;
+  - no text ink and no other target lies under it;
+  - the product link's focus ring ends before it;
+  - the row is exactly the heading's height;
+  - the gaps are 2px and 12px;
+  - with the same text layout, the price sits where it sits without the action.
+
+  For the NAME-only shapes, the action has no box, takes no focus and is not under a pointer, no space is reserved, and the price sits as in the card without it. Removing the corridor rules, or the NAME-only rule, makes the matrix fail. Nothing is claimed for text sizes not listed here.
+- **Legacy markup (check 2b).** A card that keeps `<button class="ce-button ce-product-add">` renders no visible add at 1440, at 390 and under `(hover: none)`. Removing the deprecated rule makes these tests fail. The previews and the reference pages no longer contain the element (`tests/shopping-actions.test.mjs`).
+- **Touch.** `(hover: none)` is emulated with a touch context. The tests skip, and say so, in a browser that does not apply it. Locally only Chromium was run; hosted CI also runs WebKit.
+- **Sticky bar (check 4).** CE Theme ships no sticky-bar recipe, so the rule is written for consumers, and the test only confirms that the reference product page has no such bar.
+
 ## 7. Risks and what it does not change
 
-- It reverses the behaviour rule of a decision recorded on 2026-10-25; the copy of that decision, «Añadir al carrito», stands (X-6). The boards say j3w1 approved the direction as a design default; the repository change needs j3w1's explicit approval of the new `decisions.md` row.
+- It reverses the behaviour rule of a decision recorded on 2026-10-25; the copy of that decision, «Añadir al carrito», stands (X-6). The boards say j3w1 approved the direction as a design default. The new `decisions.md` row records the repository lead's selection, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)); j3w1 may veto it. It is not a merge authorization, and the merge order stays with the lead.
 - Consumers of the card recipe (the CE Theme reference site, `/tienda/` pages) that keep the `ce-product-add` element: with the deprecated rule the button disappears at every width (today it shows on touch and narrow screens only); if the rule were dropped instead, the button would appear at every width including desktop (`.ce-button` is `display: inline-flex`, line 9). Either way their markup must change; their review is **to do** (not seen).
 - The quick action is hidden with `opacity: 0` rather than removed from the tree; some teams may prefer `visibility`. Left as the recipe has it.
 - Touch quick-buy is not designed: `AccionesCompra` says it must be designed and validated separately if ever proposed.
@@ -112,9 +149,9 @@ To run when the repository work happens (not run here, except where marked):
 ## 8. Owner decisions needed
 
 1. Copy: Decided (X-6, X-8, 2026-11-06): «carrito» / «Añadir al carrito». «Bolsa» and «Añadir a la bolsa» are not used anywhere in the design system.
-2. Approve superseding the behaviour rule of the 2026-10-25 "Add to cart" row (its copy «Añadir al carrito» stands: X-6).
-3. `ce-product-add`: keep the deprecated `display: none` rule until the preview and consumers have removed the element (recommended), remove the class outright with a documented markup migration, or keep it as an opt-in for a list with its own task?
-4. Quick-add target 44px (R-10; written with `--ce-size-target-public`, X-1) against the README's 40px "card actions" exception.
+2. Decided, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the behaviour row is revised as proposed (browse-first cards, the optional quick-add on the active desktop card, whole-card navigation on touch and narrow layouts, one primary product-page action and the sticky-bar substitution). The 2026-10-25 row stays visible, marked superseded for behaviour. «Añadir al carrito» is kept, and the fixture eligibility rules stay out of the shared ledger.
+3. Decided, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the deprecated `ce-product-add { display: none }` safeguard stays until the preview and the consumers have removed the element. There is no opt-in list variant; the safeguard is removed only in an evidenced later cleanup.
+4. Decided, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the quick-add uses the 44px public-target token, which replaces the 40px card-action exception for this control only.
 5. Names: Decided (X-8, 2026-11-06): `QuickAdd` is added, accepted with its change; `AddToCart` is kept and re-scoped to the single primary action on the product page; `AddToBag` is retired and not added.
-6. Is the quick-add inside an open pin card (Pub09Ideas) part of the rule?
-7. Ask for a sticky buy-bar recipe as a separate request?
+6. Decided, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the same rule applies to an open pin card, with an optional quick-add only in the active desktop or hover presentation, the same keyboard access and no touch quick-buy exception. Following the lead, this is documented only: the pin card stays a product link with no purchase control by default, and an application's quick-add must be a separate control outside that link. No pin slot, markup or placement is added, and no pin quick-add is implemented or proved here.
+7. Decided, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): no sticky buy-bar recipe in this request, and no new request merely to reserve one. The written consumer substitution rule stays; a concrete later need can propose a separate recipe.

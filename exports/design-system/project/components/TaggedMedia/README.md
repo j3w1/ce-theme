@@ -20,6 +20,7 @@ The photo and its `alt`; for each tagged product a letter, its position, and for
 - Do put the dot ON the thing the label describes: the glass wall or rim for “de vidrio borosilicato”, the body of the mat for “base antideslizante”; never on a tail, a handle, a shadow or empty space. The label goes in the empty area of the photo, joined by the leader.
 - Do use pins on the website and letters only where nothing can hover; never both on the same photo.
 - Do repeat everything a pin or marker points to in the `TagList`; the image is never the only place a name or price appears.
+- Do follow the shopping-action rule in an open pin card, as on a product card (`ProductCard`): the pin card is a link to the product, showing identity and price, with no purchase control by default. An optional quick-add that an application adds follows the QuickAdd rule: a separate control outside the card link, never a button inside it, shown only in the hover or keyboard-focus presentation on hover-capable screens from 640px, named with the product, at the 44px public target, with the same keyboard access. There is no touch exception: a tapped pin card on a touch or narrow screen never adds to the cart, and its link opens the product page. CE Theme provides no pin quick-add markup or placement.
 - Do use letters in reading order and keep markers off faces, product edges and the 8% safety margin.
 - Don't bake markers, prices or names into a web image; on web they stay live HTML.
 - Don't place more than about five markers or three feature tags on one image.

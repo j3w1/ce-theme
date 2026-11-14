@@ -566,12 +566,37 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-product-media > a { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
 .ce-product-link { display: flex; flex-direction: column; gap: var(--ce-space-2); color: inherit; text-decoration: none; }
 .ce-product-link:hover .ce-product-description { color: var(--ce-color-text-primary); text-decoration: underline; text-underline-offset: .2em; }
-/* Add to cart (Añadir al carrito): the icon button shows only on hover or keyboard focus of the card. On touch and narrow screens it
-   is replaced by a full-width button at the bottom of the card, so the action is always reachable without hover. */
-.ce-product-row > .ce-icon-button--action { opacity: 0; transition: opacity var(--ce-motion-quick); }
+/* QuickAdd (Añadir rápido): browse-first cards carry no purchase control at rest. The optional quick-add icon is a separate control
+   beside the product link; it shows only on hover or keyboard focus of the card, on hover-capable screens from 640px, at the public
+   target size. On touch and narrow screens nothing is added from the card: the card is the product link, and buying happens on the
+   product page (AddToCart). */
+.ce-product-row > .ce-icon-button--action { opacity: 0; transition: opacity var(--ce-motion-quick); flex-basis: var(--ce-size-target-public); width: var(--ce-size-target-public); min-height: var(--ce-size-target-public); }
 .ce-product:hover .ce-product-row > .ce-icon-button--action, .ce-product:focus-within .ce-product-row > .ce-icon-button--action { opacity: 1; }
-.ce-product-add { display: none; width: 100%; margin-top: var(--ce-space-16); }
-@media (hover: none), (max-width: 639.98px) { .ce-product-row > .ce-icon-button--action { display: none; } .ce-product-add { display: inline-flex; } }
+/* A card with no Description and no specs under its NAME has no room for the action: the 44px action would reach over the price,
+   which starts 12px below the NAME. The optional quick-add is not shown there, and buying stays on the product page. Empty
+   elements count as absent; render the Description and specs only when they have text, as productView() gives them (a selector
+   cannot see that an element holds only white space). */
+.ce-product-row:not(:has(.ce-product-description:not(:empty))):not(:has(+ .ce-product-specs:not(:empty))) > .ce-icon-button--action { display: none; }
+/* On touch and narrow screens the whole card opens the product page: the product link covers the card, and every other native control
+   in it (variant thumbnails, «Comparar», a list's own task) stays a separate target above it. The photo's own link (hidden from the
+   accessibility tree and the tab order) goes to the same page and stays below, so it never covers a control placed in the photo box. */
+@media (hover: none), (max-width: 639.98px) {
+  .ce-product-row > .ce-icon-button--action { display: none; }
+  .ce-product { position: relative; }
+  .ce-product .ce-product-link::after { position: absolute; inset: 0; content: ''; }
+  .ce-product :where(a[href], button, input, select, textarea, label, summary):where(:not(.ce-product-link, .ce-product-media > a[aria-hidden="true"][tabindex="-1"])) { position: relative; z-index: 1; }
+}
+/* The 44px quick action is taller than a NAME with a one-line Description, so it is taken out of the row's height: the ProductStack
+   gaps and the price stay where they are with or without it. Its column stays clear: the heading, the line that follows the row and,
+   with no Description, the line after that keep the target width plus the row gap free beside it. */
+@media (hover: hover) and (min-width: 640px) {
+  .ce-product-row:has(> .ce-icon-button--action):is(:has(.ce-product-description:not(:empty)), :has(+ .ce-product-specs:not(:empty))) { position: relative; padding-inline-end: calc(var(--ce-size-target-public) + var(--ce-space-12)); }
+  .ce-product-row > .ce-icon-button--action { position: absolute; inset-block-start: 0; inset-inline-end: 0; }
+  .ce-product-row:has(> .ce-icon-button--action):is(:has(.ce-product-description:not(:empty)), :has(+ .ce-product-specs:not(:empty))) + *, .ce-product-row:has(> .ce-icon-button--action):not(:has(.ce-product-description:not(:empty))):has(+ .ce-product-specs:not(:empty)) + * + * { padding-inline-end: calc(var(--ce-size-target-public) + var(--ce-space-12)); }
+}
+/* Deprecated: the full-width card button of the earlier rule. It stays hidden at every width until the previews and the consumers have
+   removed the element; without this rule a leftover .ce-button.ce-product-add would show at every width. No opt-in variant. */
+.ce-product-add { display: none; }
 .ce-product-row { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--ce-space-12); width: 100%; }
 .ce-product-row .ce-product-heading { flex: 1; min-width: 0; }
 .ce-icon-button--action { background: var(--ce-color-action-primary-bg); color: var(--ce-color-action-primary-text); border-color: transparent; }
@@ -582,7 +607,7 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-product-select { margin-bottom: var(--ce-space-8); }
 .ce-stock { display: grid; gap: var(--ce-space-8); margin: 0; padding: 0; list-style: none; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); line-height: var(--ce-font-line-heading); }
 .ce-stock > li { display: grid; grid-template-columns: 10px minmax(0, 1fr); align-items: baseline; gap: var(--ce-space-8); }
-.ce-stock > li::before { width: 10px; height: 10px; content: ''; border-radius: var(--ce-radius-pill); background: var(--ce-color-border-control); transform: translateY(1px); }
+.ce-stock > li::before { width: 10px; height: 10px; content: ''; border-radius: var(--ce-radius-pill); background: var(--ce-color-border-control); transform: translateY(1px); pointer-events: none; }
 .ce-stock > [data-state="available"]::before { background: var(--ce-color-status-success-text); }
 .ce-stock > [data-state="limited"]::before { background: var(--ce-color-status-warning-text); }
 .ce-stock > [data-state="unavailable"]::before { background: transparent; box-shadow: inset 0 0 0 2px var(--ce-color-status-danger-text); }
@@ -799,7 +824,7 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 @media (min-width: 1300px) { .ce-listing .ce-product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (min-width: 1024px) and (max-width: 1299.98px) { .ce-listing .ce-product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @keyframes ce-retail-spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .ce-tile > img, .ce-arrow-link { transition: none; } .ce-tile:hover > img { transform: none; } .ce-store-context[aria-busy="true"]::after { animation-duration: 2.4s; } .ce-rail, .ce-gallery { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: reduce) { .ce-tile > img, .ce-arrow-link, .ce-product-row > .ce-icon-button--action { transition: none; } .ce-tile:hover > img { transform: none; } .ce-store-context[aria-busy="true"]::after { animation-duration: 2.4s; } .ce-rail, .ce-gallery { scroll-behavior: auto; } }
 
 /* Casa Elida workspace recipes for CE Systems, CE Meta and other internal applications: application shell,
    density, data tables, records, editors and operational layouts. Same tokens and type as retail, more

@@ -99,7 +99,7 @@ Reference sections bundled with this system: `apply-ce-theme.md` (start here whe
 - Focus is a 2px solid outline (`ce-stroke-focus`, `ce-color-focus`) with a 3px offset on every interactive element. On photography and the black utility bar, the outline turns white with an ink halo.
 - Hover darkens fills or adds the subtle surface. Selected chips, category links, variants and choice cards gain an ink ring (`aria-pressed`, `aria-current`, `:checked`). Pressed favourites fill the heart.
 - Motion is limited to quick colour and transform transitions (`ce-motion-quick`, 160ms), removed under reduced motion. No autoplay; rails never auto-advance.
-- Targets are 44–48px tall (`ce-size-target-public` is the 44px minimum), 40px for card actions, never under 24px.
+- Targets are 44–48px tall (`ce-size-target-public` is the 44px minimum), 40px for other card actions, never under 24px. The card quick-add uses the 44px target.
 
 ## Tagging products on photography
 

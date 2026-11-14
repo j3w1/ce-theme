@@ -46,7 +46,11 @@ The **CECode** (Código CE) is white bold text on ink with tabular figures, padd
 
 ## Add to cart
 
-**AddToCart** (Añadir al carrito) is an icon button that appears only when a product card is hovered or focused. On touch and narrow screens it is replaced by a full-width “Añadir al carrito” button at the bottom of the card.
+The shopping cart is the **Cart** («carrito») everywhere; “bag” and «bolsa» are not used. Product cards are for browsing, and buying happens on the product page.
+
+- **AddToCart** (Añadir al carrito) is the one primary «Añadir al carrito» button on the product page (`ce-buy-actions`, 56px), beside the quantity and a quiet favourite. Its outcomes and whether it is enabled are state supplied by the commerce service; the recipe shows them in words.
+- **QuickAdd** (Añadir rápido) is the optional icon on the active product card: it shows only when the card is hovered or keyboard-focused on a hover-capable screen from 640px. It is a separate 44px control (`size.target.public`) beside the product link, named with the product («Añadir MENE, Taza de Vidrio Resistente al Calor al carrito»). On touch and narrow screens nothing is added from a card: the whole card is the product link. A card whose NAME has no Description and no specs under it does not show the quick-add either, because the 44px action would reach over its price.
+- The full-width card button of the earlier rule, `ce-product-add`, is deprecated: the recipe keeps it hidden at every width until consumers remove the element. No `AddToBag` name exists.
 
 ## Demonstration cue
 
@@ -134,7 +138,8 @@ Generated from `recipes/names.mjs` by `pnpm generate`; do not edit between the m
 | Id | Nombre CE | Recipe | Vue | Rule |
 | --- | --- | --- | --- | --- |
 | `ProductCard` | Tarjeta de producto | `ce-product` | — | Photo, then the ProductStack. No borders, shadows or rounded corners. |
-| `AddToCart` | Añadir al carrito | `ce-product-add`, `ce-icon-button--action` | — | On hover-capable screens an icon button appears on card hover or focus; on touch and narrow screens a full-width button sits at the bottom of the card. |
+| `QuickAdd` | Añadir rápido | `ce-icon-button--action` | — | Optional icon on the active product card: it shows only when the card is hovered or keyboard-focused, on hover-capable screens from 640px. A separate 44px control beside the product link, named with the product. Never on touch or narrow screens, where the whole card is the product link, and not on a card with no Description and no specs. |
+| `AddToCart` | Añadir al carrito | `ce-buy-actions` | — | The one primary action on the product page, 56px, beside the quantity and a quiet favourite. Its outcomes and whether it is enabled are supplied by the commerce service. |
 | `ProductCallout` | Tarjeta flotante | `ce-callout` | — | White floating card with a photo, identity and price for editorial pieces. |
 | `Mosaic` | Mosaico | `ce-mosaic` | — | Editorial grid of tiles; one large tile, one wide, two small. |
 | `MosaicTile` | Baldosa | `ce-tile`, `ce-tile--light` | — | One link in a mosaic. Neutral surface; yellow never sits behind or over a product photo. |

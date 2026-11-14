@@ -1,6 +1,6 @@
 # Cart
 
-The bag and checkout: steps, product lines with quantity, the fulfilment choice and an order summary whose amounts come from the commerce service.
+The cart and checkout: steps, product lines with quantity, the fulfilment choice and an order summary whose amounts come from the commerce service.
 
 ## Classes
 

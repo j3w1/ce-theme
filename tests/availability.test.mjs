@@ -145,7 +145,7 @@ test('the site names every availability list and marks it busy exactly while a r
 
 test('the recipe makes unknown and pending explicit, keeps the ring for unavailable only and leaves ce-availability as it was', async () => {
   const css = await readRecipes();
-  assert.ok(css.includes('.ce-stock > li::before { width: 10px; height: 10px; content: \'\'; border-radius: var(--ce-radius-pill); background: var(--ce-color-border-control); transform: translateY(1px); }'), 'the default neutral dot stays');
+  assert.ok(css.includes('.ce-stock > li::before { width: 10px; height: 10px; content: \'\'; border-radius: var(--ce-radius-pill); background: var(--ce-color-border-control); transform: translateY(1px); pointer-events: none; }'), 'the default neutral dot stays');
   assert.ok(css.includes('.ce-stock > [data-state="unknown"]::before, .ce-stock > [data-state="pending"]::before { background: var(--ce-color-border-control); }'));
   const stockRules = [...css.matchAll(/^\.ce-stock[^{]*\{[^}]*\}/gm)].map(([rule]) => rule);
   assert.deepEqual(stockRules.filter((rule) => rule.includes('box-shadow')), ['.ce-stock > [data-state="unavailable"]::before { background: transparent; box-shadow: inset 0 0 0 2px var(--ce-color-status-danger-text); }']);
