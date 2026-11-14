@@ -2,6 +2,7 @@
 import Price from './Price.astro';
 import Icon from './Icon.astro';
 import { productView } from '../../recipes/product.mjs';
+import { stockListAttributes } from '../data/store.mjs';
 interface Option { name?: string; image?: string; href?: string; current?: boolean }
 interface Props {
   product: { code?: string; name?: string; description?: string; specs?: string[]; image?: string; amount?: string; previousAmount?: string; discountLabel?: string; badge?: string };
@@ -12,7 +13,8 @@ interface Props {
   price?: { amount: string; previousAmount?: string; discountLabel?: string };
   /** Shown instead of a price when the selected store has none (never S/0). */
   priceNote?: string;
-  stock?: { state: 'available' | 'limited' | 'unavailable' | 'unknown'; text: string }[];
+  /** Supplied availability statements for the chosen store (docs/names.md#stockline); none when no store is chosen. */
+  stock?: { state: 'available' | 'limited' | 'unavailable' | 'unknown' | 'pending'; text: string }[];
   options?: Option[];
   actions?: boolean;
   compare?: boolean;
@@ -47,7 +49,7 @@ const label = view.accessibleName;
     {view.specs.length > 0 && <p class="ce-product-specs">{view.specs.join(', ')}</p>}
     {amount && <Price amount={amount.amount} previousAmount={amount.previousAmount} discountLabel={amount.discountLabel} />}
     {!amount && priceNote && <p class="ce-store-note">{priceNote}</p>}
-    {stock.length > 0 && <ul class="ce-stock">{stock.map((line) => <li data-state={line.state}>{line.text}</li>)}</ul>}
+    {stock.length > 0 && <ul class="ce-stock" {...stockListAttributes(stock)}>{stock.map((line) => <li data-state={line.state}>{line.text}</li>)}</ul>}
     {options.length > 1 && <div class="ce-variant-more"><span>Más opciones</span><ul class="ce-variant-thumbs">{options.map((option) => <li><a href={option.href ?? href ?? '#'} aria-current={option.current ? 'true' : undefined}><img src={option.image} alt={option.name ?? ''} width="44" height="44" loading="lazy" /></a></li>)}</ul></div>}
     {actions && amount && <button class="ce-button ce-button--secondary ce-product-add" type="button" aria-label={`Añadir ${label} al carrito`}>Añadir al carrito</button>}
   </div>

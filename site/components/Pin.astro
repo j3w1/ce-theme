@@ -3,9 +3,10 @@
 // Prices follow the store the visitor chose, like the product list below the photo.
 import Price from './Price.astro';
 import { productView } from '../../recipes/product.mjs';
+import { url } from '../url.mjs';
 // `item` is a catalogue entry with per-store `prices`, or a plain product with one `amount`.
 interface Props { item: any; x: string; y: string; id: string; href?: string; open?: boolean; side?: 'start' | 'end'; above?: boolean }
-const { item, x, y, id, href = '/tienda/producto/', open = false, side, above = false } = Astro.props;
+const { item, x, y, id, href = url('/tienda/producto/'), open = false, side, above = false } = Astro.props;
 const view = productView(item);
 ---
 <div class:list={['ce-pin', side === 'start' && 'ce-pin--start', above && 'ce-pin--above']} style={`--ce-x:${x};--ce-y:${y}`} data-open={open ? '' : undefined}>

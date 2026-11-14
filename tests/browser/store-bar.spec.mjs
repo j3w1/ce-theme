@@ -142,9 +142,12 @@ const cartAmounts = (page) => page.locator('main').evaluate((main) => {
 const TACNA = { lines: ['Precio actual: 13 soles', 'Precio actual: 8.5 soles'], summary: ['S/21.50', 'Sin costo', 'S/21.50'] };
 const AREQUIPA = { lines: ['Precio actual: 13.8 soles', 'Precio actual: 8.5 soles'], summary: ['S/22.30', 'Sin costo', 'S/22.30'] };
 
+// The preview serves the site under Astro's base (playwright.config.mjs), so a page is opened by its base-relative path.
+const onSite = (route) => route.slice(1);
+
 for (const [route, words] of PAGES) {
   test(`${route}: the StoreBar action is reachable by keyboard, shows the focus ring and opens the same dialog as the utility-bar button`, async ({ page }) => {
-    await page.goto(route);
+    await page.goto(onSite(route));
     await expect(storeBar(page)).toHaveCount(1);
     await expect(lead(page)).toHaveText(`${words} Tacna`);
     if (route === '/tienda/carrito/') expect(await cartAmounts(page)).toEqual(TACNA);
@@ -186,7 +189,7 @@ for (const [route, words] of PAGES) {
   });
 
   test(`${route} without a store: «Tienda: sin elegir» with «Elegir tienda», and no store-supplied amount on the page`, async ({ page }) => {
-    await page.goto(`${route}?tienda=ninguna`);
+    await page.goto(onSite(`${route}?tienda=ninguna`));
     await expect(storeBar(page)).toHaveCount(1);
     await expect(lead(page)).toHaveText('Tienda: sin elegir');
     const action = storeBar(page).getByRole('button', { name: 'Elegir tienda' });
@@ -209,7 +212,7 @@ for (const [route, words] of PAGES) {
 }
 
 test('/tienda/carrito/ opened for Arequipa shows Arequipa\'s supplied amounts with its bar', async ({ page }) => {
-  await page.goto('/tienda/carrito/?tienda=arequipa');
+  await page.goto(onSite('/tienda/carrito/?tienda=arequipa'));
   await expect(lead(page)).toHaveText('Importes en Arequipa');
   expect(await cartAmounts(page)).toEqual(AREQUIPA);
 });
@@ -221,7 +224,7 @@ for (const width of WIDTHS) {
       for (const query of ['', '?tienda=ninguna']) {
         for (const scale of SCALES) {
           const at = `${route}${query} ${scale}`;
-          await page.goto(`${route}${query}`);
+          await page.goto(onSite(`${route}${query}`));
           await page.addStyleTag({ content: `html{font-size:${scale}}` });
           const bar = storeBar(page);
           await expect(bar, at).toHaveCount(1);

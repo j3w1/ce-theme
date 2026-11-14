@@ -112,3 +112,27 @@ test.describe('standalone attachment group and work status', () => {
     expect(await page.evaluate(() => getComputedStyle(document.querySelector('.ce-message-list')).containerType)).toBe('normal');
   });
 });
+
+test('standalone rendered attachment counts keep the real 1–5 layouts and the supplied contain or cover fit', async ({ page }) => {
+  for (const width of [300, 600]) {
+    for (const count of [1, 2, 3, 4, 5]) {
+      await mount(page, `width:${width}px`, await render(CEAttachmentGroup, { items: Array.from({ length: count }, (_, i) => photo(i)), label: `${count} fotos` }), { width: 800 });
+      expect(await page.getByRole('button').count()).toBe(count);
+      expect(await columns(page, '.ce-attachment')).toBe(count === 1 ? 1 : width === 300 || [2, 4].includes(count) ? 2 : 3);
+      const size = await page.locator('.ce-attachment').first().boundingBox();
+      expect(size.width / size.height).toBeCloseTo(count === 1 ? 4 / 3 : 2 / 3, 1);
+      expect(await overflows(page)).toBe(0);
+      expect(await page.getByRole('img').first().evaluate((img) => getComputedStyle(img).objectFit)).toBe('contain');
+    }
+  }
+  await mount(page, 'width:300px', await render(CEAttachmentGroup, { items: [photo(0)], label: '1 foto', fit: 'cover' }));
+  expect(await page.getByRole('img').evaluate((img) => getComputedStyle(img).objectFit)).toBe('cover');
+});
+
+test('standalone message delivery is written in words separately from note identity', async ({ page }) => {
+  const messages = ['sent', 'delivered', 'read', 'failed'].map((status, i) => ({ id: String(i), kind: 'outgoing', text: 'Ejemplo', status, simulated: true }));
+  messages.push({ id: 'note', kind: 'note', text: 'Solo para el equipo', simulated: true });
+  await mount(page, 'width:300px', await render(CEMessageList, { messages, label: 'Mensajes' }));
+  await expect(page.locator('.ce-message-status')).toHaveText(['Enviado · simulado', 'Entregado · simulado', 'Leído · simulado', 'No entregado · simulado', 'simulada']);
+  await expect(page.getByRole('article').last()).toContainText('Nota interna · No la ve el cliente');
+});

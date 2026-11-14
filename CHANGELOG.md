@@ -1,8 +1,8 @@
 # Changelog
 
-## @casaelida/vue 0.3.3 — 2026-11-13 (unreleased)
+## @casaelida/vue 0.3.3 — 2026-11-14 (unreleased)
 
-CR-05, the in-page store line (ce-theme#11). The packaged recipes gain the StoreBar rules; the components are unchanged.
+CR-05, the in-page store line (ce-theme#11). The packaged recipes gain the StoreBar rules; the components are unchanged. It follows 0.3.2 (CR-09) in the release order.
 
 ### Added
 
@@ -12,19 +12,54 @@ CR-05, the in-page store line (ce-theme#11). The packaged recipes gain the Store
 
 - The Cart card and the storefront cart name their store with the StoreBar («Importes en …»), and the storefront home, listing, product and scene pages gain it («Precios y disponibilidad de …», «Tienda: sin elegir»). The storefront cart's amounts are now per store, with no amount when no store is chosen; the home page's promotion tile shows its offer price only for the store that supplies it.
 
-## Unreleased
+## @casaelida/vue 0.3.2 — 2026-11-14 (unreleased)
 
-CR-03, the demonstration cue (ce-theme#11).
+CR-09, the pin-card spacing and fit (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version (the `placePins()` reference behaviour in `recipes/behaviors.mjs` changes too, but it is not in the package); it follows 0.3.0 (CR-01) and 0.3.1 (CR-10) in the release order. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed, with the fit as decision 3, decided under the same standing delegation (Supervisor confirmation, 2026-11-13 13:22), not j3w1-typed.
+
+### Changed
+
+- The pin card follows the ProductStack. NAME and Description are 2px apart (`size.product.gap-identity`, was 4px), and the price block, or the store note or pending-price message in its place, starts 8px under the Description from `size.product.gap-note` (the store note and pending-price message were 4px). Every card stays the width of its focus ring inside its photo's edges, so the ring is never clipped; with large text the card is never wider than its photo, and a card taller than its photo is limited to the photo's height by `placePins()` and scrolls instead of being clipped; `enhancePins()` places the cards again once the fonts have loaded. No markup, type scale, price or API change; `tests/browser/pin-card.spec.mjs` measures it, with text at x1, x1.5 and x2.
+
+## @casaelida/vue 0.3.1 — 2026-11-13 (unreleased)
+
+CR-10, the record title with product identity (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version. Decisions 2 and 3 are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; decision 4 is the lead's decision under the same standing delegation, not j3w1-typed.
+
+### Changed
+
+- `ce-record-title` in `recipes/workspace.css` (CR-10): a direct-child `ce-product-heading` sits 8px below the code or the row that holds it, and a direct-child `ce-product-specs` 2px below the heading, from the `size.product` and `space` tokens. The 4px grid gap stays, so a title without them is unchanged; no selector reaches an identity nested inside a heading.
+- `ce-record-header` (CR-10): thumbnail, title and status share one wrapping line. The title is never narrower than its one-line code, and where the line has no room the status moves to the next line instead of covering the title. Markup and classes are unchanged.
+- The RecordEditor sample draws the identity heading instead of a run-in title. The RecordEditor README, `docs/decisions.md`, `docs/coverage.md` and CR-10 record the rules; `tests/browser/record-title.spec.mjs` measures CR-10's acceptance (390, 768 and 1440 px at 100%, 150% and 200% text, in a page-wide title and in a record header).
+
+## @casaelida/vue 0.3.0 — 2026-11-13 (unreleased)
+
+CR-01, admin navigation (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed.
+
+### Changed
+
+- `ce-module-nav` links and `ce-app-brand` follow density with the public-target floor: `min-height: max(var(--ce-size-target-public), var(--ce-control, 0px))`. That is 44px with no density and in compact, and 56px in touch; before, the links were 40px at every density and the brand had no minimum. Every consumer's module links grow. The brand also raises `ce-app-bar` where it is the tallest item in the bar, for example a bar holding only the brand (56px before, 61px now and 73px in touch).
+- Only `aria-current="page"` draws the current module link; any other value, including `"false"`, draws an ordinary link.
+- Module group headings and links wrap inside the 240px column at larger text (`overflow-wrap: anywhere`), and a link's `svg` icon keeps its supplied size (`flex: none`).
 
 ### Added
 
-- `ce-demo-cue` in `recipes/interface.css`, the standard name `DemoCue` (Aviso de demostración) and its design-system card: one bordered block note from tokens, with the 2px border reusing `stroke.focus`. It holds no text; the consumer supplies the words and `role="note"`, and production output leaves it out. No Vue component.
-- The usage rules in `docs/names.md` (“Demonstration cue”), `docs/apply-ce-theme.md`, `docs/usage.md` and `docs/coverage.md`, and the decision in `docs/decisions.md`.
-- `tests/demo-cue.test.mjs` (no text and no raw colour in the recipe; canon wording in every example) and `tests/browser/demo-cue.spec.mjs` (390, 768 and 1440 px at 100%, 150% and 200% text; axe; reading order).
+- The AppShell card's seven-group, seventeen-link module example, using existing CE Theme icons, and the module navigation rules in its guideline. The application supplies its modules and their icons.
+- `tests/browser/app-shell.spec.mjs` covers CR-01 acceptance 1 to 5 on the generated card. The screen-reader walk (acceptance 6) has not been run and is still to be scheduled.
+- The CR-01 records: `docs/decisions.md` (with the rule for selections made under the #11 delegation), `docs/coverage.md`, the `ModuleNav` rule, CR-01 and `docs/workbench.md`.
 
-## @casaelida/vue 0.2.0 — 2026-11-12 (unreleased)
+## @casaelida/vue 0.2.1 — 2026-11-13 (`vue-v0.2.1`)
 
-SEAL #7 batch B1 (ce-theme#8).
+A patch for CR-06, the availability line (ce-theme#11): the packaged recipes name the availability states `unknown` and `pending`, with the same look, and the wording and accessible name are documented. The components are unchanged.
+
+### Changed
+
+- `ce-stock` (StockLine) names its documented states in the CSS: `unknown`, which an item with no `data-state` looks like, and `pending` keep the neutral dot, and `unavailable` stays the only ring. Nothing looks different.
+- The wording contract is in the StockLine section of `docs/names.md`: «Disponibilidad por confirmar en {tienda}» for an unknown, stale, conflicting or missing reading, «Consultando disponibilidad…» while it is read, and «Pocas unidades» and «Agotado» only from a confirmed reading. With no store chosen there is no availability line. The list is named `aria-label="Disponibilidad"` in every sample and reference page.
+- The ProductCard and StoreContext cards gain an unknown sample beside the confirmed ones; StoreContext also shows the pending state. `/tienda/producto/` shows a store note instead of an availability line when no store is chosen. `ce-availability` is unchanged.
+- Tests: `tests/availability.test.mjs` (wording, accessible name, the canon fixtures, supplied readings) and `tests/browser/availability.spec.mjs` (the five states at three widths and three text sizes, the dots, forced colours and greyscale).
+
+## @casaelida/vue 0.2.0 — 2026-11-13 (`vue-v0.2.0`)
+
+SEAL #7 batch B1 (ce-theme#8). The release was built from `f2a808a`, so it also contains CR-03, the demonstration cue (ce-theme#11).
 
 ### Added
 
@@ -43,6 +78,12 @@ SEAL #7 batch B1 (ce-theme#8).
 
 - `CEMessageList` keeps a reader who is at the newest message there in WebKit when content inside a message re-renders. WebKit lays the change out in a shorter intermediate state and clamps the scroll position while every size ends as it was. The list reads the position just before the first update of a render flush and puts a reader who was at the newest message back after it, before the clamp is reported as a scroll. A reader in history is still never moved.
 - `/mensajeria/`: in WebKit, a composing reader again moves to the thread view when the window narrows or the text grows. The example reads “narrow” from its panes grid instead of the Back button, whose container-query style WebKit leaves stale inside the hidden thread pane.
+
+### Added: demonstration cue (CR-03, ce-theme#11)
+
+- `ce-demo-cue` in `recipes/interface.css`, the standard name `DemoCue` (Aviso de demostración) and its design-system card: one bordered block note from tokens, with the 2px border reusing `stroke.focus`. It holds no text; the consumer supplies the words and `role="note"`, and production output leaves it out. No Vue component.
+- The usage rules in `docs/names.md` (“Demonstration cue”), `docs/apply-ce-theme.md`, `docs/usage.md` and `docs/coverage.md`, and the decision in `docs/decisions.md`.
+- `tests/demo-cue.test.mjs` (no text and no raw colour in the recipe; canon wording in every example) and `tests/browser/demo-cue.spec.mjs` (390, 768 and 1440 px at 100%, 150% and 200% text; axe; reading order).
 
 ## Unreleased — 2026-10-30 (pending owner review)
 
