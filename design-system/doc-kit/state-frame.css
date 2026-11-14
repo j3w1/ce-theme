@@ -18,8 +18,10 @@
 
 /* Ordinary block flow, so the fragment lays out exactly as it does on its own; the cue keeps 16px above it. A fragment wider
    than the body (a code that stays on one line, a wide table, a rail) scrolls inside the body, so nothing leaves the frame or
-   the page. A body that scrolls is made focusable by the sheet; its ring is drawn inside it, where the page edge cannot hide it. */
-.ce-state-frame-body { display: flow-root; min-width: 0; overflow-x: auto; padding: var(--ce-space-24); }
+   the page. It is positioned, so it is also the containing block of the fragment's absolute boxes (a clipped .ce-sr-only label)
+   and they scroll and clip with it instead of widening the page. A body that scrolls is made focusable by the sheet; its ring is
+   drawn inside it, where the page edge cannot hide it. */
+.ce-state-frame-body { position: relative; display: flow-root; min-width: 0; overflow-x: auto; padding: var(--ce-space-24); }
 .ce-state-frame-body:focus-visible { outline: var(--ce-stroke-focus) solid var(--ce-color-focus); outline-offset: calc(var(--ce-stroke-focus) * -1); }
 .ce-state-frame-body > .ce-demo-cue { margin-block-end: var(--ce-space-16); }
 /* The bundle's own phone breakpoint; a media query cannot read a token. */

@@ -42,7 +42,7 @@ The kit needs a bundle that has the `size.marker` and `stroke.heavy` tokens and 
 | `ce-state-frame-mark` | The decorative ink marker: one or two characters, letters A, B, C in reading order or numbers. It is `size.marker` (28px) tall and at least as wide; text enlarged by the reader widens it into a pill instead of spilling out of it. |
 | `ce-state-frame-title` | The frame's heading; it names the frame. |
 | `ce-state-frame-note` | One line of secondary text under the title. |
-| `ce-state-frame-body` | The cue, then the page fragment, in ordinary block flow. A fragment wider than the body scrolls inside it. |
+| `ce-state-frame-body` | The cue, then the page fragment, in ordinary block flow. A fragment wider than the body scrolls inside it; the body is the containing block of the fragment's absolute boxes. |
 
 ## Rules
 
@@ -54,6 +54,7 @@ The kit needs a bundle that has the `size.marker` and `stroke.heavy` tokens and 
 - **A fragment wider than its body scrolls inside the body.** Some fragments cannot fit the body at a given page width and text size: a code that stays on one line, a wide table, a rail, a fixed-width phone replica. Such a fragment keeps its real size and scrolls horizontally inside `ce-state-frame-body`, so the frame and the page never overflow and the whole fragment stays reachable. It is never shrunk, clipped, wrapped or scaled to fit.
   - Give such a body `tabindex="0"`, `role="group"` and `aria-labelledby` pointing at the frame title. Keyboard users can then focus it, scroll it with the arrow keys and leave it with Tab. The kit draws its focus ring inside the body, where the edge of the page cannot hide it.
   - A scrolling body is a scroll container, so a sticky element in the fragment sticks within the body, not the page.
+- **The body is positioned** (`position: relative`), so it is the containing block of every absolutely positioned box in the fragment, such as a clipped `ce-sr-only` label. Those boxes stay where they are, but they now scroll and clip with the body instead of widening the page beyond it. A fragment's absolute element with explicit offsets is placed against the body, not the page; a fixed element is unaffected. Because of this, the resolved `top`, `right`, `bottom` and `left` values of an absolute box differ from the same fragment in an unpositioned block, while its box and pixels do not.
 - **The demonstration cue in every frame with simulated data.** When the fragment shows simulated commercial or staff data (a price, an amount, an availability line, an order, a case, a store or a staff record), the first child of its `ce-state-frame-body` is `<p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>`, in those exact words. A cue above the frames may be added for the whole sheet, but it never counts as a frame's cue.
 - **The named exemption.** A frame with no simulated data (a route shell, a documentation-only fragment) may leave the cue out only when the sheet's notes name it. Write the exemption in the notes as a list after the sentence “Exempt from the demonstration cue (no simulated data):”, one item per frame, each the frame's title without its badge:
 

@@ -62,7 +62,7 @@ test('the kit holds no raw colour and no raw size in a declaration: tokens and k
       assert.doesNotMatch(rest, /#[\da-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/i, `${where}: no raw colour`);
       assert.doesNotMatch(rest, /\d(?:px|r?em|%|v[hw]|vmin|vmax|ch|ex|pt|pc|cm|mm|in|q|fr)(?![\w-])/i, `${where}: no raw size`);
       // What is left is a CSS keyword, a zero, the grid lines of the wide frame, or the inward focus offset.
-      assert.match(rest, /^(?:(?:grid|flow-root|start|flex|flex-start|none|center|solid|middle|auto|0)(?: |$))*$|^1 \/ -1$|^calc\( \* -1\)$/, where);
+      assert.match(rest, /^(?:(?:grid|flow-root|relative|start|flex|flex-start|none|center|solid|middle|auto|0)(?: |$))*$|^1 \/ -1$|^calc\( \* -1\)$/, where);
     }
   }
   const bundle = await read('exports/design-system/project/components/bundle.css');
@@ -70,7 +70,7 @@ test('the kit holds no raw colour and no raw size in a declaration: tokens and k
   const marker = all.find((rule) => rule.selector === '.ce-state-frame-mark').declarations;
   assert.ok(marker.some(({ property, value }) => /width$/.test(property) && value === 'var(--ce-size-marker)'), 'the marker width uses size.marker');
   assert.ok(marker.some(({ property, value }) => property === 'height' && value === 'var(--ce-size-marker)'), 'the marker height is size.marker');
-  // A wide fragment scrolls inside the body (overflow-x: auto); a focused body shows the focus stroke inside its edge.
+  // A wide fragment scrolls inside the body (overflow-x: auto), and the positioned body contains its absolute boxes; a focused body shows the focus stroke inside its edge.
   const body = all.find((rule) => rule.selector === '.ce-state-frame-body' && rule.media === null).declarations;
   assert.ok(body.some(({ property, value }) => property === 'display' && value === 'flow-root'), 'the body is block flow');
   assert.ok(body.some(({ property, value }) => property === 'overflow-x' && value === 'auto'), 'a wide fragment scrolls inside the body');
