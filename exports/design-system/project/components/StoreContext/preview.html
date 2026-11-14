@@ -1,4 +1,4 @@
-<!-- @dsCard group="Product" height=660 width=1100 -->
+<!-- @dsCard group="Product" height=900 width=1100 -->
 <!doctype html>
 <html lang="es">
 <head>
@@ -6,14 +6,23 @@
 <title>StoreContext</title>
 <style>
   body { margin: 0; background: var(--ce-color-surface-canvas); }
-  .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ce-space-32); padding: var(--ce-space-16); align-items: start; }
-  .states { display: grid; gap: var(--ce-space-24); }
-  .states small { display: block; margin-bottom: var(--ce-space-8); color: var(--ce-color-text-muted); font-size: var(--ce-font-size-xs); }
+  .wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: var(--ce-space-32); padding: var(--ce-space-16); align-items: start; }
+  .states, .bars { display: grid; gap: var(--ce-space-24); }
+  .bars { grid-column: 1 / -1; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); align-items: start; }
+  .states small, .bars small { display: block; margin-bottom: var(--ce-space-8); color: var(--ce-color-text-muted); font-size: var(--ce-font-size-xs); }
   .bar { padding-inline: var(--ce-space-16); }
 </style>
 </head>
 <body>
 <div class="ce-scope wrap">
+  <section class="bars" aria-label="Barra de tienda">
+    <div><small>Barra de tienda · importes (carrito, pago, pedido)</small><p class="ce-store-note"><span>Importes en <strong>Tacna</strong></span><button class="ce-link" type="button">Cambiar tienda</button></p></div>
+    <div><small>Barra de tienda · navegación (listado, producto, favoritos)</small><p class="ce-store-note"><span>Precios y disponibilidad de <strong>Tacna</strong></span><button class="ce-link" type="button">Cambiar tienda</button></p></div>
+    <div><small>Barra de tienda · sin tienda (los importes muestran el precio pendiente)</small><p class="ce-store-note"><span>Tienda: sin elegir</span><button class="ce-link" type="button">Elegir tienda</button></p></div>
+    <div><small>Barra de tienda · actualizando (sin importes hasta la respuesta)</small><p class="ce-store-note" aria-busy="true" role="status"><span>Importes en <strong>Arequipa</strong></span><span class="ce-pill ce-pill--info">Actualizando</span></p></div>
+    <div><small>Barra de tienda · nombre largo</small><p class="ce-store-note"><span>Precios y disponibilidad de <strong>Arequipa, tienda de ejemplo con un nombre de tienda muy largo</strong></span><button class="ce-link" type="button">Cambiar tienda</button></p></div>
+    <div><small>Barra de tienda · nombre largo, actualizando</small><p class="ce-store-note" aria-busy="true" role="status"><span>Importes en <strong>Arequipa, tienda de ejemplo con un nombre de tienda muy largo</strong></span><span class="ce-pill ce-pill--info">Actualizando</span></p></div>
+  </section>
   <div class="ce-dialog" role="dialog" aria-labelledby="tienda-t" style="position:static;display:block;border:var(--ce-stroke-thin) solid var(--ce-color-border-default)">
     <div class="ce-dialog-header"><h2 id="tienda-t">Elige tu tienda</h2><button class="ce-icon-button" type="button" aria-label="Cerrar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 6 12 12M6 18 18 6"/></svg></button></div>
     <div class="ce-dialog-body"><p class="ce-store-note">Precio y disponibilidad pueden variar por tienda.</p>

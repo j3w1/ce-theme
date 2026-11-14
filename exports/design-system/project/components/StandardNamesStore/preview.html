@@ -1,4 +1,4 @@
-<!-- @dsCard group="Standard names" height=420 width=1100 subtitle="Store: id, nombre CE, muestra and rule" -->
+<!-- @dsCard group="Standard names" height=520 width=1100 subtitle="Store: id, nombre CE, muestra and rule" -->
 <!doctype html>
 <html lang="es">
 <head>
@@ -25,6 +25,7 @@
     <tbody>
     <tr id="StockLine"><th scope="row"><code>StockLine</code></th><td>Disponibilidad</td><td class="sample"><ul class="ce-stock" aria-label="Disponibilidad"><li data-state="available">Disponible en Tacna</li><li data-state="unknown">Disponibilidad por confirmar en Arequipa</li></ul></td><td class="rule">Per-store availability in words, with a state dot, in a list named «Disponibilidad». An unknown, stale, conflicting or missing reading reads «Disponibilidad por confirmar en {tienda}», never «Agotado»; «Pocas unidades» and «Agotado» only from a confirmed reading the inventory service supplies.</td></tr>
     <tr id="StoreNote"><th scope="row"><code>StoreNote</code></th><td>Nota de tienda</td><td class="sample"><p class="ce-store-note">Precio no disponible en Arequipa.</p></td><td class="rule">Short store-specific text that replaces a missing price.</td></tr>
+    <tr id="StoreBar"><th scope="row"><code>StoreBar</code></th><td>Barra de tienda</td><td class="sample"><p class="ce-store-note"><span>Importes en <strong>Tacna</strong></span><button class="ce-link" type="button">Cambiar tienda</button></p></td><td class="rule">The in-page line on every store-dependent page: the store the amounts and availability belong to, and a 44px action to change it. «Importes en {tienda}» on money-bearing surfaces, «Precios y disponibilidad de {tienda}» when browsing, «Tienda: sin elegir» with «Elegir tienda» without a store; while a change is pending, «Actualizando» replaces the action. A StoreNote with a TextLink; no class of its own.</td></tr>
     <tr id="StoreContext"><th scope="row"><code>StoreContext</code></th><td>Tienda activa</td><td class="sample"><button class="ce-store-context" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9l1.5-5h15L21 9M3 9h18M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M5 12v9h14v-9M10 21v-5h4v5"/></svg><span>Tu tienda: <span class="ce-store-context-name">Tacna</span></span></button></td><td class="rule">The button that shows and changes the chosen store; prices and availability follow it.</td></tr>
     </tbody>
   </table>

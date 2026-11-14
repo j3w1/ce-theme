@@ -1,5 +1,17 @@
 # Changelog
 
+## @casaelida/vue 0.3.3 — 2026-11-14 (unreleased)
+
+CR-05, the in-page store line (ce-theme#11). The packaged recipes gain the StoreBar rules; the components are unchanged. It follows 0.3.2 (CR-09) in the release order.
+
+### Added
+
+- The standard name `StoreBar` (Barra de tienda): the in-page store line is a `ce-store-note` whose action is a `ce-link`, with no class of its own. In `recipes/retail.css`, every `ce-link` inside a `ce-store-note` reaches `--ce-size-target-public` (44px), including a link inside a sentence, whose row grows to 44px. A pending bar (`aria-busy="true"`) shows the progress cursor. Its four states and wording are in the StoreContext guideline and card. Also added: a coverage row, the decision in `docs/decisions.md` and `tests/browser/store-bar.spec.mjs`.
+
+### Changed
+
+- The Cart card and the storefront cart name their store with the StoreBar («Importes en …»), and the storefront home, listing, product and scene pages gain it («Precios y disponibilidad de …», «Tienda: sin elegir»). The storefront cart's amounts are now per store, with no amount when no store is chosen; the home page's promotion tile shows its offer price only for the store that supplies it.
+
 ## @casaelida/vue 0.3.2 — 2026-11-14 (unreleased)
 
 CR-09, the pin-card spacing and fit (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version (the `placePins()` reference behaviour in `recipes/behaviors.mjs` changes too, but it is not in the package); it follows 0.3.0 (CR-01) and 0.3.1 (CR-10) in the release order. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed, with the fit as decision 3, decided under the same standing delegation (Supervisor confirmation, 2026-11-13 13:22), not j3w1-typed.

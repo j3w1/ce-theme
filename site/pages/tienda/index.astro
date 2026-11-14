@@ -2,6 +2,7 @@
 import Store from '../../layouts/Store.astro';
 import Icon from '../../components/Icon.astro';
 import StoreProducts from '../../components/StoreProducts.astro';
+import StoreBar from '../../components/StoreBar.astro';
 import { catalogue, categories } from '../../data/store.mjs';
 import { url } from '../../url.mjs';
 const rooms = [
@@ -22,7 +23,7 @@ const rooms = [
       <h2 class="ce-sr-only" id="destacados">Destacados</h2>
       <div class="ce-mosaic">
         <a class="ce-tile ce-tile--light" href={url('/tienda/categoria/')}><img src={url('/assets/product-nome.png')} alt="" width="900" height="900" /><span class="ce-badge ce-badge--novedad">Novedad</span><p class="ce-tile-title"><span>Vidrio que aguanta el calor del día a día</span><Icon name="arrow" /></p></a>
-        <a class="ce-tile ce-tile--light" href={url('/tienda/categoria/')}><img src={url('/assets/product-tilen.png')} alt="" width="900" height="900" /><span class="ce-badge ce-badge--promo">Promo</span><span class="ce-tile-offer"><span class="ce-price ce-price--offer"><span class="ce-sr-only">Precio actual: 6 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6</span></span></span></span><p class="ce-tile-title"><span>Un baño más seguro, sin complicarte</span><Icon name="arrow" /></p></a>
+        <a class="ce-tile ce-tile--light" href={url('/tienda/categoria/')}><img src={url('/assets/product-tilen.png')} alt="" width="900" height="900" /><span class="ce-badge ce-badge--promo" data-store-view="tacna">Promo</span><span class="ce-tile-offer" data-store-view="tacna"><span class="ce-price ce-price--offer"><span class="ce-sr-only">Precio actual: 6 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6</span></span></span></span><p class="ce-tile-title"><span>Un baño más seguro, sin complicarte</span><Icon name="arrow" /></p></a>
         <a class="ce-tile ce-tile--light" href={url('/tienda/escena/')} style="--ce-campaign-surface:var(--ce-color-border-default)"><img src={url('/assets/product-mene.png')} alt="" width="900" height="900" /><p class="ce-tile-title"><span>Ideas para tu cocina</span><Icon name="arrow" /></p></a>
         <a class="ce-tile ce-tile--light" href={url('/tienda/categoria/')}><img src={url('/assets/product-talen.png')} alt="" width="900" height="900" /><span class="ce-badge ce-badge--top">Top en ventas</span><p class="ce-tile-title"><span>Regalos útiles</span><Icon name="arrow" /></p></a>
       </div>
@@ -37,7 +38,7 @@ const rooms = [
     </section>
 
     <section class="ce-section" aria-labelledby="novedades" style="padding-top:0">
-      <div class="ce-section-head"><div><h2 id="novedades">Novedades en tu tienda</h2><p>Precio y disponibilidad en <strong data-store-name>Tacna</strong>.</p></div><a class="ce-button ce-button--secondary" href={url('/tienda/categoria/')}>Ver todo</a></div>
+      <div class="ce-section-head"><div><h2 id="novedades">Novedades en tu tienda</h2><StoreBar lead="Precios y disponibilidad de" /></div><a class="ce-button ce-button--secondary" href={url('/tienda/categoria/')}>Ver todo</a></div>
       <StoreProducts items={catalogue} layout="rail" id="novedades-lista" label="Novedades" />
     </section>
   </div>
