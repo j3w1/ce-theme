@@ -610,7 +610,7 @@ button.ce-link { padding: 0; border: 0; background: none; font: inherit; cursor:
 .ce-product-select { margin-bottom: var(--ce-space-8); }
 .ce-stock { display: grid; gap: var(--ce-space-8); margin: 0; padding: 0; list-style: none; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); line-height: var(--ce-font-line-heading); }
 .ce-stock > li { display: grid; grid-template-columns: 10px minmax(0, 1fr); align-items: baseline; gap: var(--ce-space-8); }
-.ce-stock > li::before { width: 10px; height: 10px; content: ''; border-radius: var(--ce-radius-pill); background: var(--ce-color-border-control); transform: translateY(1px); }
+.ce-stock > li::before { width: 10px; height: 10px; content: ''; border-radius: var(--ce-radius-pill); background: var(--ce-color-border-control); transform: translateY(1px); pointer-events: none; }
 .ce-stock > [data-state="available"]::before { background: var(--ce-color-status-success-text); }
 .ce-stock > [data-state="limited"]::before { background: var(--ce-color-status-warning-text); }
 .ce-stock > [data-state="unavailable"]::before { background: transparent; box-shadow: inset 0 0 0 2px var(--ce-color-status-danger-text); }

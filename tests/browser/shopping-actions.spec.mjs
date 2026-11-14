@@ -123,6 +123,19 @@ test('acceptance 1: at 390 the empty space of a card opens the product page, and
   await expect(page).toHaveURL(PRODUCT);
 });
 
+// The availability dot: the 10px li::before in the first grid column of the line, level with its first line of text.
+async function pointAtDot(page, product, options = {}) {
+  const line = product.locator('.ce-stock > li').first();
+  const height = await line.evaluate((el) => parseFloat(getComputedStyle(el).lineHeight));
+  await pointAt(page, line, { ...options, x: (box) => box.x + 5, y: (box) => box.y + height / 2 });
+}
+test('acceptance 1: at 390 a click on the availability dot opens the product page', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.goto(LISTING);
+  await pointAtDot(page, firstCard(page));
+  await expect(page).toHaveURL(PRODUCT);
+});
+
 test('acceptance 1: on touch and narrow screens the card is one link, and its other controls stay separate in their own order', async ({ page }) => {
   await open(page, card({ extras: true, quickAdd: true }), { width: 390 });
   await trackClicks(page);
@@ -262,6 +275,12 @@ test.describe('on a touch screen', () => {
     await product.locator('.ce-product-link').focus();
     expect(await visibleButtons(product)).toEqual([]);
     await pointAt(page, product.locator('.ce-product-specs'), { tap: true });
+    await expect(page).toHaveURL(PRODUCT);
+  });
+  test('acceptance 1: at 1440 under (hover: none) a tap on the availability dot opens the product page', async ({ page }) => {
+    await page.goto(LISTING);
+    test.skip(!(await page.evaluate(() => matchMedia('(hover: none)').matches)), 'This browser does not emulate (hover: none) for a touch context.');
+    await pointAtDot(page, firstCard(page), { tap: true });
     await expect(page).toHaveURL(PRODUCT);
   });
   test('acceptance 1: under (hover: none) a tap on the price opens the product page; a variant or photo-box control tap stays its own', async ({ page }) => {
