@@ -10,7 +10,7 @@ The cart and checkout: product lines with supplied quantities, line amounts and 
 2. A contextual heading (`ce-product-heading`) containing `a.ce-product-link`, with NAME and optional Description. Render optional fields only when nonblank.
 3. Optional `p.ce-product-specs`.
 4. `ce-price-block` with the supplied **line amount**, or `ce-store-note` / `ce-price-pending` explaining its absence. Identify the amount as «Importe de la línea» for assistive technology. A basis such as «cada uno» appears only if supplied. Missing never means zero.
-5. Optional `ul.ce-stock[aria-label="Disponibilidad"]`, with the actual [StockLine wording contract](../../../docs/names.md#stockline) delivered by CR-06. No store means no availability list. Unknown reads «Disponibilidad por confirmar en {tienda}»; pending reads «Consultando disponibilidad…» with `aria-busy="true"` on the list. Missing price never infers unavailable. Confirmed `limited` / `unavailable` examples are labelled «Escenario».
+5. Optional `ul.ce-stock[aria-label="Disponibilidad"]`, with the actual [StockLine wording contract](https://github.com/j3w1/ce-theme/blob/main/docs/names.md#stockline) delivered by CR-06. No store means no availability list. Unknown reads «Disponibilidad por confirmar en {tienda}»; pending reads «Consultando disponibilidad…» with `aria-busy="true"` on the list. Missing price never infers unavailable. Confirmed `limited` / `unavailable` examples are labelled «Escenario».
 6. `ce-cart-line-actions`: quantity group, then `button.ce-link` for remove. Price is above this row.
 7. Optional `ce-save-state` or `ce-notice` describing pending or failed updates in words.
 

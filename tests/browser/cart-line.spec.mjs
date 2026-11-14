@@ -212,6 +212,7 @@ test('cart quotes and scenario labels follow only the supplied selected store', 
   await page.goto('tienda/carrito/?tienda=ninguna');
   await expect(page.locator('.ce-cart-line .ce-price:visible, .ce-cart-line .ce-stock:visible, .ce-summary:visible, .ce-order-summary .ce-button:visible')).toHaveCount(0);
   await expect(page.locator('.ce-cart-line-body > .ce-store-note:visible')).toHaveCount(2);
+  await expect(page.locator('.ce-order-summary .ce-price-pending:visible')).toHaveText('Elige tu tienda para ver precio y disponibilidad.');
   await expect(page.locator('.ce-cart-line')).toHaveCount(2);
 });
 

@@ -1,8 +1,8 @@
 # Changelog
 
-## @casaelida/vue 0.5.0 — 2026-11-13 (unreleased)
+## @casaelida/vue 0.5.0 — 2026-11-14 (unreleased)
 
-Combined CR-04/CR-08 (Refs #11; #11 stays open): the packed cart styles and documented consumer composition change together. No Vue API is added.
+Combined CR-04/CR-08 (Refs #11; #11 stays open): the packed cart styles and documented consumer composition change together. No Vue API is added. It follows 0.4.0 (CR-07) in the release order.
 
 - Cart anatomy: optional code, linked identity/specifications, supplied line amount or note, actual CR-06 availability, quantity/remove, optional save-state/notice. Remove stays `button.ce-link` with «Quitar … del carrito».
 - Explicit token distances replace the uniform gap: 8/2/2/12/8px through availability, 12px to controls and 8px to save text. Unbroken codes get intrinsic room; links have a minimum 44px hit area without changing visible gaps; quantity inputs and remove have 44px targets and visible focus. Image sizes, padding and price scale stay.

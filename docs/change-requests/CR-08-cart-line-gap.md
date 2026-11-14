@@ -1,4 +1,4 @@
-Status: Implemented in CE Theme source by the combined [CR-04/CR-08 PR #30](https://github.com/j3w1/ce-theme/pull/30), packaged as @casaelida/vue 0.5.0. Release and public-consumer verification are tracked separately in the Pod objective; the historical proposal/evidence below is preserved, with implemented outcomes in section 8.
+Status: Implemented in CE Theme source by the combined [CR-04/CR-08 PR #30](https://github.com/j3w1/ce-theme/pull/30), packaged as @casaelida/vue 0.5.0. Release and public-consumer verification are linked from [PR #30](https://github.com/j3w1/ce-theme/pull/30); the historical proposal/evidence below is preserved, with implemented outcomes in section 8.
 
 # CR-08 · Cart-line spacing follows the ProductStack
 
@@ -101,4 +101,4 @@ Every new selection here is **“decided under j3w1's delegation (msg 2026-11-13
 2. X-5 remains confirmed: ProductStack covers cart lines.
 3. Ships with CR-04 in the same content PR, after the actually delivered CR-06 PR #18 / `b32b1224ebe9a0e7f8dfb9e0d90a828aedd31c72` and immutable `vue-v0.2.1`, whose public two-browser consumer proof passed. Its wording/aria contract is reused directly.
 
-`recipes/retail.css`, the Cart guideline/preview and reference cart use the direct-child anatomy. `tests/browser/cart-line.spec.mjs` measures section 6 at 390/768/1440px and computed text factors 1/1.5/2, including shipped Inter and px/rem descendants, optional fields, targets, keyboard/focus, clicks and axe. Screen-reader pass is **not run, to schedule**. Observed checks are recorded separately in the Pod objective. Frozen boards and their local patches remain untouched; new examples copy none of those patches.
+`recipes/retail.css`, the Cart guideline/preview and reference cart use the direct-child anatomy. `tests/browser/cart-line.spec.mjs` measures section 6 at 390/768/1440px and computed text factors 1/1.5/2, including shipped Inter and px/rem descendants, optional fields, targets, keyboard/focus, clicks and axe. Screen-reader pass is **not run, to schedule**. Observed checks are linked from [PR #30](https://github.com/j3w1/ce-theme/pull/30). Frozen boards and their local patches remain untouched; new examples copy none of those patches.

@@ -68,7 +68,7 @@ const summaries = [
           <div class="ce-summary-total"><dt>Total</dt><dd>{summary.total}</dd></div>
         </dl>)}
         {stores.map((store) => <a class="ce-button" data-store-view={store.id} hidden={store.id !== 'tacna'} href={url('/tienda/cuenta/')}>Continuar</a>)}
-        <p class="ce-price-pending" data-store-view="ninguna" hidden>Elige tu tienda para ver el resumen.</p>
+        <div data-store-view="ninguna" hidden class="ce-price-pending"><span>Elige tu tienda para ver precio y disponibilidad.</span></div>
         <p class="ce-fine-print">Importes de ejemplo calculados por el servicio de comercio, no por la interfaz.</p>
       </aside>
     </div>
