@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { url } from '../url.mjs';
+import { foundationVersion, vueAsset, vuePeer, vueRelease, vueVersion } from '../version.mjs';
+import * as readme from '../../packages/vue/README.md';
+// The install procedure is B1's text, the "Install" section of the package README that ships inside the package file. This
+// page shows that section as it is, with the current version's real file, instead of keeping a second version of it.
+const html = await readme.compiledContent();
+const start = html.indexOf('<h2 id="install">');
+const end = html.indexOf('<h2', start + 1);
+if (start < 0 || end < 0) throw new Error('packages/vue/README.md needs its "## Install" section followed by another "##" section.');
+const guide = html.slice(html.indexOf('</h2>', start) + '</h2>'.length, end);
+const install = `pnpm add ${vueAsset}`;
+const entry = `import '@casaelida/vue/styles.css';\nimport { CEButton } from '@casaelida/vue';`;
+---
+<Layout title="Instalar @casaelida/vue" description="Cómo instalar los componentes Vue de Casa Elida desde un archivo de paquete fijado por versión.">
+  <div class="container">
+    <div class="page-intro"><p class="eyebrow">Paquete · @casaelida/vue {vueVersion}</p><h1>Un archivo fijado.<br/>Toda la base dentro.</h1><p>Las aplicaciones Vue 3 instalan @casaelida/vue desde un archivo de paquete con versión: trae los componentes, los estilos de la base sin reinicios y la fuente Inter.</p></div>
+    <section class="section install-page" aria-labelledby="version-actual">
+      <h2 id="version-actual">Versión {vueVersion}</h2>
+      <dl class="reference-api">
+        <dt>Archivo del paquete</dt><dd><a class="ce-link" href={vueAsset}>casaelida-vue-{vueVersion}.tgz</a>, el recurso de la versión <a class="ce-link" href={vueRelease}><code>vue-v{vueVersion}</code></a> en GitHub Releases, cuyas notas dan el sha256 del archivo. Una versión publicada nunca cambia.</dd>
+        <dt>Vue</dt><dd>Dependencia par <code>{vuePeer}</code>: la aplicación instala Vue y el paquete no incluye otro.</dd>
+        <dt>Dos versiones</dt><dd>La aplicación fija la versión del paquete, {vueVersion}. La base de esta página (tokens, recetas y descargas) tiene su propia versión, {foundationVersion}. Cada versión del paquete se construye desde una revisión de este repositorio y lleva los estilos de la base de esa revisión, así que una aplicación Vue no fija la base por separado. El pie de cada página dice desde qué revisión se construyó este sitio.</dd>
+      </dl>
+      <h3>Instala y carga los estilos</h3>
+      <pre class="install-code"><code>{install}</code></pre>
+      <pre class="install-code"><code>{entry}</code></pre>
+      <p>Envuelve la región de la aplicación en <code>class="ce-scope"</code> y usa los componentes de la <a class="ce-link" href={url('/componentes/#referencia-vue')}>referencia</a>. Confirma <code>package.json</code> y <code>pnpm-lock.yaml</code>.</p>
+    </section>
+    <section class="section install-page" aria-labelledby="guia-instalacion">
+      <h2 id="guia-instalacion">Guía de instalación, actualización y vuelta atrás</h2>
+      <p class="small-note">La sección «Install» del README del paquete, el mismo texto que viaja dentro del archivo. English.</p>
+      <div class="install-guide" lang="en" set:html={guide} />
+    </section>
+  </div>
+</Layout>

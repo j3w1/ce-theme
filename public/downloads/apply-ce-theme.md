@@ -4,7 +4,7 @@ Entry point for people and agents adopting the Casa Elida design system in anoth
 
 ## 1. Load the foundation (always)
 
-**Vue 3 applications** use `@casaelida/vue`, which carries the whole foundation. See [packages/vue/README.md](../packages/vue/README.md#install).
+**Vue 3 applications** use `@casaelida/vue`, which carries the whole foundation. See [packages/vue/README.md](https://github.com/j3w1/ce-theme/blob/main/packages/vue/README.md#install).
 
 1. Install one pinned package file with pnpm and commit the lockfile: the release asset `https://github.com/j3w1/ce-theme/releases/download/vue-v<version>/casaelida-vue-<version>.tgz` (the current version is the newest `vue-v` release on the [Releases page](https://github.com/j3w1/ce-theme/releases)), or, for a commit without a release, a local `casaelida-vue-<version>.tgz` committed with the application. Vue `^3.5.0` is a peer: the application installs it.
 2. `import '@casaelida/vue/styles.css'` once, in the application entry. It holds Inter (400/600/700/800, OFL), the `--ce-` tokens and the `ce-` recipes, with no global reset.
@@ -42,7 +42,7 @@ Optional outputs:
   - Never `S/0` for missing data, never one store's price as universal, never computed discounts.
 - **Images.** Catalogue photos whole (`contain`) on white; lifestyle photos may be cropped without misrepresenting the product. Lettered markers `A`, `B`, `C` are black circles, and every marked product is also listed in text.
 - **Shared links** ([sharing.md](sharing.md)): use the share-card template; no prices in default previews.
-- **Accessibility** ([accessibility.md](accessibility.md)): WCAG 2.2 AA; native elements; visible focus; text, not colour alone.
+- **Accessibility** ([accessibility.md](https://github.com/j3w1/ce-theme/blob/main/docs/accessibility.md)): WCAG 2.2 AA; native elements; visible focus; text, not colour alone.
 - **Logos.** Supplied files only, unchanged (`public/assets/manifest.json`).
 - **Data authority.** The design system presents data; CE Systems and the commerce services own records, prices, stock, permissions and workflows.
 - **Simulated data** ([names.md](names.md#demonstration-cue)): a page that shows simulated data starts its main content with a `ce-demo-cue` note in words the application supplies, and so does every frame showing simulated commercial or staff data. Production output leaves the element out; hiding it is not enough.
@@ -52,7 +52,7 @@ Optional outputs:
 | Surface | Read | Key classes |
 | --- | --- | --- |
 | Storefront, campaigns | [usage.md](usage.md), [coverage.md](coverage.md) | `ce-site-header`, `ce-search`, `ce-category-rail`, `ce-filter-bar`, `ce-product-grid`, `ce-product`, `ce-rail`, `ce-editorial`, `ce-tagged-media`, `ce-tag-list`, `ce-store-context`, `ce-gallery` |
-| Messaging apps (CE Meta App) | [coverage.md](coverage.md#messaging-ce-meta-app), [definite width](../packages/vue/README.md#messaging-components) | `ce-conversation-list`, `ce-message-list`, `ce-composer` and the `CEConversationList`, `CEMessageList`, `CEMessageComposer`, `CEAttachmentGroup`, `CEWorkStatus` components. `CEAttachmentGroup` and `CEWorkStatus` are query containers with no width of their own: give them a definite width. Correct: `<div style="display:flex"><CEWorkStatus style="flex:1" …/></div>`. Collapses to zero width: `<div style="display:flex"><CEWorkStatus …/></div>` (the same in `inline-block`, a float or `width: max-content` unless that parent has a width). |
+| Messaging apps (CE Meta App) | [coverage.md](coverage.md#messaging-ce-meta-app), [definite width](https://github.com/j3w1/ce-theme/blob/main/packages/vue/README.md#messaging-components) | `ce-conversation-list`, `ce-message-list`, `ce-composer` and the `CEConversationList`, `CEMessageList`, `CEMessageComposer`, `CEAttachmentGroup`, `CEWorkStatus` components. `CEAttachmentGroup` and `CEWorkStatus` are query containers with no width of their own: give them a definite width. Correct: `<div style="display:flex"><CEWorkStatus style="flex:1" …/></div>`. Collapses to zero width: `<div style="display:flex"><CEWorkStatus …/></div>` (the same in `inline-block`, a float or `width: max-content` unless that parent has a width). |
 | Internal tools (CE Systems, CE Meta, CE Radio) | [coverage.md](coverage.md) | `ce-app`, `ce-module-nav`, `data-ce-density`, `ce-data-table`, `ce-bulk-bar`, `ce-record-header`, `ce-form-actions`, `ce-audit`, `ce-pos` |
 | Print | [product-identity.md](product-identity.md) | `ce-label`, `ce-label-sheet` |
 | Overlays and feedback | — | `ce-dialog`, `ce-drawer`, `ce-disclosure`, `ce-tabs`, `ce-notice`, `ce-demo-cue`, `ce-toast`, `ce-empty`, `ce-skeleton` |

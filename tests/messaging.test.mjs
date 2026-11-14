@@ -43,7 +43,10 @@ test('the design-system title has one source, ce-theme.json, and every generated
 test('CE Meta is described as the administration platform and CE Meta App as the messaging app', async () => {
   const readme = await read('design-system/README.md');
   assert.match(readme, /CE Meta \(the internal administration and control platform\)/);
-  assert.match(readme, /CE Meta App \(the messaging app, planned\)/);
+  // SEAL #7 Amendment 1 C5: ce-meta-app installs the released package and carries the messaging interface (B3, B4); it is not
+  // yet a native app or connected to a backend, so the README claims neither.
+  assert.match(readme, /CE Meta App \(the messaging app in `j3w1\/ce-meta-app`, which installs the released `@casaelida\/vue` and now carries the messaging interface\)/);
+  assert.doesNotMatch(readme, /CE Meta App \([^)]*(native|backend|connected|Tauri|Capacitor)/i);
   const decisions = await read('docs/decisions.md');
   const row = decisions.split('\n').find((line) => line.includes('| Application identities |'));
   assert.ok(row, 'docs/decisions.md records the application identities');
