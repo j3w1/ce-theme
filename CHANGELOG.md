@@ -1,5 +1,14 @@
 # Changelog
 
+## @casaelida/vue 0.5.0 — 2026-11-14 (unreleased)
+
+Combined CR-04/CR-08 (Refs #11; #11 stays open): the packed cart styles and documented consumer composition change together. No Vue API is added. It follows 0.4.0 (CR-07) in the release order.
+
+- Cart anatomy: optional code, linked identity/specifications, supplied line amount or note, actual CR-06 availability, quantity/remove, optional save-state/notice. Remove stays `button.ce-link` with «Quitar … del carrito».
+- Explicit token distances replace the uniform gap: 8/2/2/12/8px through availability, 12px to controls and 8px to save text. Unbroken codes get intrinsic room; links have a minimum 44px hit area without changing visible gaps; quantity inputs and remove have 44px targets and visible focus. Image sizes, padding and price scale stay.
+- Cart guideline and preview document eleven supplied states without arithmetic or live commerce logic; the reference cart adopts the anatomy. Focused browser acceptance covers actual Inter/text enlargement, optional/state cases, layout, keyboard, click isolation and axe. Screen-reader pass: not run, to schedule.
+- Decisions preserve historical rows and record the delegated selections. Frozen boards/local patches and the separate foundation version 0.2.0 stay unchanged.
+
 ## @casaelida/vue 0.4.0 — 2026-11-14 (unreleased)
 
 CR-07, the shopping-action rule (ce-theme#11). The shipped `styles.css` changes how product cards behave, so the package takes a new minor version with a markup migration. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; see `docs/decisions.md`, “Shopping actions (CR-07)”. It follows 0.3.3 (CR-05) in the release order.

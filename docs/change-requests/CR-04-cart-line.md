@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Implemented in CE Theme source by the combined [CR-04/CR-08 PR #30](https://github.com/j3w1/ce-theme/pull/30), packaged as @casaelida/vue 0.5.0. Release and public-consumer verification are linked from [PR #30](https://github.com/j3w1/ce-theme/pull/30); the historical proposal/evidence below is preserved, with implemented outcomes in section 8.
 
 # CR-04 · Cart line (`ce-cart-line`): identity, supplied amount, availability, controls
 
@@ -132,3 +132,15 @@ To run when the repository work happens (none run here beyond the measurements q
 3. Remove control: `ce-button--secondary` (as Pub10Bolsa) or `ce-link` (as the Cart README)?
 4. Codes in cart lines: keep "never wraps" and give the container room, or allow an `overflow-wrap` exception for stress strings? The boards' 35 overrides contradict the 2026-10-25 decision.
 5. Image `alt`: empty (decorative, the link names the product; as CE Theme's preview) or «NAME, Description» (as the boards)? Recommended: empty when the link beside it carries the same name.
+
+### Implemented outcomes (2026-11-13)
+
+Every new selection here is **“decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed.”** j3w1 can veto. [Canonical selections](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160); X-1–X-9 stand. The proposal above records its historical source, not additional implemented API.
+
+1. Anatomy approved and implemented: optional code, linked identity, optional specs, supplied line amount or note, CR-06 availability, quantity/remove, optional save-state/notice. Eleven supplied-state scenarios are documented in the Cart guideline and shown as static preview examples; no commerce controller or arithmetic.
+2. Availability→controls is 12px; controls→pending/failed message is 8px.
+3. Remove stays `button.ce-link`, **not** the proposal's secondary button, with «Quitar {NAME} del carrito», 44px public target and native button semantics.
+4. Codes never wrap; their container gives them actual room. No white-space/overflow-wrap exception.
+5. Image alt is empty when the adjacent link provides the same product identity.
+
+Implementation details (agent choices within the delegated acceptance scope, not separately typed j3w1 decisions): intrinsic flex reflow gives an unbroken code room; the product link retains its content height and uses a centred minimum 44px hit area; the input reuses the focus tokens. These details are subject to measured acceptance and independent review, rather than added to the owner decision ledger. Existing image breakpoints, padding and price scale stay. `tests/browser/cart-line.spec.mjs` owns both section-6 acceptance matrices with shipped Inter and all computed px/rem descendant sizes enlarged. Screen-reader check: **not run, to schedule**. Local/hosted test outcomes and immutable-release proof are linked from [PR #30](https://github.com/j3w1/ce-theme/pull/30); no board resynchronization is performed.

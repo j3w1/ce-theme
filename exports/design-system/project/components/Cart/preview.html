@@ -1,4 +1,4 @@
-<!-- @dsCard group="Customer journeys" height=620 width=1200 -->
+<!-- @dsCard group="Customer journeys" height=1100 width=1200 -->
 <!doctype html>
 <html lang="es">
 <head>
@@ -11,12 +11,49 @@
 </style>
 </head>
 <body>
-<div class="ce-scope wrap">
+<main class="ce-scope wrap">
+<p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p>
+<h1>Carrito</h1>
   <ol class="ce-steps" aria-label="Pasos de compra" style="margin-bottom:var(--ce-space-24)"><li aria-current="step"><span class="ce-step-label">Carrito</span></li><li><span class="ce-step-label">Entrega</span></li><li><span class="ce-step-label">Pago</span></li></ol>
   <div class="ce-cart">
     <div>
       <p class="ce-store-note"><span>Importes en <strong>Tacna</strong></span><button class="ce-link" type="button">Cambiar tienda</button></p>
-      <ul class="ce-cart-lines"><li class="ce-cart-line"><img src="../../media/product-mene.png" alt="" width="128" height="128"><div class="ce-cart-line-body"><h3 class="ce-product-heading"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></h3><p class="ce-product-specs">vidrio borosilicato, 250ml</p><div class="ce-cart-line-actions"><div class="ce-quantity"><button type="button" aria-label="Quitar uno de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button><label class="ce-sr-only" for="q-MENE">Cantidad de MENE</label><input id="q-MENE" type="number" min="1" value="2"><button type="button" aria-label="Agregar uno de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button></div><span class="ce-price ce-price--regular"><span class="ce-sr-only">Precio actual: 13 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">13</span></span></span><button class="ce-link" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg> Quitar</button></div></div></li><li class="ce-cart-line"><img src="../../media/product-nome.png" alt="" width="128" height="128"><div class="ce-cart-line-body"><h3 class="ce-product-heading"><span class="ce-product-name">NOME</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></h3><p class="ce-product-specs">vidrio borosilicato, 350ml</p><div class="ce-cart-line-actions"><div class="ce-quantity"><button type="button" aria-label="Quitar uno de NOME"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button><label class="ce-sr-only" for="q-NOME">Cantidad de NOME</label><input id="q-NOME" type="number" min="1" value="1"><button type="button" aria-label="Agregar uno de NOME"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button></div><span class="ce-price ce-price--regular"><span class="ce-sr-only">Precio actual: 8 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">8</span></span></span><button class="ce-link" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg> Quitar</button></div></div></li></ul>
+      <ul class="ce-cart-lines" aria-label="Productos en tu carrito"><li class="ce-cart-line" data-line="ordinary">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h3 class="ce-product-heading"><a class="ce-product-link" href="#producto-ordinary"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h3>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Importe de la línea: 13 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">13</span></span></span></div>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="available">Disponible en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-ordinary">Cantidad de MENE</label><input id="q-ordinary" type="number" inputmode="numeric" min="1" max="20" value="2">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+
+</div></li><li class="ce-cart-line" data-line="second">
+<img src="../../media/product-nome.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1440</span></span>
+<h3 class="ce-product-heading"><a class="ce-product-link" href="#producto-second"><span class="ce-product-name">NOME</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h3>
+<p class="ce-product-specs">vidrio borosilicato, 350ml</p>
+<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Importe de la línea: 8 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">8</span></span></span></div>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="available">Disponible en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de NOME">
+<button type="button" aria-label="Reducir cantidad de NOME" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-second">Cantidad de NOME</label><input id="q-second" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de NOME"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> NOME del carrito</span></button>
+</div>
+
+</div></li></ul>
+      <p id="nota-min" class="ce-field-note">La cantidad mínima suministrada para estos ejemplos es 1.</p>
       <fieldset class="ce-choice-cards" style="margin-top:var(--ce-space-24)"><legend class="ce-sr-only">Forma de entrega</legend>
         <label class="ce-choice-card"><input type="radio" name="e" checked><span class="ce-choice-card-title">Retiro en tienda</span><span>En Tacna. Te avisamos cuando esté listo.</span></label>
         <label class="ce-choice-card"><input type="radio" name="e"><span class="ce-choice-card-title">Envío a domicilio</span><span>Costo y plazo según tu dirección.</span></label>
@@ -28,6 +65,281 @@
       <p class="ce-fine-print">Importes de ejemplo.</p>
     </aside>
   </div>
+
+<section aria-labelledby="estados"><h2 id="estados">Estados suministrados — ejemplos estáticos</h2><p>No se ejecutan operaciones; no hay total en las cotizaciones bloqueadas, vencidas o sin importes.</p>
+<section data-cart-case="empty" aria-labelledby="estado-empty" style="margin-top:var(--ce-space-32)"><h3 id="estado-empty">Carrito vacío</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><div class="ce-empty"><h3>Tu carrito está vacío</h3><p>Elige un producto para empezar.</p></div></section>
+<section data-cart-case="pending" aria-labelledby="estado-pending" style="margin-top:var(--ce-space-32)"><h3 id="estado-pending">Cantidad pendiente</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="pending">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-pending"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Importe de la línea: 6.5 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">6.5</span></span></span></div>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="available">Disponible en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE" aria-busy="true">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-pending">Cantidad de MENE</label><input id="q-pending" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
 </div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+<p class="ce-save-state" role="status" data-state="dirty">Actualizando cantidad a 2… Mientras tanto se muestra 1.</p>
+</div></li></ul></section>
+<section data-cart-case="acknowledged" aria-labelledby="estado-acknowledged" style="margin-top:var(--ce-space-32)"><h3 id="estado-acknowledged">Cantidad confirmada</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="acknowledged">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-acknowledged"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Importe de la línea: 13 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">13</span></span></span></div>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="available">Disponible en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-acknowledged">Cantidad de MENE</label><input id="q-acknowledged" type="number" inputmode="numeric" min="1" max="20" value="2">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+<p class="ce-save-state" role="status" data-state="saved">Cantidad de MENE actualizada a 2.</p>
+</div></li></ul></section>
+<section data-cart-case="failed" aria-labelledby="estado-failed" style="margin-top:var(--ce-space-32)"><h3 id="estado-failed">Cantidad fallida</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="failed">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-failed"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Importe de la línea: 6.5 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">6.5</span></span></span></div>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="available">Disponible en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-failed">Cantidad de MENE</label><input id="q-failed" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+<div class="ce-notice ce-notice--danger" role="status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 8v5m0 3h.01"/></svg><div><strong>No se pudo cambiar la cantidad de MENE</strong><p>Tu carrito sigue igual: 1 unidad.</p><button class="ce-link" type="button">Reintentar<span class="ce-sr-only"> cantidad de MENE</span></button></div></div>
+</div></li></ul></section>
+<section data-cart-case="unavailable" aria-labelledby="estado-unavailable" style="margin-top:var(--ce-space-32)"><h3 id="estado-unavailable">Escenario: lectura confirmada sin disponibilidad</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="unavailable">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-unavailable"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<p class="ce-store-note" id="reason-unavailable">Sin importe: producto no disponible. El servicio no permite modificar la cantidad de MENE en este estado.</p>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="unavailable">Agotado en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="reason-unavailable"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-unavailable">Cantidad de MENE</label><input id="q-unavailable" type="number" inputmode="numeric" min="1" max="20" value="1" disabled aria-describedby="reason-unavailable">
+<button type="button" aria-label="Aumentar cantidad de MENE" disabled aria-describedby="reason-unavailable"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+
+</div></li></ul></section>
+<section data-cart-case="switch" aria-labelledby="estado-switch" style="margin-top:var(--ce-space-32)"><h3 id="estado-switch">Cambio de tienda confirmado</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="switch">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-switch"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<p class="ce-store-note">Importes retirados al cambiar de tienda; productos conservados.</p>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="unknown">Disponibilidad por confirmar en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-switch">Cantidad de MENE</label><input id="q-switch" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+
+</div></li></ul></section>
+<section data-cart-case="blocked" aria-labelledby="estado-blocked" style="margin-top:var(--ce-space-32)"><h3 id="estado-blocked">Cotización bloqueada; disponibilidad por confirmar</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="blocked">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-blocked"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<p class="ce-store-note" id="reason-blocked">Precio no disponible en Tacna. El servicio no permite modificar la cantidad de MENE mientras la cotización está bloqueada.</p>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="unknown">Disponibilidad por confirmar en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="reason-blocked"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-blocked">Cantidad de MENE</label><input id="q-blocked" type="number" inputmode="numeric" min="1" max="20" value="1" disabled aria-describedby="reason-blocked">
+<button type="button" aria-label="Aumentar cantidad de MENE" disabled aria-describedby="reason-blocked"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+
+</div></li></ul></section>
+<section data-cart-case="expired" aria-labelledby="estado-expired" style="margin-top:var(--ce-space-32)"><h3 id="estado-expired">Cotización vencida</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="expired">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-expired"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<p class="ce-store-note">Precio no disponible en Tacna.</p>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="unknown">Disponibilidad por confirmar en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-expired">Cantidad de MENE</label><input id="q-expired" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+<p class="ce-save-state" role="status" data-state="error">La cotización venció. Solicita una nueva para continuar.</p>
+</div></li></ul></section>
+<section data-cart-case="offline" aria-labelledby="estado-offline" style="margin-top:var(--ce-space-32)"><h3 id="estado-offline">Sin conexión</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="offline">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-offline"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Importe de la línea: 6.5 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">6.5</span></span></span></div>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="unknown">Disponibilidad por confirmar en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-offline">Cantidad de MENE</label><input id="q-offline" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+<p class="ce-save-state" role="status" data-state="error">Sin conexión. Se muestran los últimos valores confirmados.</p>
+</div></li></ul></section>
+<section data-cart-case="removed" aria-labelledby="estado-removed" style="margin-top:var(--ce-space-32)"><h3 id="estado-removed">Producto quitado; deshacer breve</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><p role="status">MENE se quitó del carrito. <button class="ce-link" type="button">Deshacer<span class="ce-sr-only"> quitar MENE del carrito</span></button></p><p class="ce-field-note">El plazo breve de deshacer lo suministra la aplicación.</p></section>
+<section data-cart-case="optional" aria-labelledby="estado-optional" style="margin-top:var(--ce-space-32)"><h3 id="estado-optional">Sin código, especificaciones ni tienda; precio pendiente</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="optional">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-optional"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+
+<p class="ce-price-pending">Elige tu tienda para ver precio y disponibilidad.</p>
+
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-optional">Cantidad de MENE</label><input id="q-optional" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+
+</div></li></ul></section>
+<section data-cart-case="name-only" aria-labelledby="estado-name-only" style="margin-top:var(--ce-space-32)"><h3 id="estado-name-only">Identidad sin descripción</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="name-only">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-name-only"><span class="ce-product-name">MENE</span></a></h4>
+
+<p class="ce-store-note">Precio no disponible en Tacna.</p>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="unknown">Disponibilidad por confirmar en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-name-only">Cantidad de MENE</label><input id="q-name-only" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+
+</div></li></ul></section>
+<section data-cart-case="availability-pending" aria-labelledby="estado-availability-pending" style="margin-top:var(--ce-space-32)"><h3 id="estado-availability-pending">Lectura de disponibilidad pendiente</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="availability-pending">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-availability-pending"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Importe de la línea: 6.5 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">6.5</span></span></span></div>
+<ul class="ce-stock" aria-label="Disponibilidad" aria-busy="true"><li data-state="pending">Consultando disponibilidad…</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-availability-pending">Cantidad de MENE</label><input id="q-availability-pending" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+
+</div></li></ul></section>
+<section data-cart-case="long" aria-labelledby="estado-long" style="margin-top:var(--ce-space-32)"><h3 id="estado-long">Identidad larga</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="long">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-long"><span class="ce-product-name">MENELOPA TILENORA</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor con Asa y Presentación Adicional para Mesa</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Importe de la línea: 6.5 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">6.5</span></span></span></div>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="unknown">Disponibilidad por confirmar en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENELOPA TILENORA">
+<button type="button" aria-label="Reducir cantidad de MENELOPA TILENORA" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-long">Cantidad de MENELOPA TILENORA</label><input id="q-long" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de MENELOPA TILENORA"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENELOPA TILENORA del carrito</span></button>
+</div>
+
+</div></li></ul></section>
+<section data-cart-case="limited" aria-labelledby="estado-limited" style="margin-top:var(--ce-space-32)"><h3 id="estado-limited">Escenario: pocas unidades confirmadas</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="limited">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-limited"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Importe de la línea: 6.5 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">6.5</span></span></span></div>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="limited">Pocas unidades en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-limited">Cantidad de MENE</label><input id="q-limited" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+
+</div></li></ul></section>
+<section data-cart-case="long-code" aria-labelledby="estado-long-code" style="margin-top:var(--ce-space-32)"><h3 id="estado-long-code">Código largo sin saltos</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="long-code">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606144100123</span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-long-code"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Importe de la línea: 13 soles</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">13</span></span></span></div>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="available">Disponible en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-long-code">Cantidad de MENE</label><input id="q-long-code" type="number" inputmode="numeric" min="1" max="20" value="2">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+
+</div></li></ul></section>
+<section data-cart-case="basis" aria-labelledby="estado-basis" style="margin-top:var(--ce-space-32)"><h3 id="estado-basis">Base de precio suministrada</h3><p class="ce-demo-cue" role="note">Demostración — datos y operaciones simulados</p><ul class="ce-cart-lines"><li class="ce-cart-line" data-line="basis">
+<img src="../../media/product-mene.png" alt="" width="128" height="128">
+<div class="ce-cart-line-body">
+<span class="ce-code">CE2606<span class="ce-code-number">1441</span></span>
+<h4 class="ce-product-heading"><a class="ce-product-link" href="#producto-basis"><span class="ce-product-name">MENE</span><span class="ce-product-description">Taza de Vidrio Resistente al Calor</span></a></h4>
+<p class="ce-product-specs">vidrio borosilicato, 250ml</p>
+<div class="ce-price-block"><span class="ce-price"><span class="ce-sr-only">Importe de la línea: 6.5 soles cada uno</span><span class="ce-price-amount" aria-hidden="true"><span class="ce-price-currency">S/</span><span class="ce-price-value">6.5</span></span><span class="ce-price-unit" aria-hidden="true"><span class="ce-price-unit-long">cada uno</span><span class="ce-price-unit-short">c/u</span></span></span></div>
+<ul class="ce-stock" aria-label="Disponibilidad"><li data-state="available">Disponible en Tacna</li></ul>
+<div class="ce-cart-line-actions">
+<div class="ce-quantity" role="group" aria-label="Cantidad de MENE">
+<button type="button" aria-label="Reducir cantidad de MENE" disabled aria-describedby="nota-min"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+<label class="ce-sr-only" for="q-basis">Cantidad de MENE</label><input id="q-basis" type="number" inputmode="numeric" min="1" max="20" value="1">
+<button type="button" aria-label="Aumentar cantidad de MENE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<button class="ce-link" type="button">Quitar<span class="ce-sr-only"> MENE del carrito</span></button>
+</div>
+
+</div></li></ul></section>
+</section>
+</main>
 </body>
 </html>

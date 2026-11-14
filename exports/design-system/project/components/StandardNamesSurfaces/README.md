@@ -1,10 +1,11 @@
 # StandardNamesSurfaces
 
-Standard names for surfaces: **ProductCard** (Tarjeta de producto), **QuickAdd** (Añadir rápido), **AddToCart** (Añadir al carrito), **ProductCallout** (Tarjeta flotante), **Mosaic** (Mosaico), **MosaicTile** (Baldosa), **PromoTile** (Baldosa Promo), **PromoPanel** (Panel Promo).
+Standard names for surfaces: **ProductCard** (Tarjeta de producto), **Cart** (Carrito), **QuickAdd** (Añadir rápido), **AddToCart** (Añadir al carrito), **ProductCallout** (Tarjeta flotante), **Mosaic** (Mosaico), **MosaicTile** (Baldosa), **PromoTile** (Baldosa Promo), **PromoPanel** (Panel Promo).
 
 ## Classes
 
 - **ProductCard** · Tarjeta de producto: `ce-product`. Photo, then the ProductStack. No borders, shadows or rounded corners.
+- **Cart** · Carrito: `ce-cart`, `ce-cart-lines`, `ce-cart-line`, `ce-cart-line-body`, `ce-cart-line-actions`. Optional unbroken code, linked NAME/Description and specs, supplied line amount or note, StockLine, then quantity and remove as button.ce-link named Quitar … del carrito. ProductStack gaps 8/2/2/12/8, then 12 to controls and 8 to save text. All values and states are supplied; no arithmetic or controller.
 - **QuickAdd** · Añadir rápido: `ce-icon-button--action`. Optional icon on the active product card: it shows only when the card is hovered or keyboard-focused, on hover-capable screens from 640px. A separate 44px control beside the product link, named with the product. Never on touch or narrow screens, where the whole card is the product link, and not on a card with no Description and no specs.
 - **AddToCart** · Añadir al carrito: `ce-buy-actions`. The one primary action on the product page, 56px, beside the quantity and a quiet favourite. Its outcomes and whether it is enabled are supplied by the commerce service.
 - **ProductCallout** · Tarjeta flotante: `ce-callout`. White floating card with a photo, identity and price for editorial pieces.

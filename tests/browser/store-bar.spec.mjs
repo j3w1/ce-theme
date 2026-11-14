@@ -197,7 +197,7 @@ for (const [route, words] of PAGES) {
     expect(await visibleAmounts(page)).toEqual({ prices: 0, text: false, bands: route === '/tienda/' ? 3 : 0 });
     if (route === '/tienda/carrito/') {
       // The no-store messages take the place of each line amount and of the summary.
-      await expect(page.locator('.ce-cart-line-actions > .ce-store-note:visible')).toHaveText(['Elige tu tienda para ver el precio.', 'Elige tu tienda para ver el precio.']);
+      await expect(page.locator('.ce-cart-line-body > .ce-store-note:visible')).toHaveText(['Elige tu tienda para ver el precio.', 'Elige tu tienda para ver el precio.']);
       await expect(page.locator('.ce-order-summary .ce-price-pending')).toBeVisible();
     }
     await action.click();
@@ -233,7 +233,7 @@ for (const width of WIDTHS) {
           expect(await spill(bar), at).toEqual([]);
           expect(await bar.locator(':scope > .ce-link').evaluate((el) => el.getBoundingClientRect().height), at).toBeGreaterThanOrEqual(44);
           // The cart's no-store messages stay inside the viewport too.
-          const outside = await page.locator('.ce-cart-line-actions > .ce-store-note:visible, .ce-order-summary .ce-price-pending:visible').evaluateAll((items) => items.filter((el) => el.getBoundingClientRect().right > innerWidth + 1).length);
+          const outside = await page.locator('.ce-cart-line-body > .ce-store-note:visible, .ce-order-summary .ce-price-pending:visible').evaluateAll((items) => items.filter((el) => el.getBoundingClientRect().right > innerWidth + 1).length);
           expect(outside, at).toBe(0);
         }
       }
