@@ -9,6 +9,60 @@ Combined CR-04/CR-08 (Refs #11; #11 stays open): the packed cart styles and docu
 - Cart guideline and preview document eleven supplied states without arithmetic or live commerce logic; the reference cart adopts the anatomy. Focused browser acceptance covers actual Inter/text enlargement, optional/state cases, layout, keyboard, click isolation and axe. Screen-reader pass: not run, to schedule.
 - Decisions preserve historical rows and record the delegated selections. Frozen boards/local patches and the separate foundation version 0.2.0 stay unchanged.
 
+## @casaelida/vue 0.4.0 — 2026-11-14 (unreleased)
+
+CR-07, the shopping-action rule (ce-theme#11). The shipped `styles.css` changes how product cards behave, so the package takes a new minor version with a markup migration. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; see `docs/decisions.md`, “Shopping actions (CR-07)”. It follows 0.3.3 (CR-05) in the release order.
+
+### Changed
+
+- Product cards are browse first: no purchase control at rest, no favourite and no full-width button. The optional QuickAdd icon (`ce-icon-button--action` in `ce-product-row`) shows only on the hovered or keyboard-focused card on hover-capable screens from 640px, at 44 × 44 (`--ce-size-target-public`), out of the row's height with its column kept clear, so the ProductStack gaps and the price do not move. It has no transition under reduced motion, and a card with no Description and no specs does not show it: measured with Inter, its unbreakable price starts inside the action's 44px (in a 150px card the digits of S/12.5 ran 1.9px under it; see CR-07 section 6). That refinement is the repository lead's selection under the CR-07 delegation, not j3w1-typed. The Description and specs are rendered only when they contain trimmed text, as `productView()` or the application's equivalent formatting gives them; handwritten whitespace-only elements are not protected (the lead's clarification under the same delegation, not j3w1-typed). Touch and narrow screens add nothing from a card: the whole card opens the product page, and its other native controls (variant thumbnails, «Comparar», a list's own task, a control in the photo box) stay separate. The photo's own link (`aria-hidden`, `tabindex="-1"`) stays under the product link; any other link in the photo box is a separate control.
+- `ce-product-add` is deprecated: it stays `display: none` at every width until consumers remove the element, and no longer shows on touch or narrow screens. Consumers that still render it must remove it from their markup; there is no opt-in variant.
+- The product page keeps one primary «Añadir al carrito» (`AddToCart`, re-scoped in the names registry) and one product-named favourite; the `ProductDetail` card shows the supplied add outcomes in words. CE Theme ships no sticky buy-bar recipe.
+- `docs/decisions.md` supersedes the behaviour of the 2026-10-25 “Add to cart” row and keeps its copy. `QuickAdd` (Añadir rápido) is added to the names registry. The `TaggedMedia` guideline applies the same rule to an open pin card, as documentation only.
+- The remaining “bag”/«Bolsa» cart wording in the guidelines, previews and `/tienda/` pages is now cart/«carrito». The `bag` and `bag-plus` icons are renamed `cart` and `cart-plus`, with the same drawing.
+
+### Migration
+
+- Remove `<button class="ce-button … ce-product-add">` from product cards. It no longer shows anywhere; the deprecated `display: none` rule stays only until consumers have removed it.
+- Remove the favourite button from `ce-product-media` on catalogue cards; keep one product-named favourite on the product page, beside the one primary «Añadir al carrito».
+- A card's optional quick-add is the `ce-icon-button ce-icon-button--action ce-icon-button--small` inside `ce-product-row`, named with the product. It shows only on hover-capable screens from 640px and not on a card with no Description and no specs.
+- Render the Description and specs only when they contain trimmed text (`productView()` or the application's equivalent). On touch and narrow screens the `ce-product-link` covers the card: give the photo's own link `aria-hidden="true"` and `tabindex="-1"`, use native controls for anything else in the card, don't wrap a card control in an element that creates its own stacking context, and don't position an element between the card and its `ce-product-link` (see the ProductCard guideline).
+- Rename the `bag` and `bag-plus` icons to `cart` and `cart-plus` where an application uses the design-system icon files; the drawing is the same.
+
+### Added
+
+- `tests/browser/shopping-actions.spec.mjs` and `tests/shopping-actions.test.mjs` check CR-07's acceptance 1 to 5. The geometry matrix loads the supplied Inter files and measures glyph ink across sixteen card shapes, three card widths, eight asserted text sizes and both writing directions.
+
+## @casaelida/vue 0.3.3 — 2026-11-14 (unreleased)
+
+CR-05, the in-page store line (ce-theme#11). The packaged recipes gain the StoreBar rules; the components are unchanged. It follows 0.3.2 (CR-09) in the release order.
+
+### Added
+
+- The standard name `StoreBar` (Barra de tienda): the in-page store line is a `ce-store-note` whose action is a `ce-link`, with no class of its own. In `recipes/retail.css`, every `ce-link` inside a `ce-store-note` reaches `--ce-size-target-public` (44px), including a link inside a sentence, whose row grows to 44px. A pending bar (`aria-busy="true"`) shows the progress cursor. Its four states and wording are in the StoreContext guideline and card. Also added: a coverage row, the decision in `docs/decisions.md` and `tests/browser/store-bar.spec.mjs`.
+
+### Changed
+
+- The Cart card and the storefront cart name their store with the StoreBar («Importes en …»), and the storefront home, listing, product and scene pages gain it («Precios y disponibilidad de …», «Tienda: sin elegir»). The storefront cart's amounts are now per store, with no amount when no store is chosen; the home page's promotion tile shows its offer price only for the store that supplies it.
+
+## @casaelida/vue 0.3.2 — 2026-11-14 (unreleased)
+
+CR-09, the pin-card spacing and fit (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version (the `placePins()` reference behaviour in `recipes/behaviors.mjs` changes too, but it is not in the package); it follows 0.3.0 (CR-01) and 0.3.1 (CR-10) in the release order. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed, with the fit as decision 3, decided under the same standing delegation (Supervisor confirmation, 2026-11-13 13:22), not j3w1-typed.
+
+### Changed
+
+- The pin card follows the ProductStack. NAME and Description are 2px apart (`size.product.gap-identity`, was 4px), and the price block, or the store note or pending-price message in its place, starts 8px under the Description from `size.product.gap-note` (the store note and pending-price message were 4px). Every card stays the width of its focus ring inside its photo's edges, so the ring is never clipped; with large text the card is never wider than its photo, and a card taller than its photo is limited to the photo's height by `placePins()` and scrolls instead of being clipped; `enhancePins()` places the cards again once the fonts have loaded. No markup, type scale, price or API change; `tests/browser/pin-card.spec.mjs` measures it, with text at x1, x1.5 and x2.
+
+## @casaelida/vue 0.3.1 — 2026-11-13 (unreleased)
+
+CR-10, the record title with product identity (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version. Decisions 2 and 3 are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; decision 4 is the lead's decision under the same standing delegation, not j3w1-typed.
+
+### Changed
+
+- `ce-record-title` in `recipes/workspace.css` (CR-10): a direct-child `ce-product-heading` sits 8px below the code or the row that holds it, and a direct-child `ce-product-specs` 2px below the heading, from the `size.product` and `space` tokens. The 4px grid gap stays, so a title without them is unchanged; no selector reaches an identity nested inside a heading.
+- `ce-record-header` (CR-10): thumbnail, title and status share one wrapping line. The title is never narrower than its one-line code, and where the line has no room the status moves to the next line instead of covering the title. Markup and classes are unchanged.
+- The RecordEditor sample draws the identity heading instead of a run-in title. The RecordEditor README, `docs/decisions.md`, `docs/coverage.md` and CR-10 record the rules; `tests/browser/record-title.spec.mjs` measures CR-10's acceptance (390, 768 and 1440 px at 100%, 150% and 200% text, in a page-wide title and in a record header).
+
 ## @casaelida/vue 0.3.0 — 2026-11-13 (unreleased)
 
 CR-01, admin navigation (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed.

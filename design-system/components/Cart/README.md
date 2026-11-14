@@ -40,7 +40,7 @@ The preview is illustrative static HTML, not a controller. Each simulated frame 
 | Offline | Say offline and identify any last confirmed values; no fresh availability claim. |
 | Removal with short undo | Supplied removal announcement and «Deshacer»; application supplies its short undo period and restores a supplied response. |
 
-The consumer owns numeric-string identifiers, decimal-string amounts, quantity limits, availability, eligibility, state transitions, undo timing and all totals. Say which store the cart is priced in. Never compute totals, taxes or discounts. Never multiply quantity by a unit price or sum lines; never invent discounts, stock thresholds, reservations or default availability.
+The consumer owns numeric-string identifiers, decimal-string amounts, quantity limits, availability, eligibility, state transitions, undo timing and all totals. Say which store the amounts are in: a StoreBar above the lines, «Importes en {tienda}» with «Cambiar tienda» (see StoreContext). Never compute totals, taxes or discounts. Never multiply quantity by a unit price or sum lines; never invent discounts, stock thresholds, reservations or default availability.
 
 ## Other classes
 

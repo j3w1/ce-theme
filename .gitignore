@@ -1,5 +1,7 @@
 node_modules/
 dist/
+# The post-build tests live in tests/dist/; only build output is ignored.
+!tests/dist/
 .astro/
 .orca/
 test-results/

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { clipboard } from './clipboard.mjs';
 
-const storePages = ['/tienda/', '/tienda/categoria/', '/tienda/producto/', '/tienda/escena/', '/tienda/carrito/', '/tienda/cuenta/', '/sistemas/', '/compartir/'];
+const storePages = ['tienda/', 'tienda/categoria/', 'tienda/producto/', 'tienda/escena/', 'tienda/carrito/', 'tienda/cuenta/', 'sistemas/', 'compartir/'];
 const fits = (page) => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth);
 
 for (const width of [390, 768, 1440]) {
@@ -17,7 +17,7 @@ for (const width of [390, 768, 1440]) {
 test('listing grid follows the retail column rhythm with the filter sidebar', async ({ page }) => {
   for (const [width, columns, sidebar] of [[390, 2, false], [800, 3, false], [1100, 3, true], [1440, 4, true]]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto('/tienda/categoria/');
+    await page.goto('tienda/categoria/');
     const grid = page.locator('[data-store-view="tacna"] .ce-product-grid');
     expect(await grid.evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(' ').length), `${width}px`).toBe(columns);
     await expect(page.locator('.ce-listing-aside')).toBeVisible({ visible: sidebar });
@@ -25,7 +25,7 @@ test('listing grid follows the retail column rhythm with the filter sidebar', as
 });
 
 test('changing store swaps every price and availability line, and never shows S/0', async ({ page }) => {
-  await page.goto('/tienda/categoria/');
+  await page.goto('tienda/categoria/');
   const visibleText = () => page.locator('main').evaluate((el) => el.innerText);
   expect(await visibleText()).toContain('Disponible en Tacna');
   await page.getByRole('button', { name: /Tu tienda/ }).click();
@@ -46,14 +46,14 @@ test('changing store swaps every price and availability line, and never shows S/
   await page.keyboard.press('Escape');
   await expect(page.getByRole('button', { name: /Tu tienda/ })).toContainText('Arequipa');
 
-  await page.goto('/tienda/producto/?tienda=ninguna');
+  await page.goto('tienda/producto/?tienda=ninguna');
   await expect(page.locator('.ce-buy-box').getByText('Elige tu tienda para ver precio y disponibilidad.')).toBeVisible();
   expect(await page.locator('.ce-buy-box .ce-price').evaluateAll((items) => items.filter((el) => el.offsetParent !== null).length)).toBe(0);
 });
 
 test('filter drawer and mobile menu are modal, close with Escape and return focus', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/tienda/categoria/');
+  await page.goto('tienda/categoria/');
   const opener = page.getByRole('button', { name: /^Filtros/ });
   await opener.click();
   await expect(page.getByRole('dialog', { name: 'Filtrar y ordenar' })).toBeVisible();
@@ -68,7 +68,7 @@ test('filter drawer and mobile menu are modal, close with Escape and return focu
 });
 
 test('product cards keep identity order, readable controls and named actions', async ({ page }) => {
-  await page.goto('/tienda/categoria/');
+  await page.goto('tienda/categoria/');
   const card = page.locator('[data-store-view="tacna"] .ce-product').first();
   await expect(card.locator('.ce-product-name')).toHaveText('MENE');
   await expect(card.locator('.ce-product-description')).toHaveText('Taza de Vidrio Resistente al Calor');
@@ -76,16 +76,15 @@ test('product cards keep identity order, readable controls and named actions', a
   await expect(add).toHaveCSS('opacity', '0');
   await card.hover();
   await expect(add).toHaveCSS('opacity', '1');
-  const favourite = card.getByRole('button', { name: /favoritos/ });
-  await favourite.click();
-  await expect(favourite).toHaveAttribute('aria-pressed', 'true');
+  // Browse first: the favourite lives on the product page, not on the card.
+  await expect(card.getByRole('button', { name: /favoritos/ })).toHaveCount(0);
   const sizes = await page.locator('[data-store-view="tacna"] :is(.ce-icon-button, .ce-chip, .ce-check)').evaluateAll((items) => items.map((el) => Math.min(el.getBoundingClientRect().width, el.getBoundingClientRect().height)));
   expect(Math.min(...sizes)).toBeGreaterThanOrEqual(24);
 });
 
 test('rail buttons scroll the rail and disable at the ends', async ({ page }) => {
   await page.setViewportSize({ width: 768, height: 900 });
-  await page.goto('/tienda/');
+  await page.goto('tienda/');
   const rail = page.locator('#novedades-lista-tacna');
   const next = page.getByRole('button', { name: 'Siguiente: Novedades' }).first();
   const prev = page.getByRole('button', { name: 'Anterior: Novedades' }).first();
@@ -95,8 +94,8 @@ test('rail buttons scroll the rail and disable at the ends', async ({ page }) =>
   await expect(prev).toBeEnabled();
 });
 
-test('web scenes use hover pins: a dot opens a product card with NAME, Description, price and a link', async ({ page }) => {
-  await page.goto('/tienda/escena/');
+test('web scenes use hover pins: a dot opens a product card with NAME, Description, price and a link', async ({ page, baseURL }) => {
+  await page.goto('tienda/escena/');
   const pins = page.locator('#escena-cocina .ce-pin');
   await expect(pins).toHaveCount(3);
   await expect(page.locator('#escena-cocina .ce-hotspot')).toHaveCount(0);
@@ -108,7 +107,7 @@ test('web scenes use hover pins: a dot opens a product card with NAME, Descripti
   await expect(card.locator('.ce-product-name')).toHaveText('MENE');
   await expect(card.locator('.ce-product-description')).toHaveText('Taza de Vidrio Resistente al Calor');
   await expect(card.locator('.ce-price-value').first()).toHaveText(/\d/);
-  await expect(card).toHaveAttribute('href', '/tienda/producto/');
+  await expect(card).toHaveAttribute('href', new URL('tienda/producto/', baseURL).pathname);
   const frame = await page.locator('#escena-cocina').boundingBox();
   const box = await card.boundingBox();
   expect(box.x).toBeGreaterThanOrEqual(frame.x - 1);
@@ -118,7 +117,7 @@ test('web scenes use hover pins: a dot opens a product card with NAME, Descripti
 });
 
 test('pins open by keyboard and tap, close with Escape, and keep one card open', async ({ page }) => {
-  await page.goto('/tienda/escena/');
+  await page.goto('tienda/escena/');
   const pins = page.locator('#escena-cocina .ce-pin');
   const dot = pins.nth(0).locator('.ce-pin-dot');
   await dot.focus();
@@ -135,7 +134,7 @@ test('pins open by keyboard and tap, close with Escape, and keep one card open',
 
 test('on a phone every pin card opens inside the photo', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/tienda/escena/');
+  await page.goto('tienda/escena/');
   const frame = await page.locator('#escena-cocina').boundingBox();
   const pins = page.locator('#escena-cocina .ce-pin');
   for (let index = 0; index < 3; index += 1) {
@@ -151,7 +150,7 @@ test('on a phone every pin card opens inside the photo', async ({ page }) => {
 });
 
 test('pins can be hidden and the list keeps every product; the pin dot is a 44px target', async ({ page }) => {
-  await page.goto('/tienda/escena/');
+  await page.goto('tienda/escena/');
   const pins = page.locator('#escena-cocina .ce-pin');
   const toggle = page.getByRole('button', { name: 'Mostrar etiquetas' });
   await expect(toggle).toHaveAttribute('aria-pressed', 'true');
@@ -164,14 +163,14 @@ test('pins can be hidden and the list keeps every product; the pin dot is a 44px
 });
 
 test('static media keep the black lettered markers', async ({ page }) => {
-  await page.goto('/patrones/');
+  await page.goto('patrones/');
   const markers = page.locator('#etiquetas .ce-hotspot:not(.ce-hotspot--inline)');
   await expect(markers).toHaveCount(3);
   expect(await markers.locator('[aria-hidden="true"]').allTextContents()).toEqual(['A', 'B', 'C']);
 });
 
 test('share previews never carry prices and keep their text inside the 1200 × 630 canvas', async ({ page }) => {
-  for (const route of ['/compartir/', '/sistemas/']) {
+  for (const route of ['compartir/', 'sistemas/']) {
     await page.goto(route);
     await page.evaluate(() => document.fonts.ready);
     await page.evaluate(() => document.querySelectorAll('[hidden]').forEach((el) => el.removeAttribute('hidden')));
@@ -209,7 +208,7 @@ test('share previews never carry prices and keep their text inside the 1200 × 6
 });
 
 test('gondola labels are 80 × 40 mm and nothing spills outside them', async ({ page }) => {
-  await page.goto('/sistemas/etiquetas/');
+  await page.goto('sistemas/etiquetas/');
   const labels = page.locator('.ce-label');
   await expect(labels).toHaveCount(14);
   const report = await labels.evaluateAll((items) => items.map((label) => {
@@ -228,7 +227,7 @@ test('gondola labels are 80 × 40 mm and nothing spills outside them', async ({ 
 
 test('internal tools: tabs work by keyboard, codes copy exactly and dense tables keep targets', async ({ page, context, browserName }) => {
   const copied = await clipboard({ page, context, browserName });
-  await page.goto('/sistemas/');
+  await page.goto('sistemas/');
   const first = page.getByRole('tab', { name: 'Productos' });
   await first.focus();
   await page.keyboard.press('ArrowRight');
@@ -245,7 +244,7 @@ test('internal tools: tabs work by keyboard, codes copy exactly and dense tables
 });
 
 test('focus stays visible on dark and light retail surfaces', async ({ page }) => {
-  await page.goto('/tienda/');
+  await page.goto('tienda/');
   for (const locator of [page.getByRole('button', { name: /Tu tienda/ }), page.locator('.ce-tile').first(), page.locator('.ce-category-link').first()]) {
     await locator.focus();
     await page.keyboard.press('Shift+Tab');

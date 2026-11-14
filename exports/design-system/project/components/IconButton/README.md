@@ -1,6 +1,6 @@
 # IconButton
 
-48px circular button holding a single outlined icon, for compact actions such as save, add to bag or next.
+48px circular button holding a single outlined icon, for compact actions such as save, add to cart or next.
 
 ## Classes
 

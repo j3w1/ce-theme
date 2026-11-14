@@ -3,6 +3,8 @@ import Store from '../../layouts/Store.astro';
 import Icon from '../../components/Icon.astro';
 import Price from '../../components/Price.astro';
 import ProductCard from '../../components/ProductCard.astro';
+import StoreBar from '../../components/StoreBar.astro';
+import { url } from '../../url.mjs';
 import { productView } from '../../../recipes/product.mjs';
 import { catalogue, stores, stockLine, stockListAttributes } from '../../data/store.mjs';
 // Line and order amounts are supplied by the commerce service as decimal strings; the page never computes them.
@@ -25,14 +27,14 @@ const summaries = [
     </ol>
     <div class="ce-cart">
       <div>
-        <p class="ce-store-note">Comprando en <strong data-store-name>Tacna</strong>. Los precios pueden variar en otra tienda.</p>
+        <StoreBar lead="Importes en" />
         <ul class="ce-cart-lines" aria-label="Productos en tu carrito">
           {lines.map(({ item, quantity, min, max, canDecrease, lineAmount }, index) => { const view = productView(item); return (
             <li class="ce-cart-line">
               <img src={view.image} alt="" width="128" height="128" />
               <div class="ce-cart-line-body">
                 <span class="ce-code">{view.code}</span>
-                <h2 class="ce-product-heading" style="--ce-product-text:1rem"><a class="ce-product-link" href="/tienda/producto/"><span class="ce-product-name">{view.name}</span><span class="ce-product-description">{view.description}</span></a></h2>
+                <h2 class="ce-product-heading" style="--ce-product-text:1rem"><a class="ce-product-link" href={url('/tienda/producto/')}><span class="ce-product-name">{view.name}</span><span class="ce-product-description">{view.description}</span></a></h2>
                 <p class="ce-product-specs">{view.specs.join(', ')}</p>
                 {stores.map((store) => <div class="ce-price-block" data-store-view={store.id} hidden={store.id !== 'tacna'} role="group" aria-label="Importe de la línea"><Price amount={lineAmount[store.id]} /></div>)}
                 <p class="ce-store-note" data-store-view="ninguna" hidden>Elige tu tienda para ver el precio.</p>
@@ -65,7 +67,7 @@ const summaries = [
           <div><dt>Retiro en tienda</dt><dd>{summary.pickup}</dd></div>
           <div class="ce-summary-total"><dt>Total</dt><dd>{summary.total}</dd></div>
         </dl>)}
-        {stores.map((store) => <a class="ce-button" data-store-view={store.id} hidden={store.id !== 'tacna'} href="/tienda/cuenta/">Continuar</a>)}
+        {stores.map((store) => <a class="ce-button" data-store-view={store.id} hidden={store.id !== 'tacna'} href={url('/tienda/cuenta/')}>Continuar</a>)}
         <p class="ce-price-pending" data-store-view="ninguna" hidden>Elige tu tienda para ver el resumen.</p>
         <p class="ce-fine-print">Importes de ejemplo calculados por el servicio de comercio, no por la interfaz.</p>
       </aside>
@@ -73,7 +75,7 @@ const summaries = [
 
     <section class="ce-section" id="favoritos" aria-labelledby="favoritos-titulo">
       <div class="ce-section-head"><h2 id="favoritos-titulo">Tus favoritos</h2></div>
-      <div class="ce-product-grid">{catalogue.slice(1, 3).map((item) => <ProductCard product={item} href="/tienda/producto/" showCode={false} priceNote="Precio y disponibilidad al elegir tu tienda." />)}</div>
+      <div class="ce-product-grid">{catalogue.slice(1, 3).map((item) => <ProductCard product={item} href={url('/tienda/producto/')} showCode={false} priceNote="Precio y disponibilidad al elegir tu tienda." />)}</div>
     </section>
   </div>
 </Store>

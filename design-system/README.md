@@ -1,4 +1,4 @@
-Casa Elida (Comercial Elida EIRL) is a Peruvian home-goods retailer with stores (“sedes”) in Tacna and Arequipa, selling retail and wholesale, online and through WhatsApp. This system is the shared specification for its ecosystem: the casaelida.com store, CE Systems (retail, inventory, purchasing, logistics, finance, HR, reporting), CE Meta (the internal administration and control platform), CE Meta App (the messaging app, planned), CE Radio and future applications. It pairs image-led home-retail patterns with Casa Elida's own logos, red and yellow palette, product identity and distinctive prices. Light theme only in this version.
+Casa Elida (Comercial Elida EIRL) is a Peruvian home-goods retailer with stores (“sedes”) in Tacna and Arequipa, selling retail and wholesale, online and through WhatsApp. This system is the shared specification for its ecosystem: the casaelida.com store, CE Systems (retail, inventory, purchasing, logistics, finance, HR, reporting), CE Meta (the internal administration and control platform), CE Meta App (the messaging app in `j3w1/ce-meta-app`, which installs the released `@casaelida/vue` and now carries the messaging interface), CE Radio and future applications. It pairs image-led home-retail patterns with Casa Elida's own logos, red and yellow palette, product identity and distinctive prices. Light theme only in this version.
 
 Products are understood through photography first, supported by verified data: NAME, Description, specifications, code, price and availability come from CE Systems and are presented, never invented. Approved decisions are recorded in `decisions.md`; this version has no open proposals for prices, promotions or shared links.
 
@@ -99,7 +99,7 @@ Reference sections bundled with this system: `apply-ce-theme.md` (start here whe
 - Focus is a 2px solid outline (`ce-stroke-focus`, `ce-color-focus`) with a 3px offset on every interactive element. On photography and the black utility bar, the outline turns white with an ink halo.
 - Hover darkens fills or adds the subtle surface. Selected chips, category links, variants and choice cards gain an ink ring (`aria-pressed`, `aria-current`, `:checked`). Pressed favourites fill the heart.
 - Motion is limited to quick colour and transform transitions (`ce-motion-quick`, 160ms), removed under reduced motion. No autoplay; rails never auto-advance.
-- Targets are 44–48px tall (`ce-size-target-public` is the 44px minimum), 40px for card actions, never under 24px.
+- Targets are 44–48px tall (`ce-size-target-public` is the 44px minimum), 40px for other card actions, never under 24px. The card quick-add uses the 44px target.
 
 ## Tagging products on photography
 

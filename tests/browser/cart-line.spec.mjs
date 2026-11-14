@@ -10,10 +10,10 @@ const preview = readFileSync('design-system/components/Cart/preview.html', 'utf8
 // Exercise the very lines shipped in the preview, not a second invented cart skeleton.
 const lines = [...preview.matchAll(/<li class="ce-cart-line"[\s\S]*?<\/div><\/li>/g)].map(([html]) => html).join('');
 
-async function mount(page, width = 390, factor = 1) {
+async function mount(page, width = 390, factor = 1, baseURL) {
   await page.setViewportSize({ width, height: 1000 });
-  await page.goto('/');
-  await page.setContent(`<!doctype html><html lang="es"><head><title>Carrito — aceptación</title><style>${fonts}${css}body{margin:0}main{padding:16px}</style></head><body><main class="ce-scope"><h1>Carrito</h1><a id="before" href="#antes">Antes de los productos</a><ul class="ce-cart-lines">${lines}</ul><p id="nota-min">La cantidad mínima suministrada es 1.</p></main></body></html>`);
+  await page.goto('./');
+  await page.setContent(`<!doctype html><html lang="es"><head><title>Carrito — aceptación</title><style>${fonts}${css}body{margin:0}main{padding:16px}</style></head><body><main class="ce-scope"><h1>Carrito</h1><a id="before" href="#antes">Antes de los productos</a><ul class="ce-cart-lines">${lines.replaceAll('../../media/', new URL('assets/', baseURL).pathname)}</ul><p id="nota-min">La cantidad mínima suministrada es 1.</p></main></body></html>`);
   await page.evaluate(async () => {
     await Promise.all([400, 600, 700, 800].map((weight) => document.fonts.load(`${weight} 16px Inter`)));
     await document.fonts.ready;
@@ -31,8 +31,8 @@ async function mount(page, width = 390, factor = 1) {
 }
 
 for (const width of [390, 768, 1440]) for (const factor of [1, 1.5, 2]) {
-  test(`CR04/08: all optional and supplied states at ${width}px, computed text ×${factor}`, async ({ page }, testInfo) => {
-    const scaled = await mount(page, width, factor);
+  test(`CR04/08: all optional and supplied states at ${width}px, computed text ×${factor}`, async ({ page, baseURL }, testInfo) => {
+    const scaled = await mount(page, width, factor, baseURL);
     for (const node of scaled) {
       expect(node.ratio, `${node.tag}.${node.class} actually scales`).toBeCloseTo(factor, 4);
       expect(node.font).toContain('Inter');
@@ -110,8 +110,8 @@ for (const width of [390, 768, 1440]) for (const factor of [1, 1.5, 2]) {
   });
 }
 
-for (const width of [390,768,1440]) for (const factor of [1,1.5,2]) test(`keyboard at ${width}px text ×${factor} follows native order, skips disabled controls, and shows every focus ring`, async ({ page }) => {
-  await mount(page,width,factor);
+for (const width of [390,768,1440]) for (const factor of [1,1.5,2]) test(`keyboard at ${width}px text ×${factor} follows native order, skips disabled controls, and shows every focus ring`, async ({ page, baseURL }) => {
+  await mount(page,width,factor,baseURL);
   const first = page.locator('[data-line="ordinary"]');
   const sequence = [first.locator('a'), first.getByRole('button', { name:'Reducir cantidad de MENE' }), first.getByRole('spinbutton'), first.getByRole('button', { name:'Aumentar cantidad de MENE' }), first.getByRole('button', { name:'Quitar MENE del carrito', exact:true })];
   await page.locator('#before').focus();
@@ -137,9 +137,9 @@ for (const width of [390,768,1440]) for (const factor of [1,1.5,2]) test(`keyboa
   await expect(unavailable.locator('a')).toBeFocused();
 });
 
-test('product link target never steals quantity/remove clicks at any text factor', async ({ page }) => {
+test('product link target never steals quantity/remove clicks at any text factor', async ({ page, baseURL }) => {
   for (const factor of [1, 1.5, 2]) {
-    await mount(page, 390, factor);
+    await mount(page, 390, factor, baseURL);
     const first=page.locator('[data-line="ordinary"]');
     await first.evaluate((line) => {
       window.cartHits=[];
@@ -153,7 +153,7 @@ test('product link target never steals quantity/remove clicks at any text factor
 });
 
 test('preview and reference cart adopt the anatomy and CR06 supplied-state contract', async ({ page }) => {
-  await page.goto('/tienda/carrito/');
+  await page.goto('tienda/carrito/');
   const cart=page.locator('.ce-cart-lines');
   await expect(cart).toHaveAccessibleName('Productos en tu carrito');
   await expect(cart.locator('.ce-cart-line-actions .ce-price')).toHaveCount(0);
@@ -167,10 +167,10 @@ test('preview and reference cart adopt the anatomy and CR06 supplied-state contr
   for (const id of ['pending','acknowledged','failed','unavailable','switch','blocked','expired','offline','removed']) expect(preview).toContain(`data-cart-case="${id}"`);
 });
 
-for (const width of [390, 768, 1440]) test(`complete current Cart preview at ${width}px is accessible and fits`, async ({ page }) => {
+for (const width of [390, 768, 1440]) test(`complete current Cart preview at ${width}px is accessible and fits`, async ({ page, baseURL }) => {
   await page.setViewportSize({ width, height:1000 });
-  await page.goto('/');
-  await page.setContent(preview.replace('<meta charset="utf-8">', `<meta charset="utf-8"><style>${fonts}${css}</style>`).replaceAll('../../media/', '/assets/'));
+  await page.goto('./');
+  await page.setContent(preview.replace('<meta charset="utf-8">', `<meta charset="utf-8"><style>${fonts}${css}</style>`).replaceAll('../../media/', new URL('assets/', baseURL).pathname));
   await page.evaluate(() => document.fonts.ready);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const result=await new AxeBuilder({ page }).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
@@ -179,7 +179,7 @@ for (const width of [390, 768, 1440]) test(`complete current Cart preview at ${w
 });
 
 test('cart changes leave a consumer page and controls outside the cart unchanged', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   await page.setContent('<style>body{margin:13px;font:19px serif}#outside{padding:7px;color:rgb(10,20,30)}</style><p id="outside">Consumer content</p><div class="ce-quantity"><input aria-label="Other quantity" value="2"></div>');
   const read=() => page.locator('#outside, .ce-quantity input').evaluateAll((items) => items.map((el) => { const s=getComputedStyle(el); return [s.fontSize,s.fontFamily,s.padding,s.color,s.minHeight,s.width]; }));
   await page.addStyleTag({ content:css.replace(/^\s*\.ce-cart[^\n]*\n/gm, '') });
@@ -193,7 +193,7 @@ test('static cart HTML shows one store quote before JavaScript and without JavaS
   const context=await browser.newContext({ javaScriptEnabled:false, baseURL });
   const page=await context.newPage();
   try {
-    await page.goto('/tienda/carrito/');
+    await page.goto('tienda/carrito/');
     await expect(page.locator('.ce-cart-line .ce-price:visible')).toHaveCount(2);
     await expect(page.locator('.ce-cart-line .ce-stock:visible')).toHaveCount(2);
     await expect(page.locator('.ce-summary:visible')).toHaveCount(1);
@@ -204,19 +204,19 @@ test('static cart HTML shows one store quote before JavaScript and without JavaS
 });
 
 test('cart quotes and scenario labels follow only the supplied selected store', async ({ page }) => {
-  await page.goto('/tienda/carrito/?tienda=arequipa');
+  await page.goto('tienda/carrito/?tienda=arequipa');
   expect(await page.locator('.ce-cart-line .ce-price-value:visible').allTextContents()).toEqual(['13.8','8.5']);
   expect(await page.locator('.ce-summary:visible dd').allTextContents()).toEqual(['S/22.30','Sin costo','S/22.30']);
   await expect(page.getByText('Escenario: MENE tiene pocas unidades confirmadas en Arequipa.')).toBeVisible();
   await expect(page.getByText('Escenario: TALEN tiene pocas unidades confirmadas en Tacna.')).toBeHidden();
-  await page.goto('/tienda/carrito/?tienda=ninguna');
+  await page.goto('tienda/carrito/?tienda=ninguna');
   await expect(page.locator('.ce-cart-line .ce-price:visible, .ce-cart-line .ce-stock:visible, .ce-summary:visible, .ce-order-summary .ce-button:visible')).toHaveCount(0);
   await expect(page.locator('.ce-cart-line-body > .ce-store-note:visible')).toHaveCount(2);
   await expect(page.locator('.ce-cart-line')).toHaveCount(2);
 });
 
-test('preview disabled controls reference their supplied reason; the supplied unit-basis example has quantity one', async ({ page }) => {
-  await mount(page);
+test('preview disabled controls reference their supplied reason; the supplied unit-basis example has quantity one', async ({ page, baseURL }) => {
+  await mount(page,390,1,baseURL);
   for (const id of ['unavailable','blocked']) {
     const line=page.locator(`[data-line="${id}"]`);
     for (const control of await line.locator(':disabled').all()) {

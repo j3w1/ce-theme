@@ -1,4 +1,4 @@
-Status: Implemented in CE Theme source with the combined CR-04/CR-08 content PR; merge and immutable @casaelida/vue 0.5.0 delivery pending. Historical proposal/evidence below is preserved; implemented outcomes follow section 8.
+Status: Implemented in CE Theme source by the combined [CR-04/CR-08 PR #30](https://github.com/j3w1/ce-theme/pull/30), packaged as @casaelida/vue 0.5.0. Release and public-consumer verification are tracked separately in the Pod objective; the historical proposal/evidence below is preserved, with implemented outcomes in section 8.
 
 # CR-08 · Cart-line spacing follows the ProductStack
 
