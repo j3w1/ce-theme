@@ -16,7 +16,8 @@ test('the installed components render with the packaged recipes and the packaged
     Object.fromEntries(names.map((name) => [name, getComputedStyle(element)[name]])), properties);
 
   // A declaration from the packaged CSS applies to each component, not only its class name.
-  expect(await styles('.ce-button', ['backgroundColor', 'minHeight'])).toEqual({ backgroundColor: 'rgb(218, 46, 58)', minHeight: '48px' });
+  await expect(page.locator('.ce-button').first()).toHaveCSS('background-color', 'rgb(218, 46, 58)');
+  await expect(page.locator('.ce-button').first()).toHaveCSS('min-height', '48px');
   expect(await styles('.ce-price', ['fontWeight', 'whiteSpace'])).toEqual({ fontWeight: '800', whiteSpace: 'nowrap' });
   expect(await styles('.ce-conversation', ['display', 'minHeight'])).toEqual({ display: 'grid', minHeight: '64px' });
   expect(await styles('.ce-message-list', ['display', 'flexDirection', 'overflowY'])).toEqual({ display: 'flex', flexDirection: 'column', overflowY: 'auto' });
