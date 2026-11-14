@@ -65,7 +65,34 @@ The **CECode** (Código CE) is white bold text on ink with tabular figures, padd
 - **Production.** Production output does not contain the element at all. Hiding it with CSS, the `hidden` attribute or `aria-hidden` is not enough. The recipe cannot tell a forgotten cue on real data; leaving it out is the application's job.
 - **Look.** Words and a 2px ink border that reuses the focus stroke (`stroke.focus`); no colour carries the meaning. Small bold text at the heading line height, as wide as its words and never wider than its container, inside which it wraps.
 
-The boards of the frozen design-workbench snapshot keep their own local drawings of the cue; new boards and examples use this recipe. The decisions behind these rules are in [decisions.md](decisions.md) (“Demonstration cue”).
+The boards of the frozen design-workbench snapshot keep their own local drawings of the cue; new boards and examples use this recipe. The decisions behind these rules are in [decisions.md](https://github.com/j3w1/ce-theme/blob/main/docs/decisions.md) (“Demonstration cue”).
+
+## StockLine
+
+The **StockLine** (Disponibilidad, `ce-stock`) says in words whether a product is available in a store; the dot beside each statement is a second signal, never the only one. One list, one item per statement:
+
+```html
+<ul class="ce-stock" aria-label="Disponibilidad">
+  <li data-state="unknown">Disponibilidad por confirmar en Tacna</li>
+</ul>
+```
+
+| State | `data-state` | Wording (`{tienda}` is the supplied store label) | Dot |
+| --- | --- | --- | --- |
+| Available | `available` | «Disponible en {tienda}» | success |
+| Few units: a confirmed reading supplied by the inventory service | `limited` | «Pocas unidades en {tienda}» | warning |
+| Sold out: a confirmed reading supplied by the inventory service | `unavailable` | «Agotado en {tienda}» | hollow danger ring |
+| Unknown, stale, conflicting, missing or no response | `unknown`; an item with no `data-state` looks the same | «Disponibilidad por confirmar en {tienda}» | neutral |
+| Being read | `pending`, with `aria-busy="true"` on the list | «Consultando disponibilidad…» | neutral |
+| No store chosen | no availability line | «Elige tu tienda para ver precio y disponibilidad» (`ce-price-pending`) takes its place | none |
+
+- `unavailable` is only a confirmed sold-out reading. A failed, missing or unanswered reading is `unknown`, never «Agotado».
+- The list carries `aria-label="Disponibilidad"`. It has no `role="status"`: announcing a change stays the application's choice, and only for a meaningful change.
+- Price and availability are supplied separately, so a confirmed reading can sit next to a missing price («Precio no disponible en Arequipa.» with «Agotado en Arequipa»).
+- The interface counts nothing. «Pocas unidades» is a supplied state, never a threshold worked out from a count; the line reserves nothing and infers no eligibility, which stays with the application or service.
+- A control inside a line, such as a «Reintentar» link, is a separate control with its own 44px target.
+- In a ProductStack the line sits `size.product.gap-note` (8px) below the price or StoreNote.
+- `ce-availability`, the dotless supplied sentence of the `Specs` card, is a separate recipe and stays as it is.
 
 ## Registry
 
@@ -128,7 +155,7 @@ Generated from `recipes/names.mjs` by `pnpm generate`; do not edit between the m
 
 | Id | Nombre CE | Recipe | Vue | Rule |
 | --- | --- | --- | --- | --- |
-| `StockLine` | Disponibilidad | `ce-stock` | — | Per-store availability in words, with a state dot. |
+| `StockLine` | Disponibilidad | `ce-stock` | — | Per-store availability in words, with a state dot, in a list named «Disponibilidad». An unknown, stale, conflicting or missing reading reads «Disponibilidad por confirmar en {tienda}», never «Agotado»; «Pocas unidades» and «Agotado» only from a confirmed reading the inventory service supplies. |
 | `StoreNote` | Nota de tienda | `ce-store-note` | — | Short store-specific text that replaces a missing price. |
 | `StoreContext` | Tienda activa | `ce-store-context` | — | The button that shows and changes the chosen store; prices and availability follow it. |
 
@@ -191,7 +218,7 @@ Generated from `recipes/names.mjs` by `pnpm generate`; do not edit between the m
 | `SiteNav` | Navegación principal | `ce-site-nav` | — | The main sections of the store. |
 | `SearchField` | Buscador | `ce-search` | — | The product search field. |
 | `CategoryTile` | Categoría con foto | `ce-category-tile` | — | A photo tile with a label that links to a category. |
-| `ModuleNav` | Navegación de módulos | `ce-module-nav` | — | The side navigation of CE apps, grouped by module. |
+| `ModuleNav` | Navegación de módulos | `ce-module-nav` | — | The side navigation of CE apps, grouped by module. The application supplies the modules and their icons; one link marks the current page, and the link height follows density. |
 | `PageHeader` | Encabezado de página | `ce-page-header` | — | The title of a tool page with its main actions. |
 | `DataTable` | Tabla de datos | `ce-data-table` | — | Dense, sortable table for tools; numbers right-aligned. |
 | `BulkBar` | Barra de selección | `ce-bulk-bar` | — | Appears when rows are selected, with actions for the selection. |

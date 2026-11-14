@@ -30,12 +30,12 @@ Examples: storefront `/tienda/` (home, `categoria`, `producto`, `escena`, `carri
 | `CETextField` | `ce-field`, `ce-input`, `ce-input-group` | Tested | Unit tests; rendered on `/componentes/`. Pass an `id` when several Vue apps share a page. |
 | `CEPrice` | `ce-price` | Tested | Unit tests; every price on the site is rendered by it through `site/components/Price.astro`. |
 | `CEProductCode` | `ce-code` | Tested | Unit tests; rendered in the code specimens on `/patrones/`. Product cards still write the code badge by hand. |
-| `CEConversationList`, `CEMessageList`, `CEMessageComposer` | `ce-conversation-list`, `ce-message-list`, `ce-composer` | Tested | Unit tests and browser tests on `/mensajeria/`, which runs them on fictional in-memory fixtures. See [Messaging](#messaging-ce-meta-app). |
-| `CEAttachmentGroup`, `CEWorkStatus` | `ce-attachments`, `ce-work-status` | Tested | Unit tests and browser tests on `/mensajeria/` (conversation “Reposición · Tacna”). Illustrative states only. See [Messaging](#messaging-ce-meta-app). |
+| `CEConversationList`, `CEMessageList`, `CEMessageComposer` | `ce-conversation-list`, `ce-message-list`, `ce-composer` | Tested | Unit tests and standalone browser proof in `tests/consumer/consumer.spec.mjs` using the anonymously installed package and packaged styles; `/mensajeria/` is the small composition example. See [Messaging](#messaging-ce-meta-app). |
+| `CEAttachmentGroup`, `CEWorkStatus` | `ce-attachments`, `ce-work-status` | Tested | Unit tests, the standalone recipe/layout suite and installed-consumer attachment/context tests. Supplied states only; no application workflow. See [Messaging](#messaging-ce-meta-app). |
 
 ## Messaging (CE Meta App)
 
-Presentation for conversation interfaces. Delivery, assignment, authorization and transport belong to the application; nothing here connects to a messaging provider. The example `/mensajeria/` is fixture-backed and says so on the page.
+Presentation for conversation interfaces. Delivery, assignment, authorization and transport belong to the application; nothing here connects to a messaging provider. The full application lives in private `j3w1/ce-meta-app` after B4. `/mensajeria/` is a compact, Spanish simulated composition of the public components, with conversation selection and local reply/note events. The [B5 retirement map](https://github.com/j3w1/ce-theme/blob/main/docs/messaging-retirement.md) classifies all 67 transferred browser scenarios and five static titles. Public keyboard, focus, draft, selection, attachment/context and scroll contracts stay in the existing standalone and anonymous consumer harnesses; public CI needs no private checkout or credentials.
 
 | Pattern | Recipe | Status | Notes |
 | --- | --- | --- | --- |
@@ -46,9 +46,9 @@ Presentation for conversation interfaces. Delivery, assignment, authorization an
 | Composer with reply and note drafts | `ce-composer` | Tested | Enter adds a line, Ctrl or ⌘ + Enter submits. |
 | Attachments already sent: one to many images, uncropped, each asking to open | `ce-attachments`, `ce-attachment` | Tested | Presentation only: no upload, camera, storage, verification, zoom or viewer. Tiles reserve their box so images never shift the message list. |
 | Contextual content in a message, and the progress of one piece of work | `ce-message-context`, `ce-work-status` | Tested | States are supplied by the application and are illustrative, not CE Systems rules. Delivery status and work progress are shown separately. |
-| Voice notes, calls, camera, uploads and a photo viewer, native notification permission | — | Specified | Need provider and platform decisions; browser tests do not verify native Android or iOS behaviour. |
+| Voice notes, calls, camera, uploads and a photo viewer, native notification permission | — | Specified | Application/native scope in CE Meta App; browser tests here do not verify native Android or iOS behaviour. |
 | Offline, upload failure and retry, restricted conversations | `ce-notice`, `ce-locked` | Specified | The composer can be disabled with a visible reason; the other states are not built. |
-| Customer assignment, product sharing, AI answers | — | Excluded | Not part of this slice. |
+| Customer assignment, product sharing, AI answers | — | Excluded | Application responsibilities in CE Meta App; not public-component contracts. |
 
 ## Shared elements and forms
 
@@ -62,7 +62,8 @@ Presentation for conversation interfaces. Delivery, assignment, authorization an
 | Dialog, drawer, menu, tooltip | `<dialog>`, `popover` | Tested | Dialogs return focus to the control that opened them. Menu and tooltip positioning is left to the application. |
 | Notices, toast, spinner, skeleton, empty state, progress, save state | `interface.css` | Implemented | |
 | Demonstration cue (DemoCue) | `ce-demo-cue` | Tested | The words come from the consumer, with `role="note"`; production output leaves the element out. Example: the `DemoCue` design-system card. Browser tests render the card at 390, 768 and 1440 px with text at 100%, 150% and 200% (wraps, stays inside its container, never overlaps the page header), run axe and check that the cue comes first in the main content; a unit test checks the recipe holds no text and no raw colour and that every example uses the canon wording. See [names.md](names.md#demonstration-cue). |
-| Status pills and availability | `ce-pill`, `ce-status`, `ce-stock` | Implemented | Always text plus colour. |
+| Status pills | `ce-pill`, `ce-status` | Implemented | Always text plus colour. |
+| Availability line (StockLine) | `ce-stock` with `data-state` `available`, `limited`, `unavailable`, `unknown`, `pending` | Tested | Always words plus a dot; the list is named «Disponibilidad». Browser tests render the five states at 390, 768 and 1440 px with text at 100%, 150% and 200% (the words wrap, the dot stays on the first line, nothing overflows), compare the dots (unknown equals no `data-state`; only `unavailable` is a ring) and read the words with forced colours and in greyscale. A unit test checks every sample's wording against its state and the demonstration fixtures. Screen-reader reading is not run. See [names.md](names.md#stockline). |
 | Icons | `site/data/icons.mjs` (30 outlined icons) | Implemented | Social platforms are text links, not their marks. |
 
 ## Retail navigation and discovery
@@ -126,8 +127,9 @@ Presentation for conversation interfaces. Delivery, assignment, authorization an
 | Pattern | Recipe | Status | Notes |
 | --- | --- | --- | --- |
 | App shell, module navigation, context switcher | `ce-app`, `ce-app-bar`, `ce-module-nav`, `ce-app-context` | Implemented | Collapses to a top scrolling nav below 1024 px. |
+| Module navigation: link height and current page (CR-01) | `ce-module-nav`, `ce-app-brand` | Tested | Module and brand links are at least `max(--ce-size-target-public, --ce-control)` tall: 44 px with no density and in compact, 56 px in touch. Only `aria-current="page"` draws the current link. Labels stay inside the 240 px column with text at 150% and 200%. The AppShell card shows a seventeen-link example; the application supplies its modules and icons. No screen-reader walk has been run (to schedule). |
 | Data table: sort, select, sticky header, numbers, bulk bar | `ce-data-table`, `ce-sort`, `ce-bulk-bar`, `ce-table-footer` | Tested | Sorting and selection state come from the application. |
-| Record header, editor sections, read-only and locked fields, save state, audit | `ce-record-*`, `ce-form-*`, `ce-readonly`, `ce-locked`, `ce-save-state`, `ce-audit` | Tested | Locked code field explains that `1688toPL` allocates codes. |
+| Record header, editor sections, read-only and locked fields, save state, audit | `ce-record-*`, `ce-form-*`, `ce-readonly`, `ce-locked`, `ce-save-state`, `ce-audit` | Tested | Locked code field explains that `1688toPL` allocates codes. A product record title follows the ProductStack through direct children (code to heading 8px, heading to specs 2px); a title without product identity keeps its 4px gap. The record header moves the status to the next line rather than narrow the title below its one-line code. |
 | Permissions-aware presentation | `ce-locked`, `ce-pill`, disabled menu items | Implemented | Presentation only; the service enforces permissions. **Needs input:** role model. |
 | Store price matrix | `ce-data-table` | Implemented | Read-only view of the pricing service. |
 | Receiving with differences | `data-ce-density="touch"`, `ce-notice`, numeric inputs | Implemented | **Needs input:** receiving workflow and tolerance rules. |

@@ -190,6 +190,8 @@
 .ce-stock > [data-state="available"]::before { background: var(--ce-color-status-success-text); }
 .ce-stock > [data-state="limited"]::before { background: var(--ce-color-status-warning-text); }
 .ce-stock > [data-state="unavailable"]::before { background: transparent; box-shadow: inset 0 0 0 2px var(--ce-color-status-danger-text); }
+/* Unknown (the default: an item with no data-state looks the same) and pending keep the neutral dot; only a confirmed sold-out reading is the ring. */
+.ce-stock > [data-state="unknown"]::before, .ce-stock > [data-state="pending"]::before { background: var(--ce-color-border-control); }
 .ce-variant-more { display: grid; gap: var(--ce-space-8); }
 .ce-variant-more > span { color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); }
 .ce-variant-thumbs { display: flex; flex-wrap: wrap; gap: var(--ce-space-8); margin: 0; padding: 0; list-style: none; }

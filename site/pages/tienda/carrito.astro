@@ -5,6 +5,7 @@ import Price from '../../components/Price.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { productView } from '../../../recipes/product.mjs';
 import { catalogue } from '../../data/store.mjs';
+import { url } from '../../url.mjs';
 // Line and order amounts are supplied by the commerce service as decimal strings; the page never computes them.
 const lines = [
   { item: catalogue[0], quantity: 2, lineAmount: '13.00' },
@@ -28,7 +29,7 @@ const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
             <li class="ce-cart-line">
               <img src={view.image} alt="" width="128" height="128" />
               <div class="ce-cart-line-body">
-                <h2 class="ce-product-heading" style="--ce-product-text:1rem"><a class="ce-product-link" href="/tienda/producto/"><span class="ce-product-name">{view.name}</span><span class="ce-product-description">{view.description}</span></a></h2>
+                <h2 class="ce-product-heading" style="--ce-product-text:1rem"><a class="ce-product-link" href={url('/tienda/producto/')}><span class="ce-product-name">{view.name}</span><span class="ce-product-description">{view.description}</span></a></h2>
                 <p class="ce-product-specs">{view.specs.join(', ')}</p>
                 <span class="ce-code" style="justify-self:start">{view.code}</span>
                 <div class="ce-cart-line-actions">
@@ -57,14 +58,14 @@ const summary = { subtotal: 'S/21.50', pickup: 'Sin costo', total: 'S/21.50' };
           <div><dt>Retiro en tienda</dt><dd>{summary.pickup}</dd></div>
           <div class="ce-summary-total"><dt>Total</dt><dd>{summary.total}</dd></div>
         </dl>
-        <a class="ce-button" href="/tienda/cuenta/">Continuar</a>
+        <a class="ce-button" href={url('/tienda/cuenta/')}>Continuar</a>
         <p class="ce-fine-print">Importes de ejemplo calculados por el servicio de comercio, no por la interfaz.</p>
       </aside>
     </div>
 
     <section class="ce-section" id="favoritos" aria-labelledby="favoritos-titulo">
       <div class="ce-section-head"><h2 id="favoritos-titulo">Tus favoritos</h2></div>
-      <div class="ce-product-grid">{catalogue.slice(1, 3).map((item) => <ProductCard product={item} href="/tienda/producto/" showCode={false} priceNote="Precio y disponibilidad al elegir tu tienda." />)}</div>
+      <div class="ce-product-grid">{catalogue.slice(1, 3).map((item) => <ProductCard product={item} href={url('/tienda/producto/')} showCode={false} priceNote="Precio y disponibilidad al elegir tu tienda." />)}</div>
     </section>
   </div>
 </Store>
