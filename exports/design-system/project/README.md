@@ -1,4 +1,4 @@
-Casa Elida (Comercial Elida EIRL) is a Peruvian home-goods retailer with stores (“sedes”) in Tacna and Arequipa, selling retail and wholesale, online and through WhatsApp. This system is the shared specification for its ecosystem: the casaelida.com store, CE Systems (retail, inventory, purchasing, logistics, finance, HR, reporting), CE Meta (the internal administration and control platform), CE Meta App (the messaging app, planned), CE Radio and future applications. It pairs image-led home-retail patterns with Casa Elida's own logos, red and yellow palette, product identity and distinctive prices. Light theme only in this version.
+Casa Elida (Comercial Elida EIRL) is a Peruvian home-goods retailer with stores (“sedes”) in Tacna and Arequipa, selling retail and wholesale, online and through WhatsApp. This system is the shared specification for its ecosystem: the casaelida.com store, CE Systems (retail, inventory, purchasing, logistics, finance, HR, reporting), CE Meta (the internal administration and control platform), CE Meta App (the messaging app in `j3w1/ce-meta-app`, which installs the released `@casaelida/vue` and now carries the messaging interface), CE Radio and future applications. It pairs image-led home-retail patterns with Casa Elida's own logos, red and yellow palette, product identity and distinctive prices. Light theme only in this version.
 
 Products are understood through photography first, supported by verified data: NAME, Description, specifications, code, price and availability come from CE Systems and are presented, never invented. Approved decisions are recorded in `decisions.md`; this version has no open proposals for prices, promotions or shared links.
 
@@ -19,7 +19,7 @@ Reference sections bundled with this system: `apply-ce-theme.md` (start here whe
   - `productView()` applies these rules to supplied values.
 - **Information order:** NAME → Description → specifications → price → availability. The code badge is optional on retail cards; internal tools, labels and campaign information cards show it. Show only fields the data supplies.
 - **Buttons say what happens:** “Ver productos”, “Añadir al carrito”, “Usar esta tienda”. Errors explain how to continue.
-- **Availability is per store, in words:** “Disponible en Tacna”, “Pocas unidades en Arequipa”, “Agotado en Arequipa”.
+- **Availability is per store, in words:** “Disponible en Tacna”, “Pocas unidades en Arequipa”, “Agotado en Arequipa”, and “Disponibilidad por confirmar en Tacna” whenever the reading is unknown, stale, conflicting or missing. Unknown availability is never “Agotado”.
 - **Product codes are strings.**
   - `CE26061509`, `7730744292227` and `CE26031111R12R` keep every character, case and leading zero.
   - Never format a code as a number, split its suffixes, truncate it or replace it with a NAME.

@@ -7,6 +7,7 @@ import Price from '../../components/Price.astro';
 import { productView, codeSegments } from '../../../recipes/product.mjs';
 import { preparePrice } from '../../../recipes/price.mjs';
 import { catalogue, stores } from '../../data/store.mjs';
+import { url } from '../../url.mjs';
 const rows = catalogue.map((item) => ({ item, view: productView(item) }));
 const code = (value: string) => codeSegments(value);
 const receiving = [
@@ -18,7 +19,7 @@ const receiving = [
 <Store title="CE Systems" bare description="Demostración de pantallas internas: catálogo, ficha, precios por tienda, recepción, etiquetas y compartir.">
   <div class="ce-app" data-ce-density="compact">
     <header class="ce-app-bar">
-      <a class="ce-app-brand" href="/sistemas/"><img src="/assets/logo-square-red.jpg" alt="" width="28" height="28" />CE Systems</a>
+      <a class="ce-app-brand" href={url('/sistemas/')}><img src={url('/assets/logo-square-red.jpg')} alt="" width="28" height="28" />CE Systems</a>
       <form class="ce-app-search ce-search" role="search"><Icon name="search" size={20} /><label class="ce-sr-only" for="buscar-sistema">Buscar por código, nombre o descripción</label><input id="buscar-sistema" type="search" placeholder="Código, NAME o descripción" /></form>
       <div class="ce-app-context"><Icon name="store" size={20} /><label class="ce-sr-only" for="sede">Tienda de trabajo</label><select class="ce-select" id="sede" style="min-height:36px;padding-block:4px">{stores.map((store) => <option>{store.name}</option>)}</select><span class="ce-pill">Rol: Encargada de tienda</span></div>
     </header>
@@ -107,20 +108,20 @@ const receiving = [
       </section>
 
       <section class="ce-tab-panel" role="tabpanel" id="etiquetas" aria-labelledby="t-etiquetas" hidden>
-        <div class="ce-page-header"><h2>Etiquetas de góndola</h2><div class="ce-page-actions"><a class="ce-button" href="/sistemas/etiquetas/">Ver hoja A4 para imprimir</a></div></div>
+        <div class="ce-page-header"><h2>Etiquetas de góndola</h2><div class="ce-page-actions"><a class="ce-button" href={url('/sistemas/etiquetas/')}>Ver hoja A4 para imprimir</a></div></div>
         <p class="ce-field-note" style="margin-top:0">80 × 40 mm, tinta negra. Papel blanco o amarillo para ofertas. El contenido del QR lo entrega el sistema.</p>
         <div class="label-stage">
           <article class="ce-label">
             <p class="ce-label-specs">{rows[0].view.specs.join(', ')}</p>
             <div class="ce-label-ident"><span class="ce-product-name">{rows[0].view.name}</span><span class="ce-product-description">{rows[0].view.description}</span></div>
-            <div class="ce-label-foot"><img class="ce-label-logo" src="/assets/logo-wordmark-black.png" alt="Casa Elida" width="1236" height="592" /><span class="ce-code">{rows[0].view.code}</span></div>
+            <div class="ce-label-foot"><img class="ce-label-logo" src={url('/assets/logo-wordmark-black.png')} alt="Casa Elida" width="1236" height="592" /><span class="ce-code">{rows[0].view.code}</span></div>
             <div class="ce-label-qr label-qr" role="img" aria-label="Espacio para el código QR">QR</div>
             <div class="ce-label-prices"><span class="ce-price"><span class="ce-sr-only">Precio: 6.5 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6.5</span></span></span></div>
           </article>
           <article class="ce-label ce-label--yellow-paper">
             <p class="ce-label-specs">{rows[2].view.specs.join(', ')}</p>
             <div class="ce-label-ident"><span class="ce-product-name">{rows[2].view.name}</span><span class="ce-product-description">{rows[2].view.description}</span></div>
-            <div class="ce-label-foot"><img class="ce-label-logo" src="/assets/logo-wordmark-black.png" alt="Casa Elida" width="1236" height="592" /><span class="ce-code">{rows[2].view.code}</span></div>
+            <div class="ce-label-foot"><img class="ce-label-logo" src={url('/assets/logo-wordmark-black.png')} alt="Casa Elida" width="1236" height="592" /><span class="ce-code">{rows[2].view.code}</span></div>
             <div class="ce-label-qr label-qr" role="img" aria-label="Espacio para el código QR">QR</div>
             <div class="ce-label-prices"><p class="ce-label-previous">Antes <del>S/7.5</del> <span class="ce-label-discount">−20%</span></p><span class="ce-price"><span class="ce-sr-only">Precio de oferta: 6 soles</span><span class="ce-price-amount"><span class="ce-price-currency" aria-hidden="true">S/</span><span class="ce-price-value" aria-hidden="true">6</span></span></span></div>
           </article>
@@ -132,7 +133,7 @@ const receiving = [
         <div class="ce-record-layout">
           <div>
             <p class="ce-field-note" style="margin-top:0">Vista previa a tamaño real de chat (300 px). Sin precio: el enlace abre la ficha con el precio de la tienda elegida.</p>
-            <div class="share-scale"><article class="ce-share-card"><div class="ce-share-card-media"><img src={rows[0].view.image} alt="" width="900" height="900" /></div><div class="ce-share-card-text"><p class="ce-product-name">{rows[0].view.name}</p><p class="ce-product-description">{rows[0].view.description}</p><p class="ce-product-specs">{rows[0].view.specs.join(', ')}</p></div><img class="ce-share-card-logo" src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="840" height="372" /></article></div>
+            <div class="share-scale"><article class="ce-share-card"><div class="ce-share-card-media"><img src={rows[0].view.image} alt="" width="900" height="900" /></div><div class="ce-share-card-text"><p class="ce-product-name">{rows[0].view.name}</p><p class="ce-product-description">{rows[0].view.description}</p><p class="ce-product-specs">{rows[0].view.specs.join(', ')}</p></div><img class="ce-share-card-logo" src={url('/assets/logo-wordmark-color.png')} alt="Casa Elida" width="840" height="372" /></article></div>
           </div>
           <form class="ce-form-section" style="padding-top:0">
             <div class="ce-field"><label for="s-title">Título del enlace</label><input class="ce-input" id="s-title" value={`${rows[0].view.name} ${rows[0].view.description} · Casa Elida`} /></div>

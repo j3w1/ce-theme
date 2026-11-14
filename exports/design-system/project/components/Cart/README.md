@@ -16,6 +16,6 @@ Lines, quantities and every amount (line totals, subtotal, delivery, total) as d
 
 ## Do and don't
 
-- Do say which store the cart is priced in.
+- Do say which store the amounts are in: a StoreBar above the lines, «Importes en {tienda}» with «Cambiar tienda» (see StoreContext).
 - Don't compute totals, taxes or discounts in the interface.
 - Don't hide fees until the last step.

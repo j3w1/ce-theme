@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { notes, release } from '../scripts/release.mjs';
+import { notes, release, verifyOnlyGh } from '../scripts/release.mjs';
 
 // The four release states of scripts/release.mjs against a stand-in for `gh`: GitHub's releases, the tag and the published file.
 const COMMIT = 'a'.repeat(40), OLDER = 'b'.repeat(40), WORKFLOW = 'Foundation checks and release', TAG = 'vue-v0.2.0', RUN = 'https://github.com/j3w1/ce-theme/actions/runs/1';
@@ -38,7 +38,7 @@ function github({ releases = [], tag = null, published = file, fails, verifyErro
     return '';
   };
   const writes = () => calls.filter(([command, sub]) => command === 'release' && ['create', 'upload', 'edit', 'delete'].includes(sub));
-  return { gh, calls, writes, delays, run: () => release({ gh, delay: (ms) => delays.push(ms), file, repo: 'j3w1/ce-theme', commit: COMMIT, workflow: WORKFLOW, run: RUN }) };
+  return { gh, calls, writes, delays, run: (options) => release({ gh, delay: (ms) => delays.push(ms), file, repo: 'j3w1/ce-theme', commit: COMMIT, workflow: WORKFLOW, run: RUN, ...options }) };
 }
 const published = { tag_name: TAG, draft: false };
 const draft = (changes = {}) => ({ tag_name: TAG, draft: true, author: { login: 'github-actions[bot]' }, target_commitish: COMMIT, body: own('x'), assets: [{ name: 'casaelida-vue-0.2.0.tgz' }], ...changes });
@@ -187,4 +187,37 @@ test('state 1 never retries readiness; tag/hash/download failures never reach at
     assert.deepEqual(fake.delays, []);
     assert.equal(fake.writes().length, 1);
   }
+});
+
+// A rollback run (#9) is verify-only: it passes only for an already published release and never writes one.
+test('verify-only: a published release is verified and nothing is written', () => {
+  const run = github({ releases: [published], tag: OLDER, published: pack(FILES, 2000) });
+  const result = run.run({ verifyOnly: true });
+  assert.equal(result.state, 'published');
+  assert.ok(verified(run.calls));
+  assert.deepEqual(run.writes(), []);
+});
+
+test('verify-only: no release, a recoverable draft or a failed read writes nothing and fails', () => {
+  for (const [label, setup] of [
+    ['no release', {}],
+    ['own recoverable draft', { releases: [draft()] }],
+    ['failed read', { releases: [published], fails: '/releases?' }],
+  ]) {
+    const run = github(setup);
+    assert.throws(() => run.run({ verifyOnly: true }), /verify-only|HTTP 502/, label);
+    assert.deepEqual(run.writes(), [], label);
+  }
+});
+
+test('the verify-only gh boundary refuses each release write before running it, and the event of the run chooses the mode', () => {
+  const ran = [];
+  const gh = verifyOnlyGh((args) => { ran.push(args); return ''; });
+  for (const verb of ['create', 'upload', 'edit', 'delete']) assert.throws(() => gh(['release', verb, TAG]), /never writes a release/, verb);
+  assert.deepEqual(ran, []);
+  for (const read of [['release', 'download', TAG], ['release', 'verify', TAG], ['release', 'verify-asset', TAG, 'file'], ['api', 'repos/j3w1/ce-theme/releases']]) gh(read);
+  assert.equal(ran.length, 4);
+  const source = readFileSync(new URL('../scripts/release.mjs', import.meta.url), 'utf8');
+  assert.match(source, /const gh = verifyOnly \? verifyOnlyGh\(command\) : command;/);
+  assert.match(source, /verifyOnly: need\('GITHUB_EVENT_NAME'\) !== 'push'/);
 });

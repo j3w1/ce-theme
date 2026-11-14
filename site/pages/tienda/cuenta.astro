@@ -2,6 +2,7 @@
 import Store from '../../layouts/Store.astro';
 import Icon from '../../components/Icon.astro';
 import { order, stores } from '../../data/store.mjs';
+import { url } from '../../url.mjs';
 const help = [
   ['Seguimiento de pedido', 'Estado de tu compra y retiro', '#seguimiento'],
   ['Cambios y devoluciones', 'Condiciones y pasos', '#ayuda'],
@@ -12,7 +13,7 @@ const help = [
 <Store title="Cuenta y ayuda" description="Inicio de sesión, seguimiento de pedido, tiendas y ayuda en la tienda de demostración.">
   <section class="ce-auth" aria-labelledby="ingresar">
     <div class="ce-auth-aside">
-      <img src="/assets/logo-wordmark-white-yellow.png" alt="" width="140" height="62" />
+      <img src={url('/assets/logo-wordmark-white-yellow.png')} alt="" width="140" height="62" />
       <p>Guarda tus favoritos y sigue tus pedidos en un solo lugar.</p>
     </div>
     <div class="ce-auth-main">

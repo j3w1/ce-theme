@@ -157,24 +157,66 @@ export function enhanceMarkers(root = document) {
   }
 }
 
+// How far a card's focus ring reaches outside it (stroke.focus at stroke.offset), in px. The card's own token values
+// (its cascade, overrides included) are read from its computed style and resolved as the width of a hidden probe inside
+// the card: the values are written into the probe, so nothing it inherits or matches can change them, and its inline
+// !important declarations win over any stylesheet. It sits in the card so the card's zoom and transforms apply to it
+// as to the ring, and it is removed at once; no declaration of the card changes and no transition applies.
+function focusRingReach(card) {
+  const style = getComputedStyle(card);
+  const focus = style.getPropertyValue('--ce-stroke-focus').trim();
+  const offset = style.getPropertyValue('--ce-stroke-offset').trim();
+  if (!focus || !offset) return 0;
+  const probe = document.createElement('span');
+  probe.style.cssText = 'all:initial!important;position:absolute!important;display:block!important;visibility:hidden!important;zoom:1!important;height:0!important';
+  probe.style.setProperty('font-size', style.fontSize, 'important');
+  probe.style.setProperty('width', `calc(${focus} + ${offset})`, 'important');
+  card.append(probe);
+  const reach = probe.getBoundingClientRect().width;
+  probe.remove();
+  return reach;
+}
+
+// The height limit placePins() sets on a card taller than its photo; a consumer's own inline max-height (value and
+// priority) is kept aside while the limit applies and put back when it no longer does.
+const consumerMaxHeight = new WeakMap();
+function limitHeight(card, height) {
+  if (!consumerMaxHeight.has(card)) consumerMaxHeight.set(card, [card.style.getPropertyValue('max-height'), card.style.getPropertyPriority('max-height')]);
+  card.style.setProperty('max-height', `${height}px`, 'important');
+}
+function releaseHeight(card) {
+  if (!consumerMaxHeight.has(card)) return;
+  const [value, priority] = consumerMaxHeight.get(card);
+  consumerMaxHeight.delete(card);
+  if (value) card.style.setProperty('max-height', value, priority); else card.style.removeProperty('max-height');
+}
+
 /** Web pins: a .ce-pin shows its card on hover and focus in CSS; this adds tap-to-open for touch (aria-expanded on the dot),
  * Escape and outside-tap to close, one open card per photo, and keeps each card inside its frame by flipping it
- * (ce-pin--start, ce-pin--above) when the side it would open on has no room. */
+ * (ce-pin--start, ce-pin--above) when the side it would open on has no room. A card taller than the photo (large text
+ * on a small photo) is limited to the photo's height, and the card scrolls. The photo clips, so a card never comes
+ * closer to its edge than the card's focus ring (stroke.focus at stroke.offset), which therefore stays visible. */
 export function placePins(frame, { gap = 20, inset = 14 } = {}) {
   const box = frame.getBoundingClientRect();
   for (const pin of frame.querySelectorAll('.ce-pin')) {
     const card = pin.querySelector('.ce-pin-card');
     if (!card) continue;
-    const { offsetWidth: width, offsetHeight: height } = card;
+    const ring = focusRingReach(card);
+    const room = box.height - 2 * ring;
+    releaseHeight(card);
+    const limited = card.getBoundingClientRect().height > room;
+    if (limited) limitHeight(card, room);
+    const width = card.offsetWidth;
+    const height = limited ? room : card.offsetHeight;
     const at = pin.getBoundingClientRect();
     const start = at.left + width - inset > box.right;
     const above = at.top + gap + height > box.bottom && (at.top - gap - height >= box.top || at.top - box.top > box.bottom - at.top);
     pin.classList.toggle('ce-pin--start', start);
     pin.classList.toggle('ce-pin--above', above);
-    // Preferred offset from the dot, then clamped so the whole card stays inside the photo.
+    // Preferred offset from the dot, then clamped so the whole card and its focus ring stay inside the photo.
     const clamp = (value, low, high) => Math.max(low, Math.min(value, Math.max(low, high)));
-    const left = clamp(start ? -(width - inset) : -inset, box.left - at.left, box.right - at.left - width);
-    const top = clamp(above ? -(height + gap) : gap, box.top - at.top, box.bottom - at.top - height);
+    const left = clamp(start ? -(width - inset) : -inset, box.left + ring - at.left, box.right - ring - at.left - width);
+    const top = clamp(above ? -(height + gap) : gap, box.top + ring - at.top, box.bottom - ring - at.top - height);
     Object.assign(card.style, { left: `${left}px`, right: 'auto', top: `${top}px`, bottom: 'auto' });
   }
 }
@@ -199,6 +241,7 @@ export function enhancePins(root = document) {
     frame.addEventListener('keydown', (event) => { if (event.key === 'Escape') { const open = pins.find((pin) => pin.hasAttribute('data-open')); close(); open?.querySelector('.ce-pin-dot').focus(); } });
     placePins(frame);
     if (typeof ResizeObserver === 'function') new ResizeObserver(() => placePins(frame)).observe(frame);
+    document.fonts?.ready.then(() => placePins(frame));
   }
 }
 

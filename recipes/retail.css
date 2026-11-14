@@ -33,6 +33,8 @@
 .ce-store-context[aria-busy="true"]::after { width: 12px; height: 12px; content: ''; border: 2px solid currentColor; border-right-color: transparent; border-radius: var(--ce-radius-pill); animation: ce-retail-spin .8s linear infinite; }
 .ce-store-note { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ce-space-4) var(--ce-space-8); margin: 0; color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-sm); line-height: var(--ce-font-line-heading); }
 .ce-store-note strong { color: var(--ce-color-text-primary); }
+.ce-store-note .ce-link { display: inline-flex; align-items: center; min-height: var(--ce-size-target-public); }
+.ce-store-note[aria-busy="true"] { cursor: progress; }
 .ce-price-pending { display: grid; gap: var(--ce-space-8); justify-items: start; padding: var(--ce-space-12) var(--ce-space-16); background: var(--ce-color-surface-subtle); font-size: var(--ce-font-size-sm); font-weight: var(--ce-font-weight-semibold); line-height: var(--ce-font-line-heading); }
 
 /* Site header ------------------------------------------------------------------------------------------ */
@@ -215,6 +217,8 @@
 .ce-stock > [data-state="available"]::before { background: var(--ce-color-status-success-text); }
 .ce-stock > [data-state="limited"]::before { background: var(--ce-color-status-warning-text); }
 .ce-stock > [data-state="unavailable"]::before { background: transparent; box-shadow: inset 0 0 0 2px var(--ce-color-status-danger-text); }
+/* Unknown (the default: an item with no data-state looks the same) and pending keep the neutral dot; only a confirmed sold-out reading is the ring. */
+.ce-stock > [data-state="unknown"]::before, .ce-stock > [data-state="pending"]::before { background: var(--ce-color-border-control); }
 .ce-variant-more { display: grid; gap: var(--ce-space-8); }
 .ce-variant-more > span { color: var(--ce-color-text-secondary); font-size: var(--ce-font-size-xs); }
 .ce-variant-thumbs { display: flex; flex-wrap: wrap; gap: var(--ce-space-8); margin: 0; padding: 0; list-style: none; }

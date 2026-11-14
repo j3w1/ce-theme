@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Approved through X-1, X-7, X-8 and the lead's CR-05 selections; implemented in CE Theme source by pull request [#22](https://github.com/j3w1/ce-theme/pull/22). X-1, X-7 and X-8 are j3w1's decisions of 2026-11-06; decisions 1, 2 and 4 are the ce-theme lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([#11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)). The evidence below still describes the frozen boards of 5 November 2026 (X-3)
 
 # CR-05 · Store-context bar: the in-page line "prices are for this store · change store"
 
@@ -9,7 +9,7 @@ Status: Ready for owner review; not submitted anywhere
 | Depends on | Nothing. CR-04 notes that CE Theme's Cart preview shows a `ce-store-note` above the cart list; no other request depends on this one |
 | Checked against | CE Theme — Design System artifact version 1793881448-c98f (design-system.json: re-synced to `j3w1/ce-theme@e8b8d7a8`; `bundle.css` sha256 `de102fad7d927541e3c31c2c30dd770fa0d0fca3b4000a84a9e5bfcb7353ed06`) and the workbench boards of 5 November 2026. Evidence tags **[A] [S] [R] [H]** are explained in CR-08. |
 
-**Interpretation.** The hand-off lists a "store-context bar" without a definition. I took it to mean the one-line bar that appears inside pages that show store-dependent amounts, naming the store and offering to change it. The utility-bar button already exists in CE Theme (`ce-store-context`) and is not the subject. If the owner meant something else, this request needs rewriting (owner decision 1).
+**Interpretation.** The hand-off lists a "store-context bar" without a definition. I took it to mean the one-line bar that appears inside pages that show store-dependent amounts, naming the store and offering to change it. The utility-bar button already exists in CE Theme (`ce-store-context`) and is not the subject. If the owner meant something else, this request needs rewriting (owner decision 1). Decision 1 (section 8) confirms this interpretation.
 
 ## 1. Summary
 
@@ -83,7 +83,7 @@ Wording in the documentation (Spanish UI strings; the store label is supplied):
 | No store | «Tienda: sin elegir» | «Elegir tienda» |
 | Pending | the lead with the new store | the word «Actualizando» (no link) |
 
-Whether the three leads stay three is owner decision 2. Documentation in the same change: StoreContext README (the bar, its states, the invariants above), a card or preview state for each, the `names.md` entry, a `coverage.md` row.
+Decision 2 (section 8) keeps the two leads and uses «Tienda:» only for the empty state. Documentation in the same change: StoreContext README (the bar, its states, the invariants above), a card or preview state for each, the `names.md` entry, a `coverage.md` row.
 
 ## 5. Accessibility and invariants it must keep
 
@@ -107,17 +107,19 @@ To run when the repository work happens (not run here, except where marked):
 4. Keyboard: the action is reachable, shows the focus ring and opens the same dialog as the utility-bar button.
 5. Screen reader announcement of the pending state: **not run, to schedule**.
 
+In the implementation, checks 1, 2 and 4 are browser tests in `tests/browser/store-bar.spec.mjs`. They render the StoreContext card's states with the supplied Inter files and the generated tokens and recipes only, and the five storefront pages that depend on the store (home, listing, product, scene and cart), with and without a store. They also check that the text really grows: at x1.5 and x2 the bar, its action and the pill have 1.5 and 2 times their computed font size. Before the rule, the action measured 16.8px at 100% text, 25.2px at x1.5 and 33.6px at x2, at all three widths (measured without the Inter files loaded). Check 3 is the page's rule in the StoreContext guideline. The examples keep it: the storefront cart shows each store's supplied amounts only with that store's bar, no storefront page shows a store-supplied amount without a store (the home page's price-band links «Hasta S/5», «S/10», «S/20» name price ranges, not a store's prices, and stay), and the pending state is shown in the card without amounts. Check 5 is still not run.
+
 ## 7. Risks and what it does not change
 
-- `ce-store-note` is also used inside pin cards and product cards for «Precio no disponible en {tienda}»; the new rule only touches a `.ce-link` inside it, so those uses are unaffected. Pin-card spacing is CR-09.
-- Pages that today show both the utility-bar button and the in-page line repeat the store name by design; owner decision 4.
+- `ce-store-note` is also used inside pin cards and product cards for «Precio no disponible en {tienda}»; the new rule only touches a `.ce-link` inside it, so those uses are unaffected. One existing note with an inline link, «Consulta Ayuda» on the storefront product page, also gets the 44px target, so its row is taller. Pin-card spacing is CR-09.
+- Pages that today show both the utility-bar button and the in-page line repeat the store name by design. Decision 4 (section 8) shows the in-page line on every store-dependent page.
 - The boards keep their three local markups as part of the frozen snapshot (X-3); new boards use the bar.
 - Not changed: `ce-store-context`, the dialog and drawer, choice cards, the price-pending recipe.
 
 ## 8. Owner decisions needed
 
-1. Confirm that "store-context bar" means this in-page line.
-2. One lead phrase or two (money-bearing and browsing)? The boards use four in-page leads («Importes en», «Precios y disponibilidad de», «Tienda:», «Tu tienda:») plus «Tienda actual:» in the store drawer. The proposal keeps «Importes en» and «Precios y disponibilidad de», reuses «Tienda:» only for the empty state («Tienda: sin elegir»), retires «Tu tienda:», and leaves the drawer outside this request.
+1. Decided (lead's CR-05 selection, 2026-11-13; decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed): "store-context bar" means this in-page line, distinct from the store drawer.
+2. Decided (lead's CR-05 selection, 2026-11-13; decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed): two leads, «Importes en {tienda}» on money-bearing surfaces and «Precios y disponibilidad de {tienda}» when browsing; «Tienda:» only in the empty state («Tienda: sin elegir»); «Tu tienda:» is retired from the in-page line (the utility-bar button keeps it); the drawer, with «Tienda actual:», stays outside this request.
 3. Decided (X-7, 2026-11-06): the pending bar carries `role="status"`, as a recipe-level rule.
-4. Show the in-page line on every store-dependent page, or only where amounts are shown (cart, checkout, favourites)?
+4. Decided (lead's CR-05 selection, 2026-11-13; decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed): on every store-dependent page, including browsing pages that show only availability, not only where amounts are shown.
 5. Decided (X-8, 2026-11-06): option A. `StoreBar` is accepted as the name of the composition `ce-store-note` + `ce-link`, with no new class.

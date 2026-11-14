@@ -10,10 +10,12 @@ import '../../recipes/share-card.css';
 import '../../recipes/print-label.css';
 import '../styles/site.css';
 import Icon from '../components/Icon.astro';
+import BuildInfo from '../components/BuildInfo.astro';
 import { stores } from '../data/store.mjs';
+import { url } from '../url.mjs';
 interface Props { title: string; description?: string; current?: string; bare?: boolean }
 const { title, description = 'Demostración de tienda del sistema de diseño de Casa Elida.', current, bare = false } = Astro.props;
-const nav = [['/tienda/categoria/', 'Productos'], ['/tienda/escena/', 'Ambientes'], ['/tienda/categoria/#ofertas', 'Ofertas'], ['/tienda/cuenta/#tiendas', 'Tiendas'], ['/tienda/cuenta/#ayuda', 'Ayuda']];
+const nav = [[url('/tienda/categoria/'), 'Productos'], [url('/tienda/escena/'), 'Ambientes'], [url('/tienda/categoria/#ofertas'), 'Ofertas'], [url('/tienda/cuenta/#tiendas'), 'Tiendas'], [url('/tienda/cuenta/#ayuda'), 'Ayuda']];
 ---
 <!doctype html>
 <html lang="es-PE">
@@ -22,11 +24,11 @@ const nav = [['/tienda/categoria/', 'Productos'], ['/tienda/escena/', 'Ambientes
     <title>{title} · Casa Elida</title><meta name="description" content={description} />
     <meta name="robots" content="noindex" />
     <meta name="theme-color" content="#111111" />
-    <link rel="icon" href="/assets/logo-wordmark-color.png" type="image/png" />
+    <link rel="icon" href={url('/assets/logo-wordmark-color.png')} type="image/png" />
   </head>
   <body class="ce-scope">
     <a class="ce-skip" href="#contenido">Saltar al contenido</a>
-    <div class="ce-band ce-band--yellow demo-notice"><div class="ce-container demo-notice-inner"><p><strong>Demostración del sistema de diseño.</strong> Productos, precios, tiendas y existencias son ejemplos.</p><a class="ce-link" href="/patrones/">Volver al sistema</a></div></div>
+    <div class="ce-band ce-band--yellow demo-notice"><div class="ce-container demo-notice-inner"><p><strong>Demostración del sistema de diseño.</strong> Productos, precios, tiendas y existencias son ejemplos.</p><BuildInfo /><a class="ce-link" href={url('/patrones/')}>Volver al sistema</a></div></div>
     {!bare && <>
       <div class="ce-utility-bar">
         <div class="ce-container ce-utility-bar-inner">
@@ -36,17 +38,17 @@ const nav = [['/tienda/categoria/', 'Productos'], ['/tienda/escena/', 'Ambientes
       </div>
       <header class="ce-site-header">
         <div class="ce-container ce-site-header-inner">
-          <a class="ce-site-brand" href="/tienda/"><img src="/assets/logo-wordmark-color.png" alt="Casa Elida, inicio" width="99" height="44" /></a>
+          <a class="ce-site-brand" href={url('/tienda/')}><img src={url('/assets/logo-wordmark-color.png')} alt="Casa Elida, inicio" width="99" height="44" /></a>
           <nav class="ce-site-nav" aria-label="Principal"><ul>{nav.map(([href, label]) => <li><a href={href} aria-current={current === label ? 'page' : undefined}>{label}</a></li>)}</ul></nav>
-          <form class="ce-search" role="search" action="/tienda/categoria/">
+          <form class="ce-search" role="search" action={url('/tienda/categoria/')}>
             <Icon name="search" size={20} />
             <label class="ce-sr-only" for="buscar">Buscar productos</label>
             <input id="buscar" name="q" type="search" placeholder="¿Qué estás buscando?" autocomplete="off" />
           </form>
           <div class="ce-site-actions">
-            <a class="ce-site-action" href="/tienda/cuenta/"><Icon name="user" /><span class="ce-site-action-label">Hola, inicia sesión</span><span class="ce-sr-only">Cuenta: inicia sesión</span></a>
-            <a class="ce-site-action" href="/tienda/carrito/#favoritos" aria-label="Favoritos"><Icon name="heart" /></a>
-            <a class="ce-site-action" href="/tienda/carrito/" aria-label="Carrito, 3 productos"><Icon name="cart" /><span class="ce-count" aria-hidden="true">3</span></a>
+            <a class="ce-site-action" href={url('/tienda/cuenta/')}><Icon name="user" /><span class="ce-site-action-label">Hola, inicia sesión</span><span class="ce-sr-only">Cuenta: inicia sesión</span></a>
+            <a class="ce-site-action" href={url('/tienda/carrito/#favoritos')} aria-label="Favoritos"><Icon name="heart" /></a>
+            <a class="ce-site-action" href={url('/tienda/carrito/')} aria-label="Carrito, 3 productos"><Icon name="cart" /><span class="ce-count" aria-hidden="true">3</span></a>
             <button class="ce-site-action ce-site-menu" type="button" data-ce-open="menu-tienda" aria-label="Abrir menú"><Icon name="menu" /></button>
           </div>
         </div>
@@ -54,16 +56,16 @@ const nav = [['/tienda/categoria/', 'Productos'], ['/tienda/escena/', 'Ambientes
     </>}
     <main id="contenido" tabindex="-1"><slot /></main>
     {!bare && <>
-      <div class="ce-container ce-feedback"><p>¿Encontraste lo que buscabas?</p><a class="ce-button ce-button--secondary" href="/tienda/cuenta/#ayuda">Cuéntanos</a></div>
+      <div class="ce-container ce-feedback"><p>¿Encontraste lo que buscabas?</p><a class="ce-button ce-button--secondary" href={url('/tienda/cuenta/#ayuda')}>Cuéntanos</a></div>
       <footer class="ce-site-footer">
         <div class="ce-container">
           <div class="ce-footer-grid">
-            <div class="ce-footer-intro"><img src="/assets/logo-wordmark-black.png" alt="Casa Elida" width="140" height="67" /><p>Regalos, decoración y hogar. Todo lo que hace casa.</p><ul class="ce-social-links"><li><a class="ce-button ce-button--secondary" href="https://www.instagram.com/casa.elida/">Instagram</a></li></ul></div>
-            <div><h2>Compra</h2><ul class="ce-footer-links"><li><a href="/tienda/categoria/">Productos</a></li><li><a href="/tienda/escena/">Ambientes</a></li><li><a href="/tienda/categoria/#ofertas">Ofertas</a></li><li><a href="/tienda/carrito/">Tu carrito</a></li></ul></div>
-            <div><h2>Ayuda</h2><ul class="ce-footer-links"><li><a href="/tienda/cuenta/#seguimiento">Seguimiento de pedido</a></li><li><a href="/tienda/cuenta/#ayuda">Cambios y devoluciones</a></li><li><a href="/tienda/cuenta/#ayuda">Retiro en tienda</a></li><li><a href="/tienda/cuenta/#ayuda">Contacto</a></li></ul></div>
-            <div><h2>Casa Elida</h2><ul class="ce-footer-links"><li><a href="/tienda/cuenta/#tiendas">Nuestras tiendas</a></li><li><a href="/">Sistema de diseño</a></li></ul></div>
+            <div class="ce-footer-intro"><img src={url('/assets/logo-wordmark-black.png')} alt="Casa Elida" width="140" height="67" /><p>Regalos, decoración y hogar. Todo lo que hace casa.</p><ul class="ce-social-links"><li><a class="ce-button ce-button--secondary" href="https://www.instagram.com/casa.elida/">Instagram</a></li></ul></div>
+            <div><h2>Compra</h2><ul class="ce-footer-links"><li><a href={url('/tienda/categoria/')}>Productos</a></li><li><a href={url('/tienda/escena/')}>Ambientes</a></li><li><a href={url('/tienda/categoria/#ofertas')}>Ofertas</a></li><li><a href={url('/tienda/carrito/')}>Tu carrito</a></li></ul></div>
+            <div><h2>Ayuda</h2><ul class="ce-footer-links"><li><a href={url('/tienda/cuenta/#seguimiento')}>Seguimiento de pedido</a></li><li><a href={url('/tienda/cuenta/#ayuda')}>Cambios y devoluciones</a></li><li><a href={url('/tienda/cuenta/#ayuda')}>Retiro en tienda</a></li><li><a href={url('/tienda/cuenta/#ayuda')}>Contacto</a></li></ul></div>
+            <div><h2>Casa Elida</h2><ul class="ce-footer-links"><li><a href={url('/tienda/cuenta/#tiendas')}>Nuestras tiendas</a></li><li><a href={url('/')}>Sistema de diseño</a></li></ul></div>
           </div>
-          <div class="ce-footer-legal"><span>© Casa Elida. Demostración; no es una tienda en línea.</span><ul><li><a href="/tienda/cuenta/#ayuda">Términos</a></li><li><a href="/tienda/cuenta/#ayuda">Privacidad</a></li><li><a href="/tienda/cuenta/#ayuda">Libro de reclamaciones</a></li></ul></div>
+          <div class="ce-footer-legal"><span>© Casa Elida. Demostración; no es una tienda en línea.</span><ul><li><a href={url('/tienda/cuenta/#ayuda')}>Términos</a></li><li><a href={url('/tienda/cuenta/#ayuda')}>Privacidad</a></li><li><a href={url('/tienda/cuenta/#ayuda')}>Libro de reclamaciones</a></li></ul></div>
         </div>
       </footer>
       <dialog class="ce-dialog" id="elegir-tienda" aria-labelledby="elegir-tienda-titulo">
@@ -79,7 +81,7 @@ const nav = [['/tienda/categoria/', 'Productos'], ['/tienda/escena/', 'Ambientes
         </form>
       </dialog>
       <dialog class="ce-drawer ce-drawer--start" id="menu-tienda" aria-label="Menú">
-        <div class="ce-dialog-header"><img src="/assets/logo-wordmark-color.png" alt="Casa Elida" width="90" height="40" /><button class="ce-icon-button" type="button" data-ce-close aria-label="Cerrar menú"><Icon name="close" /></button></div>
+        <div class="ce-dialog-header"><img src={url('/assets/logo-wordmark-color.png')} alt="Casa Elida" width="90" height="40" /><button class="ce-icon-button" type="button" data-ce-close aria-label="Cerrar menú"><Icon name="close" /></button></div>
         <div class="ce-dialog-body"><ul class="ce-nav-list">{nav.map(([href, label]) => <li><a href={href} aria-current={current === label ? 'page' : undefined}>{label}<Icon name="arrow" size={20} /></a></li>)}</ul></div>
       </dialog>
     </>}

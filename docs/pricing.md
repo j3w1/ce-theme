@@ -39,6 +39,7 @@ Prices and availability can differ by product, variant, store and commercial con
 | Price unavailable for this store | “Precio no disponible en {tienda}”, with a link to the other store; no `S/0`. |
 | Promotion | The supplied promotional price and, when supplied, previous price and validity. |
 | Stock differs between stores | Availability per store in words (“Disponible en Tacna · Agotado en Arequipa”). |
+| Availability not confirmed for this store | “Disponibilidad por confirmar en {tienda}” for an unknown, stale, conflicting or missing reading, “Consultando disponibilidad…” while it is read; never “Agotado” ([StockLine](names.md#stockline)). |
 
 Never present one store's amount as universal.
 

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { clipboard } from './clipboard.mjs';
 
-const routes=['/','/fundamentos/','/componentes/','/patrones/','/aplicaciones/','/compartir/','/descargas/','/tienda/','/tienda/categoria/','/tienda/producto/','/tienda/escena/','/tienda/carrito/','/tienda/cuenta/','/sistemas/','/sistemas/etiquetas/','/mensajeria/'];
+const routes=['./','fundamentos/','componentes/','instalar/','patrones/','aplicaciones/','compartir/','descargas/','tienda/','tienda/categoria/','tienda/producto/','tienda/escena/','tienda/carrito/','tienda/cuenta/','sistemas/','sistemas/etiquetas/','mensajeria/'];
 for (const route of routes) {
   test(`${route}: renders without errors, missing images, broken local links or accessibility violations`,async({page,request})=>{
     const errors=[];
@@ -22,7 +22,7 @@ for (const route of routes) {
 for (const width of [390,768,1440]) {
   test(`responsive product hierarchy at ${width}px`,async({page})=>{
     await page.setViewportSize({width,height:1000});
-    await page.goto('/patrones/');
+    await page.goto('patrones/');
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
     const columns=await page.locator('.ce-product-grid').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
     expect(columns).toBe(width<640?2:width<1024?3:4);
@@ -60,7 +60,7 @@ for (const route of routes) {
   });
 }
 test('native control families render with ce-theme states',async({page})=>{
-  await page.goto('/componentes/');
+  await page.goto('componentes/');
   const area=page.locator('#nat-text');
   await expect(area).toHaveCSS('font-family',/Inter/);
   await area.focus();
@@ -74,7 +74,7 @@ test('native control families render with ce-theme states',async({page})=>{
 });
 test('mobile navigation supports keyboard focus and Escape recovery',async({page})=>{
   await page.setViewportSize({width:390,height:844});
-  await page.goto('/');
+  await page.goto('./');
   await page.keyboard.press('Tab');
   await expect(page.getByText('Saltar al contenido')).toBeFocused();
   await page.keyboard.press('Enter');
@@ -90,7 +90,7 @@ test('mobile navigation supports keyboard focus and Escape recovery',async({page
   await expect(page.locator('#mobile-navigation')).toBeHidden();
 });
 test('interactive category and color choices expose their selected state',async({page})=>{
-  await page.goto('/componentes/');
+  await page.goto('componentes/');
   const category=page.getByRole('group',{name:'Ejemplo de selección de categoría'});
   await category.getByRole('button',{name:'Cocina',exact:true}).click();
   await expect(category.getByRole('button',{name:'Cocina',exact:true})).toHaveAttribute('aria-pressed','true');
@@ -100,7 +100,7 @@ test('interactive category and color choices expose their selected state',async(
   await expect(colors.getByRole('button',{name:'Negro',exact:true})).toHaveAttribute('aria-pressed','true');
 });
 test('application format changes retain code, price and readable proportions',async({page})=>{
-  await page.goto('/aplicaciones/');
+  await page.goto('aplicaciones/');
   for(const [name,ratio] of [['Historia · 9:16',9/16],['Pantalla · 16:9',16/9],['Cuadrado · 1:1',1]]) {
     const control=page.getByRole('button',{name,exact:true});await control.click();
     await expect(control).toHaveAttribute('aria-pressed','true');
@@ -112,7 +112,7 @@ test('application format changes retain code, price and readable proportions',as
 });
 test('copyable recipe HTML reaches the clipboard and confirms completion',async({page,context,browserName})=>{
   const copied=await clipboard({page,context,browserName});
-  await page.goto('/componentes/');
+  await page.goto('componentes/');
   await page.locator('.recipe-source summary').first().click();
   await page.getByRole('button',{name:'Copiar HTML'}).first().click();
   await expect(page.locator('#copy-status')).toHaveText('Copiado al portapapeles');
@@ -120,7 +120,7 @@ test('copyable recipe HTML reaches the clipboard and confirms completion',async(
 });
 test('long identifiers, larger text and failed product images do not break card layout',async({page})=>{
   await page.setViewportSize({width:390,height:1000});
-  await page.goto('/patrones/');
+  await page.goto('patrones/');
   await page.evaluate(()=>{
     document.documentElement.style.fontSize='200%';
     const code=document.querySelector('.ce-code');code.textContent='CE2606144100123';
@@ -133,11 +133,11 @@ test('long identifiers, larger text and failed product images do not break card 
   const box=await card.boundingBox();expect(box.height).toBeGreaterThan(200);
 });
 test('reduced motion removes control transitions',async({page})=>{
-  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/componentes/');
+  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('componentes/');
   expect(await page.locator('.ce-button').first().evaluate(el=>getComputedStyle(el).transitionDuration)).toBe('0s');
 });
 test('tagged photography links every marker to a product with the same letter',async({page})=>{
-  await page.goto('/patrones/');
+  await page.goto('patrones/');
   const markers=page.locator('#etiquetas .ce-tagged-media .ce-hotspot');
   await expect(markers).toHaveCount(3);
   for (const marker of await markers.all()) {
@@ -154,7 +154,7 @@ test('tagged photography links every marker to a product with the same letter',a
 });
 
 test('product codes never wrap and have barely rounded corners',async({page})=>{
-  for (const path of ['/sistemas/','/patrones/']) {
+  for (const path of ['sistemas/','patrones/']) {
     await page.goto(path);
     const codes=await page.locator('.ce-code').evaluateAll(els=>els.map(el=>({lines:Math.round(el.getBoundingClientRect().height/parseFloat(getComputedStyle(el).lineHeight||'1')),white:getComputedStyle(el).whiteSpace,radius:parseFloat(getComputedStyle(el).borderTopLeftRadius),font:parseFloat(getComputedStyle(el).fontSize),h:el.getBoundingClientRect().height})));
     expect(codes.length).toBeGreaterThan(0);
@@ -162,7 +162,7 @@ test('product codes never wrap and have barely rounded corners',async({page})=>{
   }
 });
 test('feature tags stay inside their frame and never overlap each other or a marker',async({page})=>{
-  await page.goto('/patrones/');
+  await page.goto('patrones/');
   const frame=page.locator('#etiquetas .ce-tagged-media');
   const rects=await frame.evaluate(el=>{const r=(n)=>{const b=n.getBoundingClientRect();return {l:b.left,r:b.right,t:b.top,b:b.bottom};};return {frame:r(el),tags:[...el.querySelectorAll('.ce-feature-tag')].map(r),markers:[...el.querySelectorAll('.ce-hotspot')].map(r)};});
   const hit=(a,b)=>a.l<b.r&&a.r>b.l&&a.t<b.b&&a.b>b.t;
@@ -175,7 +175,7 @@ test('feature tags stay inside their frame and never overlap each other or a mar
   });
 });
 test('Novedad is green and promotion tiles keep the neutral surface; S/ sits on the baseline by default',async({page})=>{
-  await page.goto('/tienda/');
+  await page.goto('tienda/');
   const tiles=await page.locator('.ce-mosaic .ce-tile').evaluateAll(els=>els.map(el=>getComputedStyle(el).backgroundColor));
   for (const bg of tiles) expect(bg).not.toBe('rgb(249, 235, 16)');
   expect(await page.locator('.ce-mosaic .ce-badge--novedad').first().evaluate(el=>getComputedStyle(el).backgroundColor)).toBe('rgb(54, 133, 0)');
@@ -184,14 +184,14 @@ test('Novedad is green and promotion tiles keep the neutral surface; S/ sits on 
 
 test('narrow screens add nothing from a card: no hover icon and no full-width Añadir al carrito button',async({page})=>{
   await page.setViewportSize({width:390,height:900});
-  await page.goto('/tienda/categoria/');
+  await page.goto('tienda/categoria/');
   const card=page.locator('[data-store-view="tacna"] .ce-product').first();
   await expect(card.locator('.ce-product-add')).toHaveCount(0);
   await expect(card.locator('.ce-product-row > .ce-icon-button--action')).toBeHidden();
   await expect(card.getByRole('button',{name:/carrito/})).toBeHidden();
 });
 test('promo and sale boxes surround only the price, never the basis label',async({page})=>{
-  await page.goto('/patrones/');
+  await page.goto('patrones/');
   const geometry=await page.locator('.ce-price--offer:has(.ce-price-presentation), .ce-price--sale:has(.ce-price-presentation)').first().evaluate(el=>{const a=el.querySelector('.ce-price-amount').getBoundingClientRect(),b=el.querySelector('.ce-price-presentation').getBoundingClientRect();return {amountRight:a.right,basisLeft:b.left,bg:getComputedStyle(el).backgroundColor};});
   expect(geometry.bg).toBe('rgba(0, 0, 0, 0)'); expect(geometry.basisLeft).toBeGreaterThanOrEqual(geometry.amountRight);
 });
