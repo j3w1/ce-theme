@@ -1,4 +1,4 @@
-Status: Implemented in CE Theme by pull request [#29](https://github.com/j3w1/ce-theme/pull/29) as the StateFrame documentation kit: `design-system/doc-kit/state-frame.css` and its `README.md`, shipped in the design-system bundle as `doc-kit/`. It is not a recipe, a component, a registry entry or a design-system card; the name `StateFrame` appears only in the kit's documentation. Decisions 2, 4, 5 and 7 were decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)). Two corrections to the section 4.1 rule, found by the acceptance checks of section 6 (“Implemented with the kit”), were accepted by the repository lead under the same standing delegation, not j3w1-typed; j3w1 may veto them.
+Status: Implemented in CE Theme by pull request [#29](https://github.com/j3w1/ce-theme/pull/29) as the StateFrame documentation kit: `design-system/doc-kit/state-frame.css` and its `README.md`, shipped in the design-system bundle as `doc-kit/`. It is not a recipe, a component, a registry entry or a design-system card; the name `StateFrame` appears only in the kit's documentation. Decisions 2, 4, 5 and 7 were decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)). Four corrections to the section 4.1 rule, found by the acceptance checks of section 6 (“Implemented with the kit”), were accepted by the repository lead under the same standing delegation, not j3w1-typed; j3w1 may veto them.
 
 # CR-02 · State-sheet frame (`ce-state-frame`): one frame and label for documentation sheets
 
@@ -217,12 +217,13 @@ Implemented with the kit:
   - every shipped frame is named by a heading title, with a decorative marker of one or two characters, an English label, no inline style on the kit's own elements and no empty `style` attribute anywhere in a frame (a fragment keeps the consumer inputs its recipes document);
   - every frame starts its body with the canon cue, unless the sheet's notes name it as exempt;
   - sheets link the kit after the bundle.
-- **Checks 1 and 2** are `tests/browser/state-frame.spec.mjs`, run on a synthetic sheet, `tests/fixtures/state-frame-sheet.html`. Its eight frames cover a lettered card, the «Escenario» badge, a route shell exempt from the cue, a staff record, a two-character marker on a wide frame, the band, and frames inside a group. The sheet is tested at 390, 768 and 1440 px with text at 100%, 150% and 200%. Text is enlarged the way a reader's text-size setting does it: every font size grows, including px sizes such as the 28px cart price, and so does the root size. The test checks:
+- **Checks 1 and 2** are `tests/browser/state-frame.spec.mjs`, run on a synthetic sheet, `tests/fixtures/state-frame-sheet.html`. Its nine frames cover a lettered card, the «Escenario» badge, a route shell exempt from the cue, a staff record, a two-character marker on a wide frame, a wide table of codes that stay on one line (ending in a link whose name ends in a clipped `ce-sr-only` label), the band, and frames inside a group. The sheet is tested at 390, 768 and 1440 px with text at 100%, 150% and 200%. Text is enlarged the way a reader's text-size setting does it: every font size grows, including px sizes such as the 28px cart price, and so does the root size. The test checks:
   - no overflow, and the label wraps;
   - the marker stays `size.marker` tall, is `size.marker` wide unless its characters and inline padding need more, and keeps its characters' ink inside it horizontally and vertically. This is checked with the sheet's own markers (A to E, 1, 2, 10), which are 28px circles at 100% text, and with wider valid markers on the same frames (W, M, WW, MW, 88, H, A1, 20; for example WW is 38px wide at 100% text and 66px at 200%);
   - each fragment, copied into a page that loads only the tokens and the bundle at the same place and width, draws the same pixels and keeps every element box (to 0.02px) as in the frame;
   - axe finds no violations, the sheet has one `h1`, frames are named by their titles in heading order, and labels and badges carry their `lang`;
-  - every frame with simulated data carries its own cue.
+  - every frame with simulated data carries its own cue;
+  - a fragment wider than its body scrolls inside it, with no page or frame overflow. The body is reached with Tab and shows its focus ring inside its edge. It scrolls to its end with the arrow keys, a wheel and a touch pan. Tab continues into the fragment's link, whose ring stays inside the scrollport, and then out. Removing the body's `position: relative` makes 14 of these tests fail on their unchanged page assertions, because the link's clipped label then widens the page.
 
   A further test loads every design-system component card with and without the kit after the bundle and finds every computed style and box unchanged.
 - **Check 5 and the private part of check 1** were measured in a scratch harness on the twelve frozen boards of check 1.
@@ -258,31 +259,52 @@ Implemented with the kit:
     - Text grows by the factor in every case.
     - No label, title or note overflows, and every marker is 28px tall with its characters inside it.
     - The selection box of a title's first line, at the heading line height of 1.2, starts up to 1px above the label's text column. That is Chromium's selection rectangle, not painted ink.
-  - **Where check 1 does not hold, the boards behave the same with and without the kit.** These cases stay unmet for those frozen boards; the kit's own label, title, note and marker stay inside in every case.
+  - **Overflow on the boards' own sheet layout.** The kit's label, title, note and marker stay inside in every case. The pages and frames that overflowed did so equally with and without the kit:
     - **Page overflow, 55 of 108 cases.** Nine 1440px boards keep their 1440px page at 390 and 768 px, with 1050px and 672px of overflow, frozen and rebuilt alike. Pub06Estados at 390px with 200% text overflows by 5px frozen and 3px rebuilt.
-    - **Frame overflow, 11 of 108 cases.** In each, the fragment is wider than the frame body and overflows a plain block of the same width by the same amount:
-      - Pub06Estados at 390 and 768 px: its grid gives frame 1 a zero-width cell, with a body 124.7px wide at 390px and 100% text, 108.7px at 768px and 100% text, and 193.4px at 768px and 200% text.
-      - The long-string phone replica of Pub20Largos (frame 4), at 150% and 200% text.
-  - **Fragment preservation, compared in the same rebuilt page.** Each fragment is measured in its frame. It is then moved into a plain `section` that takes the frame's place, with the frame's width, the body's insets and the same board ancestors, and measured again. Boxes are compared to 0.02px, every standard computed property of every element and pseudo-element is compared (custom properties are not), and so are the pixels of the same clip, each taken once two screenshots agree.
-    - 836 of the 900 comparisons are identical in boxes, styles and pixels.
-    - 32 (Pub03Estados, Pub06Estados, Pub09Estados, Pub14EstadosMovil, Pub20Estados) differ only in the last captured pixel row, where the frame body's padding paints the canvas and the plain block has ended. With 1px of bottom padding on the plain block they are byte-identical.
-    - 30 (Pub06Estados at 390 and 768 px) cannot be matched with padding, because the board's grid gives the frame a zero-width cell that its body overflows. Given the body's content width, the plain block matches them in boxes, styles and pixels.
-    - 2 (Adm15Estados frame 6 at 390 and 768 px, 100% text) differ between two screenshots of the same framed state, and are identical on a fresh reload.
-    - The Chrome DevTools Protocol finds no rule of the kit's stylesheet matching any of the 36,630 fragment elements audited.
+    - **Frame overflow, 11 of 108 cases.** In each, the fragment is wider than the frame body and overflows a plain block of the same width by the same amount. In Pub06Estados at 390 and 768 px, the sheet's grid gives frame 1 a zero-width cell; the long-string phone replica of Pub20Largos (frame 4) overflows at 150% and 200% text.
+  - **With a responsive sheet layer.** Each sheet's own grid, head and notes stay with the sheet (decision 5), so the harness gave each of the twelve sheets a responsive layer of its own, which changes no kit class or fragment.
+    - Page overflow fell to 11 cases and frame overflow to 11 cases (29 frames).
+    - Every remaining case was a fragment whose intrinsic width exceeds its body. For example, Pub20Largos frame 4 at 390px and 150% text has 358px and needs 369.5px: the cart-line image, its gap and a CE code that stays on one line.
+    - No sheet-setup failure remained.
+  - **The body scrolls (third correction).** With `overflow-x: auto` on the body, frame overflow fell to 0 in all 108 cases.
+    - The 29 scrolling bodies, given `tabindex="0"`, `role="group"` and `aria-labelledby` to their title, scroll with the arrow keys to their native end and back.
+    - Page overflow remained in the six Pub02Estados cases at 390 and 768 px (53px at 390px and 100% text). Six absolutely positioned `ce-sr-only` price labels caused it: their containing block lay outside the static body, so the body did not clip them.
+  - **The body is positioned (fourth correction).** With `position: relative`, page and frame overflow are 0 in all 108 cases. Keyboard reach holds for all 29 scrolling bodies, axe reports no violations in 24 runs, and the Chrome DevTools Protocol finds no rule of the kit matching any of the 36,630 fragment elements audited.
+    - Every fragment still keeps its intrinsic width; where that exceeds its body, the body scrolls.
+    - At the native end, the rightmost box of seven scrolling bodies ends up to 0.39px past the scrollport, counting a board's own nested rails as clipping their content: the browser rounds the scroll range to whole pixels. Two of them were checked pixel by pixel, and no ink is lost in either. Pub02Estados frames 1 and 2 hold such rails, which scroll on their own and were not driven with keys.
+  - **Fragment preservation, compared in the same rebuilt page** (900 fragment comparisons, with the kit's source at its final state). Each fragment is measured in its frame. It is then moved into a plain block that takes the frame's place, with the body's content width and the same board ancestors, and measured again.
+    - Boxes are compared to 0.02px, and every standard computed property of every element and pseudo-element is compared (custom properties are not).
+    - Pixels are compared on the same clip, each taken once two screenshots agree. A scrolling body is compared at its start and at its end, against the plain block's clip shifted by the scroll offset.
+    - A difference only in the last captured pixel row, where the body's padding paints the canvas after the plain block has ended, counts when the plain block with 1px more bottom padding is byte-identical.
+    - Two plain blocks were measured:
 
-    These are observations under matched conditions, and no kit cause was found. The 64 comparisons that were not identical at first are explained by the comparison itself (the plain block's last row and width) or by a screenshot that differed from itself. An earlier comparison against a separate page without the board's ancestors differed in 253 of the 900 comparisons, and is superseded by this one.
+    | Plain block | Boxes | Computed styles | Pixels |
+    | --- | --- | --- | --- |
+    | Unpositioned, as before the fourth correction | 900/900 | 567/900 | 863/900 |
+    | Positioned like the body: `position: relative`, the body's padding, a spacer reproducing the cue's height and margins, and its padding box at the body's place | 900/900 | 900/900 | 869/900 |
 
-The acceptance checks found two corrections to the rule in section 4.1. The repository lead accepted both under the same standing delegation, not j3w1-typed, and j3w1 may veto them. Measured in Chromium with the supplied Inter files:
+    - **Computed styles.** All 5,292 style differences against the unpositioned block are the `top`, `right`, `bottom` and `left` values (and their logical forms) of 837 clipped `ce-sr-only` boxes. They are resolved against the containing block: the positioned body here, the page there. The boxes do not move, and every difference disappears against the positioned block, whose containing block matches the body's to 0.02px in all 900 comparisons.
+    - **26 of the 31 pixel comparisons not proved against the positioned block are fragments inside a body that scrolls.**
+      - The same plain block with only `overflow-x: auto`, scrolled to the body's native offset, is byte-identical to the framed body in all 58 start and end windows of the 29 scrolling comparisons.
+      - With the framed body's `overflow-x` set to `visible`, 28 of the 29 start windows are byte-identical; the remaining one differs in one pixel by one level, on a status pill's text.
+      - The largest difference, 50,101 pixels in Pub02Estados frame 3 at 390px and 200% text, comes from the comparison itself: the body's native end is 137px, while its integer scroll range is 138px.
+      - The differences therefore come from painting inside a scroll container, not from a layout change. The specific rendering mechanism is not proved, and these comparisons are not counted as identical.
+    - **Five comparisons stay unexplained** (Adm15Estados frames 3 and 6). They differed between screenshots of the same state in earlier runs, around a multiply-blended logo image and a disabled button, and are held unproved in every run.
+    - An earlier comparison, against a separate page without the board's ancestors, differed in 253 of the 900 comparisons, and is superseded.
+
+The acceptance checks found four corrections to the rule in section 4.1. The repository lead accepted all four under the same standing delegation, not j3w1-typed, and j3w1 may veto them. Measured in Chromium with the supplied Inter files:
 
 - **The marker.** As proposed (`width` and `height` 28px, with the inherited 1.5 line height), characters at 200% text leave the marker. Two characters measure 33.0 to 33.7px across the 28px circle. Every marker's ink also sits 3px below the circle, because a line box taller than the marker is start-aligned instead of centred. The kit uses `min-width: var(--ce-size-marker)`, `padding-inline: var(--ce-space-4)` and `line-height: var(--ce-font-line-tight)`. Every marker stays 28px tall. It is 28px wide while its characters and inline padding fit, which holds for single letters and numbers and for `10` at 100% text, and it widens into a pill whenever they need more, at any text size: `WW` is 38px wide at 100% text. Variant J's marker already behaved this way.
 - **The body.** As proposed (`display: grid` with a 16px gap), a fragment does not lay out as it does on its own. A grid item shrink-wraps when its margins are `auto`: the `ce-empty` route shell is 370px wide in the frame and 420px on its own at 768 and 1440 px. A grid item also keeps its children's margins inside it: a staff record header fragment is 316.97px tall in the frame and 292.97px on its own. The kit's body is ordinary block flow (`display: flow-root`), and the cue keeps its 16px gap through `margin-block-end`.
+- **A fragment wider than its body.** Some fragments are wider than any body at a given page width and text size: a code that stays on one line, a wide table, a rail, a phone replica. As proposed, such a fragment leaves its frame and the page. The kit's body scrolls it horizontally (`overflow-x: auto`), at its real size. A sheet gives such a body `tabindex="0"`, `role="group"` and `aria-labelledby` pointing at its title, and the kit draws the focus ring inside the body's edge.
+- **Absolute boxes inside the fragment.** A static scrolling body does not clip an absolutely positioned descendant whose containing block lies outside it. In Pub02Estados, six clipped `ce-sr-only` price labels widened the page from 390px to 443px while every frame stayed contained. The kit's body is `position: relative`, so it is the containing block of those boxes. They scroll and clip with it, and their boxes and pixels do not change; only their resolved offsets refer to the body instead of the page.
 
 Registry: `StateFrame` is named only in the kit's documentation (`design-system/doc-kit/README.md`); `recipes/names.mjs` and `names.md` do not list it.
 
 Not run:
 
 - check 6 (no screen reader was used): to schedule;
-- WebKit locally (hosted CI runs it);
+- WebKit locally (hosted CI runs it), and WebKit, other pixel densities and real devices on the twelve rebuilt boards;
 - real devices;
 - forced colours.
 
