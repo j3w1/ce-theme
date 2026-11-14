@@ -2,6 +2,7 @@
 // not live records or current offers. Prices are decimal strings per store; a product without a price for the
 // selected store shows the "price unavailable" state instead of S/0.
 import { products } from './products.mjs';
+import { url } from '../url.mjs';
 
 export const stores = [
   { id: 'tacna', name: 'Tacna', note: 'Tienda de ejemplo' },
@@ -41,12 +42,12 @@ export function stockListAttributes(lines) {
 }
 
 export const categories = [
-  { label: 'Cocina', icon: 'home', image: '/assets/product-nome.png', href: '/tienda/categoria/' },
-  { label: 'Tazas y vasos', image: '/assets/product-mene.png', href: '/tienda/categoria/' },
-  { label: 'Baño', image: '/assets/product-tilen.png', href: '/tienda/categoria/' },
-  { label: 'Tapetes', image: '/assets/product-talen.png', href: '/tienda/categoria/' },
-  { label: 'Regalos', icon: 'gift', href: '/tienda/categoria/' },
-  { label: 'Ofertas', icon: 'tag', href: '/tienda/categoria/' },
+  { label: 'Cocina', icon: 'home', image: url('/assets/product-nome.png'), href: url('/tienda/categoria/') },
+  { label: 'Tazas y vasos', image: url('/assets/product-mene.png'), href: url('/tienda/categoria/') },
+  { label: 'Baño', image: url('/assets/product-tilen.png'), href: url('/tienda/categoria/') },
+  { label: 'Tapetes', image: url('/assets/product-talen.png'), href: url('/tienda/categoria/') },
+  { label: 'Regalos', icon: 'gift', href: url('/tienda/categoria/') },
+  { label: 'Ofertas', icon: 'tag', href: url('/tienda/categoria/') },
 ];
 
 export const order = {
@@ -65,7 +66,7 @@ export const storeViews = [...stores.map((store) => store.id), 'ninguna'];
 /** ProductCard props for one catalogue item as seen from one store (or none selected). */
 export function cardFor(item, storeId) {
   const store = stores.find((entry) => entry.id === storeId);
-  const href = '/tienda/producto/';
+  const href = url('/tienda/producto/');
   const options = item.options.map((option) => ({ name: `${option.name}, ${option.specs.at(-1)}`, image: option.image, href, current: option.code === item.code }));
   if (!store) return { href, flag: item.flag, options, priceNote: 'Elige tu tienda para ver precio y disponibilidad.' };
   const amount = item.prices[store.id];

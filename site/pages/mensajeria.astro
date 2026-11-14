@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import MessagingDemo from '../components/MessagingDemo.vue';
+import { url } from '../url.mjs';
 ---
 <Layout title="Mensajería (composición de componentes)" description="Un ejemplo pequeño y simulado de los componentes públicos de mensajería de Casa Elida.">
   <div class="container messaging-page">
@@ -9,7 +10,7 @@ import MessagingDemo from '../components/MessagingDemo.vue';
       <h1>Una composición de mensajería.</h1>
       <p>Elige una de las dos conversaciones, escribe una respuesta o una nota interna y prueba los componentes de <code>@casaelida/vue</code>. Los mensajes se agregan solo a la memoria de esta página.</p>
     </div>
-    <MessagingDemo base={import.meta.env.BASE_URL} client:load />
+    <MessagingDemo base={url('/')} client:load />
     <p class="small-note">La aplicación completa vive en CE Meta App. Aquí se combinan <code>CEConversationList</code>, <code>CEMessageList</code>, <code>CEMessageComposer</code>, <code>CEAttachmentGroup</code> y <code>CEWorkStatus</code>. Los estados y la ilustración son datos de ejemplo: leído no es aceptado. No hay conexión, persistencia, envío real, visor ni funciones nativas.</p>
   </div>
 </Layout>
