@@ -8,6 +8,11 @@ import { ROUTES } from './tests/live/routes.mjs';
 // selection, which proves the /mensajeria/ island hydrated, and adds tests/live/live.spec.mjs.
 const missing = ['CE_SITE_URL', 'CE_EXPECT_COMMIT', 'CE_EXPECT_VERSION'].filter((name) => !process.env[name]);
 if (missing.length) throw new Error(`The live smoke needs ${missing.join(', ')}.`);
+// The site URL is never printed back: one that could carry a secret (credentials, a query or a fragment) is refused.
+const site = URL.parse(process.env.CE_SITE_URL);
+if (!site || !/^https?:$/.test(site.protocol) || site.username || site.password || /[?#]/.test(process.env.CE_SITE_URL)) {
+  throw new Error('CE_SITE_URL must be an http or https URL with no credentials, query or fragment.');
+}
 if (!/^[0-9a-f]{40}$/.test(process.env.CE_EXPECT_COMMIT)) throw new Error('CE_EXPECT_COMMIT must be the full 40-character commit SHA.');
 if (!/^\d+\.\d+\.\d+$/.test(process.env.CE_EXPECT_VERSION)) throw new Error('CE_EXPECT_VERSION must be X.Y.Z.');
 const escape = (text) => text.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');

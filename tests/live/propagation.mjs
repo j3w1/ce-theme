@@ -12,9 +12,12 @@ import { ROUTES } from './routes.mjs';
 const BUDGET = 5 * 60_000;
 const PAUSE = 15_000;
 const SPENT = 'the five-minute budget ran out';
+/** An error code or class name such as ECONNREFUSED or TypeError; anything else is not printed. */
+const named = (value) => (typeof value === 'string' && /^[A-Za-z]\w*$/.test(value) ? value : undefined);
 
 export default async function waitForDeploy() {
   const site = new URL(process.env.CE_SITE_URL.replace(/\/?$/, '/'));
+  const where = `${site.origin}${site.pathname}`; // never the credentials, query or fragment of the URL
   const commit = process.env.CE_EXPECT_COMMIT;
   const version = process.env.CE_EXPECT_VERSION;
   const deadline = Date.now() + BUDGET;
@@ -67,14 +70,16 @@ export default async function waitForDeploy() {
       last = waiting;
     } catch (error) {
       // The last reason that says what was not served yet is kept: running out of time is not one, and a request cut off at the
-      // deadline is added to the earlier reason instead of replacing it.
+      // deadline is added to the earlier reason instead of replacing it. A request error is named by its code, never by its
+      // message, which can repeat the URL.
       if (error.message !== SPENT) {
         const cutOff = error.name === 'TimeoutError' || error.name === 'AbortError';
-        last = !cutOff ? error.message : last === 'no answer' ? 'a request reached the deadline' : `${last}; then a request reached the deadline`;
+        const failed = `a request failed: ${named(error.cause?.code) ?? named(error.name) ?? 'unknown error'}`;
+        last = !cutOff ? failed : last === 'no answer' ? 'a request reached the deadline' : `${last}; then a request reached the deadline`;
       }
     }
     const left = deadline - Date.now();
-    if (left <= 0) throw new Error(`${site.href} did not serve the expected deploy within five minutes (last: ${last}).`);
+    if (left <= 0) throw new Error(`${where} did not serve the expected deploy within five minutes (last: ${last}).`);
     await new Promise((resolve) => setTimeout(resolve, Math.min(PAUSE, left)));
   }
 }
