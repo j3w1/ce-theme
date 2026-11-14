@@ -1,5 +1,13 @@
 # Changelog
 
+## @casaelida/vue 0.3.2 — 2026-11-14 (unreleased)
+
+CR-09, the pin-card spacing and fit (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version (the `placePins()` reference behaviour in `recipes/behaviors.mjs` changes too, but it is not in the package); it follows 0.3.0 (CR-01) and 0.3.1 (CR-10) in the release order. The decisions are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed, with the fit as decision 3, decided under the same standing delegation (Supervisor confirmation, 2026-11-13 13:22), not j3w1-typed.
+
+### Changed
+
+- The pin card follows the ProductStack. NAME and Description are 2px apart (`size.product.gap-identity`, was 4px), and the price block, or the store note or pending-price message in its place, starts 8px under the Description from `size.product.gap-note` (the store note and pending-price message were 4px). Every card stays the width of its focus ring inside its photo's edges, so the ring is never clipped; with large text the card is never wider than its photo, and a card taller than its photo is limited to the photo's height by `placePins()` and scrolls instead of being clipped; `enhancePins()` places the cards again once the fonts have loaded. No markup, type scale, price or API change; `tests/browser/pin-card.spec.mjs` measures it, with text at x1, x1.5 and x2.
+
 ## @casaelida/vue 0.3.1 — 2026-11-13 (unreleased)
 
 CR-10, the record title with product identity (ce-theme#11). The shipped `styles.css` changes, so the package takes a new version. Decisions 2 and 3 are the repository lead's selections, decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed; decision 4 is the lead's decision under the same standing delegation, not j3w1-typed.
