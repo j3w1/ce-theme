@@ -1,4 +1,4 @@
-Status: Ready for owner review; not submitted anywhere
+Status: Implemented in CE Theme by pull request [#21](https://github.com/j3w1/ce-theme/pull/21) (recipe `recipes/workspace.css`, RecordEditor sample and README, `docs/decisions.md`). Decisions 2 and 3 were decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed: the repository lead's selection in [j3w1/ce-theme#11](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160). Decision 4 (below) fixes the record-header overlap that acceptance 4 exposed, so `ce-record-header` changes after all (section 7 said it would not). The frozen boards are unchanged (X-3). Sections 2 to 7 are the dated proposal
 
 # CR-10 · Record title with product identity follows the ProductStack
 
@@ -81,7 +81,7 @@ Recipe: `ce-record-title` (existing name; no modifier class). The existing rule 
 
 ## 6. Acceptance checks
 
-To run when the repository work happens (not run here, except where marked):
+To run when the repository work happens (not run here, except where marked). Implemented as `tests/browser/record-title.spec.mjs`, which measures each item in a harness that loads only the generated tokens and recipes; item 4 runs both in a page-wide title and in a record header beside the image and the status pill, and checks that the enlarged text really is larger; the RecordEditor sample is measured there too.
 1. Harness: code (row) to heading 8, NAME to Description 2, heading to specs 2, specs to meta 4. Method run here on the current recipe [H]: 4 / 2 / 4 / 4.
 2. A title without product identity: plain `h2` and meta, and a plain `h2` preceded by an eyebrow paragraph or by `nav.ce-breadcrumbs` (the Adm03Categorias and Adm09Escena shapes): every distance unchanged at 4px, with the bundle's `.ce-record-title :is(h1, h2) { margin: 0 }` still in force.
 3. A title with a code and a meta line but no specs: heading to meta 4px.
@@ -97,5 +97,6 @@ To run when the repository work happens (not run here, except where marked):
 ## 8. Owner decisions needed
 
 1. Decided (X-5, 2026-11-06): the ProductStack applies to details and tools, which covers record titles, so the code to NAME distance is 8px. Four boards draw 4px and three draw 6px today; they stay as they are in the frozen snapshot (X-3).
-2. Replace the RecordEditor sample's run-in heading by the identity heading (recommended), or leave the sample as it is.
-3. Nested titles (Adm10Publicaciones, Adm10Tiendas, Adm10Estados): X-3 (decided 2026-11-06) rules out the re-synchronisation pass, so these frozen boards keep their inline 6px and are not normalised. Still open: new boards use the direct-child shape (recommended), or the recipe also gets a selector that supports the nested shape.
+2. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): the RecordEditor sample uses the identity heading (`h1.ce-product-heading`, NAME and Description as two spans) instead of the run-in title.
+3. Nested titles (Adm10Publicaciones, Adm10Tiendas, Adm10Estados): X-3 (decided 2026-11-06) rules out the re-synchronisation pass, so these frozen boards keep their inline 6px and are not normalised. Decided under j3w1's delegation (msg 2026-11-13 12:35, Supervisor recommendation), not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): new examples use the direct-child identity structure, and the recipe gets no selector for the nested shape. Contextual heading levels are kept, the frozen nested titles stay untouched, and titles without product identity keep their current spacing.
+4. Decided by the repository lead under the same standing delegation, not j3w1-typed ([issue #11 comment](https://github.com/j3w1/ce-theme/issues/11#issuecomment-6844081160)): fix inside CR-10 the record-header overlap that acceptance 4 exposed. At 390px with 200% text the header left the title about 119px beside the image and the status pill, while the one-line code needs about 189px, so the code and the identity ran under the pill. The header now lays out the thumbnail, the title and the status on one wrapping line; the title is never narrower than its one-line code, and where the line has no room the status moves to the next line. Markup, classes, type scale, the one-line code, the status and heading levels are unchanged. A header with the documented anatomy (thumbnail, title, status) keeps its layout wherever the line has room; a further child, which that anatomy does not include, now joins the same wrapping line instead of starting a second grid row.
