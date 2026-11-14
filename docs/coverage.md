@@ -30,12 +30,12 @@ Examples: storefront `/tienda/` (home, `categoria`, `producto`, `escena`, `carri
 | `CETextField` | `ce-field`, `ce-input`, `ce-input-group` | Tested | Unit tests; rendered on `/componentes/`. Pass an `id` when several Vue apps share a page. |
 | `CEPrice` | `ce-price` | Tested | Unit tests; every price on the site is rendered by it through `site/components/Price.astro`. |
 | `CEProductCode` | `ce-code` | Tested | Unit tests; rendered in the code specimens on `/patrones/`. Product cards still write the code badge by hand. |
-| `CEConversationList`, `CEMessageList`, `CEMessageComposer` | `ce-conversation-list`, `ce-message-list`, `ce-composer` | Tested | Unit tests and browser tests on `/mensajeria/`, which runs them on fictional in-memory fixtures. See [Messaging](#messaging-ce-meta-app). |
-| `CEAttachmentGroup`, `CEWorkStatus` | `ce-attachments`, `ce-work-status` | Tested | Unit tests and browser tests on `/mensajeria/` (conversation “Reposición · Tacna”). Illustrative states only. See [Messaging](#messaging-ce-meta-app). |
+| `CEConversationList`, `CEMessageList`, `CEMessageComposer` | `ce-conversation-list`, `ce-message-list`, `ce-composer` | Tested | Unit tests and standalone browser proof in `tests/consumer/consumer.spec.mjs` using the anonymously installed package and packaged styles; `/mensajeria/` is the small composition example. See [Messaging](#messaging-ce-meta-app). |
+| `CEAttachmentGroup`, `CEWorkStatus` | `ce-attachments`, `ce-work-status` | Tested | Unit tests, the standalone recipe/layout suite and installed-consumer attachment/context tests. Supplied states only; no application workflow. See [Messaging](#messaging-ce-meta-app). |
 
 ## Messaging (CE Meta App)
 
-Presentation for conversation interfaces. Delivery, assignment, authorization and transport belong to the application; nothing here connects to a messaging provider. The example `/mensajeria/` is fixture-backed and says so on the page.
+Presentation for conversation interfaces. Delivery, assignment, authorization and transport belong to the application; nothing here connects to a messaging provider. The full application lives in private `j3w1/ce-meta-app` after B4. `/mensajeria/` is a compact, Spanish simulated composition of the public components, with conversation selection and local reply/note events. The [B5 retirement map](https://github.com/j3w1/ce-theme/blob/main/docs/messaging-retirement.md) classifies all 67 transferred browser scenarios and five static titles. Public keyboard, focus, draft, selection, attachment/context and scroll contracts stay in the existing standalone and anonymous consumer harnesses; public CI needs no private checkout or credentials.
 
 | Pattern | Recipe | Status | Notes |
 | --- | --- | --- | --- |
@@ -46,9 +46,9 @@ Presentation for conversation interfaces. Delivery, assignment, authorization an
 | Composer with reply and note drafts | `ce-composer` | Tested | Enter adds a line, Ctrl or ⌘ + Enter submits. |
 | Attachments already sent: one to many images, uncropped, each asking to open | `ce-attachments`, `ce-attachment` | Tested | Presentation only: no upload, camera, storage, verification, zoom or viewer. Tiles reserve their box so images never shift the message list. |
 | Contextual content in a message, and the progress of one piece of work | `ce-message-context`, `ce-work-status` | Tested | States are supplied by the application and are illustrative, not CE Systems rules. Delivery status and work progress are shown separately. |
-| Voice notes, calls, camera, uploads and a photo viewer, native notification permission | — | Specified | Need provider and platform decisions; browser tests do not verify native Android or iOS behaviour. |
+| Voice notes, calls, camera, uploads and a photo viewer, native notification permission | — | Specified | Application/native scope in CE Meta App; browser tests here do not verify native Android or iOS behaviour. |
 | Offline, upload failure and retry, restricted conversations | `ce-notice`, `ce-locked` | Specified | The composer can be disabled with a visible reason; the other states are not built. |
-| Customer assignment, product sharing, AI answers | — | Excluded | Not part of this slice. |
+| Customer assignment, product sharing, AI answers | — | Excluded | Application responsibilities in CE Meta App; not public-component contracts. |
 
 ## Shared elements and forms
 
