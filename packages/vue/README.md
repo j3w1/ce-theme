@@ -2,13 +2,13 @@
 
 Casa Elida's reusable Vue 3 + TypeScript components. Each component renders an approved ce-theme recipe and reuses the recipe helpers, so an application gets the same markup, classes and behaviour that the foundation documents. The components add no CSS of their own: the package ships the foundation stylesheet they render, built from the same tokens and recipes.
 
-Status: `0.3.2`, private. `private: true` is the publication safeguard: the package is never published to a registry; each version is one package file, `casaelida-vue-X.Y.Z.tgz`, made with `pnpm pack`.
+Status: `0.3.3`, private. `private: true` is the publication safeguard: the package is never published to a registry; each version is one package file, `casaelida-vue-X.Y.Z.tgz`, made with `pnpm pack`.
 
 ## Install
 
 1. Install one pinned package file with pnpm, and commit `package.json` and `pnpm-lock.yaml`. The lockfile records the file's integrity hash, so every install, including a clean CI checkout, gets the same package and styles.
    - Each version is published once, from merged `main`, as the asset of an immutable GitHub Release of `j3w1/ce-theme`: `pnpm add https://github.com/j3w1/ce-theme/releases/download/vue-v<version>/casaelida-vue-<version>.tgz`. The newest `vue-v` release on the [Releases page](https://github.com/j3w1/ce-theme/releases) is the current version; its notes give the file's sha256.
-   - For a commit without a release, use a local package file: in a ce-theme checkout at a pinned commit, `pnpm install`, `pnpm build:vue`, then `pnpm pack` in `packages/vue`; copy `casaelida-vue-0.3.2.tgz` into the application, run `pnpm add ./casaelida-vue-0.3.2.tgz` and commit the file with the manifest and lockfile: a local file is part of the pin, so a clean checkout needs it. Keep the previous file while it may be needed for a rollback.
+   - For a commit without a release, use a local package file: in a ce-theme checkout at a pinned commit, `pnpm install`, `pnpm build:vue`, then `pnpm pack` in `packages/vue`; copy `casaelida-vue-0.3.3.tgz` into the application, run `pnpm add ./casaelida-vue-0.3.3.tgz` and commit the file with the manifest and lockfile: a local file is part of the pin, so a clean checkout needs it. Keep the previous file while it may be needed for a rollback.
 2. Import the styles once, in the application entry: `import '@casaelida/vue/styles.css';`. It holds Inter (400, 600, 700 and 800, with its fonts beside it), the `--ce-` tokens and the `ce-` recipes. It resets nothing: every rule sits under a `ce-` class, and the tokens are custom properties on `:root`.
 3. Wrap the application region in `class="ce-scope"`. Without the styles or the scope the components render unstyled.
 
