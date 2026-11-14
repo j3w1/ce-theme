@@ -10,7 +10,7 @@ import { test, expect } from '@playwright/test';
 const ORIGIN = 'http://shopping-actions.test';
 const css = readFileSync('recipes/fonts.css', 'utf8') + readFileSync('exports/tokens.css', 'utf8') + readFileSync('exports/recipes.css', 'utf8');
 const ICON = '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 7h14"/></svg>';
-const LISTING = '/tienda/categoria/';
+const LISTING = 'tienda/categoria/';
 const PRODUCT = /\/tienda\/producto\/$/;
 const firstCard = (page) => page.locator('[data-store-view="tacna"] .ce-product').first();
 const QUICK = '.ce-product-row > .ce-icon-button--action';
@@ -509,7 +509,7 @@ test('acceptance 3: Tab reaches the product link, then the quick action with its
 for (const width of [1440, 390]) {
   test(`acceptance 4: at ${width} the product page has one primary add to cart and one product-named favourite`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto('/tienda/producto/');
+    await page.goto('tienda/producto/');
     const box = page.locator('.ce-buy-box');
     const primary = await box.locator('.ce-button:not(.ce-button--secondary):not(.ce-button--ink)').evaluateAll((items) => items.filter((el) => el.getClientRects().length > 0).map((el) => el.textContent.trim()));
     expect(primary).toEqual(['Añadir al carrito']);
