@@ -106,6 +106,8 @@ async function focusRingInside(page, card, label) {
 // focused and the unfocused card (the photo would clip a ring outside it, and both strips would then be equal).
 async function focusRingPainted(page, card) {
   await keyboardFocus(page, card);
+  // A screenshot clip must lie in the viewport: centre the card by scrolling the window only, never the photo.
+  await card.evaluate((el) => { const c = el.getBoundingClientRect(); window.scrollBy(0, c.top + c.height / 2 - innerHeight / 2); });
   const bands = await card.evaluate((el) => {
     const s = getComputedStyle(el), c = el.getBoundingClientRect();
     const mid = parseFloat(s.outlineOffset) + parseFloat(s.outlineWidth) / 2;
@@ -194,7 +196,7 @@ for (const width of WIDTHS) {
     test(`scene at ${width}px, text x${factor}: pin cards keep 2px and 8px, wrap, and open inside the photo without overflow`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       for (const [store, kinds] of Object.entries(STORES)) {
-        await page.goto(`/tienda/escena/?tienda=${store}`);
+        await page.goto(`tienda/escena/?tienda=${store}`);
         const pins = page.locator('#escena-cocina .ce-pin');
         await expect(pins).toHaveCount(3);
         if (factor !== 1) { await enlargeText(page, factor); await placeAgain(page, '#escena-cocina'); }
@@ -212,7 +214,7 @@ for (const width of WIDTHS) {
 test('scene: open pin cards, also one limited to the photo, have no accessibility violations; focus and targets are unchanged', async ({ page }) => {
   for (const [store, index, factor] of [['tacna', 2, 1], ['ninguna', 0, 1], ['tacna', 2, 2]]) {
     await page.setViewportSize({ width: 390, height: 900 });
-    await page.goto(`/tienda/escena/?tienda=${store}`);
+    await page.goto(`tienda/escena/?tienda=${store}`);
     if (factor !== 1) { await enlargeText(page, factor); await placeAgain(page, '#escena-cocina'); }
     const pin = page.locator('#escena-cocina .ce-pin').nth(index);
     await pin.locator('.ce-pin-dot').click();
@@ -226,7 +228,7 @@ test('scene: open pin cards, also one limited to the photo, have no accessibilit
   // Keyboard focus on the card link (after the dot opened it) shows the 2px focus outline at the focus offset; the chevron
   // cell stays 44px wide.
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/tienda/escena/');
+  await page.goto('tienda/escena/');
   const pin = page.locator('#escena-cocina .ce-pin').first();
   await pin.locator('.ce-pin-dot').focus();
   const card = pin.locator('.ce-pin-card');
