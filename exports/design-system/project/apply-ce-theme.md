@@ -2,6 +2,8 @@
 
 Entry point for people and agents adopting the Casa Elida design system in another application. Read this first, then open only the references the task needs.
 
+Public documentation URLs and hosting details are in [hosting.md](https://github.com/j3w1/ce-theme/blob/main/docs/hosting.md). Both documentation targets describe the same foundation; Vue applications still install a pinned release asset from GitHub, not a package from the documentation host.
+
 ## 1. Load the foundation (always)
 
 **Vue 3 applications** use `@casaelida/vue`, which carries the whole foundation. See [packages/vue/README.md](https://github.com/j3w1/ce-theme/blob/main/packages/vue/README.md#install).

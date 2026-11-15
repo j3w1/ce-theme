@@ -22,7 +22,7 @@ Read `/etc/ce-devbox/AGENTS.md` first. Work in a registered CE task worktree.
 
 After changes: `pnpm generate`, `pnpm check` (includes the Vue package's typecheck, tests and build), `pnpm test:browser`, `pnpm test:consumer` (the clean install proof of the packed package; it needs the npm registry), and `git diff --check`.
 Browser tests require a compatible Playwright Chromium installation. Locally `pnpm test:browser` runs Chromium and says WebKit was not run; hosted CI runs both. Report unrun checks accurately.
-Publication runs only from merged `main` under SEAL #7: the B1-release workflow publishes the package and B2's site workflow deploys the site; nothing else publishes the package or deploys the site. Design System artifact synchronization (B7) stays possible under its own PES. The repository is public.
+Publication runs only from merged `main` under SEAL #7: the B1-release workflow publishes the package and B2's site workflow deploys the Pages site; nothing else publishes the package. PES #35 also authorizes the lead to deploy the static site to Vercel from reviewed, merged `main`, after the existing release checks succeed; see `docs/hosting.md`. Design System artifact synchronization (B7) stays possible under its own PES. The repository is public.
 
 ## Repository delivery
 
