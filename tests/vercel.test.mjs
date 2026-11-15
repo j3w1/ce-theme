@@ -16,4 +16,5 @@ test('Vercel serves the existing static build at its Pages base without an HTML 
   assert.equal(config.trailingSlash, true);
   assert.deepEqual(config.redirects, [{ source: '/', destination: base, permanent: false }]);
   assert.equal(config.rewrites, undefined);
+  assert.equal(config.git?.deploymentEnabled, false);
 });
