@@ -10,10 +10,11 @@ test('Vercel serves the existing static build at its Pages base without an HTML 
   const config = JSON.parse(await read('vercel.json'));
   const astro = await read('astro.config.mjs');
   const base = astro.match(/base: '([^']+)'/)[1];
-  assert.equal(config.outputDirectory, 'dist');
-  assert.equal(config.buildCommand, 'pnpm build');
+  assert.equal(config.outputDirectory, 'dist-vercel');
+  assert.equal(config.buildCommand, 'pnpm build && node scripts/stage-vercel.mjs');
   assert.equal(config.installCommand, 'pnpm install --frozen-lockfile');
   assert.equal(config.trailingSlash, true);
   assert.deepEqual(config.redirects, [{ source: '/', destination: base, permanent: false }]);
-  assert.deepEqual(config.rewrites, [{ source: `${base}:path*`, destination: '/:path*' }]);
+  assert.equal(config.rewrites, undefined);
+  assert.equal(config.git?.deploymentEnabled, false);
 });

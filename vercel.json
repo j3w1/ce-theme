@@ -1,14 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
+  "git": { "deploymentEnabled": false },
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm build",
-  "outputDirectory": "dist",
+  "buildCommand": "pnpm build && node scripts/stage-vercel.mjs",
+  "outputDirectory": "dist-vercel",
   "trailingSlash": true,
   "redirects": [
     { "source": "/", "destination": "/ce-theme/", "permanent": false }
-  ],
-  "rewrites": [
-    { "source": "/ce-theme/:path*", "destination": "/:path*" }
   ]
 }
