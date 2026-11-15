@@ -293,5 +293,6 @@ test('SEAL #7 revises the workflow, delivery, identity and showcase rows without
     assert.match(text, /Showcase exception \(SEAL #7\)/, `${file} names the revised exception`);
     assert.match(text, /B1-release workflow/, `${file} names the only package publisher`);
   }
-  assert.match(await read('AGENTS.md'), /nothing else publishes the package or deploys the site/);
+  assert.match(await read('AGENTS.md'), /nothing else publishes the package/);
+  assert.match(await read('AGENTS.md'), /PES #35 also authorizes the lead to deploy the static site to Vercel from reviewed, merged `main`/);
 });

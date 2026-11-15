@@ -27,6 +27,8 @@ Install a compatible test browser when necessary with `pnpm exec playwright inst
 
 People and agents adopting the system start with [docs/apply-ce-theme.md](docs/apply-ce-theme.md). Load `exports/tokens.css` before `exports/recipes.css`. Add `ce-scope` to your container to apply the shared typography and local box sizing. All reusable classes use `ce-`; variables use `--ce-`. Recipes do not apply a global reset.
 
+The public documentation, production URLs and deployment/rollback procedures are recorded in [docs/hosting.md](docs/hosting.md). Consumers continue to pin the immutable Vue release asset; documentation hosting does not change the package installation source.
+
 ```html
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="recipes.css">
