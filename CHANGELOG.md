@@ -1,5 +1,10 @@
 # Changelog
 
+## StateFrame documentation kit
+
+- State sheets can load the StateFrame stylesheet after the design-system recipe bundle. The kit provides a named frame, a token-sized marker, a note and a body that shows the fragment at its original size. Intrinsically wide fragments scroll inside the body.
+- The kit ships with the design-system documentation. The Vue package's contents and version stay the same.
+
 ## @casaelida/vue 0.5.0 — 2026-11-14 (unreleased)
 
 Combined CR-04/CR-08 (Refs #11; #11 stays open): the packed cart styles and documented consumer composition change together. No Vue API is added. It follows 0.4.0 (CR-07) in the release order.
