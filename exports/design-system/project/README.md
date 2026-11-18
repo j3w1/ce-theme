@@ -2,7 +2,7 @@ Casa Elida (Comercial Elida EIRL) is a Peruvian home-goods retailer with stores 
 
 Products are understood through photography first, supported by verified data: NAME, Description, specifications, code, price and availability come from CE Systems and are presented, never invented. Approved decisions are recorded in `decisions.md`; this version has no open proposals for prices, promotions or shared links.
 
-Load `tokens.css`, then `components/bundle.css`, and wrap every region in `class="ce-scope"`. Components are framework-neutral HTML and CSS recipes: there is no JavaScript bundle (optional reference behaviour lives in `recipes/behaviors.mjs` in the repository). Every class starts with `ce-` and every variable with `--ce-`. The recipes never reset the page.
+Load `tokens.css`, then `components/bundle.css`, and wrap every region in `class="ce-scope"`. Design documentation that stacks the states of a page (a state sheet) also loads `doc-kit/state-frame.css` after the bundle: the StateFrame documentation kit (`doc-kit/README.md`), which no application uses. Components are framework-neutral HTML and CSS recipes: there is no JavaScript bundle (optional reference behaviour lives in `recipes/behaviors.mjs` in the repository). Every class starts with `ce-` and every variable with `--ce-`. The recipes never reset the page.
 
 Reference sections bundled with this system: `apply-ce-theme.md` (start here when applying the system), `product-identity.md`, `pricing.md`, `sharing.md`, `accessibility.md`, `coverage.md` (what is implemented, tested or still open), `decisions.md`, `sources.md` and `evolution.md`.
 

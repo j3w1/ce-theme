@@ -9,6 +9,7 @@
 | `tokens.json`, `tokens.css` | `tokens/*.tokens.json` (DTCG) through `scripts/design-system.mjs`. Variable names match `exports/tokens.css` (`--ce-…`); semantic colors stay aliases of palette colors. Every token's `$description` becomes its usage note. |
 | `components/bundle.css` | Every recipe source (`recipes/recipes.css`, `interface.css`, `retail.css`, `workspace.css`, `share-card.css`, `print-label.css`), plus one line mapping `--ce-font-family` to the design system's `--font-sans`. |
 | `README.md`, `components/<Name>/README.md` and `preview.html`, `assets/<Group>/README.md`, `components/Cover/preview.html` | Authored in `design-system/`. |
+| `doc-kit/state-frame.css`, `doc-kit/README.md` | Authored in `design-system/doc-kit/`: the StateFrame documentation kit for state sheets (CR-02). It is not a recipe and not a component card; sheets load it after `components/bundle.css`. |
 | `apply-ce-theme.md`, `product-identity.md`, `pricing.md`, `sharing.md`, `accessibility.md`, `coverage.md`, `decisions.md`, `sources.md`, `evolution.md` | `docs/` (copied; links to files outside the bundle point at the repository). |
 | `assets/Icons/*.svg` | `site/data/icons.mjs`, drawn in ink `#111111`. |
 | `licenses/inter-OFL.txt` | `fonts/inter/OFL.txt`. |
