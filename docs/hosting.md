@@ -1,6 +1,6 @@
 # Hosting
 
-The documentation site (`site/`) is published at **https://j3w1.github.io/ce-theme/**. [PES #35](https://github.com/j3w1/ce-theme/issues/35) also authorizes the Vercel documentation target **https://ce-theme-j3w1.vercel.app/ce-theme/** for the same static site. The lead has verified the managed alias; deployment acceptance is recorded in PES #35 against the actual deployed commit and Vue version.
+The documentation site (`site/`) is published at **https://j3w1.github.io/ce-theme/**.
 
 ## GitHub Pages
 
@@ -10,31 +10,3 @@ The documentation site (`site/`) is published at **https://j3w1.github.io/ce-the
 - **Accidental disclosure.** GitHub's native **Unpublish site** (repository Settings → Pages) takes the site down at once and keeps the Pages setup. It is a step for j3w1 or the repository lead, who records it. The next deploy publishes the site again, so the correction merges first.
 - **Live check.** After a deploy, the live smoke runs against the published site. It first waits for propagation: for at most five minutes from its first attempt, until every route shows the deployed commit and package version and every same-site link and resource those pages use (stylesheets, fonts, scripts, island bundles, downloads) is served. Its checks then run once, without retries: `CE_SITE_URL=https://j3w1.github.io/ce-theme/ CE_EXPECT_COMMIT=<deployed sha> CE_EXPECT_VERSION=<X.Y.Z> pnpm exec playwright test -c playwright.live.config.mjs`. A failure is fixed through a reviewed pull request or rolled back.
 - **Not a preview.** This is the public documentation of released versions. It is not a development preview, uses none of the development-host preview tooling and does not expire.
-
-## Vercel (PES #35)
-
-The repository lead owns authenticated project setup, deployment and live readback. Configuration must be independently reviewed and merged into `main` before deployment. This target does not publish the Vue package or replace Pages.
-
-| Setting | Value |
-| --- | --- |
-| Public documentation URL | https://ce-theme-j3w1.vercel.app/ce-theme/ |
-| Source / production branch | This repository / `main` |
-| Automatic Git deployments | Disabled: `git.deploymentEnabled: false` |
-| Root directory | Repository root (`.`), not `site/` |
-| Framework preset | Other (`framework: null` in `vercel.json`); static files only |
-| Node.js | `24.x`, also pinned by the root `package.json` engines |
-| Package manager | pnpm `12.14.0`, from the root `packageManager` field |
-| Project build environment | `ENABLE_EXPERIMENTAL_COREPACK=1` to honor that package-manager pin |
-| Install command | `pnpm install --frozen-lockfile` |
-| Build command | `pnpm build && node scripts/stage-vercel.mjs` |
-| Output directory | `dist-vercel` |
-
-[`vercel.json`](../vercel.json) keeps Astro's existing `/ce-theme/` base. The ordinary `pnpm build` still generates the Vue package and static Astro site in `dist` for Pages. A Vercel-only staging step then clears `dist-vercel` and copies every file unchanged into `dist-vercel/ce-theme/`. Vercel serves that physical directory tree: `/ce-theme/componentes/` resolves to `dist-vercel/ce-theme/componentes/index.html`, alongside the prefixed CSS, JS, fonts, images and downloads. `/` redirects temporarily to `/ce-theme/`; no prefix rewrite or HTML fallback is used. Trailing slashes match Astro's directory pages; files with extensions keep their filenames. No adapter, SSR runtime or new dependency is needed. The Astro `site` setting remains the Pages origin. Staging changes neither the Pages output nor package contents.
-
-**Release process.** Automatic Git deployments are disabled in `vercel.json`. The Git connection stays in place for source metadata, but a push or merge does not deploy the site. After the required hosted checks and existing Pages/package release workflow succeed, the lead manually creates a production deployment from the exact reviewed, merged `main` SHA through Vercel's Git deployment flow. Confirm the published `@casaelida/vue` version is already installable before serving its documentation. Build from the Git-linked source: `site/version.mjs` needs Git metadata, so a CLI source upload without `.git` is unsuitable. Provider builds use the settings above, with staging after the unchanged build; the lead records the actual source commit, version, public HTTPS URL and deployment result. This repository adds no Vercel GitHub Actions workflow and grants no package publication authority to Vercel. The project has previews disabled and serves these public docs without Vercel Authentication. Keep unreviewed branches out of production.
-
-**Live check.** Use the existing smoke command from the Pages section with `CE_SITE_URL` set to the actual Vercel URL including `/ce-theme/`, and the expected full source SHA and Vue package version. Verify the root redirect and a missing resource separately. The smoke checks nested pages, links, CSS, JavaScript/island hydration, fonts, assets and downloads against the deployed commit/version. A local configuration check does not prove Vercel's routing; provider readback and browser checks are required before reporting the URL as verified. Check that Pages remains available as well.
-
-**Rollback.** The lead uses Vercel's dashboard Instant Rollback to the previous verified production deployment available on the existing plan, then repeats the live check with that deployment's commit/version. For the first deployment, there is no previous Vercel release to restore; Pages remains available. Follow with a reviewed correction or revert through `main`. After an Instant Rollback, production-domain auto-assignment is disabled until a corrected deployment is promoted; the lead verifies the production assignment explicitly. Do not change package release tags or assets, the Pages rollback process, DNS or the plan.
-
-Primary references: [Vercel static configuration](https://vercel.com/docs/project-configuration/vercel-json), [disabling automatic Git deployments](https://vercel.com/docs/project-configuration/git-configuration#turning-off-all-automatic-deployments), [build settings and Corepack](https://vercel.com/docs/builds/configure-a-build), [supported Node.js versions](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions), [Astro static deployment](https://docs.astro.build/en/guides/deploy/vercel/) and [Instant Rollback](https://vercel.com/docs/instant-rollback).
