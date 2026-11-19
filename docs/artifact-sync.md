@@ -86,6 +86,13 @@ Messaging and 12 Retail & Systems copied files were verified by full SHA-256 and
 are byte-identical to the previous copies and to the canonical. Boards (16 and
 193), notes (9 and 44), pages (0 and 14), order, titles, geometry, status and
 sharing are equal. No board file was in either publish, and no board was edited.
+A later owner read of both complete file lists found `canvas.json` (the pin) as
+the only differing non-platform path against the pre-refresh baseline, which
+covers all 61 Messaging paths and the 206 Retail & Systems project paths (the
+Retail platform files were not compared). The baseline holds path, size and the
+first 128 bits of SHA-256 for boards; full SHA-256 was read for both
+`canvas.json`, the rendered boards and the copied files. Pin labels and the
+sidebar pin states were unchanged.
 
 **Render checks.** Local mirror (Chromium only): the kit's CSS loaded after the
 bundle with Inter, a labelled frame with the demonstration cue and a 520px
@@ -95,11 +102,26 @@ kept its size and scrolled in its body, the title and note were not clipped, the
 marker stayed 28px high (a pill at 200%) and the focused body showed a 2px ink
 ring inside its edge. Live viewer, kept separate: the kit's item renders in the
 canonical Overview without clipping, and both explorations open and draw all
-their boards at overview zoom. Not run: per-board clipping, typography and focus
-at 100% zoom in the live exploration viewers, live text scaling and narrow
-widths, the 640px breakpoint, keyboard traversal of the explorations, WebKit,
-screen readers and physical devices. Repository CI browser and packed-consumer
-checks are separate evidence.
+their boards at overview zoom.
+
+Board level (local mirror, Chromium only; mirror runtime, not the platform's):
+two Messaging boards (an operations-status board at 1440×2575 and a mobile list at
+390×844) and two Retail & Systems boards (a 768 tablet board and a 1440 price board)
+were rendered at their board size from the exact stored files and verified copied
+files. Every text node used Inter, with no failed requests, console errors or
+horizontal overflow. The two Retail boards rendered byte-identically against the
+pre-refresh copies; no pre-refresh Messaging copies were kept, so there was no
+Messaging pre-render. Both Messaging boards fit their height (the mobile list has
+intended ellipsis). On both Retail boards the last lines of the notes block lie 57
+and 84 px below the declared board height and are cut off; this is unchanged by the
+refresh and not checked in the live viewer. Static checks and keyboard focus are
+separate: Tab traversal (no control was activated) showed the 2px ring on every
+traversed recipe control (up to 60 stops per board), while the mobile board's own header buttons, rows and tabs use the
+browser's default outline, whose ends fall on the board edge for full-width rows.
+Live board-level inspection was not done (it needs zoom or selection, which changes
+viewer state). Not run: WebKit, text scaling, narrow widths and the 640px breakpoint,
+screen readers and physical devices. Repository CI browser and packed-consumer checks
+are separate evidence.
 
 Real messaging, business services and AI remain unconnected. This record does not
 extend platform or backend acceptance.
