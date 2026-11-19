@@ -92,3 +92,19 @@ and the 640 px breakpoint were unrun. The kit mirror's 200% test set the root
 font size directly. Artifact Firefox, WebKit, screen-reader and physical-device
 checks were unrun. Repository browser and packed-consumer checks are tracked
 separately.
+
+## 2026-11-19 · Hosting retirement decision
+
+[Issue #41](https://github.com/j3w1/ce-theme/issues/41) synchronized the canonical
+Design System from merged CE Theme `14e5d7cc9ef6c96b13dd36837e35f4972b0405fd`.
+The native editor published `project/decisions.md` at revision 53. Its readback
+matched the 37,721-byte Git export, including the final newline (SHA-256
+`7e4a0f8f0d98428fb3fc603f5af860dd23a79d0b4c9a7e20a9d6634e0aebd9ed`).
+
+The final write updated `project/design-system.json` at revision 54. Only
+`lastChange` differed. The native before-and-after inventory showed identical
+sizes and SHA-256 hashes for the other 246 of 248 project files. Both
+exploration artifacts were left untouched because they do not copy this file.
+
+The publishing session performed the native readback. The prior revision number,
+asset-store inventory and rendered page were unverified.
