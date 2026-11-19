@@ -106,5 +106,13 @@ The final write updated `project/design-system.json` at revision 54. Only
 sizes and SHA-256 hashes for the other 246 of 248 project files. Both
 exploration artifacts were left untouched because they do not copy this file.
 
-The publishing session performed the native readback. The prior revision number,
-asset-store inventory and rendered page were unverified.
+The adoption guide was published from PR #43 commit `4d62591` at revision 55.
+The native readback of `project/apply-ce-theme.md` matched the 6,750-byte Git
+export (SHA-256
+`6c2c6e48e980a4ec2b90dc2a031e456bbec767a9b832fc3a8053bb4429b0881c`).
+The final write updated only `lastChange` at revision 56. The decisions ledger
+kept its exact hash. A visual comparison of the 248 native file listings
+showed changes only to the guide and revision index by size and hash prefix.
+
+The publishing sessions performed the native readbacks. The initial revision
+number, separate asset-store inventory and rendered pages were unverified.
