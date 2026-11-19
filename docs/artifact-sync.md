@@ -39,3 +39,56 @@ and packed-consumer checks are separate evidence.
 Real messaging, business services and AI remain unconnected; application examples
 are fixtures. The CR-02 documentation kit was excluded. This record does not
 extend platform or backend acceptance.
+
+## 2026-11-19 · CR-02 documentation kit and hosting note
+
+[Issue #39](https://github.com/j3w1/ce-theme/issues/39) synchronized the three
+private artifacts from CE Theme `943744fdbfa697bd4d52a3efa1a8a5787ec91600` and
+the immutable `@casaelida/vue` **0.5.0** release.
+
+| Artifact | Native revision | Verified change |
+| --- | --- | --- |
+| Canonical Design System | 46 → 52 | Five source files, revision index and page-generated outputs |
+| Messaging exploration | 36 → 38 | Installed canonical revision 52 |
+| Retail & Systems archive | 65 → 67 | Installed canonical revision 52 |
+
+The five published source files were `README.md`, `apply-ce-theme.md`,
+`decisions.md`, `doc-kit/README.md` and `doc-kit/state-frame.css`. All five
+authored files matched Git byte for byte on final readback. The write to
+`design-system.json` updated `lastChange`. The page later added the kit to
+`docs.sections` and preserved the `lastChange` values.
+
+One editor save appended a transient space to the kit README. The editor
+stored the file without the space and final newline, so one forward correction
+restored the exact Git bytes. The page appended the expected 11,873-byte
+`Consuming` tail to the exact root README body and generated the expected
+`manifest.json` containing both kit files. The token CSS, component bundles, API
+cards, previews and blobs kept their hashes. The canonical title, namespace,
+ownership, privacy and unowned content were preserved.
+
+All 10 Messaging and 12 Retail & Systems copied files matched the canonical
+by full SHA-256. Each complete canvas matched its prior state apart from the
+pin version and copy time. Post-refresh path, size and 128-bit SHA-256 prefix
+checks matched the prior listings for all 16 Messaging and 193 Retail board
+files. The Retail platform files were outside that comparison.
+
+In the live Chromium viewer, the kit rendered without clipping and both
+exploration overviews drew their boards. The Chromium mirror exercised the
+kit at desktop size and in a 360 px sheet at 100% and 200% root text. The wide
+fragment scrolled inside the frame and the focused body showed the 2 px ring.
+
+The local mirror also rendered two boards from each exploration at board
+geometry. Text used Inter and none overflowed horizontally. Keyboard checks
+used Tab traversal only. Sampled recipe controls showed the 2 px focus ring,
+and the mobile board's own controls used Chromium's default outline. The Retail
+before-and-after snapshots were byte-identical, including existing bottom
+clipping of 57 and 84 px in two notes sections. Messaging pre-refresh snapshots
+were unavailable.
+
+Live kit focus and keyboard traversal, live exploration board-level checks,
+live text scaling and narrow widths were unrun. The exploration mirrors were
+checked at board geometry. Scaled text, narrow viewports, 200% browser zoom
+and the 640 px breakpoint were unrun. The kit mirror's 200% test set the root
+font size directly. Artifact Firefox, WebKit, screen-reader and physical-device
+checks were unrun. Repository browser and packed-consumer checks are tracked
+separately.
