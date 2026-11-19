@@ -1,6 +1,5 @@
 node_modules/
 dist/
-/dist-vercel/
 # The post-build tests live in tests/dist/; only build output is ignored.
 !tests/dist/
 .astro/

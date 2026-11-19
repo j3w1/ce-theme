@@ -294,5 +294,7 @@ test('SEAL #7 revises the workflow, delivery, identity and showcase rows without
     assert.match(text, /B1-release workflow/, `${file} names the only package publisher`);
   }
   assert.match(await read('AGENTS.md'), /nothing else publishes the package/);
-  assert.match(await read('AGENTS.md'), /PES #35 also authorizes the lead to deploy the static site to Vercel from reviewed, merged `main`/);
+  assert.match(await read('AGENTS.md'), /Publication runs only from merged `main` under SEAL #7: the B1-release workflow publishes the package and B2's site workflow deploys the Pages site/);
+  // Keep the retired provider name out of tracked files except for the decision ledger and optional peers.
+  assert.doesNotMatch(await read('AGENTS.md'), /\x76ercel/i);
 });
